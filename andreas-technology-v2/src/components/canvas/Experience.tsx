@@ -21,6 +21,7 @@ export default function Experience() {
     const isInitializedRef = useRef(false)
     const isVisibleRef = useRef(true)
     const lastFrameTimeRef = useRef(0)
+    const mouseThrottleRef = useRef<NodeJS.Timeout | null>(null)
     const { theme } = useTheme()
 
     useEffect(() => {
@@ -45,13 +46,12 @@ export default function Experience() {
         const isMobile = isTouchDevice && isSmallScreen
 
         // Throttled mouse move handler (only for desktop)
-        let throttleTimeout: NodeJS.Timeout | null = null
         const handleMouseMove = (e: MouseEvent) => {
             // Throttle to 60fps max (16ms)
-            if (throttleTimeout) return
+            if (mouseThrottleRef.current) return
             
-            throttleTimeout = setTimeout(() => {
-                throttleTimeout = null
+            mouseThrottleRef.current = setTimeout(() => {
+                mouseThrottleRef.current = null
             }, 16)
 
             // Use clientX/clientY directly since canvas fills the screen
@@ -150,6 +150,11 @@ export default function Experience() {
                 if (wasVisible && !isVisibleRef.current) {
                     particlesRef.current = []
                 }
+                
+                // Restart animation when becoming visible
+                if (!wasVisible && isVisibleRef.current && !animationFrameRef.current) {
+                    animationFrameRef.current = requestAnimationFrame(animate)
+                }
             }
         }
 
@@ -162,9 +167,9 @@ export default function Experience() {
 
         // Animation loop with frame rate limiting
         const animate = (currentTime: number = 0) => {
-            // Skip animation if not visible to save CPU
+            // Skip rendering if not visible to save CPU
             if (!isVisibleRef.current) {
-                animationFrameRef.current = requestAnimationFrame(animate)
+                // Don't schedule next frame when not visible
                 return
             }
 
@@ -233,6 +238,9 @@ export default function Experience() {
             }
             if (mobileIntervalRef.current) {
                 clearInterval(mobileIntervalRef.current)
+            }
+            if (mouseThrottleRef.current) {
+                clearTimeout(mouseThrottleRef.current)
             }
         }
     }, [theme]) // Re-run when theme changes
