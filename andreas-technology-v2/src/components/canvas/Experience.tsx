@@ -22,6 +22,7 @@ export default function Experience() {
     const isVisibleRef = useRef(true)
     const lastFrameTimeRef = useRef(0)
     const mouseThrottleRef = useRef<NodeJS.Timeout | null>(null)
+    const scrollThrottleRef = useRef<NodeJS.Timeout | null>(null)
     const { theme } = useTheme()
 
     useEffect(() => {
@@ -129,12 +130,11 @@ export default function Experience() {
         }
 
         // Clear canvas when scrolling away from hero section - throttled
-        let scrollThrottleTimeout: NodeJS.Timeout | null = null
         const handleScroll = () => {
-            if (scrollThrottleTimeout) return
+            if (scrollThrottleRef.current) return
             
-            scrollThrottleTimeout = setTimeout(() => {
-                scrollThrottleTimeout = null
+            scrollThrottleRef.current = setTimeout(() => {
+                scrollThrottleRef.current = null
             }, 100)
 
             const heroSection = document.getElementById('hero')
@@ -165,7 +165,7 @@ export default function Experience() {
             window.addEventListener('scroll', handleScroll)
         }
 
-        // Animation loop with frame rate limiting
+        // Animation loop with frame rate limiting (30fps to save CPU)
         const animate = (currentTime: number = 0) => {
             // Skip rendering if not visible to save CPU
             if (!isVisibleRef.current) {
@@ -173,7 +173,7 @@ export default function Experience() {
                 return
             }
 
-            // Limit to ~30fps when not in hero for better performance (33ms)
+            // Limit to ~30fps for better performance (33ms)
             const targetFrameTime = 33
             if (currentTime - lastFrameTimeRef.current < targetFrameTime) {
                 animationFrameRef.current = requestAnimationFrame(animate)
@@ -241,6 +241,9 @@ export default function Experience() {
             }
             if (mouseThrottleRef.current) {
                 clearTimeout(mouseThrottleRef.current)
+            }
+            if (scrollThrottleRef.current) {
+                clearTimeout(scrollThrottleRef.current)
             }
         }
     }, [theme]) // Re-run when theme changes
