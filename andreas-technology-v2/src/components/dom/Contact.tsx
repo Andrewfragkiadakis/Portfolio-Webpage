@@ -1,8 +1,9 @@
 'use client'
 import { useContent } from '@/hooks/useContent'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { memo } from 'react'
 
-export default function Contact() {
+function Contact() {
     const t = useContent()
     const { language } = useLanguage()
 
@@ -124,3 +125,5 @@ export default function Contact() {
         </section>
     )
 }
+
+export default memo(Contact)

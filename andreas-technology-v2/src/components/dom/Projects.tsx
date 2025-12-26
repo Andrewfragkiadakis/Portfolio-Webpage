@@ -1,8 +1,9 @@
 'use client'
 import { useContent } from '@/hooks/useContent'
 import Image from 'next/image'
+import { memo } from 'react'
 
-export default function Projects() {
+function Projects() {
     const t = useContent()
 
     return (
@@ -24,8 +25,9 @@ export default function Projects() {
                                     <Image
                                         src={project.image}
                                         alt={project.name}
-                                        layout="fill"
-                                        objectFit="cover"
+                                        fill
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                        style={{ objectFit: 'cover' }}
                                         loading="lazy"
                                         unoptimized
                                     />
@@ -115,3 +117,5 @@ export default function Projects() {
         </section>
     )
 }
+
+export default memo(Projects)

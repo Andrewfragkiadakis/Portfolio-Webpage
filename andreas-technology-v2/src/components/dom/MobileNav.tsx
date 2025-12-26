@@ -1,27 +1,35 @@
 'use client'
 
 import { useContent } from '@/hooks/useContent'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, memo, useRef } from 'react'
 
-export default function MobileNav() {
+function MobileNav() {
     const t = useContent()
     const [activeSection, setActiveSection] = useState('hero')
     const [isVisible, setIsVisible] = useState(true)
     const [lastScrollY, setLastScrollY] = useState(0)
+    const scrollThrottleRef = useRef<NodeJS.Timeout | null>(null)
 
-    const scrollToSection = (id: string) => {
+    const scrollToSection = useCallback((id: string) => {
         const element = document.getElementById(id)
         if (element) {
             element.scrollIntoView({ behavior: 'smooth' })
             setActiveSection(id)
         }
-    }
+    }, [])
 
-    // Handle scroll for active section and visibility
+    // Handle scroll for active section and visibility - throttled
     useEffect(() => {
         const scroller = document.getElementById('scroller')
 
         const handleScroll = () => {
+            // Throttle to every 100ms
+            if (scrollThrottleRef.current) return
+            
+            scrollThrottleRef.current = setTimeout(() => {
+                scrollThrottleRef.current = null
+            }, 100)
+
             const currentScrollY = scroller ? scroller.scrollTop : window.scrollY
 
             // Determine visibility based on scroll direction
@@ -66,6 +74,9 @@ export default function MobileNav() {
             } else {
                 window.removeEventListener('scroll', handleScroll)
             }
+            if (scrollThrottleRef.current) {
+                clearTimeout(scrollThrottleRef.current)
+            }
         }
     }, [lastScrollY])
 
@@ -97,3 +108,5 @@ export default function MobileNav() {
         </div>
     )
 }
+
+export default memo(MobileNav)

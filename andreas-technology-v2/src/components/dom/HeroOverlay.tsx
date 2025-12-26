@@ -2,16 +2,17 @@
 
 import { useContent } from '@/hooks/useContent'
 import Typewriter from 'typewriter-effect'
+import { memo, useCallback } from 'react'
 
-export default function HeroOverlay() {
+function HeroOverlay() {
     const t = useContent()
 
-    const scrollToSection = (id: string) => {
+    const scrollToSection = useCallback((id: string) => {
         const element = document.getElementById(id)
         if (element) {
             element.scrollIntoView({ behavior: 'smooth' })
         }
-    }
+    }, [])
 
     return (
         <div className="absolute top-0 left-0 w-full h-screen flex flex-col justify-center items-start p-6 sm:p-12 pointer-events-none z-10">
@@ -71,3 +72,5 @@ export default function HeroOverlay() {
         </div>
     )
 }
+
+export default memo(HeroOverlay)

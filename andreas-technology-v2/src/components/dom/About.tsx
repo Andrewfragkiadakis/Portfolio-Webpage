@@ -1,8 +1,9 @@
 'use client'
 import { useContent } from '@/hooks/useContent'
 import { motion } from 'framer-motion'
+import { memo } from 'react'
 
-export default function About() {
+function About() {
     const t = useContent()
 
     return (
@@ -23,8 +24,8 @@ export default function About() {
                             key={index}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.2 }}
+                            viewport={{ once: true, margin: "-100px" }}
+                            transition={{ delay: index * 0.1, duration: 0.5 }}
                         >
                             {paragraph}
                         </motion.p>
@@ -35,7 +36,8 @@ export default function About() {
                 <motion.h3
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.5 }}
                     className="text-2xl sm:text-3xl font-bold mt-12 sm:mt-16 md:mt-24 mb-8 sm:mb-12"
                 >
                     {t.skillsTitle}
@@ -47,9 +49,9 @@ export default function About() {
                             key={index}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.1 }}
-                            whileHover={{ y: -8, scale: 1.02 }}
+                            viewport={{ once: true, margin: "-50px" }}
+                            transition={{ delay: index * 0.05, duration: 0.4 }}
+                            whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.2 } }}
                             className="bg-zinc-100 dark:bg-zinc-900/50 border border-zinc-300 dark:border-zinc-800 p-6 rounded-lg hover:border-black dark:hover:border-white transition-all duration-300 shadow-sm hover:shadow-xl group"
                         >
                             <div className="flex justify-between items-start mb-4">
@@ -70,7 +72,8 @@ export default function About() {
                                     className="h-full bg-black dark:bg-white"
                                     initial={{ width: 0 }}
                                     whileInView={{ width: `${[90, 85, 95, 80, 85, 90][index % 6]}%` }}
-                                    transition={{ duration: 1.5, delay: 0.5 + (index * 0.1), ease: "easeOut" }}
+                                    transition={{ duration: 1, delay: 0.3 + (index * 0.05), ease: "easeOut" }}
+                                    viewport={{ once: true }}
                                 />
                             </div>
                         </motion.div>
@@ -80,3 +83,5 @@ export default function About() {
         </section>
     )
 }
+
+export default memo(About)

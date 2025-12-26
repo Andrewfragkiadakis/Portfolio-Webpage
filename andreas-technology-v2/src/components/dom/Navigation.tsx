@@ -2,19 +2,28 @@
 
 import { useLanguage } from '@/contexts/LanguageContext'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useState, useCallback, memo } from 'react'
 
-export default function Navigation() {
+function Navigation() {
     const { language, setLanguage } = useLanguage()
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-    const scrollToSection = (id: string) => {
+    const scrollToSection = useCallback((id: string) => {
         const element = document.getElementById(id)
         if (element) {
             element.scrollIntoView({ behavior: 'smooth' })
         }
         setMobileMenuOpen(false)
-    }
+    }, [])
+
+    const toggleLanguage = useCallback(() => {
+        setLanguage(language === 'en' ? 'gr' : 'en')
+    }, [language, setLanguage])
+
+    const toggleLanguageAndCloseMenu = useCallback(() => {
+        setLanguage(language === 'en' ? 'gr' : 'en')
+        setMobileMenuOpen(false)
+    }, [language, setLanguage])
 
     return (
         <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800 transition-all duration-300">
@@ -70,7 +79,7 @@ export default function Navigation() {
 
                     {/* Language Toggle */}
                     <button
-                        onClick={() => setLanguage(language === 'en' ? 'gr' : 'en')}
+                        onClick={toggleLanguage}
                         className="ml-4 px-3 py-1 bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-black dark:text-white rounded transition-all duration-200 text-sm font-medium cursor-pointer"
                     >
                         {language === 'en' ? 'GR' : 'EN'}
@@ -136,10 +145,7 @@ export default function Navigation() {
                         {language === 'en' ? 'Contact' : 'ΕΠΙΚΟΙΝΩΝΙΑ'}
                     </button>
                     <button
-                        onClick={() => {
-                            setLanguage(language === 'en' ? 'gr' : 'en')
-                            setMobileMenuOpen(false)
-                        }}
+                        onClick={toggleLanguageAndCloseMenu}
                         className="text-left mt-2 py-3 px-4 bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-black dark:text-white rounded-lg transition-all duration-200 font-medium text-sm"
                     >
                         {language === 'en' ? '🌐 Switch to Greek' : '🌐 Αλλαγή σε Αγγλικά'}
@@ -149,3 +155,5 @@ export default function Navigation() {
         </nav >
     )
 }
+
+export default memo(Navigation)
