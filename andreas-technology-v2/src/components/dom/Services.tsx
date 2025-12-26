@@ -2,8 +2,9 @@
 
 import { useContent } from '@/hooks/useContent'
 import { motion } from 'framer-motion'
+import { memo } from 'react'
 
-export default function Services() {
+function Services() {
     const t = useContent()
 
     return (
@@ -12,7 +13,8 @@ export default function Services() {
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.5 }}
                     className="text-3xl sm:text-4xl md:text-5xl font-bold mb-16 sm:mb-24 text-center"
                 >
                     {t.servicesTitle}
@@ -24,9 +26,9 @@ export default function Services() {
                             key={index}
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.2 }}
-                            whileHover={{ y: -10 }}
+                            viewport={{ once: true, margin: "-50px" }}
+                            transition={{ delay: index * 0.1, duration: 0.5 }}
+                            whileHover={{ y: -10, transition: { duration: 0.2 } }}
                             className="bg-white dark:bg-zinc-950 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-zinc-100 dark:border-zinc-800 group text-center"
                         >
                             <div className="w-20 h-20 mx-auto mb-6 bg-zinc-100 dark:bg-zinc-900 rounded-full flex items-center justify-center text-4xl text-black dark:text-white group-hover:scale-110 transition-transform duration-300">
@@ -47,3 +49,5 @@ export default function Services() {
         </section>
     )
 }
+
+export default memo(Services)

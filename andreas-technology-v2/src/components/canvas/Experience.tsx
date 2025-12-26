@@ -1,7 +1,7 @@
 'use client'
 import { useContent } from '@/hooks/useContent'
 import { useTheme } from '@/contexts/ThemeContext'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useCallback } from 'react'
 
 interface BinaryParticle {
     x: number
@@ -19,6 +19,8 @@ export default function Experience() {
     const animationFrameRef = useRef<number | undefined>(undefined)
     const mobileIntervalRef = useRef<NodeJS.Timeout | undefined>(undefined)
     const isInitializedRef = useRef(false)
+    const isVisibleRef = useRef(true)
+    const lastFrameTimeRef = useRef(0)
     const { theme } = useTheme()
 
     useEffect(() => {
@@ -42,8 +44,16 @@ export default function Experience() {
         const isSmallScreen = window.innerWidth < 1024 // Treat tablets as mobile for this animation
         const isMobile = isTouchDevice && isSmallScreen
 
-        // Mouse move handler (only for desktop)
+        // Throttled mouse move handler (only for desktop)
+        let throttleTimeout: NodeJS.Timeout | null = null
         const handleMouseMove = (e: MouseEvent) => {
+            // Throttle to 60fps max (16ms)
+            if (throttleTimeout) return
+            
+            throttleTimeout = setTimeout(() => {
+                throttleTimeout = null
+            }, 16)
+
             // Use clientX/clientY directly since canvas fills the screen
 
             // Initialize mouse position on first movement
@@ -118,15 +128,26 @@ export default function Experience() {
             }, 150) // Check every 150ms
         }
 
-        // Clear canvas when scrolling away from hero section
+        // Clear canvas when scrolling away from hero section - throttled
+        let scrollThrottleTimeout: NodeJS.Timeout | null = null
         const handleScroll = () => {
+            if (scrollThrottleTimeout) return
+            
+            scrollThrottleTimeout = setTimeout(() => {
+                scrollThrottleTimeout = null
+            }, 100)
+
             const heroSection = document.getElementById('hero')
             const scroller = document.getElementById('scroller')
 
             if (heroSection && scroller) {
                 const rect = heroSection.getBoundingClientRect()
-                // If hero section is mostly out of view, clear particles
-                if (rect.bottom < window.innerHeight * 0.3) {
+                // If hero section is mostly out of view, pause animation
+                const wasVisible = isVisibleRef.current
+                isVisibleRef.current = rect.bottom > window.innerHeight * 0.3
+                
+                // Clear particles when becoming invisible to save memory
+                if (wasVisible && !isVisibleRef.current) {
                     particlesRef.current = []
                 }
             }
@@ -139,8 +160,22 @@ export default function Experience() {
             window.addEventListener('scroll', handleScroll)
         }
 
-        // Animation loop
-        const animate = () => {
+        // Animation loop with frame rate limiting
+        const animate = (currentTime: number = 0) => {
+            // Skip animation if not visible to save CPU
+            if (!isVisibleRef.current) {
+                animationFrameRef.current = requestAnimationFrame(animate)
+                return
+            }
+
+            // Limit to ~30fps when not in hero for better performance (33ms)
+            const targetFrameTime = 33
+            if (currentTime - lastFrameTimeRef.current < targetFrameTime) {
+                animationFrameRef.current = requestAnimationFrame(animate)
+                return
+            }
+            lastFrameTimeRef.current = currentTime
+
             // Theme-aware background colors with faster fade
             const bgColor = theme === 'light'
                 ? 'rgba(255, 255, 255, 0.25)' // Faster fade for light mode

@@ -1,8 +1,9 @@
 'use client'
 import { useContent } from '@/hooks/useContent'
 import { motion } from 'framer-motion'
+import { memo } from 'react'
 
-export default function Experience() {
+function Experience() {
     const t = useContent()
 
     return (
@@ -11,7 +12,8 @@ export default function Experience() {
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.5 }}
                     className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 sm:mb-10 md:mb-12"
                 >
                     {t.experienceTitle}
@@ -28,8 +30,8 @@ export default function Experience() {
                             key={index}
                             initial={{ opacity: 0, x: -20 }}
                             whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.1 }}
+                            viewport={{ once: true, margin: "-50px" }}
+                            transition={{ delay: index * 0.05, duration: 0.4 }}
                             className="relative pl-8 group"
                         >
                             {/* Timeline Dot */}
@@ -60,7 +62,8 @@ export default function Experience() {
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.5 }}
                     className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 sm:mb-10 md:mb-12"
                 >
                     {t.educationTitle}
@@ -75,8 +78,8 @@ export default function Experience() {
                             key={index}
                             initial={{ opacity: 0, x: -20 }}
                             whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.1 }}
+                            viewport={{ once: true, margin: "-50px" }}
+                            transition={{ delay: index * 0.05, duration: 0.4 }}
                             className="relative pl-8 group"
                         >
                             {/* Timeline Dot */}
@@ -106,3 +109,5 @@ export default function Experience() {
         </section>
     )
 }
+
+export default memo(Experience)
