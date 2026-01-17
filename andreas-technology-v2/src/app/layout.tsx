@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   metadataBase: new URL('https://andreas.technology'),
   title: 'Andreas Fragkiadakis | IT & Security Engineer Portfolio',
-  description: 'Explore the digital portfolio of Andreas Fragkiadakis - IT & Computer Engineering Student specializing in Network Security, System Administration, and Web Development.',
+  description: 'Explore my digital portfolio - an IT & Computer Engineering Graduate, passionate about security, networks, and AI & automation.',
   icons: {
     icon: [
       { url: '/favicons/favicon.ico' },
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Andreas Fragkiadakis | IT & Security Engineer Portfolio',
-    description: 'Explore the digital portfolio of Andreas Fragkiadakis - IT & Computer Engineering Student specializing in Network Security, System Administration, and Web Development.',
+    description: 'Explore my digital portfolio - an IT & Computer Engineering Graduate, passionate about security, networks, and AI & automation.',
     url: 'https://andreas.technology',
     siteName: 'Andreas Fragkiadakis Portfolio',
     images: [
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Andreas Fragkiadakis | IT & Security Engineer Portfolio',
-    description: 'Explore the digital portfolio of Andreas Fragkiadakis - IT & Computer Engineering Student specializing in Network Security, System Administration, and Web Development.',
+    description: 'Explore my digital portfolio - an IT & Computer Engineering Graduate, passionate about security, networks, and AI & automation.',
     images: ['/images/Porftolio website/portfolio-site-2025.png'],
   },
 }
