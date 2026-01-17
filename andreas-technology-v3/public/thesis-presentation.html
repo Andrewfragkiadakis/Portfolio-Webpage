@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Διπλωματική Εργασία: RoF για 5G</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Comfortaa', sans-serif;
+            background-color: #f0f2f5;
+        }
+        .slide {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100%; height: 100%;
+            opacity: 0;
+            transform: scale(0.98);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            z-index: 1;
+            display: flex;
+            pointer-events: none;
+        }
+        .slide.active {
+            opacity: 1;
+            transform: scale(1);
+            z-index: 2;
+            pointer-events: auto;
+        }
+        .slide-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem 4rem;
+        }
+        .slide-content h2 {
+            font-weight: 700;
+            color: #ffffff;
+            font-size: 2.25rem;
+        }
+        .slide-content h3 {
+             color: #ffffff;
+             font-weight: 600;
+             font-size: 1.5rem;
+        }
+        .visual-diagram {
+            background-color: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(21, 96, 130, 0.7);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            margin-top: 1.5rem;
+            width: 100%;
+            height: auto;
+        }
+        .nav-button {
+            background-color: #156082;
+            color: white;
+            border: 2px solid #156082;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .nav-button:hover {
+            background-color: #0E2841;
+            border-color: #156082;
+        }
+        .nav-button:disabled {
+            background-color: #4b5563;
+            border-color: #4b5563;
+            cursor: not-allowed;
+        }
+        body, #presentation-container, .slide-content, .slide, img {
+            user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            pointer-events: auto;
+        }
+        body {
+            -webkit-touch-callout: none;
+        }
+        img {
+            -webkit-user-drag: none;
+            pointer-events: none;
+        }
+        @media print {
+          body { display: none !important; }
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
+
+    <div id="presentation-container" class="w-full max-w-6xl aspect-[16/9] bg-[#0E2841] text-white rounded-xl overflow-hidden relative shadow-2xl">
+
+        <div class="slide active" data-slide="1">
+            <div class="slide-content text-center">
+                <div class="mb-6">
+                    <img src="images/thesis-presentation/placeholder-logo.png" alt="Λογότυπο Πανεπιστημίου Δυτικής Αττικής" class="h-28 mx-auto mb-6">
+                    <p class="text-xl">ΠΑΝΕΠΙΣΤΗΜΙΟ ΔΥΤΙΚΗΣ ΑΤΤΙΚΗΣ</p>
+                    <p class="text-lg">ΣΧΟΛΗ ΜΗΧΑΝΙΚΩΝ</p>
+                    <p class="text-lg">ΤΜΗΜΑ ΜΗΧΑΝΙΚΩΝ ΠΛΗΡΟΦΟΡΙΚΗΣ ΚΑΙ ΥΠΟΛΟΓΙΣΤΩΝ</p>
+                </div>
+                <div class="w-24 h-1 bg-[#156082] mx-auto my-6"></div>
+                <p class="text-2xl font-semibold mb-4">ΔΙΠΛΩΜΑΤΙΚΗ ΕΡΓΑΣΙΑ</p>
+                <h1 class="text-4xl font-bold">Νέα Υβριδικά Ασύρματα – Οπτικά δίκτυα (Radio over Fiber) για δίκτυα Πέμπτης γενιάς (5G)</h1>
+                <div class="mt-10 text-xl text-gray-300">
+                    <p>ΦΡΑΓΚΙΑΔΑΚΗΣ ΑΝΔΡΕΑΣ | ΑΜ: 19390297</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-slide="2">
+            <div class="slide-content">
+                <h2 class="mb-8">Πίνακας Περιεχομένων</h2>
+                <div class="grid grid-cols-2 grid-rows-3 gap-x-12 gap-y-6 text-left max-w-5xl w-full">
+                    <div class="bg-gray-900/40 p-4 rounded-lg">
+                        <h3 class="font-bold text-blue-300">01. Η πρόκληση του 5G</h3>
+                        <p class="text-gray-300">Κατανοώντας το εμπόδιο του fronthaul.</p>
+                    </div>
+                    <div class="bg-gray-900/40 p-4 rounded-lg">
+                        <h3 class="font-bold text-blue-300">02. Η λύση RoF</h3>
+                        <p class="text-gray-300">Συνδυάζοντας την ευελιξία των ασύρματων δικτύων με την δύναμη οπτικών ινών.</p>
+                    </div>
+                    <div class="bg-gray-900/40 p-4 rounded-lg">
+                        <h3 class="font-bold text-blue-300">03. Αρχιτεκτονική C-RAN</h3>
+                        <p class="text-gray-300">Συγκέντρωση της πληροφορίας, αποσυμπίεση των περιφερειακών δικτύων.</p>
+                    </div>
+                    <div class="bg-gray-900/40 p-4 rounded-lg">
+                        <h3 class="font-bold text-blue-300">04. Βασικά πλεονεκτήματα</h3>
+                        <p class="text-gray-300">Απόδοση, κόστος και μελλοντική διασφάλιση.</p>
+                    </div>
+                    <div class="bg-gray-900/40 p-4 rounded-lg">
+                        <h3 class="font-bold text-blue-300">05. Προκλήσεις & μελλοντικές προοπτικές</h3>
+                        <p class="text-gray-300">Τεχνικά εμπόδια και ερευνητικές κατευθύνσεις.</p>
+                    </div>
+                    <div class="bg-gray-900/40 p-4 rounded-lg">
+                        <h3 class="font-bold text-blue-300">06. Συμπεράσματα</h3>
+                        <p class="text-gray-300">Διαμορφώνοντας του μέλλοντος της δικτυακής υποδομής.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-slide="3">
+            <div class="slide-content flex-row items-center gap-8">
+                 <div class="w-1/2 text-left">
+                    <h2 class="mb-4">1. Η πρόκληση του 5G</h2>
+                    <h3 class="font-semibold text-xl mb-3 text-orange-400">Το πρόβλημα:</h3>
+                    <ul class="list-disc pl-5 space-y-3 text-lg">
+                        <li>Το 5G υπόσχεται ανεπανάληπτη απόδοση: ταχύτητες >10 Gbps, καθυστέρηση <1 ms, τεράστια πυκνότητα συσκευών (IoT).</li>
+                        <li>Αυτό δημιουργεί ένα τεράστιο φορτίο δεδομένων στο fronthaul, τη σύνδεση μεταξύ του κεντρικού δικτύου και των κεραιών.</li>
+                        <li>Οι παραδοσιακές λύσεις fronthaul (χαλκός, μικροκύματα) αποτελούν σημαντικό εμπόδιο, καθώς δεν διαθέτουν το απαιτούμενο εύρος ζώνης.</li>
+                    </ul>
+                </div>
+                <div class="w-1/2">
+                    <img src="images/thesis-presentation/placeholder-5g-challenge.png" alt="Diagram of 5G fronthaul bottleneck" class="visual-diagram object-contain">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-slide="4">
+            <div class="slide-content flex-row items-center gap-8">
+                 <div class="w-1/2 text-left">
+                    <h2 class="mb-4">2. Η λύση: RoF</h2>
+                     <h3 class="font-semibold text-xl mb-3 text-green-400">Σύγκλιση ασύρματων και οπτικών δικτύων</h3>
+                    <h4 class="font-bold mt-4">Βασική αρχή:</h4>
+                    <p class="mb-4 text-lg">Συνδυάζει το υψηλό εύρος ζώνης και την αξιοπιστία των οπτικών ινών με την ευελιξία και την κινητικότητα των ασύρματων δικτύων.</p>
+                    <h4 class="font-bold">Πώς λειτουργεί:</h4>
+                    <p class="text-lg">Μεταδίδει ραδιοσήματα απευθείας μέσω οπτικών ινών, διατηρώντας τη μορφή του σήματος.</p>
+                </div>
+                <div class="w-1/2">
+                    <img src="images/thesis-presentation/placeholder-rof-solution.png" alt="Diagram of Radio over Fiber solution" class="visual-diagram object-contain">
+                </div>
+            </div>
+        </div>
+        
+        <div class="slide" data-slide="5">
+            <div class="slide-content">
+                <h2 class="mb-4">3. Αρχιτεκτονική C-RAN</h2>
+                <p class="text-lg text-gray-300 max-w-4xl">Πρόκειται για ένα νέο τρόπο κεντρικοποιημένης επεξεργασίας, που απλοποιεί την περιφέρεια του δικτύου. Είναι μια βασική αρχιτεκτονική αλλαγή.</p>
+                <div class="w-full max-w-6xl flex justify-center">
+                     <img src="images/thesis-presentation/placeholder-dran-vs-cran.png" alt="Comparison of Distributed RAN and Centralized RAN" class="visual-diagram object-contain mt-4" style="width: 75%;">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-slide="6">
+            <div class="slide-content flex-row items-center gap-8">
+                <div class="w-1/2 text-left">
+                    <h2 class="mb-4">4. Βασικά πλεονεκτήματα</h2>
+                    <h3 class="font-semibold text-xl mb-3 text-blue-300">Ασύγκριτη απόδοση και επεκτασιμότητα</h3>
+                    <ul class="list-disc pl-5 space-y-3 text-lg">
+                        <li><strong>Τεράστιο εύρος ζώνης:</strong> Πρακτικά απεριόριστη χωρητικότητα.</li>
+                        <li><strong>Χαμηλή καθυστέρηση:</strong> Τα σήματα διαδίδονται με την ταχύτητα του φωτός.</li>
+                        <li><strong>Επεκτασιμότητα:</strong> Η πολυπλεξία WDM επιτρέπει σε μία μόνο ίνα να μεταφέρει πολλαπλές ροές δεδομένων, αυξάνοντας την χωρητικότητα χωρίς την ανάγκη τοποθέτησης επιπλέον καλωδίων.</li>
+                    </ul>
+                </div>
+                <div class="w-1/2">
+                    <img src="images/thesis-presentation/placeholder-wdm.png" alt="Wavelength Division Multiplexing Diagram" class="visual-diagram object-contain">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-slide="7">
+            <div class="slide-content flex-row items-center gap-8">
+                <div class="w-1/2 text-left">
+                    <h2 class="mb-4">4. Βασικά πλεονεκτήματα</h2>
+                    <h3 class="font-semibold text-xl mb-3 text-green-300">Οικονομική και ενεργειακή απόδοση</h3>
+                    <ul class="list-disc pl-5 space-y-3 text-lg">
+                        <li><strong>Μείωση κόστους:</strong> Η συγκέντρωση του εξοπλισμού σε ένα μοντέλο C-RAN μειώνει δραστικά το συνολικό κόστος ιδιοκτησίας (TCO). Ο απλοποιημένος εξοπλισμός είναι φθηνότερος και οι συγκεντρωμένοι πόροι μειώνουν τα λειτουργικά έξοδα.</li>
+                        <li><strong>Πράσινο δίκτυο:</strong> Οι συγκεντρωμένοι πόροι είναι πολύ πιο ενεργειακά αποδοτικοί από τις κατανεμημένες, ενεργοβόρες κυψέλες.</li>
+                    </ul>
+                </div>
+                <div class="w-1/2">
+                    <img src="images/thesis-presentation/placeholder-tco-chart.png" alt="TCO Comparison Chart" class="visual-diagram object-contain">
+                </div>
+            </div>
+        </div>
+        
+        <div class="slide" data-slide="8">
+            <div class="slide-content flex-row items-center gap-8">
+                <div class="w-1/2 text-left">
+                    <h2 class="mb-4">4. Βασικά πλεονεκτήματα</h2>
+                    <h3 class="font-semibold text-xl mb-3 text-purple-300">Ευελιξία και διασφάλιση για το μέλλον</h3>
+                    <ul class="list-disc pl-5 space-y-3 text-lg">
+                        <li><strong>Τεχνολογικά ανεξάρτητη λύση:</strong> Η ίδια υποδομή RoF μπορεί να μεταφέρει σήματα 4G, 5G, Wi-Fi και μελλοντικά σήματα 6G.</li>
+                        <li><strong>Ευκολία Αναβάθμισης:</strong> Καθώς η τεχνολογία δικτύων εξελίσσεται, οι απαιτούμενες αναβαθμίσεις πραγματοποιούνται μόνο στον κεντρικό συγκρότημα BBU.</li>
+                        <li>Η δαπανηρή και δύσκολη στην αντικατάσταση υποδομή οπτικών ινών παραμένει ανέπαφη.</li>
+                    </ul>
+                </div>
+                <div class="w-1/2">
+                    <img src="images/thesis-presentation/placeholder-unified-infra.png" alt="Unified Optical Infrastructure Diagram" class="visual-diagram object-contain">
+                </div>
+            </div>
+        </div>
+        
+        <div class="slide" data-slide="9">
+            <div class="slide-content flex-row items-center gap-8">
+                <div class="w-1/2 text-left">
+                    <h2 class="mb-4">5. Μελέτη Περίπτωσης: Korea Telecom</h2>
+                    <ul class="list-disc pl-5 space-y-3 text-base">
+                        <li><strong>Στόχος:</strong> Υποστήριξη κρίσιμων εφαρμογών 5G-V2X (Vehicle-to-Everything) στην Έξυπνη Πόλη Songdo.</li>
+                        <li><strong>Αρχιτεκτονική:</strong> Εγκατέστησαν ένα αναλογικό σύστημα RoF χρησιμοποιώντας τη ζώνη mmWave 28 GHz, ενσωματώνοντάς το με Mobile Edge Computing (MEC) για την επεξεργασία δεδομένων πιο κοντά στον χρήστη.</li>
+                        <li><strong>Αποτέλεσμα:</strong> Το δίκτυο πέτυχε με επιτυχία καθυστέρηση κάτω των 0,9ms και ταχύτητες άνω των 3 Gbps, αποδεικνύοντας ότι ο συνδυασμός RoF + MEC είναι μια βιώσιμη και ισχυρή λύση για τις πιο απαιτητικές περιπτώσεις χρήσης 5G.</li>
+                    </ul>
+                </div>
+                <div class="w-1/2">
+                    <img src="images/thesis-presentation/placeholder-case-study.png" alt="Korea Telecom Case Study Diagram" class="visual-diagram object-contain">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-slide="10">
+            <div class="slide-content">
+                <h2 class="mb-8">6. Προκλήσεις & Ερευνητικές Κατευθύνσεις</h2>
+                 <div class="w-full max-w-6xl">
+                     <img src="images/thesis-presentation/placeholder-challenges-research.png" alt="Challenges and Future Research Directions" class="visual-diagram object-contain">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-slide="11">
+            <div class="slide-content">
+                <h2 class="mb-8">6. Συμπεράσματα</h2>
+                <div class="w-full max-w-5xl flex justify-center">
+                    <img src="images/thesis-presentation/placeholder-conclusions.png" alt="Conclusions Summary" class="w-full h-auto" style="width: 75%;">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-slide="12">
+            <div class="slide-content">
+                 <h1 class="text-5xl font-bold">Ευχαριστώ για τον χρόνο σας!</h1>
+                 <div class="mt-12">
+                    <img src="images/thesis-presentation/qr-code.png" alt="QR Code" class="h-64 w-64">
+                 </div>
+                 <div class="mt-12 text-lg text-gray-400">
+                    <p>ΦΡΑΓΚΙΑΔΑΚΗΣ ΑΝΔΡΕΑΣ | ΑΜ: 19390297</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="absolute bottom-0 left-0 right-0 p-3 z-10 bg-black bg-opacity-25">
+            <div class="max-w-6xl mx-auto flex justify-between items-center text-xs text-gray-300 font-medium">
+                <span>Τμήμα Μηχανικών Πληροφορικής και Υπολογιστών</span>
+                <span></span>
+                <span id="slide-counter" class="text-right w-24 block">{currentSlide} / {totalSlides}</span>
+            </div>
+        </footer>
+
+    </div>
+
+    <div class="flex items-center justify-center w-full max-w-6xl mt-4 space-x-4">
+        <button id="prev-btn" class="nav-button">Προηγούμενη</button>
+        <button id="next-btn" class="nav-button">Επόμενη</button>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const slideCounter = document.getElementById('slide-counter');
+
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+
+        function updateView() {
+            slides.forEach((slide, index) => {
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+
+            slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+        }
+
+        function goToNextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateView();
+            }
+        }
+
+        function goToPrevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateView();
+            }
+        }
+
+        nextBtn.addEventListener('click', goToNextSlide);
+        prevBtn.addEventListener('click', goToPrevSlide);
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowRight') {
+                goToNextSlide();
+            } else if (event.key === 'ArrowLeft') {
+                goToPrevSlide();
+            }
+        });
+
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        document.addEventListener('copy', e => e.preventDefault());
+        document.addEventListener('cut', e => e.preventDefault());
+        document.addEventListener('paste', e => e.preventDefault());
+        document.addEventListener('selectstart', e => e.preventDefault());
+        document.addEventListener('dragstart', e => e.preventDefault());
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && ['c','x','v','p','s','u','a'].includes(e.key.toLowerCase())) {
+                e.preventDefault();
+            }
+        });
+
+        updateView();
+    </script>
+
+</body>
+</html>

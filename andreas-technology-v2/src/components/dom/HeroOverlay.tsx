@@ -31,12 +31,12 @@ export default function HeroOverlay() {
                             t.title,
                             "IT Engineer",
                             "Network & Systems Engineer",
-                            "Conversational AI Engineer",
                             "Infrastructure & Support Engineer",
-                            "Cloud & DevOps Enthusiast",
                             "Applied Computer Science Specialist",
                             "Creative Problem Solver",
                             "Technical Support Engineer",
+                            "Conversational AI Engineer",
+                            "Cloud & DevOps Enthusiast",
                             "System Design & Integration Engineer",
                             "AI & Automation Enthusiast",
                         ],
@@ -57,6 +57,9 @@ export default function HeroOverlay() {
                 >
                     View Projects
                 </button>
+
+
+
                 <button
                     onClick={() => scrollToSection('contact')}
                     className="px-6 py-3 border-2 border-black dark:border-white text-black dark:text-white rounded-lg hover:scale-105 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all duration-300 font-medium"
