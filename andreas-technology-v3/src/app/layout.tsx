@@ -12,8 +12,8 @@ import CustomCursor from '@/components/ui/CustomCursor'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Andreas | Creative Technologist',
-  description: 'The digital portfolio of Andreas.',
+  title: 'Andreas | IT & Security Engineer',
+  description: 'The digital portfolio of Andreas Fragkiadakis. IT & Computer Engineering Student, IT & Security Engineer.',
   icons: {
     icon: [
       { url: '/favicons/favicon.ico' },
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: 'Andreas | Creative Technologist',
+    title: 'Andreas | IT & Security Engineer',
     description: 'The digital portfolio of Andreas Fragkiadakis. IT & Computer Engineering Student, Creative Technologist.',
     url: 'https://andreas.technology',
     siteName: 'Andreas Fragkiadakis Portfolio',
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Andreas | Creative Technologist',
+    title: 'Andreas | IT & Security Engineer',
     description: 'The digital portfolio of Andreas Fragkiadakis.',
     images: ['/images/Porftolio website/portfolio-site-2025.png'],
   },
@@ -62,6 +62,34 @@ export default function RootLayout({
           integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
           crossOrigin="anonymous"
           referrerPolicy="no-referrer"
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Person',
+              name: 'Andreas Fragkiadakis',
+              url: 'https://andreas.technology',
+              image: 'https://andreas.technology/images/Porftolio%20website/portfolio-site-2025.png',
+              jobTitle: 'IT & Security Engineer',
+              worksFor: {
+                '@type': 'Organization',
+                name: 'OMILIA LTD',
+              },
+              sameAs: [
+                'https://github.com/Andrewfragkiadakis',
+                'https://www.linkedin.com/in/andreas-fragkiadakis/',
+              ],
+              email: 'andrewfragkiadakis@gmail.com',
+              telephone: '+30-697-345-3683',
+              address: {
+                '@type': 'PostalAddress',
+                addressLocality: 'Athens',
+                addressCountry: 'GR',
+              },
+            }),
+          }}
         />
       </head>
       <body className={inter.className}>

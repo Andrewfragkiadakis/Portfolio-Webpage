@@ -1,54 +1,54 @@
 Role & Goal
-Act as an Elite Creative Technologist and Lead Front-End Architect. Your goal is to engineer a high-performance, visionary masterplan and code foundation for a world-class personal portfolio. The output must balance bleeding-edge aesthetics with technical rigor, specifically optimized for the Next.js App Router and static deployment.
+Act as an Elite IT & Security Engineer and Lead Front - End Architect.Your goal is to engineer a high - performance, visionary masterplan and code foundation for a world - class personal portfolio.The output must balance bleeding - edge aesthetics with technical rigor, specifically optimized for the Next.js App Router and static deployment.
 
 Technical Stack
-Framework: Next.js 15 (App Router) + TypeScript (Strict Mode).
+Framework: Next.js 15(App Router) + TypeScript(Strict Mode).
 
-Styling: Tailwind CSS (Custom Glassmorphism config).
+    Styling: Tailwind CSS(Custom Glassmorphism config).
 
-3D/Graphics: React Three Fiber (R3F) + Drei + Custom GLSL Shaders.
+3D / Graphics: React Three Fiber(R3F) + Drei + Custom GLSL Shaders.
 
-Animation: Framer Motion (Layout transitions + Scroll-linked logic).
+    Animation: Framer Motion(Layout transitions + Scroll - linked logic).
 
-UX/Smoothness: Lenis Scroll + Custom SVG Reactive Cursor.
+        UX / Smoothness: Lenis Scroll + Custom SVG Reactive Cursor.
 
-Design & UI Philosophy: "The Glass Nexus"
-Aesthetic: Dark-themed Glassmorphism. Implement a depth-heavy UI using backdrop-blur-xl, bg-white/5, and border-white/10.
+            Design & UI Philosophy: "The Glass Nexus"
+Aesthetic: Dark - themed Glassmorphism.Implement a depth - heavy UI using backdrop-blur - xl, bg - white / 5, and border - white / 10.
 
 Lighting: Use CSS Mesh Gradients and Radial Spotlights that follow the mouse.
 
-The 3D Hero: A custom Fragment Shader on a plane or sphere. Use Perlin Noise to drive organic, morphing distortions. The shader must be optimized for GPU performance (no frame drops).
+    The 3D Hero: A custom Fragment Shader on a plane or sphere.Use Perlin Noise to drive organic, morphing distortions.The shader must be optimized for GPU performance(no frame drops).
 
-Typography: High-contrast sans-serif (e.g., Inter or Geist) with oversized headers and subtle letter-spacing animations.
+        Typography: High - contrast sans - serif(e.g., Inter or Geist) with oversized headers and subtle letter - spacing animations.
 
-I. The Architectural Blueprint
-File Hierarchy: Provide a modular src/ directory structure. Separate components/ui (stateless), components/sections (logic-heavy), and hooks/ (scroll/state).
+            I.The Architectural Blueprint
+File Hierarchy: Provide a modular src / directory structure.Separate components / ui(stateless), components / sections(logic - heavy), and hooks / (scroll / state).
 
 Tailwind Extension: Provide a tailwind.config.ts snippet that includes custom keyframes for "border-glow" and "mesh-drift."
 
-Smooth Scroll: Provide a SmoothScroll wrapper using @studio-freight/lenis.
+Smooth Scroll: Provide a SmoothScroll wrapper using @studio-freight / lenis.
 
-II. Core Implementation (The "Wow" Factor)
-Shader Hero Component: Create a HeroCanvas.tsx using @react-three/fiber. Include a GLSL fragmentShader that produces a morphing, organic glass-like blob.
+    II.Core Implementation(The "Wow" Factor)
+Shader Hero Component: Create a HeroCanvas.tsx using @react-three / fiber.Include a GLSL fragmentShader that produces a morphing, organic glass - like blob.
 
 Interactive Cursor: A Cursor.tsx component using framer-motion's useSpring. It must morph (scale/change color) when hovering over data-cursor="pointer" elements.
 
-"Story Mode" Timeline: A vertical component where a motion.div progress bar fills based on useScroll. Use sticky positioning for year-markers that "light up" when they enter the viewport.
+"Story Mode" Timeline: A vertical component where a motion.div progress bar fills based on useScroll.Use sticky positioning for year - markers that "light up" when they enter the viewport.
 
 Project Grid: Implement a "Tilt" effect using Framer Motion's useMotionValue for a 3D perspective hover on project cards.
 
-III. Internationalization (Bilingual EN/GR)
+III.Internationalization(Bilingual EN / GR)
 State Strategy: Use a lightweight ContentContext to toggle between en and gr.
 
-Metadata: Show how to implement a dynamic generateMetadata function that swaps SEO tags based on the active language.
+    Metadata: Show how to implement a dynamic generateMetadata function that swaps SEO tags based on the active language.
 
-IV. Static Optimization & Deployment
+        IV.Static Optimization & Deployment
 Static Export: Configuration for next.config.js with output: 'export' and images: { unoptimized: true }.
 
 GitHub Actions: A YAML workflow to build and deploy to GitHub Pages automatically.
 
 Content Data
-Use the provided TypeScript content object to populate all UI elements. Ensure the "Experience" section is mapped correctly to the "Story Mode" timeline.
+Use the provided TypeScript content object to populate all UI elements.Ensure the "Experience" section is mapped correctly to the "Story Mode" timeline.
 // Bilingual content data for Andreas Fragkiadakis portfolio
 
 export interface Skill {
@@ -125,7 +125,7 @@ export interface Content {
 export const content: Record<'en' | 'gr', Content> = {
     en: {
         name: "ANDREAS FRAGKIADAKIS",
-        title: "Creative Technologist",
+        title: "IT & Security Engineer",
         location: "Athens, Greece",
         phone: "(+30) 697-345-3683",
         email: "andrewfragkiadakis@gmail.com",
@@ -350,7 +350,7 @@ export const content: Record<'en' | 'gr', Content> = {
 
     gr: {
         name: "ΑΝΔΡΕΑΣ ΦΡΑΓΚΙΑΔΑΚΗΣ",
-        title: "Creative Technologist",
+        title: "IT & Security Engineer",
         location: "Αθήνα, Ελλάδα",
         phone: "(+30) 697-345-3683",
         email: "andrewfragkiadakis@gmail.com",

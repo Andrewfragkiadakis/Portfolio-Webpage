@@ -106,7 +106,7 @@ export interface Content {
 export const content: Record<'en' | 'gr', Content> = {
     en: {
         name: "ANDREAS FRAGKIADAKIS",
-        title: "Creative Technologist",
+        title: "IT & Security Engineer",
         location: "Athens, Greece",
         phone: "(+30) 697-345-3683",
         email: "andrewfragkiadakis@gmail.com",
@@ -133,7 +133,7 @@ export const content: Record<'en' | 'gr', Content> = {
             firstName: "ANDREAS",
             lastName: "FRAGKIADAKIS",
             typewriter: [
-                "SYSTEM ENGINEER // CREATIVE TECHNOLOGIST",
+                "SYSTEM ENGINEER // IT & SECURITY ENGINEER",
                 "NETWORK & SYSTEMS ENGINEER",
                 "CONVERSATIONAL AI ENGINEER",
                 "INFRASTRUCTURE & SUPPORT ENGINEER",
@@ -377,7 +377,7 @@ export const content: Record<'en' | 'gr', Content> = {
 
     gr: {
         name: "ΑΝΔΡΕΑΣ ΦΡΑΓΚΙΑΔΑΚΗΣ",
-        title: "Creative Technologist",
+        title: "IT & Security Engineer",
         location: "Αθήνα, Ελλάδα",
         phone: "(+30) 697-345-3683",
         email: "andrewfragkiadakis@gmail.com",
@@ -404,7 +404,7 @@ export const content: Record<'en' | 'gr', Content> = {
             firstName: "ΑΝΔΡΕΑΣ",
             lastName: "ΦΡΑΓΚΙΑΔΑΚΗΣ",
             typewriter: [
-                "SYSTEM ENGINEER // CREATIVE TECHNOLOGIST",
+                "SYSTEM ENGINEER // IT & SECURITY ENGINEER",
                 "NETWORK & SYSTEMS ENGINEER",
                 "CONVERSATIONAL AI ENGINEER",
                 "INFRASTRUCTURE & SUPPORT ENGINEER",
