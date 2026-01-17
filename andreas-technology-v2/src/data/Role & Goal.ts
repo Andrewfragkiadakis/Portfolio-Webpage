@@ -1,7 +1,7 @@
-Role & Goal
-Act as an Elite IT & Security Engineer and Lead Front - End Architect.Your goal is to engineer a high - performance, visionary masterplan and code foundation for a world - class personal portfolio.The output must balance bleeding - edge aesthetics with technical rigor, specifically optimized for the Next.js App Router and static deployment.
+/* Role & Goal
+Act as an Elite IT & Security Engineer and Lead Front-End Architect. Your goal is to engineer a high-performance, visionary masterplan and code foundation for a world-class personal portfolio. The output must balance bleeding-edge aesthetics with technical rigor, specifically optimized for the Next.js App Router and static deployment. */
 
-Technical Stack
+/* Technical Stack
 Framework: Next.js 15(App Router) + TypeScript(Strict Mode).
 
     Styling: Tailwind CSS(Custom Glassmorphism config).
@@ -45,10 +45,10 @@ State Strategy: Use a lightweight ContentContext to toggle between en and gr.
         IV.Static Optimization & Deployment
 Static Export: Configuration for next.config.js with output: 'export' and images: { unoptimized: true }.
 
-GitHub Actions: A YAML workflow to build and deploy to GitHub Pages automatically.
+GitHub Actions: A YAML workflow to build and deploy to GitHub Pages automatically. */
 
-Content Data
-Use the provided TypeScript content object to populate all UI elements.Ensure the "Experience" section is mapped correctly to the "Story Mode" timeline.
+/* Content Data
+Use the provided TypeScript content object to populate all UI elements.Ensure the "Experience" section is mapped correctly to the "Story Mode" timeline. */
 // Bilingual content data for Andreas Fragkiadakis portfolio
 
 export interface Skill {
