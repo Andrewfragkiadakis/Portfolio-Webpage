@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Andreas | IT & Security Engineer',
-    description: 'The digital portfolio of Andreas Fragkiadakis. IT & Computer Engineering Student, Creative Technologist.',
+    description: 'The digital portfolio of Andreas Fragkiadakis. IT & Computer Engineering Student, IT & Security Engineer.',
     url: 'https://andreas.technology',
     siteName: 'Andreas Fragkiadakis Portfolio',
     images: [
