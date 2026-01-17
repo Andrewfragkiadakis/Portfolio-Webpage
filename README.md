@@ -1,5 +1,7 @@
 # Andreas Fragkiadakis - Portfolio v2
 
+[![Website](https://img.shields.io/badge/Website-andreas.technology-blue?style=for-the-badge&logo=google-chrome)](https://andreas.technology)
+
 Hello! This repository hosts my dynamic personal CV and portfolio website, rebuilt from the ground up using **Next.js 16**. It showcases my skills, education, work experience, and projects in IT and Computer Engineering with a modern, interactive user experience.
 
 This project represents a significant transformation from previous versions, moving to a robust, component-based architecture using the latest web technologies.
