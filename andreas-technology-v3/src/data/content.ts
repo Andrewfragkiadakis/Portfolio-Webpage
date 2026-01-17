@@ -306,15 +306,15 @@ export const content: Record<'en' | 'gr', Content> = {
         projects: [
             {
                 name: "Portfolio Website",
-                year: 2025,
+                year: 2026,
                 tags: ["Next.js", "Three.js", "React", "TypeScript", "Framer Motion"],
-                description: "Designed and built this modern portfolio (2025) with 3D graphics, smooth interactions, and animated sections. Features dark mode, responsive design, and professional animations.",
+                description: "Designed and built this modern portfolio (2026) with 3D graphics, smooth interactions, and animated sections. Features dark mode, responsive design, and professional animations.",
                 githubLink: "https://github.com/Andrewfragkiadakis/andrewfragkiadakis.github.io",
                 image: "/images/Porftolio website/portfolio-site-2025.png"
             },
             {
                 name: "HappyFox 🦊 - Mental Health App",
-                year: 2025,
+                year: 2026,
                 tags: ["UI/UX Design", "Figma", "Team Project", "SRH Heidelberg"],
                 description: "Developed UI/UX concepts for a user-friendly mental health app aimed at promoting emotional well-being during a Master's course.",
                 githubLink: "https://github.com/Andrewfragkiadakis/Mental-Health-Project/tree/main",
@@ -322,7 +322,7 @@ export const content: Record<'en' | 'gr', Content> = {
             },
             {
                 name: "Schiller Language Centers Website",
-                year: 2025,
+                year: 2026,
                 tags: ["Wix", "Wix Studio", "Web Development", "Educational"],
                 description: "Developed the website for Schiller Language Centers in Rethymno, Greece. The site showcases courses in English, German, and Educational Robotics.",
                 liveSiteLink: "https://www.schiller.edu.gr/",
@@ -337,7 +337,7 @@ export const content: Record<'en' | 'gr', Content> = {
             },
             {
                 name: "Thesis: Hybrid Wireless-Optical Networks for 5G",
-                year: 2025,
+                year: 2026,
                 tags: ["Thesis", "5G", "Radio over Fiber", "Research"],
                 description: "Master's thesis on new hybrid wireless-optical networks (Radio over Fiber) for 5G. Includes research and full thesis documentation.",
                 liveSiteLink: "/thesis-presentation.html",
@@ -372,7 +372,7 @@ export const content: Record<'en' | 'gr', Content> = {
         ],
 
         contactTitle: "GET IN TOUCH",
-        copyright: "© 2025 Created By Andreas Fragkiadakis. All rights reserved."
+        copyright: "© 2026 Created By Andreas Fragkiadakis. All rights reserved."
     },
 
     gr: {
@@ -577,7 +577,7 @@ export const content: Record<'en' | 'gr', Content> = {
         projects: [
             {
                 name: "Προσωπική Ιστοσελίδα Portfolio",
-                year: 2025,
+                year: 2026,
                 tags: ["Next.js", "Three.js", "React", "TypeScript", "Framer Motion"],
                 description: "Σχεδίαση και υλοποίηση modern portfolio με 3D γραφικά, ομαλές αλληλεπιδράσεις (animations) και Dark Mode.",
                 githubLink: "https://github.com/Andrewfragkiadakis/andrewfragkiadakis.github.io",
@@ -585,7 +585,7 @@ export const content: Record<'en' | 'gr', Content> = {
             },
             {
                 name: "HappyFox 🦊 - Εφαρμογή Ψυχικής Υγείας",
-                year: 2025,
+                year: 2026,
                 tags: ["UI/UX Design", "Figma", "Team Project", "SRH Heidelberg"],
                 description: "Σχεδιασμός UI/UX για εφαρμογή ψυχικής υγείας με στόχο την προώθηση της συναισθηματικής ευεξίας. Υλοποιήθηκε στα πλαίσια μεταπτυχιακού μαθήματος.",
                 githubLink: "https://github.com/Andrewfragkiadakis/Mental-Health-Project/tree/main",
@@ -593,7 +593,7 @@ export const content: Record<'en' | 'gr', Content> = {
             },
             {
                 name: "Ιστοσελίδα Κέντρων Ξένων Γλωσσών Schiller",
-                year: 2025,
+                year: 2026,
                 tags: ["Wix", "Wix Studio", "Web Development", "Educational"],
                 description: "Ανάπτυξη ιστοσελίδας για τα εκπαιδευτικά κέντρα Schiller στο Ρέθυμνο. Παρουσίαση προγραμμάτων σπουδών Αγγλικών, Γερμανικών και Εκπαιδευτικής Ρομποτικής.",
                 liveSiteLink: "https://www.schiller.edu.gr/",
@@ -608,7 +608,7 @@ export const content: Record<'en' | 'gr', Content> = {
             },
             {
                 name: "Thesis: Hybrid Wireless-Optical Networks for 5G",
-                year: 2025,
+                year: 2026,
                 tags: ["Διπλωματική", "5G", "Radio over Fiber", "Έρευνα"],
                 description: "Διπλωματική εργασία στα υβριδικά ασύρματα-οπτικά δίκτυα (Radio over Fiber) για δίκτυα 5ης γενιάς. Περιλαμβάνει τεχνική έρευνα και τεκμηρίωση.",
                 liveSiteLink: "/thesis-presentation.html",
@@ -643,6 +643,6 @@ export const content: Record<'en' | 'gr', Content> = {
         ],
 
         contactTitle: "ΕΠΙΚΟΙΝΩΝΙΑ",
-        copyright: "© 2025 Created By Ανδρέας Φραγκιαδάκης. All rights reserved."
+        copyright: "© 2026 Created By Ανδρέας Φραγκιαδάκης. All rights reserved."
     }
 }
