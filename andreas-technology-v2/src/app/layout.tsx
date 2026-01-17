@@ -8,6 +8,7 @@ import { ThemeProvider } from '@/contexts/ThemeContext'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://andreas.technology'),
   title: 'Andreas | IT & Security Engineer',
   description: 'The digital portfolio of Andreas.',
   icons: {

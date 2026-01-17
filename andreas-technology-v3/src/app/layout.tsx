@@ -12,6 +12,7 @@ import CustomCursor from '@/components/ui/CustomCursor'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://andreas.technology'),
   title: 'Andreas | IT & Security Engineer',
   description: 'The digital portfolio of Andreas Fragkiadakis. IT & Computer Engineering Student, IT & Security Engineer.',
   icons: {

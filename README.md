@@ -41,4 +41,4 @@ The v2 portfolio introduces significant improvements and new features:
 
 
 ## 📄 License
-© 2025 Andreas Fragkiadakis. All rights reserved.
+© 2026 Andreas Fragkiadakis. All rights reserved.
