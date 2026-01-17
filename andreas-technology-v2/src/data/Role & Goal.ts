@@ -143,9 +143,10 @@ export const content: Record<'en' | 'gr', Content> = {
         about: {
             title: "ABOUT ME",
             description: [
-                "Dedicated IT & Computer Engineering student with expertise in networking, system administration, and project management. Analytical and detail-oriented, with hands-on experience in web development, technical support, and infrastructure coordination.",
-                "Fluent in English (C2) and German (B2), delivering innovative solutions to drive efficiency and growth.",
-                "Currently writing my thesis on 'New Hybrid Wireless-Optical Networks (Radio over Fiber) for Fifth Generation (5G) Networks' and working at OMILIA LTD as an IT Engineer."
+                "I am an IT & Computer Engineer (M.Eng.) specializing in SecOps, Infrastructure Automation, and AI Integration. My approach combines deep technical research with hands-on engineering to build secure, scalable, and automated environments.",
+                "Currently, I balance my role as an IT Engineer at Omilia, while fulfilling my military service as an IT Operations Administrator. My academic background is rooted in 5G research, specifically in Hybrid Wireless-Optical Networks (Radio over Fiber).",
+                "With a focus on Endpoint Hardening, Network Security, and AI-driven operations (Atlassian Rovo, Gemini), I bridge the gap between complex infrastructure and operational efficiency.",
+                "Based in Greece | Fluent in English (C2) & German (B2)"
             ]
         },
 
@@ -368,9 +369,10 @@ export const content: Record<'en' | 'gr', Content> = {
         about: {
             title: "ΣΧΕΤΙΚΑ ΜΕ ΕΜΕΝΑ",
             description: [
-                "Αφοσιωμένος Φοιτητής Πληροφορικής & Μηχανικής Υπολογιστών με εξειδίκευση στα Δίκτυα, τη διαχείριση συστημάτων και το project management. Αναλυτικός και προσηλωμένος στη λεπτομέρεια, με πρακτική εμπειρία στην ανάπτυξη ιστοσελίδων, τεχνική υποστήριξη και συντονισμό υποδομών.",
-                "Άπταιστη γνώση της Αγγλικής (C2) και Γερμανικής (B2), παρέχοντας καινοτόμες λύσεις για την αύξηση της αποδοτικότητας και της ανάπτυξης.",
-                "Αυτή τη στιγμή γράφω τη Διπλωματική μου εργασία με τίτλο 'Νέα Υβριδικά Ασύρματα-Οπτικά Δίκτυα (Radio over Fiber) για Δίκτυα Πέμπτης Γενιάς (5G)' και εργάζομαι στην OMILIA LTD ως Μηχανικός Υποστήριξης Πληροφορικής."
+                "Είμαι Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) με εξειδίκευση σε SecOps, αυτοματισμό υποδομών και ενσωμάτωση Τεχνητής Νοημοσύνης. Η προσέγγισή μου συνδυάζει τη βαθιά τεχνική έρευνα με την εφαρμοσμένη μηχανική για τη δημιουργία ασφαλών, κλιμακούμενων και αυτοματοποιημένων περιβαλλόντων.",
+                "Επί του παρόντος, συνδυάζω τον ρόλο μου ως Μηχανικός Πληροφορικής στην Omilia, ενώ παράλληλα εκπληρώνω τις στρατιωτικές μου υποχρεώσεις ως Διαχειριστής Επιχειρήσεων Πληροφορικής. Το ακαδημαϊκό μου υπόβαθρο βασίζεται στην έρευνα δικτύων 5G, και συγκεκριμένα στα Υβριδικά Ασύρματα-Οπτικά Δίκτυα (Radio over Fiber).",
+                "Με έμφαση στην ενίσχυση τερματικών σημείων (Endpoint Hardening), την ασφάλεια δικτύων και τις λειτουργίες που βασίζονται στην Τεχνητή Νοημοσύνη (Atlassian Rovo, Gemini), γεφυρώνω το χάσμα μεταξύ πολύπλοκων υποδομών και επιχειρησιακής αποτελεσματικότητας.",
+                "Με έδρα την Ελλάδα | Άριστη γνώση Αγγλικών (C2) & Γερμανικών (B2)"
             ]
         },
 
