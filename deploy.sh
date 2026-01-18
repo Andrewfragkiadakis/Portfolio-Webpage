@@ -8,7 +8,7 @@ set -e  # Exit on error
 echo "🚀 Starting deployment..."
 
 # Navigate to project directory
-cd "$(dirname "$0")/andreas-technology-v2"
+cd "$(dirname "$0")/andreas-technology-v3"
 
 echo "📦 Building production site..."
 npm run build
@@ -21,7 +21,7 @@ rm -rf _next
 
 echo "📋 Copying new build files (excluding metadata)..."
 # Copy everything except the metadata txt files and redundant files
-rsync -av --exclude='__next.*' --exclude='*.txt' --exclude='_not-found.html' --exclude='_not-found/' --exclude='favicon.ico' andreas-technology-v2/out/ ./
+rsync -av --exclude='__next.*' --exclude='*.txt' --exclude='_not-found.html' --exclude='_not-found/' andreas-technology-v3/out/ ./
 
 echo "✅ Deployment files ready!"
 echo ""

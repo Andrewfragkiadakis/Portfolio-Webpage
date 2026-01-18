@@ -124,9 +124,10 @@ export const content: Record<'en' | 'gr', Content> = {
         about: {
             title: "ABOUT ME",
             description: [
-                "Dedicated IT & Computer Engineering student with expertise in networking, system administration, and project management. Analytical and detail-oriented, with hands-on experience in web development, technical support, and infrastructure coordination.",
-                "Fluent in English (C2) and German (B2), delivering innovative solutions to drive efficiency and growth.",
-                "Currently writing my thesis on 'New Hybrid Wireless-Optical Networks (Radio over Fiber) for Fifth Generation (5G) Networks' and working at OMILIA LTD as an IT Engineer."
+                "I am an IT & Computer Engineer (M.Eng.) specializing in SecOps, Infrastructure Automation, and AI Integration. My approach combines deep technical research with hands-on engineering to build secure, scalable, and automated environments.",
+                "Currently, I balance my role as an IT Engineer at Omilia, while fulfilling my military service as an IT Operations Administrator. My academic background is rooted in 5G research, specifically in Hybrid Wireless-Optical Networks (Radio over Fiber).",
+                "With a focus on Endpoint Hardening, Network Security, and AI-driven operations (Atlassian Rovo, Gemini), I bridge the gap between complex infrastructure and operational efficiency.",
+                "Based in Greece | Fluent in English (C2) & German (B2)"
             ]
         },
         hero: {
@@ -340,7 +341,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 year: 2026,
                 tags: ["Thesis", "5G", "Radio over Fiber", "Research"],
                 description: "Master's thesis on new hybrid wireless-optical networks (Radio over Fiber) for 5G. Includes research and full thesis documentation.",
-                liveSiteLink: "/thesis-presentation.html",
+                liveSiteLink: "/thesis-presentation",
                 reportLink: "https://drive.usercontent.google.com/download?id=1iayG5SCoUykioRzLPl1BeOkO7iwxxHkD&export=download&authuser=0",
                 image: "/images/thesis-presentation/thesis-image.png"
             },
@@ -395,9 +396,10 @@ export const content: Record<'en' | 'gr', Content> = {
         about: {
             title: "ΣΧΕΤΙΚΑ ΜΕ ΕΜΕΝΑ",
             description: [
-                "Φοιτητής Πληροφορικής & Μηχανικής Υπολογιστών με εξειδίκευση στα Δίκτυα, τη διαχείριση συστημάτων και το project management. Αναλυτική σκέψη με προσοχή στη λεπτομέρεια και πρακτική εμπειρία στην ανάπτυξη ιστοσελίδων, την τεχνική υποστήριξη και τον συντονισμό υποδομών.",
-                "Άπταιστη γνώση Αγγλικών (C2) και Γερμανικών (B2), με στόχο την παροχή καινοτόμων λύσεων για την αύξηση της αποδοτικότητας.",
-                "Επί του παρόντος εκπονώ τη διπλωματική μου εργασία με θέμα 'Νέα Υβριδικά Ασύρματα-Οπτικά Δίκτυα (Radio over Fiber) για δίκτυα 5G' και εργάζομαι στην OMILIA LTD ως Μηχανικός Υποστήριξης Πληροφορικής (IT Engineer)."
+                "Είμαι Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) με εξειδίκευση σε SecOps, αυτοματισμό υποδομών και ενσωμάτωση Τεχνητής Νοημοσύνης. Η προσέγγισή μου συνδυάζει τη βαθιά τεχνική έρευνα με την εφαρμοσμένη μηχανική για τη δημιουργία ασφαλών, κλιμακούμενων και αυτοματοποιημένων περιβαλλόντων.",
+                "Επί του παρόντος, συνδυάζω τον ρόλο μου ως Μηχανικός Πληροφορικής στην Omilia, ενώ παράλληλα εκπληρώνω τις στρατιωτικές μου υποχρεώσεις ως Διαχειριστής Επιχειρήσεων Πληροφορικής. Το ακαδημαϊκό μου υπόβαθρο βασίζεται στην έρευνα δικτύων 5G, και συγκεκριμένα στα Υβριδικά Ασύρματα-Οπτικά Δίκτυα (Radio over Fiber).",
+                "Με έμφαση στην ενίσχυση τερματικών σημείων (Endpoint Hardening), την ασφάλεια δικτύων και τις λειτουργίες που βασίζονται στην Τεχνητή Νοημοσύνη (Atlassian Rovo, Gemini), γεφυρώνω το χάσμα μεταξύ πολύπλοκων υποδομών και επιχειρησιακής αποτελεσματικότητας.",
+                "Με έδρα την Ελλάδα | Άριστη γνώση Αγγλικών (C2) & Γερμανικών (B2)"
             ]
         },
         hero: {
@@ -611,7 +613,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 year: 2026,
                 tags: ["Διπλωματική", "5G", "Radio over Fiber", "Έρευνα"],
                 description: "Διπλωματική εργασία στα υβριδικά ασύρματα-οπτικά δίκτυα (Radio over Fiber) για δίκτυα 5ης γενιάς. Περιλαμβάνει τεχνική έρευνα και τεκμηρίωση.",
-                liveSiteLink: "/thesis-presentation.html",
+                liveSiteLink: "/thesis-presentation",
                 reportLink: "https://drive.usercontent.google.com/download?id=1iayG5SCoUykioRzLPl1BeOkO7iwxxHkD&export=download&authuser=0",
                 image: "/images/thesis-presentation/thesis-image.png"
             },

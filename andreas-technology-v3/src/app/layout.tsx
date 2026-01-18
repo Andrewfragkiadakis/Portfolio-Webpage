@@ -15,6 +15,9 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://andreas.technology'),
   title: 'Andreas | IT & Security Engineer',
   description: 'The digital portfolio of Andreas Fragkiadakis. IT & Computer Engineering Student, IT & Security Engineer.',
+  alternates: {
+    canonical: '/',
+  },
   icons: {
     icon: [
       { url: '/favicons/favicon.ico' },
