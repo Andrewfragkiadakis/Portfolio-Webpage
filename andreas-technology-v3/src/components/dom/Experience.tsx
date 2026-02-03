@@ -20,9 +20,13 @@ export default function Experience() {
     const scrollMobileRow = (containerRef: React.RefObject<HTMLDivElement | null>, direction: 'left' | 'right') => {
         const el = containerRef.current
         if (!el) return
-        const amount = direction === 'right' ? ONE_CARD_SCROLL_MOBILE : -ONE_CARD_SCROLL_MOBILE
         const maxScroll = el.scrollWidth - el.clientWidth
-        const target = Math.max(0, Math.min(el.scrollLeft + amount, maxScroll))
+        if (maxScroll <= 0) return
+        const scrollLeft = el.scrollLeft
+        if (direction === 'right' && scrollLeft >= maxScroll - 1) return
+        if (direction === 'left' && scrollLeft <= 1) return
+        const amount = direction === 'right' ? ONE_CARD_SCROLL_MOBILE : -ONE_CARD_SCROLL_MOBILE
+        const target = Math.max(0, Math.min(scrollLeft + amount, maxScroll))
         el.scrollTo({ left: target, behavior: 'smooth' })
     }
 

@@ -18,13 +18,27 @@ export default function Projects() {
     const scrollProjects = (direction: 'left' | 'right') => {
         const container = scrollContainerRef.current
         if (!container) return
-        const card = container.querySelector<HTMLElement>('[data-project-card]')
-        const gap = 24
-        const cardWidth = card ? card.offsetWidth : (typeof window !== 'undefined' && window.innerWidth >= 768 ? 400 : 320)
-        const amount = cardWidth + gap
+        const cards = Array.from(container.querySelectorAll<HTMLElement>('[data-project-card]'))
+        if (cards.length === 0) return
         const maxScroll = container.scrollWidth - container.clientWidth
-        const target = Math.max(0, Math.min(container.scrollLeft + (direction === 'right' ? amount : -amount), maxScroll))
-        container.scrollTo({ left: target, behavior: 'smooth' })
+        if (maxScroll <= 0) return
+        const containerRect = container.getBoundingClientRect()
+        let currentIndex = 0
+        for (let i = 0; i < cards.length; i++) {
+            const r = cards[i].getBoundingClientRect()
+            if (r.left >= containerRect.left - 1) {
+                currentIndex = i
+                break
+            }
+            currentIndex = i
+        }
+        const nextIndex = direction === 'right' ? currentIndex + 1 : currentIndex - 1
+        if (nextIndex < 0 || nextIndex >= cards.length) return
+        const targetCard = cards[nextIndex]
+        const targetRect = targetCard.getBoundingClientRect()
+        const delta = targetRect.left - containerRect.left
+        const targetScrollLeft = Math.max(0, Math.min(container.scrollLeft + delta, maxScroll))
+        container.scrollTo({ left: targetScrollLeft, behavior: 'smooth' })
     }
 
     return (

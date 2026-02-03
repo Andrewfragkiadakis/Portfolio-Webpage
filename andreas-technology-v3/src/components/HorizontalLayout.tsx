@@ -111,7 +111,7 @@ export default function HorizontalLayout() {
                 <div id="projects" className="min-h-[85vh] w-full overflow-hidden relative">
                     <Projects />
                 </div>
-                <div id="contact" className="min-h-[85vh] w-full overflow-hidden relative">
+                <div id="contact" className="min-h-0 w-full overflow-hidden relative">
                     <Contact />
                 </div>
             </div>

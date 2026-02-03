@@ -181,62 +181,42 @@ export default function Navigation() {
                 </div>
 
                 <nav className="flex-1 flex flex-col justify-start pt-6 pb-8 overflow-y-auto px-6">
-                    <div className="flex flex-col gap-0">
-                        <div className="flex items-center gap-4 py-3 px-4 border-b border-[var(--foreground)]/15">
-                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-50 uppercase tracking-[0.2em]">01</span>
-                            <button
-                                onClick={() => scrollToSection('hero', 0)}
-                                className="flex-1 text-left py-2 px-2 min-h-[48px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-xl sm:text-2xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
+                    <motion.div
+                        className="flex flex-col gap-0"
+                        initial="closed"
+                        animate={mobileMenuOpen ? 'open' : 'closed'}
+                        variants={{
+                            open: { transition: { staggerChildren: 0.04, delayChildren: 0.06 } },
+                            closed: { transition: { staggerChildren: 0.02, staggerDirection: -1 } },
+                        }}
+                    >
+                        {[
+                            { index: '01', label: language === 'en' ? 'Home' : 'ΑΡΧΙΚΗ', section: 'hero', i: 0 },
+                            { index: '02', label: t.nav.about, section: 'about', i: 1 },
+                            { index: '03', label: t.nav.services, section: 'services', i: 2 },
+                            { index: '04', label: t.nav.experience, section: 'experience', i: 3 },
+                            { index: '05', label: t.nav.projects, section: 'projects', i: 4 },
+                            { index: '06', label: t.nav.contact, section: 'contact', i: 5 },
+                        ].map((item) => (
+                            <motion.div
+                                key={item.section}
+                                className="flex items-center gap-4 py-3 px-4 border-b border-[var(--foreground)]/15"
+                                variants={{
+                                    open: { opacity: 1, x: 0 },
+                                    closed: { opacity: 0, x: -12 },
+                                }}
+                                transition={{ duration: 0.2, ease: 'easeOut' }}
                             >
-                                {language === 'en' ? 'Home' : 'ΑΡΧΙΚΗ'}
-                            </button>
-                        </div>
-                        <div className="flex items-center gap-4 py-3 px-4 border-b border-[var(--foreground)]/15">
-                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-50 uppercase tracking-[0.2em]">02</span>
-                            <button
-                                onClick={() => scrollToSection('about', 1)}
-                                className="flex-1 text-left py-2 px-2 min-h-[48px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-xl sm:text-2xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
-                            >
-                                {t.nav.about}
-                            </button>
-                        </div>
-                        <div className="flex items-center gap-4 py-3 px-4 border-b border-[var(--foreground)]/15">
-                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-50 uppercase tracking-[0.2em]">03</span>
-                            <button
-                                onClick={() => scrollToSection('services', 2)}
-                                className="flex-1 text-left py-2 px-2 min-h-[48px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-xl sm:text-2xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
-                            >
-                                {t.nav.services}
-                            </button>
-                        </div>
-                        <div className="flex items-center gap-4 py-3 px-4 border-b border-[var(--foreground)]/15">
-                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-50 uppercase tracking-[0.2em]">04</span>
-                            <button
-                                onClick={() => scrollToSection('experience', 3)}
-                                className="flex-1 text-left py-2 px-2 min-h-[48px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-xl sm:text-2xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
-                            >
-                                {t.nav.experience}
-                            </button>
-                        </div>
-                        <div className="flex items-center gap-4 py-3 px-4 border-b border-[var(--foreground)]/15">
-                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-50 uppercase tracking-[0.2em]">05</span>
-                            <button
-                                onClick={() => scrollToSection('projects', 4)}
-                                className="flex-1 text-left py-2 px-2 min-h-[48px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-xl sm:text-2xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
-                            >
-                                {t.nav.projects}
-                            </button>
-                        </div>
-                        <div className="flex items-center gap-4 py-3 px-4 border-b border-[var(--foreground)]/15">
-                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-50 uppercase tracking-[0.2em]">06</span>
-                            <button
-                                onClick={() => scrollToSection('contact', 5)}
-                                className="flex-1 text-left py-2 px-2 min-h-[48px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-xl sm:text-2xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
-                            >
-                                {t.nav.contact}
-                            </button>
-                        </div>
-                    </div>
+                                <span className="text-[10px] font-mono text-[var(--foreground)] opacity-50 uppercase tracking-[0.2em]">{item.index}</span>
+                                <button
+                                    onClick={() => scrollToSection(item.section, item.i)}
+                                    className="flex-1 text-left py-2 px-2 min-h-[48px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-xl sm:text-2xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
+                                >
+                                    {item.label}
+                                </button>
+                            </motion.div>
+                        ))}
+                    </motion.div>
                 </nav>
 
                 <div className="px-6 py-6 border-t border-[var(--foreground)]/10 flex justify-between items-center text-[var(--foreground)]/60 text-sm font-mono uppercase tracking-widest">
