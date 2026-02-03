@@ -1,3 +1,16 @@
+# Changelog
+
+The format is based on [Common Changelog](https://common-changelog.org/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Changed
+- Improve font loading: Inter with `display: 'swap'` to reduce FCP/LCP impact and align globals.css with loaded font
+- Improve accessibility: raise contrast for secondary text (opacity-65/50/55 → 80/75) in Contact, Navigation, Experience, About, Projects
+- Fix identical-link purpose: add `aria-label="Contact via email"` to both mailto links in Contact and `aria-hidden` on decorative icons
+
+---
+
 # Andreas Technology V2 - Development Changelog
 **Date**: December 3-4, 2026  
 **Project**: andreas-technology-v2 (Next.js 16 Portfolio Rebuild)

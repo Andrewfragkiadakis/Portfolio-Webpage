@@ -39,12 +39,12 @@ export default function Contact() {
                         </h3>
 
                         {/* Email */}
-                        <a href={`mailto:${t.email}`} className="flex items-start sm:items-center gap-3 sm:gap-4 group">
+                        <a href={`mailto:${t.email}`} className="flex items-start sm:items-center gap-3 sm:gap-4 group" aria-label="Contact via email">
                             <div className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-[var(--background)] transition-all duration-300 flex-shrink-0">
-                                <i className="fas fa-envelope text-xl"></i>
+                                <i className="fas fa-envelope text-xl" aria-hidden></i>
                             </div>
                             <div className="flex-1 min-w-0">
-                                <div className="text-[10px] font-mono text-[var(--foreground)] opacity-65 uppercase">Email</div>
+                                <div className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase">Email</div>
                                 <div className="text-sm sm:text-lg font-bold text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors break-all">{t.email}</div>
                             </div>
                         </a>
@@ -55,14 +55,14 @@ export default function Contact() {
                                 <i className="fas fa-map-marker-alt text-xl"></i>
                             </div>
                             <div>
-                                <div className="text-[10px] font-mono text-[var(--foreground)] opacity-65 uppercase">Location</div>
+                                <div className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase">Location</div>
                                 <div className="text-lg font-bold text-[var(--foreground)]">{t.location}</div>
                             </div>
                         </div>
 
                         {/* Social Links */}
                         <div className="pt-4">
-                            <div className="text-[10px] font-mono text-[var(--foreground)] opacity-65 uppercase mb-4">{t.contact.socialTitle}</div>
+                            <div className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase mb-4">{t.contact.socialTitle}</div>
                             <div className="flex gap-3">
                                 <a
                                     href={t.github}
@@ -109,9 +109,10 @@ export default function Contact() {
                         <div className="space-y-3">
                             <a
                                 href={`mailto:${t.email}`}
+                                aria-label="Contact via email"
                                 className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[var(--accent)] text-[var(--background)] font-bold uppercase tracking-widest hover:shadow-[0_0_30px_var(--accent)] transition-all duration-300"
                             >
-                                <i className="fas fa-paper-plane"></i>
+                                <i className="fas fa-paper-plane" aria-hidden></i>
                                 {t.contact.sendMessage}
                             </a>
 
@@ -128,7 +129,7 @@ export default function Contact() {
                 </div>
 
                 {/* Footer - flush above bottom nav (padding = nav height only) */}
-                <div className="mt-6 pb-[52px] md:pb-0 text-center text-xs font-mono text-[var(--foreground)] opacity-55">
+                <div className="mt-6 pb-[52px] md:pb-0 text-center text-xs font-mono text-[var(--foreground)] opacity-75">
                     <p>{t.copyright}</p>
                 </div>
             </div>

@@ -168,7 +168,7 @@ export default function Experience() {
                 <div className="flex flex-col gap-8 md:hidden">
                     <div>
                         <div className="flex items-center justify-between gap-2 mb-3 pl-1">
-                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-65 uppercase tracking-widest">
+                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest">
                                 {t.experienceSection.professional}
                             </span>
                             <div className="flex gap-2">
@@ -209,14 +209,14 @@ export default function Experience() {
                                             <span className="w-12 h-12 flex items-center justify-center border border-[var(--accent)]/30 text-[var(--accent)] rounded-lg">
                                                 <i className="fas fa-briefcase text-lg"></i>
                                             </span>
-                                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-65 uppercase tracking-widest">
+                                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest">
                                                 {exp.duration}
                                             </span>
                                         </div>
                                         <h3 className="text-lg font-bold text-[var(--foreground)] uppercase leading-tight mb-2">
                                             {exp.role}
                                         </h3>
-                                        <p className="text-xs font-mono text-[var(--foreground)] opacity-75 mb-4">
+                                        <p className="text-xs font-mono text-[var(--foreground)] opacity-85 mb-4">
                                             @ {exp.company}
                                         </p>
                                         <ul className="space-y-2 flex-1 overflow-y-auto">
@@ -235,7 +235,7 @@ export default function Experience() {
                     </div>
                     <div>
                         <div className="flex items-center justify-between gap-2 mb-3 pl-1">
-                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-65 uppercase tracking-widest">
+                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest">
                                 {t.experienceSection.education}
                             </span>
                             <div className="flex gap-2">
@@ -273,14 +273,14 @@ export default function Experience() {
                                             <span className="w-12 h-12 flex items-center justify-center border border-[var(--foreground)]/30 text-[var(--foreground)] rounded-lg">
                                                 <i className="fas fa-graduation-cap text-lg"></i>
                                             </span>
-                                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-65 uppercase tracking-widest">
+                                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest">
                                                 {edu.duration}
                                             </span>
                                         </div>
                                         <h3 className="text-lg font-bold text-[var(--foreground)] uppercase leading-tight mb-2">
                                             {edu.degree}
                                         </h3>
-                                        <p className="text-xs font-mono text-[var(--foreground)] opacity-75 mb-4">
+                                        <p className="text-xs font-mono text-[var(--foreground)] opacity-85 mb-4">
                                             {edu.institution}
                                         </p>
                                         {edu.details && (
@@ -347,7 +347,7 @@ export default function Experience() {
                                     <span className="w-12 h-12 flex items-center justify-center border border-[var(--accent)]/30 text-[var(--accent)] rounded-lg group-hover:bg-[var(--accent)] group-hover:text-[var(--background)] transition-colors">
                                         <i className="fas fa-briefcase text-lg"></i>
                                     </span>
-                                    <span className="text-[10px] font-mono text-[var(--foreground)] opacity-65 uppercase tracking-widest">
+                                    <span className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest">
                                         {exp.duration}
                                     </span>
                                 </div>
@@ -355,7 +355,7 @@ export default function Experience() {
                                 <h3 className="text-lg md:text-xl font-bold text-[var(--foreground)] uppercase leading-tight mb-2 group-hover:text-[var(--accent)] transition-colors">
                                     {exp.role}
                                 </h3>
-                                <p className="text-xs font-mono text-[var(--foreground)] opacity-75 mb-4">
+                                <p className="text-xs font-mono text-[var(--foreground)] opacity-85 mb-4">
                                     @ {exp.company}
                                 </p>
 
@@ -398,7 +398,7 @@ export default function Experience() {
                                     <span className="w-12 h-12 flex items-center justify-center border border-[var(--foreground)]/30 text-[var(--foreground)] rounded-lg group-hover:bg-[var(--accent)] group-hover:text-[var(--background)] group-hover:border-[var(--accent)] transition-colors">
                                         <i className="fas fa-graduation-cap text-lg"></i>
                                     </span>
-                                    <span className="text-[10px] font-mono text-[var(--foreground)] opacity-65 uppercase tracking-widest">
+                                    <span className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest">
                                         {edu.duration}
                                     </span>
                                 </div>
@@ -406,7 +406,7 @@ export default function Experience() {
                                 <h3 className="text-lg md:text-xl font-bold text-[var(--foreground)] uppercase leading-tight mb-2 group-hover:text-[var(--accent)] transition-colors">
                                     {edu.degree}
                                 </h3>
-                                <p className="text-xs font-mono text-[var(--foreground)] opacity-75 mb-4">
+                                <p className="text-xs font-mono text-[var(--foreground)] opacity-85 mb-4">
                                     {edu.institution}
                                 </p>
 

@@ -171,7 +171,7 @@ export default function Projects() {
                                         unoptimized
                                     />
                                 )}
-                                <div className="absolute top-4 right-4 font-mono text-2xl text-[var(--accent)] opacity-50 font-bold">
+                                <div className="absolute top-4 right-4 font-mono text-2xl text-[var(--accent)] opacity-70 font-bold">
                                     {(index + 1).toString().padStart(2, '0')}
                                 </div>
                             </div>

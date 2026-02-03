@@ -82,7 +82,7 @@ export default function About() {
                                 <i className="fas fa-code text-lg"></i>
                             </div>
                             <div>
-                                <div className="text-[10px] font-mono text-[var(--foreground)] opacity-65 uppercase">Current Focus</div>
+                                <div className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase">Current Focus</div>
                                 <div className="text-base font-bold text-[var(--foreground)]">Systems & AI Engineering</div>
                             </div>
                         </div>
@@ -128,7 +128,7 @@ export default function About() {
                                     <div className="text-xl md:text-2xl font-black text-[var(--accent)]">
                                         <AnimatedCounter value={stat.value} suffix={stat.suffix} duration={1.5} />
                                     </div>
-                                    <div className="text-[11px] font-mono text-[var(--foreground)] opacity-65 uppercase leading-tight">{stat.label}</div>
+                                    <div className="text-[11px] font-mono text-[var(--foreground)] opacity-80 uppercase leading-tight">{stat.label}</div>
                                 </motion.div>
                             ))}
                         </div>
@@ -150,7 +150,7 @@ export default function About() {
                                 <i className={`${skill.icon} text-base`}></i>
                             </div>
                             <h4 className="font-bold text-sm text-[var(--foreground)] mb-1">{skill.label}</h4>
-                            <p className="text-[10px] text-[var(--foreground)] opacity-65 leading-relaxed line-clamp-2">
+                            <p className="text-[10px] text-[var(--foreground)] opacity-80 leading-relaxed line-clamp-2">
                                 {skill.detail || 'Building innovative solutions'}
                             </p>
                         </motion.div>

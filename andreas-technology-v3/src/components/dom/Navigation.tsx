@@ -207,7 +207,7 @@ export default function Navigation() {
                                 }}
                                 transition={{ duration: 0.2, ease: 'easeOut' }}
                             >
-                                <span className="text-[10px] font-mono text-[var(--foreground)] opacity-50 uppercase tracking-[0.2em]">{item.index}</span>
+                                <span className="text-[10px] font-mono text-[var(--foreground)] opacity-75 uppercase tracking-[0.2em]">{item.index}</span>
                                 <button
                                     onClick={() => scrollToSection(item.section, item.i)}
                                     className="flex-1 text-left py-2 px-2 min-h-[48px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-xl sm:text-2xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
@@ -219,7 +219,7 @@ export default function Navigation() {
                     </motion.div>
                 </nav>
 
-                <div className="px-6 py-6 border-t border-[var(--foreground)]/10 flex justify-between items-center text-[var(--foreground)]/60 text-sm font-mono uppercase tracking-widest">
+                <div className="px-6 py-6 border-t border-[var(--foreground)]/10 flex justify-between items-center text-[var(--foreground)] opacity-80 text-sm font-mono uppercase tracking-widest">
                     <span>{language === 'en' ? 'English' : 'Ελληνικά'}</span>
                     <span>{t.location}</span>
                 </div>

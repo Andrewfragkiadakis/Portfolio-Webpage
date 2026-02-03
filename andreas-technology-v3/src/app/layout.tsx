@@ -9,7 +9,7 @@ import NoiseOverlay from '@/components/dom/NoiseOverlay'
 import ThemeToggle from '@/components/ui/ThemeToggle'
 import CustomCursor from '@/components/ui/CustomCursor'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'], display: 'swap' })
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://andreas.technology'),
