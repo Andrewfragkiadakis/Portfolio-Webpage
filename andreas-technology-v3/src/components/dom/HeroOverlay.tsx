@@ -1,46 +1,9 @@
 'use client'
 
 import { useContent } from '@/hooks/useContent'
-import { useState, useRef } from 'react'
-import { motion, useMotionValue, useSpring } from 'framer-motion'
+import { useState } from 'react'
+import { motion } from 'framer-motion'
 import Typewriter from 'typewriter-effect'
-
-// Magnetic Wrapper Component
-function Magnetic({ children }: { children: React.ReactNode }) {
-    const ref = useRef<HTMLDivElement>(null)
-    const x = useMotionValue(0)
-    const y = useMotionValue(0)
-
-    const springConfig = { stiffness: 100, damping: 20, mass: 0.1 }
-    const quickX = useSpring(x, springConfig)
-    const quickY = useSpring(y, springConfig)
-
-    const onMouseMove = (e: React.MouseEvent) => {
-        if (!ref.current) return
-        const { clientX, clientY } = e
-        const { width, height, left, top } = ref.current.getBoundingClientRect()
-        const mouseX = clientX - (left + width / 2)
-        const mouseY = clientY - (top + height / 2)
-        x.set(mouseX * 0.15)
-        y.set(mouseY * 0.15)
-    }
-
-    const onMouseLeave = () => {
-        x.set(0)
-        y.set(0)
-    }
-
-    return (
-        <motion.div
-            ref={ref}
-            onMouseMove={onMouseMove}
-            onMouseLeave={onMouseLeave}
-            style={{ x: quickX, y: quickY }}
-        >
-            {children}
-        </motion.div>
-    )
-}
 
 export default function HeroOverlay() {
     const t = useContent()
@@ -162,34 +125,31 @@ export default function HeroOverlay() {
                 transition={{ duration: 0.8, delay: 1.3 }}
                 className="flex gap-4 mt-12 pointer-events-auto"
             >
-                <Magnetic>
-                    <a
-                        href={t.linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)]"
-                    >
-                        <i className="fab fa-linkedin text-xl"></i>
-                    </a>
-                </Magnetic>
-                <Magnetic>
-                    <a
-                        href={t.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)]"
-                    >
-                        <i className="fab fa-github text-xl"></i>
-                    </a>
-                </Magnetic>
-                <Magnetic>
-                    <a
-                        href={`mailto:${t.email}`}
-                        className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)]"
-                    >
-                        <i className="fas fa-envelope text-xl"></i>
-                    </a>
-                </Magnetic>
+                <a
+                    href={t.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="LinkedIn profile"
+                    className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)]"
+                >
+                    <i className="fab fa-linkedin text-xl" aria-hidden></i>
+                </a>
+                <a
+                    href={t.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="GitHub profile"
+                    className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)]"
+                >
+                    <i className="fab fa-github text-xl" aria-hidden></i>
+                </a>
+                <a
+                    href={`mailto:${t.email}`}
+                    aria-label="Send email"
+                    className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)]"
+                >
+                    <i className="fas fa-envelope text-xl" aria-hidden></i>
+                </a>
             </motion.div>
 
             {/* CTA Buttons */}
@@ -199,31 +159,27 @@ export default function HeroOverlay() {
                 transition={{ duration: 0.8, delay: 1.5 }}
                 className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8 pointer-events-auto w-full sm:w-auto max-w-xs sm:max-w-none"
             >
-                <Magnetic>
-                    <button
-                        onClick={() => scrollToSection('projects', 4)}
-                        className="group relative px-6 sm:px-6 py-2.5 sm:py-3 bg-transparent overflow-hidden hover:shadow-[0_0_20px_var(--accent)] transition-shadow duration-300 w-full"
-                    >
-                        <span className="relative z-10 font-bold uppercase tracking-widest text-xs sm:text-xs text-foreground group-hover:text-background transition-colors duration-300 whitespace-nowrap">
-                            {t.hero.viewWork}
-                        </span>
-                        <div className="absolute inset-0 bg-foreground transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-                        <div className="absolute inset-0 border border-foreground" />
-                    </button>
-                </Magnetic>
+                <button
+                    onClick={() => scrollToSection('projects', 4)}
+                    className="group relative px-6 sm:px-6 py-2.5 sm:py-3 bg-transparent overflow-hidden hover:shadow-[0_0_20px_var(--accent)] transition-shadow duration-300 w-full"
+                >
+                    <span className="relative z-10 font-bold uppercase tracking-widest text-xs sm:text-xs text-foreground group-hover:text-background transition-colors duration-300 whitespace-nowrap">
+                        {t.hero.viewWork}
+                    </span>
+                    <div className="absolute inset-0 bg-foreground transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                    <div className="absolute inset-0 border border-foreground" />
+                </button>
 
-                <Magnetic>
-                    <button
-                        onClick={() => scrollToSection('contact', 5)}
-                        className="group relative px-6 sm:px-6 py-2.5 sm:py-3 bg-transparent overflow-hidden hover:shadow-[0_0_20px_var(--accent)] transition-shadow duration-300 w-full"
-                    >
-                        <span className="relative z-10 font-bold uppercase tracking-widest text-xs sm:text-xs text-foreground group-hover:text-background transition-colors duration-300 whitespace-nowrap">
-                            {t.hero.getInTouch}
-                        </span>
-                        <div className="absolute inset-0 bg-foreground transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-                        <div className="absolute inset-0 border border-foreground" />
-                    </button>
-                </Magnetic>
+                <button
+                    onClick={() => scrollToSection('contact', 5)}
+                    className="group relative px-6 sm:px-6 py-2.5 sm:py-3 bg-transparent overflow-hidden hover:shadow-[0_0_20px_var(--accent)] transition-shadow duration-300 w-full"
+                >
+                    <span className="relative z-10 font-bold uppercase tracking-widest text-xs sm:text-xs text-foreground group-hover:text-background transition-colors duration-300 whitespace-nowrap">
+                        {t.hero.getInTouch}
+                    </span>
+                    <div className="absolute inset-0 bg-foreground transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                    <div className="absolute inset-0 border border-foreground" />
+                </button>
             </motion.div>
 
             <motion.div

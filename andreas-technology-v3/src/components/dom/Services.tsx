@@ -43,7 +43,7 @@ export default function Services() {
                                     {service.title}
                                 </h3>
 
-                                <p className="text-[var(--foreground)] opacity-70 leading-relaxed text-sm">
+                                <p className="text-[var(--foreground)] opacity-80 leading-relaxed text-sm">
                                     {service.description}
                                 </p>
                             </div>
@@ -62,15 +62,28 @@ export default function Services() {
                     viewport={{ once: true }}
                     className="mt-12 text-center"
                 >
-                    <p className="text-lg text-[var(--foreground)] opacity-80 mb-4">
+                    <p className="text-lg text-[var(--foreground)] opacity-90 mb-4">
                         Have a unique project in mind?
                     </p>
-                    <a
-                        href="mailto:andrewfragkiadakis@gmail.com"
-                        className="inline-block px-8 py-4 border border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--accent)] hover:text-[var(--background)] transition-all duration-300 font-bold uppercase tracking-widest hover:shadow-[0_0_20px_var(--accent)]"
+                    <button
+                        onClick={() => {
+                            if (typeof window !== 'undefined') {
+                                if (window.innerWidth >= 768) {
+                                    const maxScroll = document.documentElement.scrollHeight - window.innerHeight
+                                    const targetY = (5 / 5) * maxScroll
+                                    window.scrollTo({ top: targetY, behavior: 'smooth' })
+                                } else {
+                                    const element = document.getElementById('contact')
+                                    if (element) {
+                                        element.scrollIntoView({ behavior: 'smooth' })
+                                    }
+                                }
+                            }
+                        }}
+                        className="inline-block px-8 py-4 border border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--accent)] hover:text-[var(--background)] transition-all duration-300 font-bold uppercase tracking-widest hover:shadow-[0_0_20px_var(--accent)] cursor-pointer"
                     >
                         Let&apos;s Talk
-                    </a>
+                    </button>
                 </motion.div>
             </div>
         </section>

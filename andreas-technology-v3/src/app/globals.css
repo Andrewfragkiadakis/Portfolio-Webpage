@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #1e1b4b;
-  --accent: #818cf8;
-  /* Soft Indigo */
-  --glow: rgba(129, 140, 248, 0.15);
+  --background: #fafafa;
+  --foreground: #0f172a;
+  --accent: #4f46e5;
+  /* Stronger Indigo for better contrast */
+  --glow: rgba(79, 70, 229, 0.15);
 
   --font-display: "Outfit", sans-serif;
 }

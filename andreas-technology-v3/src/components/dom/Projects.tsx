@@ -83,7 +83,7 @@ export default function Projects() {
                                         src={project.image}
                                         alt={project.name}
                                         fill
-                                        className="object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 grayscale-[20%] group-hover:grayscale-0"
+                                        className="object-cover opacity-100 md:opacity-70 md:group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 grayscale-0 md:grayscale-[20%] md:group-hover:grayscale-0"
                                         unoptimized
                                     />
                                 )}

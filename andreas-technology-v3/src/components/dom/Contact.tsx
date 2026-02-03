@@ -1,44 +1,6 @@
 'use client'
 import { useContent } from '@/hooks/useContent'
-import { motion, useMotionValue, useSpring } from 'framer-motion'
-import { useRef } from 'react'
-
-// Magnetic Wrapper Component
-function Magnetic({ children }: { children: React.ReactNode }) {
-    const ref = useRef<HTMLDivElement>(null)
-    const x = useMotionValue(0)
-    const y = useMotionValue(0)
-
-    const springConfig = { stiffness: 100, damping: 20, mass: 0.1 }
-    const quickX = useSpring(x, springConfig)
-    const quickY = useSpring(y, springConfig)
-
-    const onMouseMove = (e: React.MouseEvent) => {
-        if (!ref.current) return
-        const { clientX, clientY } = e
-        const { width, height, left, top } = ref.current.getBoundingClientRect()
-        const mouseX = clientX - (left + width / 2)
-        const mouseY = clientY - (top + height / 2)
-        x.set(mouseX * 0.15)
-        y.set(mouseY * 0.15)
-    }
-
-    const onMouseLeave = () => {
-        x.set(0)
-        y.set(0)
-    }
-
-    return (
-        <motion.div
-            ref={ref}
-            onMouseMove={onMouseMove}
-            onMouseLeave={onMouseLeave}
-            style={{ x: quickX, y: quickY }}
-        >
-            {children}
-        </motion.div>
-    )
-}
+import { motion } from 'framer-motion'
 
 export default function Contact() {
     const t = useContent()
@@ -78,54 +40,48 @@ export default function Contact() {
 
                         {/* Email */}
                         <a href={`mailto:${t.email}`} className="flex items-start sm:items-center gap-3 sm:gap-4 group">
-                            <Magnetic>
-                                <div className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-[var(--background)] transition-all duration-300 flex-shrink-0">
-                                    <i className="fas fa-envelope text-xl"></i>
-                                </div>
-                            </Magnetic>
+                            <div className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-[var(--background)] transition-all duration-300 flex-shrink-0">
+                                <i className="fas fa-envelope text-xl"></i>
+                            </div>
                             <div className="flex-1 min-w-0">
-                                <div className="text-[10px] font-mono text-[var(--foreground)] opacity-50 uppercase">Email</div>
+                                <div className="text-[10px] font-mono text-[var(--foreground)] opacity-65 uppercase">Email</div>
                                 <div className="text-sm sm:text-lg font-bold text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors break-all">{t.email}</div>
                             </div>
                         </a>
 
                         {/* Location */}
                         <div className="flex items-center gap-4">
-                            <Magnetic>
-                                <div className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--accent)]">
-                                    <i className="fas fa-map-marker-alt text-xl"></i>
-                                </div>
-                            </Magnetic>
+                            <div className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--accent)]">
+                                <i className="fas fa-map-marker-alt text-xl"></i>
+                            </div>
                             <div>
-                                <div className="text-[10px] font-mono text-[var(--foreground)] opacity-50 uppercase">Location</div>
+                                <div className="text-[10px] font-mono text-[var(--foreground)] opacity-65 uppercase">Location</div>
                                 <div className="text-lg font-bold text-[var(--foreground)]">{t.location}</div>
                             </div>
                         </div>
 
                         {/* Social Links */}
                         <div className="pt-4">
-                            <div className="text-[10px] font-mono text-[var(--foreground)] opacity-50 uppercase mb-4">{t.contact.socialTitle}</div>
+                            <div className="text-[10px] font-mono text-[var(--foreground)] opacity-65 uppercase mb-4">{t.contact.socialTitle}</div>
                             <div className="flex gap-3">
-                                <Magnetic>
-                                    <a
-                                        href={t.github}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)]"
-                                    >
-                                        <i className="fab fa-github text-xl"></i>
-                                    </a>
-                                </Magnetic>
-                                <Magnetic>
-                                    <a
-                                        href={t.linkedin}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)]"
-                                    >
-                                        <i className="fab fa-linkedin text-xl"></i>
-                                    </a>
-                                </Magnetic>
+                                <a
+                                    href={t.github}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label="GitHub profile"
+                                    className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)]"
+                                >
+                                    <i className="fab fa-github text-xl" aria-hidden></i>
+                                </a>
+                                <a
+                                    href={t.linkedin}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label="LinkedIn profile"
+                                    className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)]"
+                                >
+                                    <i className="fab fa-linkedin text-xl" aria-hidden></i>
+                                </a>
                             </div>
                         </div>
                     </motion.div>
@@ -145,38 +101,34 @@ export default function Contact() {
                                     {t.contact.opportunitesTitle}
                                 </h3>
                             </div>
-                            <p className="text-[var(--foreground)] opacity-70 text-sm leading-relaxed mb-6">
+                            <p className="text-[var(--foreground)] opacity-80 text-sm leading-relaxed mb-6">
                                 {t.contact.opportunitesDescription}
                             </p>
                         </div>
 
                         <div className="space-y-3">
-                            <Magnetic>
-                                <a
-                                    href={`mailto:${t.email}`}
-                                    className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[var(--accent)] text-[var(--background)] font-bold uppercase tracking-widest hover:shadow-[0_0_30px_var(--accent)] transition-all duration-300"
-                                >
-                                    <i className="fas fa-paper-plane"></i>
-                                    {t.contact.sendMessage}
-                                </a>
-                            </Magnetic>
+                            <a
+                                href={`mailto:${t.email}`}
+                                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[var(--accent)] text-[var(--background)] font-bold uppercase tracking-widest hover:shadow-[0_0_30px_var(--accent)] transition-all duration-300"
+                            >
+                                <i className="fas fa-paper-plane"></i>
+                                {t.contact.sendMessage}
+                            </a>
 
-                            <Magnetic>
-                                <a
-                                    href={cvLink}
-                                    download
-                                    className="w-full flex items-center justify-center gap-2 px-6 py-4 border border-[var(--foreground)] text-[var(--foreground)] font-bold uppercase tracking-widest hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300"
-                                >
-                                    <i className="fas fa-download"></i>
-                                    {t.contact.downloadResume}
-                                </a>
-                            </Magnetic>
+                            <a
+                                href={cvLink}
+                                download
+                                className="w-full flex items-center justify-center gap-2 px-6 py-4 border border-[var(--foreground)] text-[var(--foreground)] font-bold uppercase tracking-widest hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300"
+                            >
+                                <i className="fas fa-download"></i>
+                                {t.contact.downloadResume}
+                            </a>
                         </div>
                     </motion.div>
                 </div>
 
                 {/* Footer */}
-                <div className="mt-12 text-center text-xs font-mono text-[var(--foreground)] opacity-40">
+                <div className="mt-12 text-center text-xs font-mono text-[var(--foreground)] opacity-55">
                     <p>{t.copyright}</p>
                 </div>
             </div>
