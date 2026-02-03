@@ -87,7 +87,7 @@ export default function MobileNav() {
                     onClick={() => scrollToSection(item.id)}
                     className={`flex flex-col items-center gap-1 transition-colors duration-300 ${activeSection === item.id
                         ? 'text-[var(--accent)]'
-                        : 'text-[var(--foreground)] opacity-50 hover:opacity-100 hover:text-[var(--foreground)]'
+                        : 'text-[var(--foreground)] opacity-65 hover:opacity-100 hover:text-[var(--foreground)]'
                         }`}
                 >
                     <i className={`${item.icon} text-xl`}></i>
