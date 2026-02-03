@@ -36,38 +36,46 @@ export default function HorizontalLayout() {
     // Smooth physics for the scale to make it feel cinematic
     const smoothScale = useSpring(scale, { stiffness: 60, damping: 25, restDelta: 0.001 })
 
-    // --- SMART SNAP LOGIC ---
+    // --- SMART SNAP LOGIC (Desktop Only) ---
     const velocity = useVelocity(scrollYProgress)
     const [isSnapping, setIsSnapping] = useState(false)
 
     useEffect(() => {
+        // Only apply snap logic on desktop (md breakpoint and above)
+        const isDesktop = () => window.innerWidth >= 768
+        
+        if (!isDesktop()) {
+            return // Exit early on mobile - no scroll locking
+        }
+
         let timeout: NodeJS.Timeout
 
         const handleScroll = () => {
-            if (isSnapping) return
+            // Double check we're still on desktop
+            if (!isDesktop() || isSnapping) return
 
             clearTimeout(timeout)
             timeout = setTimeout(() => {
                 const currentProgress = scrollYProgress.get()
                 const currentVelocity = velocity.get()
 
-                // Much more subtle threshold for intent
-                if (Math.abs(currentVelocity) < 0.005) {
+                // Threshold for scroll intent detection
+                if (Math.abs(currentVelocity) < 0.01) {
                     // 6 sections = 5 transition gaps. Midpoints at 0, 0.2, 0.4, 0.6, 0.8, 1.0
                     const nearestSection = Math.round(currentProgress * 5) / 5
                     const distance = Math.abs(currentProgress - nearestSection)
 
-                    // Snap zone: pull if within 6% (tighter for subtlety)
-                    if (distance > 0.005 && distance < 0.06) {
+                    // Snap zone: pull if within 8% (more forgiving for better UX)
+                    if (distance > 0.01 && distance < 0.08) {
                         setIsSnapping(true)
 
                         const maxScroll = document.documentElement.scrollHeight - window.innerHeight
                         const targetY = nearestSection * maxScroll
 
-                        // Custom slow animation for "Cinematic" feel
+                        // Faster animation for better responsiveness
                         animate(window.scrollY, targetY, {
-                            duration: 1.8,
-                            ease: [0.165, 0.84, 0.44, 1], // Very slow and smooth EaseOutQuart
+                            duration: 1.2,
+                            ease: [0.25, 0.1, 0.25, 1], // Smooth but faster
                             onUpdate: (latest) => window.scrollTo({ top: latest })
                         }).then(() => {
                             setTimeout(() => setIsSnapping(false), 200)
