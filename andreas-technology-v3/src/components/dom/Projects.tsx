@@ -16,13 +16,15 @@ export default function Projects() {
     }, [])
 
     const scrollProjects = (direction: 'left' | 'right') => {
-        if (scrollContainerRef.current) {
-            const scrollAmount = 420 // Card width + gap
-            scrollContainerRef.current.scrollBy({
-                left: direction === 'right' ? scrollAmount : -scrollAmount,
-                behavior: 'smooth'
-            })
-        }
+        const container = scrollContainerRef.current
+        if (!container) return
+        const card = container.querySelector<HTMLElement>('[data-project-card]')
+        const gap = 24
+        const cardWidth = card ? card.offsetWidth : (typeof window !== 'undefined' && window.innerWidth >= 768 ? 400 : 320)
+        const amount = cardWidth + gap
+        const maxScroll = container.scrollWidth - container.clientWidth
+        const target = Math.max(0, Math.min(container.scrollLeft + (direction === 'right' ? amount : -amount), maxScroll))
+        container.scrollTo({ left: target, behavior: 'smooth' })
     }
 
     return (
@@ -70,6 +72,7 @@ export default function Projects() {
                     {t.projects.map((project: any, index: number) => (
                         <motion.div
                             key={index}
+                            data-project-card
                             initial={{ opacity: 0, x: 50 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}

@@ -127,8 +127,8 @@ export default function Contact() {
                     </motion.div>
                 </div>
 
-                {/* Footer */}
-                <div className="mt-12 text-center text-xs font-mono text-[var(--foreground)] opacity-55">
+                {/* Footer - tight above bottom nav (reserve space for fixed nav) */}
+                <div className="mt-6 pb-20 md:pb-0 text-center text-xs font-mono text-[var(--foreground)] opacity-55">
                     <p>{t.copyright}</p>
                 </div>
             </div>

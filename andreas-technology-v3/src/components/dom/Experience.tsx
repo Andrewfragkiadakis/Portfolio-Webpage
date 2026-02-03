@@ -3,16 +3,28 @@ import { useContent } from '@/hooks/useContent'
 import { motion } from 'framer-motion'
 import { useRef, useEffect } from 'react'
 
+const CARD_WIDTH_MOBILE = 280
+const GAP_MOBILE = 16
+const ONE_CARD_SCROLL_MOBILE = CARD_WIDTH_MOBILE + GAP_MOBILE
+
 export default function Experience() {
     const t = useContent()
     const scrollContainerRef = useRef<HTMLDivElement>(null)
+    const expMobileRef = useRef<HTMLDivElement>(null)
+    const eduMobileRef = useRef<HTMLDivElement>(null)
 
-    // Reset scroll on mount
     useEffect(() => {
-        if (scrollContainerRef.current) {
-            scrollContainerRef.current.scrollLeft = 0
-        }
+        if (scrollContainerRef.current) scrollContainerRef.current.scrollLeft = 0
     }, [])
+
+    const scrollMobileRow = (containerRef: React.RefObject<HTMLDivElement | null>, direction: 'left' | 'right') => {
+        const el = containerRef.current
+        if (!el) return
+        const amount = direction === 'right' ? ONE_CARD_SCROLL_MOBILE : -ONE_CARD_SCROLL_MOBILE
+        const maxScroll = el.scrollWidth - el.clientWidth
+        const target = Math.max(0, Math.min(el.scrollLeft + amount, maxScroll))
+        el.scrollTo({ left: target, behavior: 'smooth' })
+    }
 
     const scroll = (direction: 'left' | 'right') => {
         if (!scrollContainerRef.current) return
@@ -151,10 +163,29 @@ export default function Experience() {
                 {/* --- MOBILE: Two rows (Experience | Education) --- */}
                 <div className="flex flex-col gap-8 md:hidden">
                     <div>
-                        <div className="text-[10px] font-mono text-[var(--foreground)] opacity-65 uppercase tracking-widest mb-3 pl-1">
-                            {t.experienceSection.professional}
+                        <div className="flex items-center justify-between gap-2 mb-3 pl-1">
+                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-65 uppercase tracking-widest">
+                                {t.experienceSection.professional}
+                            </span>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => scrollMobileRow(expMobileRef, 'left')}
+                                    className="w-9 h-9 border border-[var(--foreground)]/30 flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 active:scale-95"
+                                    aria-label="Previous"
+                                >
+                                    <i className="fas fa-chevron-left text-sm"></i>
+                                </button>
+                                <button
+                                    onClick={() => scrollMobileRow(expMobileRef, 'right')}
+                                    className="w-9 h-9 border border-[var(--foreground)]/30 flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 active:scale-95"
+                                    aria-label="Next"
+                                >
+                                    <i className="fas fa-chevron-right text-sm"></i>
+                                </button>
+                            </div>
                         </div>
                         <div
+                            ref={expMobileRef}
                             className="flex gap-4 overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 scroll-smooth items-stretch"
                             style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
                         >
@@ -199,10 +230,29 @@ export default function Experience() {
                         </div>
                     </div>
                     <div>
-                        <div className="text-[10px] font-mono text-[var(--foreground)] opacity-65 uppercase tracking-widest mb-3 pl-1">
-                            {t.experienceSection.education}
+                        <div className="flex items-center justify-between gap-2 mb-3 pl-1">
+                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-65 uppercase tracking-widest">
+                                {t.experienceSection.education}
+                            </span>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => scrollMobileRow(eduMobileRef, 'left')}
+                                    className="w-9 h-9 border border-[var(--foreground)]/30 flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 active:scale-95"
+                                    aria-label="Previous"
+                                >
+                                    <i className="fas fa-chevron-left text-sm"></i>
+                                </button>
+                                <button
+                                    onClick={() => scrollMobileRow(eduMobileRef, 'right')}
+                                    className="w-9 h-9 border border-[var(--foreground)]/30 flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 active:scale-95"
+                                    aria-label="Next"
+                                >
+                                    <i className="fas fa-chevron-right text-sm"></i>
+                                </button>
+                            </div>
                         </div>
                         <div
+                            ref={eduMobileRef}
                             className="flex gap-4 overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 scroll-smooth items-stretch"
                             style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
                         >
