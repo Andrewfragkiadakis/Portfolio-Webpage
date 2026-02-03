@@ -78,7 +78,7 @@ export default function MobileNav() {
 
     return (
         <div
-            className={`md:hidden fixed left-0 right-0 bottom-0 !bg-[var(--background)] !border-t !border-[var(--foreground)] rounded-none shadow-lg z-50 px-4 py-3 flex justify-between items-center transition-all duration-300 ease-in-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
+            className={`md:hidden fixed left-4 right-4 !bg-[var(--background)] !border !border-[var(--foreground)] rounded-none shadow-lg z-50 px-4 py-3 flex justify-between items-center transition-all duration-300 ease-in-out ${isVisible ? 'bottom-4 opacity-100 translate-y-0' : '-bottom-20 opacity-0 translate-y-10'
                 }`}
         >
             {navItems.map((item) => (

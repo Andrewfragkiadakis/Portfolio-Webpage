@@ -18,27 +18,94 @@ export default function Projects() {
     const scrollProjects = (direction: 'left' | 'right') => {
         const container = scrollContainerRef.current
         if (!container) return
-        const cards = Array.from(container.querySelectorAll<HTMLElement>('[data-project-card]'))
-        if (cards.length === 0) return
-        const maxScroll = container.scrollWidth - container.clientWidth
-        if (maxScroll <= 0) return
-        const containerRect = container.getBoundingClientRect()
-        let currentIndex = 0
-        for (let i = 0; i < cards.length; i++) {
-            const r = cards[i].getBoundingClientRect()
-            if (r.left >= containerRect.left - 1) {
-                currentIndex = i
-                break
-            }
-            currentIndex = i
+
+        // Check if we're at the boundaries first
+        const scrollLeft = container.scrollLeft
+        const scrollWidth = container.scrollWidth
+        const clientWidth = container.clientWidth
+        const maxScroll = scrollWidth - clientWidth
+        const isAtStart = scrollLeft <= 1 // Small threshold for rounding
+        const isAtEnd = scrollLeft >= maxScroll - 1 // Small threshold for rounding
+
+        // Prevent scrolling if at boundaries
+        if (direction === 'left' && isAtStart) {
+            return // Already at start, don't scroll
         }
-        const nextIndex = direction === 'right' ? currentIndex + 1 : currentIndex - 1
-        if (nextIndex < 0 || nextIndex >= cards.length) return
-        const targetCard = cards[nextIndex]
-        const targetRect = targetCard.getBoundingClientRect()
-        const delta = targetRect.left - containerRect.left
-        const targetScrollLeft = Math.max(0, Math.min(container.scrollLeft + delta, maxScroll))
-        container.scrollTo({ left: targetScrollLeft, behavior: 'smooth' })
+        if (direction === 'right' && isAtEnd) {
+            return // Already at end, don't scroll
+        }
+
+        const containerRect = container.getBoundingClientRect()
+        const containerCenter = containerRect.left + containerRect.width / 2
+
+        // Get all project cards
+        const cards = Array.from(container.querySelectorAll('[data-project-card]')) as HTMLElement[]
+
+        if (cards.length === 0) return
+
+        // Find the currently visible card (closest to center)
+        let currentIndex = -1
+        let minDistance = Infinity
+
+        cards.forEach((card, index) => {
+            const cardRect = card.getBoundingClientRect()
+            const cardCenter = cardRect.left + cardRect.width / 2
+            const distance = Math.abs(cardCenter - containerCenter)
+            
+            // Check if card is at least partially visible
+            if (distance < minDistance && cardRect.left < containerRect.right && cardRect.right > containerRect.left) {
+                minDistance = distance
+                currentIndex = index
+            }
+        })
+
+        // If no card found, determine based on scroll position
+        if (currentIndex === -1) {
+            if (direction === 'right') {
+                // Find first card that's not fully visible to the right
+                for (let i = 0; i < cards.length; i++) {
+                    const cardRect = cards[i].getBoundingClientRect()
+                    if (cardRect.right > containerRect.right) {
+                        currentIndex = Math.max(0, i - 1)
+                        break
+                    }
+                }
+                if (currentIndex === -1) currentIndex = cards.length - 1
+            } else {
+                // Find last card that's not fully visible to the left
+                for (let i = cards.length - 1; i >= 0; i--) {
+                    const cardRect = cards[i].getBoundingClientRect()
+                    if (cardRect.left < containerRect.left) {
+                        currentIndex = Math.min(cards.length - 1, i + 1)
+                        break
+                    }
+                }
+                if (currentIndex === -1) currentIndex = 0
+            }
+        }
+
+        // Determine target index
+        let targetIndex = direction === 'right' ? currentIndex + 1 : currentIndex - 1
+
+        // Clamp to valid range
+        targetIndex = Math.max(0, Math.min(targetIndex, cards.length - 1))
+
+        // Only scroll if target is different from current
+        if (targetIndex === currentIndex) return
+
+        // Scroll to target card, centering it
+        const targetCard = cards[targetIndex]
+        if (targetCard) {
+            const cardRect = targetCard.getBoundingClientRect()
+            const containerRect = container.getBoundingClientRect()
+            const scrollOffset = cardRect.left - containerRect.left - (containerRect.width / 2) + (cardRect.width / 2)
+            const newScrollLeft = Math.max(0, Math.min(container.scrollLeft + scrollOffset, maxScroll))
+            
+            container.scrollTo({
+                left: newScrollLeft,
+                behavior: 'smooth'
+            })
+        }
     }
 
     return (
@@ -60,21 +127,21 @@ export default function Projects() {
                     </span>
                 </div>
 
-                {/* Navigation Arrows */}
-                <div className="flex justify-end gap-2 mb-4">
+                {/* Navigation Arrows (Desktop only) */}
+                <div className="hidden md:flex justify-end gap-2 mb-4">
                     <button
                         onClick={() => scrollProjects('left')}
-                        className="w-10 h-10 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300"
+                        className="w-10 h-10 md:w-12 md:h-12 border border-[var(--foreground)]/30 flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 active:scale-95"
                         aria-label="Previous project"
                     >
-                        <i className="fas fa-chevron-left"></i>
+                        <i className="fas fa-chevron-left text-sm md:text-base"></i>
                     </button>
                     <button
                         onClick={() => scrollProjects('right')}
-                        className="w-10 h-10 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300"
+                        className="w-10 h-10 md:w-12 md:h-12 border border-[var(--foreground)]/30 flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 active:scale-95"
                         aria-label="Next project"
                     >
-                        <i className="fas fa-chevron-right"></i>
+                        <i className="fas fa-chevron-right text-sm md:text-base"></i>
                     </button>
                 </div>
 

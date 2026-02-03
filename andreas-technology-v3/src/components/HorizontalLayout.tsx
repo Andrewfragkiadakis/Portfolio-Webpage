@@ -94,24 +94,24 @@ export default function HorizontalLayout() {
 
     return (
         <div ref={targetRef} className="relative bg-[var(--background)]">
-            {/* MOBILE LAYOUT (Vertical Stack, tighter spacing) */}
-            <div className="flex flex-col md:hidden gap-0">
+            {/* MOBILE LAYOUT (Vertical Stack) */}
+            <div className="flex flex-col md:hidden gap-[10vh]">
                 <div id="hero" className="min-h-screen w-full overflow-hidden relative">
                     <HeroOverlay />
                 </div>
-                <div id="about" className="min-h-[85vh] w-full overflow-hidden relative">
+                <div id="about" className="min-h-screen w-full overflow-hidden relative">
                     <About />
                 </div>
-                <div id="services" className="min-h-[85vh] w-full overflow-hidden relative">
+                <div id="services" className="min-h-screen w-full overflow-hidden relative">
                     <Services />
                 </div>
-                <div id="experience" className="min-h-[85vh] w-full overflow-hidden relative">
+                <div id="experience" className="min-h-screen w-full overflow-hidden relative">
                     <Experience />
                 </div>
-                <div id="projects" className="min-h-[85vh] w-full overflow-hidden relative">
+                <div id="projects" className="min-h-screen w-full overflow-hidden relative">
                     <Projects />
                 </div>
-                <div id="contact" className="min-h-0 w-full overflow-hidden relative">
+                <div id="contact" className="min-h-screen w-full overflow-hidden relative">
                     <Contact />
                 </div>
             </div>
