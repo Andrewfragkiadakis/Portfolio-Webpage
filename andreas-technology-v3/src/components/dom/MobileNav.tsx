@@ -1,10 +1,12 @@
 'use client'
 
 import { useContent } from '@/hooks/useContent'
+import { useTheme } from '@/contexts/ThemeContext'
 import { useState, useEffect } from 'react'
 
 export default function MobileNav() {
     const t = useContent()
+    const { theme, setTheme } = useTheme()
     const [activeSection, setActiveSection] = useState('hero')
     const [isVisible, setIsVisible] = useState(true)
     const [lastScrollY, setLastScrollY] = useState(0)
@@ -76,12 +78,15 @@ export default function MobileNav() {
         { id: 'contact', icon: 'fas fa-envelope', label: 'Contact' },
     ]
 
+    const isDark = theme === 'dark'
+    const toggleTheme = () => setTheme(isDark ? 'light' : 'dark')
+
     return (
         <div
-            className={`md:hidden fixed left-4 right-4 z-50 transition-all duration-300 ease-out ${isVisible ? 'bottom-5 opacity-100 translate-y-0' : 'bottom-0 opacity-0 translate-y-4 pointer-events-none'}`}
+            className={`md:hidden fixed left-4 right-4 z-50 flex items-center gap-3 transition-all duration-300 ease-out ${isVisible ? 'bottom-5 opacity-100 translate-y-0' : 'bottom-0 opacity-0 translate-y-4 pointer-events-none'}`}
         >
             <nav
-                className="mx-auto max-w-md rounded-2xl border border-[var(--foreground)]/20 bg-[var(--background)]/95 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.12)] py-3 px-4 flex items-center justify-around gap-1"
+                className="flex-1 min-w-0 max-w-md rounded-2xl border border-[var(--foreground)]/20 bg-[var(--background)]/95 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.12)] py-3 px-4 flex items-center justify-around gap-1"
                 aria-label="Mobile navigation"
             >
                 {navItems.map((item) => (
@@ -103,6 +108,14 @@ export default function MobileNav() {
                     </button>
                 ))}
             </nav>
+            <button
+                type="button"
+                onClick={toggleTheme}
+                aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+                className="flex-shrink-0 w-12 h-12 rounded-2xl border border-[var(--foreground)]/20 bg-[var(--background)]/95 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.12)] flex items-center justify-center hover:bg-[var(--foreground)]/10 transition-colors"
+            >
+                <div className="w-3 h-3 rounded-full bg-[var(--accent)]" aria-hidden />
+            </button>
         </div>
     )
 }

@@ -19,7 +19,7 @@ export default function ThemeToggle() {
             type="button"
             onClick={() => setTheme(isKernel ? 'light' : 'dark')}
             aria-label={isKernel ? 'Switch to light mode' : 'Switch to dark mode'}
-            className="fixed bottom-8 right-8 z-50 flex items-center gap-3 px-4 py-2 bg-background/80 backdrop-blur border border-foreground rounded-full hover:bg-foreground hover:text-background transition-colors"
+            className="hidden md:flex fixed bottom-8 right-8 z-50 items-center gap-3 px-4 py-2 bg-[var(--background)]/80 backdrop-blur border border-[var(--foreground)] rounded-full hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-colors"
         >
             <span className="text-xs font-mono uppercase tracking-widest hidden sm:block">
                 {isKernel ? 'DARK_MODE' : 'LIGHT_MODE'}
