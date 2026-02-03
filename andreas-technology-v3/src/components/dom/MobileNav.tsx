@@ -78,22 +78,31 @@ export default function MobileNav() {
 
     return (
         <div
-            className={`md:hidden fixed left-4 right-4 !bg-[var(--background)] !border !border-[var(--foreground)] rounded-none shadow-lg z-50 px-4 py-3 flex justify-between items-center transition-all duration-300 ease-in-out ${isVisible ? 'bottom-4 opacity-100 translate-y-0' : '-bottom-20 opacity-0 translate-y-10'
-                }`}
+            className={`md:hidden fixed left-4 right-4 z-50 transition-all duration-300 ease-out ${isVisible ? 'bottom-5 opacity-100 translate-y-0' : 'bottom-0 opacity-0 translate-y-4 pointer-events-none'}`}
         >
-            {navItems.map((item) => (
-                <button
-                    key={item.id}
-                    onClick={() => scrollToSection(item.id)}
-                    className={`flex flex-col items-center gap-1 transition-colors duration-300 ${activeSection === item.id
-                        ? 'text-[var(--accent)]'
-                        : 'text-[var(--foreground)] opacity-65 hover:opacity-100 hover:text-[var(--foreground)]'
-                        }`}
-                >
-                    <i className={`${item.icon} text-xl`}></i>
-                    <span className="text-[10px] font-medium uppercase tracking-wide">{item.label}</span>
-                </button>
-            ))}
+            <nav
+                className="mx-auto max-w-md rounded-2xl border border-[var(--foreground)]/20 bg-[var(--background)]/95 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.12)] py-3 px-4 flex items-center justify-around gap-1"
+                aria-label="Mobile navigation"
+            >
+                {navItems.map((item) => (
+                    <button
+                        key={item.id}
+                        onClick={() => scrollToSection(item.id)}
+                        className={`relative flex flex-1 flex-col items-center justify-center gap-1.5 min-h-[52px] min-w-0 py-2 px-2 rounded-xl transition-colors duration-200 ${activeSection === item.id
+                            ? 'text-[var(--accent)] bg-[var(--foreground)]/10'
+                            : 'text-[var(--foreground)] opacity-70 hover:opacity-100 hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10'
+                            }`}
+                    >
+                        <i className={`${item.icon} text-lg`} aria-hidden></i>
+                        <span className="text-[10px] font-semibold uppercase tracking-widest truncate w-full text-center">
+                            {item.label}
+                        </span>
+                        {activeSection === item.id && (
+                            <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-0.5 rounded-full bg-[var(--accent)]" aria-hidden />
+                        )}
+                    </button>
+                ))}
+            </nav>
         </div>
     )
 }
