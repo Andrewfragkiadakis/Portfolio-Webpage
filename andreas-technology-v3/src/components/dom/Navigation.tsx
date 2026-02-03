@@ -4,6 +4,7 @@ import { useLanguage } from '@/contexts/LanguageContext'
 import { useContent } from '@/hooks/useContent'
 import { useTheme } from '@/contexts/ThemeContext'
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 
 export default function Navigation() {
     const { language, setLanguage } = useLanguage()
@@ -97,19 +98,49 @@ export default function Navigation() {
                     </button>
                 </div>
 
-                {/* Mobile Menu Button - Larger touch target, aligned to bar */}
+                {/* Mobile Menu Button - Animated hamburger / close */}
                 <button
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                    className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 text-[var(--foreground)] p-3 min-w-[44px] min-h-[44px] flex items-center justify-center transition-transform duration-200 hover:scale-105 active:scale-95"
+                    className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 text-[var(--foreground)] p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-[var(--foreground)]/10 active:bg-[var(--foreground)]/15 transition-colors duration-200"
                     aria-label="Toggle menu"
                 >
-                    <svg className="w-7 h-7 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                        {mobileMenuOpen ? (
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        ) : (
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                        )}
-                    </svg>
+                    <motion.span
+                        className="relative w-7 h-5 flex flex-col justify-center"
+                        initial={false}
+                        animate={mobileMenuOpen ? 'open' : 'closed'}
+                        variants={{
+                            closed: {},
+                            open: {},
+                        }}
+                    >
+                        <motion.span
+                            className="absolute left-0 right-0 h-0.5 bg-current rounded-full origin-center"
+                            style={{ y: -6 }}
+                            variants={{
+                                closed: { rotate: 0, y: -6 },
+                                open: { rotate: 45, y: 0 },
+                            }}
+                            transition={{ duration: 0.2, ease: 'easeInOut' }}
+                        />
+                        <motion.span
+                            className="absolute left-0 right-0 h-0.5 bg-current rounded-full"
+                            style={{ y: 0 }}
+                            variants={{
+                                closed: { opacity: 1, scaleX: 1 },
+                                open: { opacity: 0, scaleX: 0 },
+                            }}
+                            transition={{ duration: 0.15 }}
+                        />
+                        <motion.span
+                            className="absolute left-0 right-0 h-0.5 bg-current rounded-full origin-center"
+                            style={{ y: 6 }}
+                            variants={{
+                                closed: { rotate: 0, y: 6 },
+                                open: { rotate: -45, y: 0 },
+                            }}
+                            transition={{ duration: 0.2, ease: 'easeInOut' }}
+                        />
+                    </motion.span>
                 </button>
             </div>
 
@@ -150,43 +181,61 @@ export default function Navigation() {
                 </div>
 
                 <nav className="flex-1 flex flex-col justify-start pt-6 pb-8 overflow-y-auto px-6">
-                    <div className="flex flex-col gap-1">
-                        <button
-                            onClick={() => scrollToSection('hero', 0)}
-                            className="text-left py-4 px-4 min-h-[52px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-2xl sm:text-3xl md:text-4xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
-                        >
-                            {language === 'en' ? 'Home' : 'ΑΡΧΙΚΗ'}
-                        </button>
-                        <button
-                            onClick={() => scrollToSection('about', 1)}
-                            className="text-left py-4 px-4 min-h-[52px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-2xl sm:text-3xl md:text-4xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
-                        >
-                            {t.nav.about}
-                        </button>
-                        <button
-                            onClick={() => scrollToSection('services', 2)}
-                            className="text-left py-4 px-4 min-h-[52px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-2xl sm:text-3xl md:text-4xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
-                        >
-                            {t.nav.services}
-                        </button>
-                        <button
-                            onClick={() => scrollToSection('experience', 3)}
-                            className="text-left py-4 px-4 min-h-[52px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-2xl sm:text-3xl md:text-4xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
-                        >
-                            {t.nav.experience}
-                        </button>
-                        <button
-                            onClick={() => scrollToSection('projects', 4)}
-                            className="text-left py-4 px-4 min-h-[52px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-2xl sm:text-3xl md:text-4xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
-                        >
-                            {t.nav.projects}
-                        </button>
-                        <button
-                            onClick={() => scrollToSection('contact', 5)}
-                            className="text-left py-4 px-4 min-h-[52px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-2xl sm:text-3xl md:text-4xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
-                        >
-                            {t.nav.contact}
-                        </button>
+                    <div className="flex flex-col gap-0">
+                        <div className="flex items-center gap-4 py-3 px-4 border-b border-[var(--foreground)]/15">
+                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-50 uppercase tracking-[0.2em]">01</span>
+                            <button
+                                onClick={() => scrollToSection('hero', 0)}
+                                className="flex-1 text-left py-2 px-2 min-h-[48px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-xl sm:text-2xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
+                            >
+                                {language === 'en' ? 'Home' : 'ΑΡΧΙΚΗ'}
+                            </button>
+                        </div>
+                        <div className="flex items-center gap-4 py-3 px-4 border-b border-[var(--foreground)]/15">
+                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-50 uppercase tracking-[0.2em]">02</span>
+                            <button
+                                onClick={() => scrollToSection('about', 1)}
+                                className="flex-1 text-left py-2 px-2 min-h-[48px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-xl sm:text-2xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
+                            >
+                                {t.nav.about}
+                            </button>
+                        </div>
+                        <div className="flex items-center gap-4 py-3 px-4 border-b border-[var(--foreground)]/15">
+                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-50 uppercase tracking-[0.2em]">03</span>
+                            <button
+                                onClick={() => scrollToSection('services', 2)}
+                                className="flex-1 text-left py-2 px-2 min-h-[48px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-xl sm:text-2xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
+                            >
+                                {t.nav.services}
+                            </button>
+                        </div>
+                        <div className="flex items-center gap-4 py-3 px-4 border-b border-[var(--foreground)]/15">
+                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-50 uppercase tracking-[0.2em]">04</span>
+                            <button
+                                onClick={() => scrollToSection('experience', 3)}
+                                className="flex-1 text-left py-2 px-2 min-h-[48px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-xl sm:text-2xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
+                            >
+                                {t.nav.experience}
+                            </button>
+                        </div>
+                        <div className="flex items-center gap-4 py-3 px-4 border-b border-[var(--foreground)]/15">
+                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-50 uppercase tracking-[0.2em]">05</span>
+                            <button
+                                onClick={() => scrollToSection('projects', 4)}
+                                className="flex-1 text-left py-2 px-2 min-h-[48px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-xl sm:text-2xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
+                            >
+                                {t.nav.projects}
+                            </button>
+                        </div>
+                        <div className="flex items-center gap-4 py-3 px-4 border-b border-[var(--foreground)]/15">
+                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-50 uppercase tracking-[0.2em]">06</span>
+                            <button
+                                onClick={() => scrollToSection('contact', 5)}
+                                className="flex-1 text-left py-2 px-2 min-h-[48px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-xl sm:text-2xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
+                            >
+                                {t.nav.contact}
+                            </button>
+                        </div>
                     </div>
                 </nav>
 

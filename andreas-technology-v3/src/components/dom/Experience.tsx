@@ -109,7 +109,7 @@ export default function Experience() {
     }
 
     return (
-        <section className="w-full h-auto md:h-screen md:max-h-[1080px] flex flex-col justify-center px-4 sm:px-6 md:px-12 lg:px-24 py-7 md:py-0 overflow-visible md:overflow-hidden relative">
+        <section className="w-full h-auto md:h-screen md:max-h-[1080px] flex flex-col justify-center px-4 sm:px-6 md:px-12 lg:px-24 py-4 md:py-0 overflow-visible md:overflow-hidden relative">
             <div className="max-w-[1920px] mx-auto w-full h-full flex flex-col justify-center">
 
                 {/* --- HEADER & CONTROLS --- */}
