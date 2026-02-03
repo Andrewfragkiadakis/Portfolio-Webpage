@@ -46,7 +46,7 @@ export default function About() {
     ]
 
     return (
-        <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-12 md:py-0 overflow-visible md:overflow-hidden">
+        <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-7 md:py-0 overflow-visible md:overflow-hidden">
             <div className="max-w-7xl mx-auto w-full">
                 {/* Header - Editorial Style */}
                 <div className="flex flex-col items-start gap-2 mb-6 md:mb-8">

@@ -149,41 +149,41 @@ export default function Navigation() {
                     </div>
                 </div>
 
-                <nav className="flex-1 flex flex-col justify-center px-6 py-8">
-                    <div className="flex flex-col gap-0">
+                <nav className="flex-1 flex flex-col justify-start pt-6 pb-8 overflow-y-auto px-6">
+                    <div className="flex flex-col gap-1">
                         <button
                             onClick={() => scrollToSection('hero', 0)}
-                            className="text-left py-3.5 text-[var(--foreground)] hover:text-[var(--accent)] transition-colors duration-200 text-2xl sm:text-3xl font-bold uppercase tracking-tight"
+                            className="text-left py-4 px-4 min-h-[52px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-2xl sm:text-3xl md:text-4xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
                         >
                             {language === 'en' ? 'Home' : 'ΑΡΧΙΚΗ'}
                         </button>
                         <button
                             onClick={() => scrollToSection('about', 1)}
-                            className="text-left py-3.5 text-[var(--foreground)] hover:text-[var(--accent)] transition-colors duration-200 text-2xl sm:text-3xl font-bold uppercase tracking-tight"
+                            className="text-left py-4 px-4 min-h-[52px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-2xl sm:text-3xl md:text-4xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
                         >
                             {t.nav.about}
                         </button>
                         <button
                             onClick={() => scrollToSection('services', 2)}
-                            className="text-left py-3.5 text-[var(--foreground)] hover:text-[var(--accent)] transition-colors duration-200 text-2xl sm:text-3xl font-bold uppercase tracking-tight"
+                            className="text-left py-4 px-4 min-h-[52px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-2xl sm:text-3xl md:text-4xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
                         >
                             {t.nav.services}
                         </button>
                         <button
                             onClick={() => scrollToSection('experience', 3)}
-                            className="text-left py-3.5 text-[var(--foreground)] hover:text-[var(--accent)] transition-colors duration-200 text-2xl sm:text-3xl font-bold uppercase tracking-tight"
+                            className="text-left py-4 px-4 min-h-[52px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-2xl sm:text-3xl md:text-4xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
                         >
                             {t.nav.experience}
                         </button>
                         <button
                             onClick={() => scrollToSection('projects', 4)}
-                            className="text-left py-3.5 text-[var(--foreground)] hover:text-[var(--accent)] transition-colors duration-200 text-2xl sm:text-3xl font-bold uppercase tracking-tight"
+                            className="text-left py-4 px-4 min-h-[52px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-2xl sm:text-3xl md:text-4xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
                         >
                             {t.nav.projects}
                         </button>
                         <button
                             onClick={() => scrollToSection('contact', 5)}
-                            className="text-left py-3.5 text-[var(--foreground)] hover:text-[var(--accent)] transition-colors duration-200 text-2xl sm:text-3xl font-bold uppercase tracking-tight"
+                            className="text-left py-4 px-4 min-h-[52px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-2xl sm:text-3xl md:text-4xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
                         >
                             {t.nav.contact}
                         </button>

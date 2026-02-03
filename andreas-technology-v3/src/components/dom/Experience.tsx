@@ -109,7 +109,7 @@ export default function Experience() {
     }
 
     return (
-        <section className="w-full h-auto md:h-screen md:max-h-[1080px] flex flex-col justify-center px-4 sm:px-6 md:px-12 lg:px-24 py-12 md:py-0 overflow-visible md:overflow-hidden relative">
+        <section className="w-full h-auto md:h-screen md:max-h-[1080px] flex flex-col justify-center px-4 sm:px-6 md:px-12 lg:px-24 py-7 md:py-0 overflow-visible md:overflow-hidden relative">
             <div className="max-w-[1920px] mx-auto w-full h-full flex flex-col justify-center">
 
                 {/* --- HEADER & CONTROLS --- */}
@@ -129,8 +129,8 @@ export default function Experience() {
                         </span>
                     </div>
 
-                    {/* Navigation Buttons */}
-                    <div className="flex gap-2">
+                    {/* Navigation Buttons (desktop only; mobile uses two separate swipe rows) */}
+                    <div className="hidden md:flex gap-2">
                         <button
                             onClick={() => scroll('left')}
                             className="w-10 h-10 md:w-12 md:h-12 border border-[var(--foreground)]/30 flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 active:scale-95"
@@ -148,13 +148,122 @@ export default function Experience() {
                     </div>
                 </div>
 
-                {/* --- HORIZONTAL SCROLL RAIL --- */}
+                {/* --- MOBILE: Two rows (Experience | Education) --- */}
+                <div className="flex flex-col gap-8 md:hidden">
+                    <div>
+                        <div className="text-[10px] font-mono text-[var(--foreground)] opacity-65 uppercase tracking-widest mb-3 pl-1">
+                            {t.experienceSection.professional}
+                        </div>
+                        <div
+                            className="flex gap-4 overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 scroll-smooth items-stretch"
+                            style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
+                        >
+                            {t.experience.map((exp: any, idx: number) => (
+                                <motion.div
+                                    key={`exp-m-${idx}`}
+                                    initial={{ opacity: 0, x: 30 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    viewport={{ once: true }}
+                                    className="min-w-[280px] w-[280px] aspect-square bg-[var(--background)] border border-[var(--foreground)]/40 flex-shrink-0 p-4 flex flex-col justify-between hover:border-[var(--accent)] transition-all duration-300 group scroll-snap-align-start relative"
+                                >
+                                    <div className="absolute top-0 right-0 p-4 opacity-10 text-4xl font-black text-[var(--foreground)] z-0">
+                                        {(idx + 1).toString().padStart(2, '0')}
+                                    </div>
+                                    <div className="z-10 relative flex-1 flex flex-col">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <span className="w-12 h-12 flex items-center justify-center border border-[var(--accent)]/30 text-[var(--accent)] rounded-lg">
+                                                <i className="fas fa-briefcase text-lg"></i>
+                                            </span>
+                                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-65 uppercase tracking-widest">
+                                                {exp.duration}
+                                            </span>
+                                        </div>
+                                        <h3 className="text-lg font-bold text-[var(--foreground)] uppercase leading-tight mb-2">
+                                            {exp.role}
+                                        </h3>
+                                        <p className="text-xs font-mono text-[var(--foreground)] opacity-75 mb-4">
+                                            @ {exp.company}
+                                        </p>
+                                        <ul className="space-y-2 flex-1 overflow-y-auto">
+                                            {exp.tasks.map((task: string, ti: number) => (
+                                                <li key={ti} className="text-xs text-[var(--foreground)] opacity-80 flex items-start gap-2">
+                                                    <span className="text-[var(--accent)] mt-1 text-[6px] shrink-0"><i className="fas fa-square"></i></span>
+                                                    <span className="leading-tight">{task}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </motion.div>
+                            ))}
+                            <div className="w-4 flex-shrink-0" />
+                        </div>
+                    </div>
+                    <div>
+                        <div className="text-[10px] font-mono text-[var(--foreground)] opacity-65 uppercase tracking-widest mb-3 pl-1">
+                            {t.experienceSection.education}
+                        </div>
+                        <div
+                            className="flex gap-4 overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 scroll-smooth items-stretch"
+                            style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
+                        >
+                            {t.education.map((edu: any, idx: number) => (
+                                <motion.div
+                                    key={`edu-m-${idx}`}
+                                    initial={{ opacity: 0, x: 30 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    viewport={{ once: true }}
+                                    className="min-w-[280px] w-[280px] aspect-square bg-[var(--background)] border border-[var(--foreground)]/20 flex-shrink-0 p-4 flex flex-col justify-between hover:border-[var(--accent)] transition-all duration-300 group scroll-snap-align-start"
+                                >
+                                    <div className="flex-1 flex flex-col">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <span className="w-12 h-12 flex items-center justify-center border border-[var(--foreground)]/30 text-[var(--foreground)] rounded-lg">
+                                                <i className="fas fa-graduation-cap text-lg"></i>
+                                            </span>
+                                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-65 uppercase tracking-widest">
+                                                {edu.duration}
+                                            </span>
+                                        </div>
+                                        <h3 className="text-lg font-bold text-[var(--foreground)] uppercase leading-tight mb-2">
+                                            {edu.degree}
+                                        </h3>
+                                        <p className="text-xs font-mono text-[var(--foreground)] opacity-75 mb-4">
+                                            {edu.institution}
+                                        </p>
+                                        {edu.details && (
+                                            <div className="space-y-2 mb-4 flex-1 overflow-y-auto">
+                                                {edu.details.map((detail: string, i: number) => (
+                                                    <div key={i} className="flex items-start gap-2 text-xs text-[var(--foreground)] opacity-80">
+                                                        <i className="fas fa-check text-[var(--accent)] text-[10px] mt-0.5"></i>
+                                                        <span>{detail}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                    {edu.link && (
+                                        <a
+                                            href={edu.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest border border-[var(--foreground)] px-4 py-3 hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all justify-center w-full mt-auto"
+                                        >
+                                            <i className="fas fa-certificate"></i>
+                                            {t.experienceSection.verify}
+                                        </a>
+                                    )}
+                                </motion.div>
+                            ))}
+                            <div className="w-4 flex-shrink-0" />
+                        </div>
+                    </div>
+                </div>
+
+                {/* --- DESKTOP: Single horizontal scroll rail --- */}
                 <div
                     ref={scrollContainerRef}
-                    className="flex gap-4 md:gap-6 overflow-x-auto no-scrollbar pb-4 md:pb-8 -mx-4 px-4 scroll-smooth items-stretch"
+                    className="hidden md:flex gap-4 md:gap-6 overflow-x-auto no-scrollbar pb-4 md:pb-8 -mx-4 px-4 scroll-smooth items-stretch"
                     style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
                     onScroll={(e) => {
-                        // Prevent page scroll when container scrolls
                         e.stopPropagation()
                     }}
                 >
