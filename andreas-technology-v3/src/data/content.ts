@@ -56,6 +56,7 @@ export interface Content {
     }
     about: {
         title: string
+        tagline: string
         description: string[]
     }
     hero: {
@@ -123,11 +124,13 @@ export const content: Record<'en' | 'gr', Content> = {
 
         about: {
             title: "ABOUT ME",
+            tagline: "Computer Engineer with a passion for building exceptional digital products",
             description: [
                 "I am an IT & Computer Engineer (M.Eng.) specializing in SecOps, Infrastructure Automation, and AI Integration. My approach combines deep technical research with hands-on engineering to build secure, scalable, and automated environments.",
                 "Currently, I balance my role as an IT Engineer at Omilia, while fulfilling my military service as an IT Operations Administrator. My academic background is rooted in 5G research, specifically in Hybrid Wireless-Optical Networks (Radio over Fiber).",
                 "With a focus on Endpoint Hardening, Network Security, and AI-driven operations (Atlassian Rovo, Gemini), I bridge the gap between complex infrastructure and operational efficiency.",
-                "Based in Greece | Fluent in English (C2) & German (B2)"
+                "Based in Greece | Fluent in English (C2) & German (B2)",
+                "I am a Computer and IT Engineer (M.Eng.) specializing in SecOps, infrastructure automation, and AI integration. Graduate of a Polytechnic-level University of computer engineering and informatics."
             ]
         },
         hero: {
@@ -410,18 +413,20 @@ export const content: Record<'en' | 'gr', Content> = {
         nav: {
             about: "ΣΧΕΤΙΚΑ",
             experience: "ΕΜΠΕΙΡΙΑ",
-            projects: "ΕΡΓΑ",
+            projects: "PROJECTS",
             services: "ΥΠΗΡΕΣΙΕΣ",
             contact: "ΕΠΙΚΟΙΝΩΝΙΑ"
         },
 
         about: {
             title: "ΣΧΕΤΙΚΑ ΜΕ ΕΜΕΝΑ",
+            tagline: "Μηχανικός Πληροφορικής με πάθος για την κατασκευή εξαιρετικών ψηφιακών προϊόντων",
             description: [
                 "Είμαι Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) με εξειδίκευση σε SecOps, αυτοματισμό υποδομών και ενσωμάτωση Τεχνητής Νοημοσύνης. Η προσέγγισή μου συνδυάζει τη βαθιά τεχνική έρευνα με την εφαρμοσμένη μηχανική για τη δημιουργία ασφαλών, κλιμακούμενων και αυτοματοποιημένων περιβαλλόντων.",
-                "Επί του παρόντος, συνδυάζω τον ρόλο μου ως Μηχανικός Πληροφορικής στην Omilia, ενώ παράλληλα εκπληρώνω τις στρατιωτικές μου υποχρεώσεις ως Διαχειριστής Επιχειρήσεων Πληροφορικής. Το ακαδημαϊκό μου υπόβαθρο βασίζεται στην έρευνα δικτύων 5G, και συγκεκριμένα στα Υβριδικά Ασύρματα-Οπτικά Δίκτυα (Radio over Fiber).",
+                "Αυτή τη στιγμή, συνδυάζω τον ρόλο μου ως Μηχανικός Πληροφορικής στην Omilia, ενώ παράλληλα εκπληρώνω τις στρατιωτικές μου υποχρεώσεις ως Υπεύθυνος Πληροφορικής. Το ακαδημαϊκό μου υπόβαθρο βασίζεται στην έρευνα δικτύων 5G, και συγκεκριμένα στα Υβριδικά Ασύρματα-Οπτικά Δίκτυα (Radio over Fiber).",
                 "Με έμφαση στην ενίσχυση τερματικών σημείων (Endpoint Hardening), την ασφάλεια δικτύων και τις λειτουργίες που βασίζονται στην Τεχνητή Νοημοσύνη (Atlassian Rovo, Gemini), γεφυρώνω το χάσμα μεταξύ πολύπλοκων υποδομών και επιχειρησιακής αποτελεσματικότητας.",
-                "Με έδρα την Ελλάδα | Άριστη γνώση Αγγλικών (C2) & Γερμανικών (B2)"
+                "Με έδρα την Ελλάδα | Άριστη γνώση Αγγλικών (C2) & Γερμανικών (B2)",
+                "Είμαι Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) με εξειδίκευση σε SecOps, αυτοματισμό υποδομών και ενσωμάτωση Τεχνητής Νοημοσύνης. Απόφοιτος Πολυτεχνικού επιπέδου σχολής μηχανικών ηλεκτρονικών υπολογιστών και πληροφορικής."
             ]
         },
         hero: {
@@ -444,11 +449,11 @@ export const content: Record<'en' | 'gr', Content> = {
             title: "ΕΠΙΚΟΙΝΩΝΙΑ",
             subtitle: "ΕΛΑΤΕ ΣΕ ΕΠΑΦΗ",
             infoTitle: "Στοιχεία Επικοινωνίας",
-            socialTitle: "Βρείτε με στα social media",
+            socialTitle: "Βρείτε με στα social",
             opportunitesTitle: "Διαθέσιμος για νέες ευκαιρίες",
-            opportunitesDescription: "Αναζητώ θέσεις πλήρους απασχόλησης, έργα ως ελεύθερος επαγγελματίας ή ενδιαφέρουσες συνεργασίες. Ας δημιουργήσουμε κάτι ξεχωριστό μαζί.",
-            sendMessage: "ΑΠΟΣΤΟΛΗ ΜΗΝΥΜΑΤΟΣ",
-            downloadResume: "ΛΗΨΗ ΒΙΟΓΡΑΦΙΚΟΥ"
+            opportunitesDescription: "Freelance projects ή ενδιαφέρουσες συνεργασίες. Ας δημιουργήσουμε κάτι μοναδικό μαζί.",
+            sendMessage: "Αποστολη Μηνυματος",
+            downloadResume: "Ληψη Βιογραφικου"
         },
 
         skillsTitle: "ΒΑΣΙΚΕΣ ΔΕΞΙΟΤΗΤΕΣ",
@@ -591,13 +596,13 @@ export const content: Record<'en' | 'gr', Content> = {
             verify: "ΠΙΣΤΟΠΟΙΗΣΗ"
         },
         projectsSection: {
-            title: "ΕΡΓΑ",
+            title: "PROJECTS",
             subtitle: "ΕΠΙΛΕΓΜΕΝΑ ΕΡΓΑ",
             live: "Live",
             code: "Code",
-            githubCta: "Δείτε το πλήρες portfolio στο GitHub"
+            githubCta: "Δείτε το πλήρες Portfolio στο GitHub"
         },
-        projectsTitle: "ΕΡΓΑ",
+        projectsTitle: "PROJECTS",
         projects: [
             {
                 name: "Προσωπική Ιστοσελίδα Portfolio",
@@ -685,6 +690,6 @@ export const content: Record<'en' | 'gr', Content> = {
         ],
 
         contactTitle: "ΕΠΙΚΟΙΝΩΝΙΑ",
-        copyright: "© 2026 Δημιουργήθηκε από τον Ανδρέα Φραγκιαδάκη. Με επιφύλαξη παντός δικαιώματος."
+        copyright: "© 2026 Created By Ανδρέας Φραγκιαδάκης. All rights reserved."
     }
 }

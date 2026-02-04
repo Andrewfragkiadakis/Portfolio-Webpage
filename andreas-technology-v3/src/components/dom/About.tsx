@@ -105,7 +105,7 @@ export default function About() {
                         className="flex flex-col justify-center"
                     >
                         <h3 className="text-xl md:text-2xl font-bold text-[var(--foreground)] mb-3">
-                            Computer Engineer with a passion for building exceptional digital products
+                            {t.about.tagline}
                         </h3>
 
                         <div className="space-y-3 text-sm text-[var(--foreground)] opacity-80 leading-relaxed">
