@@ -10,7 +10,7 @@ export default function Services() {
     return (
         <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-4 md:py-0 overflow-visible md:overflow-hidden">
             <div className="max-w-7xl mx-auto w-full">
-                <div className="flex flex-col items-end gap-2 mb-8 sm:mb-12 w-full text-right">
+                <div id="services" className="flex flex-col items-end gap-2 mb-8 sm:mb-12 w-full text-right">
                     <motion.h2
                         initial={{ opacity: 0, x: 50 }}
                         whileInView={{ opacity: 1, x: 0 }}
@@ -18,7 +18,7 @@ export default function Services() {
                         className="text-[12vw] md:text-[8vw] leading-[0.8] font-black tracking-tighter text-transparent select-none"
                         style={{ WebkitTextStroke: '2px var(--foreground)' }}
                     >
-                        EXPERTISE
+                        {t.servicesTitle}
                     </motion.h2>
                     <span className="text-sm font-mono tracking-widest uppercase text-[var(--foreground)] pr-2">
                         // WHAT I DO

@@ -49,7 +49,7 @@ export default function About() {
         <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-4 md:py-0 overflow-visible md:overflow-hidden">
             <div className="max-w-7xl mx-auto w-full">
                 {/* Header - Editorial Style */}
-                <div className="flex flex-col items-start gap-2 mb-6 md:mb-8">
+                <div id="about" className="flex flex-col items-start gap-2 mb-6 md:mb-8">
                     <motion.h2
                         initial={{ opacity: 0, x: -50 }}
                         whileInView={{ opacity: 1, x: 0 }}
@@ -57,7 +57,7 @@ export default function About() {
                         className="text-[12vw] md:text-[7vw] leading-[0.8] font-black tracking-tighter text-transparent select-none"
                         style={{ WebkitTextStroke: '2px var(--foreground)' }}
                     >
-                        PROFILE
+                        {t.about.title}
                     </motion.h2>
                     <span className="text-sm font-mono tracking-widest uppercase text-[var(--foreground)] pl-2">
                         // ABOUT ME

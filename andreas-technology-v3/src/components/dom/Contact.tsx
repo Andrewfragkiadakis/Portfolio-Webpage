@@ -10,7 +10,7 @@ export default function Contact() {
         <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-4 md:py-0 overflow-visible md:overflow-hidden">
             <div className="max-w-6xl mx-auto w-full">
                 {/* Header - Editorial Style */}
-                <div className="flex flex-col items-start gap-2 mb-8 md:mb-12">
+                <div id="contact" className="flex flex-col items-start gap-2 mb-8 md:mb-12">
                     <motion.h2
                         initial={{ opacity: 0, x: -50 }}
                         whileInView={{ opacity: 1, x: 0 }}

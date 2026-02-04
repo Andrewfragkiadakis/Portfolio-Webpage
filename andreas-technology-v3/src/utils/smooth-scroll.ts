@@ -20,9 +20,11 @@ export function smoothScrollTo(targetY: number, durationMs: number = SECTION_SCR
     requestAnimationFrame(step)
 }
 
-export function smoothScrollToElement(element: HTMLElement, durationMs: number = SECTION_SCROLL_DURATION_MS): void {
+const FIXED_NAV_OFFSET_PX = 64
+
+export function smoothScrollToElement(element: HTMLElement, durationMs: number = SECTION_SCROLL_DURATION_MS, offsetTop: number = FIXED_NAV_OFFSET_PX): void {
     if (typeof window === 'undefined') return
-    const targetY = element.getBoundingClientRect().top + window.scrollY
+    const targetY = element.getBoundingClientRect().top + window.scrollY - offsetTop
     smoothScrollTo(targetY, durationMs)
 }
 

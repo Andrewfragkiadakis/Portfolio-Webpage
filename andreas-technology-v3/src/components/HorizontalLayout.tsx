@@ -101,26 +101,26 @@ export default function HorizontalLayout() {
         <div ref={targetRef} className="relative bg-[var(--background)]">
             {/* MOBILE LAYOUT (Vertical Stack) */}
             <div className="flex flex-col md:hidden gap-[10vh]">
-                <div id="hero" className="min-h-screen w-full overflow-hidden relative">
+                <div className="min-h-screen w-full overflow-hidden relative">
                     <HeroOverlay />
                 </div>
-                <div id="about" className="min-h-screen w-full overflow-hidden relative">
+                <div className="min-h-screen w-full overflow-hidden relative">
                     <About />
                 </div>
-                <div id="services" className="min-h-screen w-full overflow-hidden relative">
+                <div className="min-h-screen w-full overflow-hidden relative">
                     <Services />
                 </div>
-                <div id="experience" className="min-h-screen w-full overflow-hidden relative">
+                <div className="min-h-screen w-full overflow-hidden relative">
                     <Suspense fallback={<SectionFallback />}>
                         <Experience />
                     </Suspense>
                 </div>
-                <div id="projects" className="min-h-screen w-full overflow-hidden relative mb-[-4vh]">
+                <div className="min-h-screen w-full overflow-hidden relative">
                     <Suspense fallback={<SectionFallback />}>
                         <Projects />
                     </Suspense>
                 </div>
-                <div id="contact" className="min-h-screen w-full overflow-hidden relative">
+                <div className="min-h-screen w-full overflow-hidden relative">
                     <Suspense fallback={<SectionFallback />}>
                         <Contact />
                     </Suspense>

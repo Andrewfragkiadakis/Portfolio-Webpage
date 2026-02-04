@@ -130,7 +130,7 @@ export default function Experience() {
 
                 {/* --- HEADER & CONTROLS --- */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 sm:mb-8 md:mb-12 gap-4 md:gap-6">
-                    <div className="flex flex-col items-start gap-2">
+                    <div id="experience" className="flex flex-col items-start gap-2">
                         <motion.h2
                             initial={{ opacity: 0, x: -50 }}
                             whileInView={{ opacity: 1, x: 0 }}

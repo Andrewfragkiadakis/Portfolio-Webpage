@@ -39,7 +39,7 @@ export default function HeroOverlay() {
             >
                 <div className="relative">
                     {/* Base Layer - Outline */}
-                    <div className="flex flex-col items-center">
+                    <div id="hero" className="flex flex-col items-center">
                         <h1
                             className="text-[12vw] leading-[0.8] font-black tracking-tighter text-transparent select-none transition-all duration-500"
                             style={{ WebkitTextStroke: '2px var(--foreground)' }}

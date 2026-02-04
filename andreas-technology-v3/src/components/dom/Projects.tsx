@@ -110,9 +110,9 @@ export default function Projects() {
 
     return (
         <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-4 md:py-0 overflow-visible md:overflow-hidden">
-            <div className="max-w-[1920px] mx-auto w-full">
+            <div className="max-w-[1920px] mx-auto w-full max-h-[calc(100vh-8rem)] md:max-h-none overflow-y-auto md:overflow-visible">
                 {/* Header */}
-                <div className="flex flex-col items-end gap-2 mb-6 sm:mb-8 w-full text-right">
+                <div id="projects" className="flex flex-col items-end gap-2 mb-6 sm:mb-8 w-full text-right">
                     <motion.h2
                         initial={{ opacity: 0, x: 50 }}
                         whileInView={{ opacity: 1, x: 0 }}
