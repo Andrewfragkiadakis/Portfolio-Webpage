@@ -128,8 +128,8 @@ export default function Contact() {
                     </motion.div>
                 </div>
 
-                {/* Footer - flush above bottom nav (padding = nav height only) */}
-                <div className="mt-6 pb-[52px] md:pb-0 text-center text-xs font-mono text-[var(--foreground)] opacity-75">
+                {/* Footer - enough padding on mobile so copyright stays above bottom nav */}
+                <div className="mt-6 pb-[7rem] md:pb-0 text-center text-xs font-mono text-[var(--foreground)] opacity-75">
                     <p>{t.copyright}</p>
                 </div>
             </div>

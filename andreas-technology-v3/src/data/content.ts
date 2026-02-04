@@ -410,7 +410,7 @@ export const content: Record<'en' | 'gr', Content> = {
         nav: {
             about: "ΣΧΕΤΙΚΑ",
             experience: "ΕΜΠΕΙΡΙΑ",
-            projects: "PROJECTS",
+            projects: "ΕΡΓΑ",
             services: "ΥΠΗΡΕΣΙΕΣ",
             contact: "ΕΠΙΚΟΙΝΩΝΙΑ"
         },
@@ -444,11 +444,11 @@ export const content: Record<'en' | 'gr', Content> = {
             title: "ΕΠΙΚΟΙΝΩΝΙΑ",
             subtitle: "ΕΛΑΤΕ ΣΕ ΕΠΑΦΗ",
             infoTitle: "Στοιχεία Επικοινωνίας",
-            socialTitle: "Βρείτε με στα social",
+            socialTitle: "Βρείτε με στα social media",
             opportunitesTitle: "Διαθέσιμος για νέες ευκαιρίες",
-            opportunitesDescription: "Αναζητώ θέσεις πλήρους απασχόλησης, freelance projects ή ενδιαφέρουσες συνεργασίες. Ας δημιουργήσουμε κάτι μοναδικό μαζί.",
-            sendMessage: "Αποστολη Μηνυματος",
-            downloadResume: "Ληψη Βιογραφικου"
+            opportunitesDescription: "Αναζητώ θέσεις πλήρους απασχόλησης, έργα ως ελεύθερος επαγγελματίας ή ενδιαφέρουσες συνεργασίες. Ας δημιουργήσουμε κάτι ξεχωριστό μαζί.",
+            sendMessage: "ΑΠΟΣΤΟΛΗ ΜΗΝΥΜΑΤΟΣ",
+            downloadResume: "ΛΗΨΗ ΒΙΟΓΡΑΦΙΚΟΥ"
         },
 
         skillsTitle: "ΒΑΣΙΚΕΣ ΔΕΞΙΟΤΗΤΕΣ",
@@ -584,20 +584,20 @@ export const content: Record<'en' | 'gr', Content> = {
             }
         ],
         experienceSection: {
-            title: "Καριέρα",
-            subtitle: "Χρονολόγιο: Εργασία & Εκπαίδευση",
-            professional: "Professional",
-            education: "Education",
-            verify: "Πιστοποίηση"
+            title: "ΚΑΡΙΕΡΑ",
+            subtitle: "ΧΡΟΝΟΛΟΓΙΟ: ΕΡΓΑΣΙΑ & ΕΚΠΑΙΔΕΥΣΗ",
+            professional: "ΕΠΑΓΓΕΛΜΑΤΙΚΗ",
+            education: "ΕΚΠΑΙΔΕΥΣΗ",
+            verify: "ΠΙΣΤΟΠΟΙΗΣΗ"
         },
         projectsSection: {
-            title: "PROJECTS",
+            title: "ΕΡΓΑ",
             subtitle: "ΕΠΙΛΕΓΜΕΝΑ ΕΡΓΑ",
             live: "Live",
             code: "Code",
-            githubCta: "Δείτε το πλήρες Portfolio στο GitHub"
+            githubCta: "Δείτε το πλήρες portfolio στο GitHub"
         },
-        projectsTitle: "PROJECTS",
+        projectsTitle: "ΕΡΓΑ",
         projects: [
             {
                 name: "Προσωπική Ιστοσελίδα Portfolio",
@@ -685,6 +685,6 @@ export const content: Record<'en' | 'gr', Content> = {
         ],
 
         contactTitle: "ΕΠΙΚΟΙΝΩΝΙΑ",
-        copyright: "© 2026 Created By Ανδρέας Φραγκιαδάκης. All rights reserved."
+        copyright: "© 2026 Δημιουργήθηκε από τον Ανδρέα Φραγκιαδάκη. Με επιφύλαξη παντός δικαιώματος."
     }
 }

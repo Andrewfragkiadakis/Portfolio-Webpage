@@ -145,10 +145,11 @@ export default function Projects() {
                     </button>
                 </div>
 
-                {/* Horizontal Scrollable Project Cards */}
+                {/* Horizontal Scrollable Project Cards - same sizing as Experience (career) cards */}
                 <div
                     ref={scrollContainerRef}
-                    className="flex gap-6 overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 scroll-smooth"
+                    className="flex gap-4 md:gap-6 overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 md:-mx-0 md:px-0 scroll-smooth items-stretch"
+                    style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
                 >
                     {t.projects.map((project: any, index: number) => (
                         <motion.div
@@ -158,10 +159,9 @@ export default function Projects() {
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.15 }}
-                            className="min-w-[320px] md:min-w-[400px] border border-[var(--foreground)] bg-[var(--background)] flex-shrink-0 group overflow-hidden hover:border-[var(--accent)] transition-colors"
+                            className="min-w-[280px] sm:min-w-[320px] md:min-w-[380px] lg:min-w-[400px] w-[280px] sm:w-[320px] md:w-[380px] lg:w-[400px] aspect-square border border-[var(--foreground)]/40 bg-[var(--background)] flex-shrink-0 group overflow-hidden hover:border-[var(--accent)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)] flex flex-col scroll-snap-align-start"
                         >
-                            {/* Image */}
-                            <div className="relative h-48 overflow-hidden">
+                            <div className="relative flex-[0_0_42%] min-h-0 overflow-hidden bg-[var(--background)]">
                                 {project.image && (
                                     <Image
                                         src={project.image}
@@ -171,25 +171,25 @@ export default function Projects() {
                                         unoptimized
                                     />
                                 )}
-                                <div className="absolute top-4 right-4 font-mono text-2xl text-[var(--accent)] opacity-70 font-bold">
+                                <div className="absolute top-3 right-3 font-mono text-xl text-[var(--accent)] opacity-70 font-bold">
                                     {(index + 1).toString().padStart(2, '0')}
                                 </div>
                             </div>
 
-                            {/* Content */}
-                            <div className="p-6">
-                                <h3 className="text-xl font-black text-[var(--accent)] uppercase tracking-tight mb-2">
-                                    {project.name}
-                                </h3>
-                                <div className="flex flex-wrap gap-2 mb-4">
-                                    {project.tags.slice(0, 3).map((tag: string, i: number) => (
-                                        <span key={i} className="text-[10px] font-mono border border-[var(--foreground)] px-2 py-1 text-[var(--foreground)]">
-                                            {tag}
-                                        </span>
-                                    ))}
+                            <div className="flex-1 flex flex-col justify-between p-4 sm:p-5 md:p-6 min-h-0">
+                                <div>
+                                    <h3 className="text-lg md:text-xl font-black text-[var(--accent)] uppercase tracking-tight mb-2 line-clamp-2">
+                                        {project.name}
+                                    </h3>
+                                    <div className="flex flex-wrap gap-1.5 mb-3">
+                                        {project.tags.slice(0, 3).map((tag: string, i: number) => (
+                                            <span key={i} className="text-[10px] font-mono border border-[var(--foreground)] px-2 py-0.5 text-[var(--foreground)]">
+                                                {tag}
+                                            </span>
+                                        ))}
+                                    </div>
                                 </div>
-
-                                <div className="flex gap-4">
+                                <div className="flex gap-3 flex-shrink-0">
                                     {project.liveSiteLink && (
                                         <a href={project.liveSiteLink} target="_blank" rel="noopener noreferrer" className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)] hover:text-[var(--accent)] flex items-center gap-1 transition-colors">
                                             <i className="fas fa-external-link-alt"></i> {t.projectsSection.live}
