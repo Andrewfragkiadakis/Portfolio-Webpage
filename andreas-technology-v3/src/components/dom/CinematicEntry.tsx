@@ -4,21 +4,37 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Typewriter from 'typewriter-effect'
 
+const MOBILE_MAX_WIDTH = 768
+
 export default function CinematicEntry() {
     const [entered, setEntered] = useState(false)
     const [showButton, setShowButton] = useState(false)
+    const [isMobile, setIsMobile] = useState(true)
 
     useEffect(() => {
+        const check = () => window.innerWidth <= MOBILE_MAX_WIDTH
+        setIsMobile(check())
+        const listener = () => setIsMobile(check())
+        window.addEventListener('resize', listener)
+        return () => window.removeEventListener('resize', listener)
+    }, [])
+
+    useEffect(() => {
+        if (isMobile) {
+            setEntered(true)
+            document.body.style.overflow = 'auto'
+            return
+        }
         if (!entered) {
             document.body.style.overflow = 'hidden'
         } else {
             document.body.style.overflow = 'auto'
         }
-    }, [entered])
+    }, [entered, isMobile])
 
     return (
         <AnimatePresence>
-            {!entered && (
+            {!entered && !isMobile && (
                 <motion.div
                     initial={{ opacity: 1 }}
                     exit={{ y: '-100%', transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } }}

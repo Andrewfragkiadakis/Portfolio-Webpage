@@ -1,10 +1,12 @@
 'use client'
 
 import { useContent } from '@/hooks/useContent'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Typewriter from 'typewriter-effect'
 import { scrollToSection as smoothScrollToSection } from '@/utils/smooth-scroll'
+
+const DESKTOP_MIN_WIDTH = 769
 
 export default function HeroOverlay() {
     const t = useContent()
@@ -15,6 +17,11 @@ export default function HeroOverlay() {
 
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
     const [isHovering, setIsHovering] = useState(false)
+    const [canUseSpotlight, setCanUseSpotlight] = useState(false)
+
+    useEffect(() => {
+        setCanUseSpotlight(typeof window !== 'undefined' && window.innerWidth >= DESKTOP_MIN_WIDTH)
+    }, [])
 
     const handleMouseMove = (e: React.MouseEvent) => {
         const { clientX, clientY } = e
@@ -30,11 +37,11 @@ export default function HeroOverlay() {
             className="absolute top-0 left-0 w-full h-screen flex flex-col justify-center items-center overflow-hidden z-10"
         >
 
-            {/* Massive Typography - Background Layer */}
+            {/* Massive Typography - Background Layer (minimal delay for LCP) */}
             <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
+                initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1, delay: 0.5 }}
+                transition={{ duration: 0.25, delay: 0.05 }}
                 className="relative z-10 flex flex-col items-center justify-center w-full"
             >
                 <div className="relative">
@@ -53,40 +60,32 @@ export default function HeroOverlay() {
                             {t.hero.lastName}
                         </h1>
                     </div>
-                    {/* Spotlight Layer - Filled */}
-                    <motion.div
-                        className="absolute top-0 left-0 w-full h-full flex flex-col items-center pointer-events-none"
-                        animate={{
-                            // Position spotlight above and to the right of cursor
-                            // X: subtract less to move right relative to cursor
-                            // Y: subtract more to move above the cursor
-                            WebkitMaskPosition: `${mousePosition.x - 25}px ${mousePosition.y - 200}px`,
-                            maskPosition: `${mousePosition.x - 25}px ${mousePosition.y - 500}px`,
-                        } as any}
-                        // TIMING FIX: Reduced duration significantly to remove "drag"
-                        transition={{ type: "tween", ease: "backOut", duration: 0.35 }}
-                        style={{
-                            // Original size preserved
-                            maskImage: 'radial-gradient(circle 150px at center, black 100%, transparent 100%)',
-                            WebkitMaskImage: 'radial-gradient(circle 150px at center, black 100%, transparent 100%)',
-
-                            // IMPORTANT: Define the box size explicitly (Diameter = Radius * 2)
-                            // This ensures the mask is calculated as a 300x300 box
-                            maskSize: '300px 300px',
-                            WebkitMaskSize: '300px 300px',
-
-                            WebkitMaskRepeat: 'no-repeat',
-                            maskRepeat: 'no-repeat',
-                            opacity: isHovering ? 1 : 0
-                        }}
-                    >
-                        <h1 className="text-[12vw] leading-[0.8] font-black tracking-tighter text-[var(--accent)] select-none">
-                            {t.hero.firstName}
-                        </h1>
-                        <h1 className="text-[10vw] leading-[0.8] font-black tracking-tighter text-[var(--accent)] select-none mt-2">
-                            {t.hero.lastName}
-                        </h1>
-                    </motion.div>
+                    {canUseSpotlight && (
+                        <motion.div
+                            className="absolute top-0 left-0 w-full h-full flex flex-col items-center pointer-events-none"
+                            animate={{
+                                WebkitMaskPosition: `${mousePosition.x - 25}px ${mousePosition.y - 200}px`,
+                                maskPosition: `${mousePosition.x - 25}px ${mousePosition.y - 500}px`,
+                            } as any}
+                            transition={{ type: "tween", ease: "backOut", duration: 0.35 }}
+                            style={{
+                                maskImage: 'radial-gradient(circle 150px at center, black 100%, transparent 100%)',
+                                WebkitMaskImage: 'radial-gradient(circle 150px at center, black 100%, transparent 100%)',
+                                maskSize: '300px 300px',
+                                WebkitMaskSize: '300px 300px',
+                                WebkitMaskRepeat: 'no-repeat',
+                                maskRepeat: 'no-repeat',
+                                opacity: isHovering ? 1 : 0
+                            }}
+                        >
+                            <h1 className="text-[12vw] leading-[0.8] font-black tracking-tighter text-[var(--accent)] select-none">
+                                {t.hero.firstName}
+                            </h1>
+                            <h1 className="text-[10vw] leading-[0.8] font-black tracking-tighter text-[var(--accent)] select-none mt-2">
+                                {t.hero.lastName}
+                            </h1>
+                        </motion.div>
+                    )}
                 </div>
             </motion.div>
 

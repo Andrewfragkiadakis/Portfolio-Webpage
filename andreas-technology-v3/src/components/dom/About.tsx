@@ -147,9 +147,9 @@ export default function About() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: 0.4 + index * 0.1 }}
-                                className="border border-[var(--foreground)]/30 p-3 hover:border-[var(--accent)] transition-all duration-300 group flex flex-col"
+                                className={`border p-3 transition-all duration-300 group flex flex-col ${isExpanded ? 'border-[var(--accent)] bg-[var(--accent)]/10' : 'border-[var(--foreground)]/30 hover:border-[var(--accent)]'}`}
                             >
-                                <div className="w-9 h-9 border border-[var(--foreground)]/50 flex items-center justify-center text-[var(--foreground)] group-hover:border-[var(--accent)] group-hover:text-[var(--accent)] transition-colors mb-2">
+                                <div className={`w-9 h-9 border flex items-center justify-center transition-colors mb-2 ${isExpanded ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-[var(--foreground)]/50 text-[var(--foreground)] group-hover:border-[var(--accent)] group-hover:text-[var(--accent)]'}`}>
                                     <i className={`${skill.icon} text-base`}></i>
                                 </div>
                                 <h4 className="font-bold text-sm text-[var(--foreground)] mb-1">{skill.label}</h4>
