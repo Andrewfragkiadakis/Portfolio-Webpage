@@ -115,7 +115,7 @@ export default function HorizontalLayout() {
                         <Experience />
                     </Suspense>
                 </div>
-                <div id="projects" className="min-h-screen w-full overflow-hidden relative">
+                <div id="projects" className="min-h-screen w-full overflow-hidden relative mb-[-4vh]">
                     <Suspense fallback={<SectionFallback />}>
                         <Projects />
                     </Suspense>
