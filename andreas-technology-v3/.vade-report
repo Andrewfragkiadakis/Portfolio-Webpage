@@ -1,0 +1,36 @@
+# Vercel Speed Insights Integration
+
+Successfully installed and configured Vercel Speed Insights for the Next.js 16.0.7 portfolio project.
+
+## Changes Made
+
+### 1. Package Installation
+- Installed `@vercel/speed-insights` package using npm
+- Updated package.json and package-lock.json with the new dependency
+
+### 2. Code Integration
+Modified: `src/app/layout.tsx`
+- Added import statement: `import { SpeedInsights } from '@vercel/speed-insights/next'`
+- Added `<SpeedInsights />` component inside the `<body>` tag, after all other content
+- Placed after the ThemeProvider/LanguageProvider/SmoothScroll wrapper to ensure proper rendering
+
+## Implementation Details
+
+Since this is a Next.js 16.0.7 project (> 13.5) using the App Router, I used the recommended approach:
+- Imported from `@vercel/speed-insights/next` (optimized for Next.js App Router)
+- Added the component to the root layout file
+- No additional configuration needed - the component works automatically
+
+## Verification
+
+✅ Build completed successfully with no errors
+✅ Linter ran successfully (no new errors introduced)
+✅ TypeScript compilation passed
+✅ All static pages generated correctly
+
+The Speed Insights component will now automatically track Web Vitals metrics and send them to Vercel when the site is deployed.
+
+## Files Modified
+- `/package.json` - Added @vercel/speed-insights dependency
+- `/package-lock.json` - Updated lockfile with new dependencies
+- `/src/app/layout.tsx` - Added SpeedInsights import and component
