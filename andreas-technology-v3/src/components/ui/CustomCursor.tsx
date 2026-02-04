@@ -33,14 +33,18 @@ export default function CustomCursor() {
 
     if (!isVisible) return null
 
+    const size = 40
+    const scale = isHovering ? 1 : 16 / size
+    const offset = (size * scale) / 2
+
     return (
         <motion.div
-            className="fixed top-0 left-0 pointer-events-none z-[100000] hidden md:block"
+            className="fixed top-0 left-0 pointer-events-none z-[100000] hidden md:block origin-center"
+            style={{ width: size, height: size }}
             animate={{
-                x: position.x - (isHovering ? 20 : 8),
-                y: position.y - (isHovering ? 20 : 8),
-                width: isHovering ? 40 : 16,
-                height: isHovering ? 40 : 16,
+                x: position.x - offset,
+                y: position.y - offset,
+                scale,
             }}
             transition={{
                 type: "spring",

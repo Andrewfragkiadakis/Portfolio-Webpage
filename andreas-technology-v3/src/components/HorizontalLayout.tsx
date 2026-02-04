@@ -1,12 +1,17 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, Suspense } from 'react'
+import dynamic from 'next/dynamic'
 import { motion, useScroll, useTransform, useSpring, useVelocity, animate } from 'framer-motion'
-// removed unused hook import
 import HeroOverlay from '@/components/dom/HeroOverlay'
 import About from '@/components/dom/About'
 import Services from '@/components/dom/Services'
-import Experience from '@/components/dom/Experience'
-import Projects from '@/components/dom/Projects'
-import Contact from '@/components/dom/Contact'
+
+const Experience = dynamic(() => import('@/components/dom/Experience'), { ssr: false })
+const Projects = dynamic(() => import('@/components/dom/Projects'), { ssr: false })
+const Contact = dynamic(() => import('@/components/dom/Contact'), { ssr: false })
+
+function SectionFallback() {
+    return <div className="min-h-screen w-full flex items-center justify-center bg-transparent" aria-hidden />
+}
 
 export default function HorizontalLayout() {
     const targetRef = useRef<HTMLDivElement>(null)
@@ -106,13 +111,19 @@ export default function HorizontalLayout() {
                     <Services />
                 </div>
                 <div id="experience" className="min-h-screen w-full overflow-hidden relative">
-                    <Experience />
+                    <Suspense fallback={<SectionFallback />}>
+                        <Experience />
+                    </Suspense>
                 </div>
                 <div id="projects" className="min-h-screen w-full overflow-hidden relative">
-                    <Projects />
+                    <Suspense fallback={<SectionFallback />}>
+                        <Projects />
+                    </Suspense>
                 </div>
                 <div id="contact" className="min-h-screen w-full overflow-hidden relative">
-                    <Contact />
+                    <Suspense fallback={<SectionFallback />}>
+                        <Contact />
+                    </Suspense>
                 </div>
             </div>
 
@@ -140,17 +151,23 @@ export default function HorizontalLayout() {
 
                         {/* Section 4: Experience */}
                         <div className="relative h-screen w-screen flex-shrink-0 overflow-hidden flex items-center justify-center">
-                            <Experience />
+                            <Suspense fallback={<SectionFallback />}>
+                                <Experience />
+                            </Suspense>
                         </div>
 
                         {/* Section 5: Projects */}
                         <div className="relative h-screen w-screen flex-shrink-0 overflow-hidden flex items-center justify-center">
-                            <Projects />
+                            <Suspense fallback={<SectionFallback />}>
+                                <Projects />
+                            </Suspense>
                         </div>
 
                         {/* Section 6: Contact */}
                         <div className="relative h-screen w-screen flex-shrink-0 overflow-hidden flex items-center justify-center">
-                            <Contact />
+                            <Suspense fallback={<SectionFallback />}>
+                                <Contact />
+                            </Suspense>
                         </div>
                     </motion.div>
                 </div>

@@ -1,15 +1,19 @@
 'use client'
 
+import dynamic from 'next/dynamic'
+import { useEffect, Suspense } from 'react'
 import Navigation from '@/components/dom/Navigation'
 import MobileNav from '@/components/dom/MobileNav'
-import HorizontalLayout from '@/components/HorizontalLayout'
-import { useEffect } from 'react'
+
+const HorizontalLayout = dynamic(() => import('@/components/HorizontalLayout'), { ssr: false })
+
+function MainFallback() {
+  return <div className="relative z-10 w-full min-h-screen" aria-hidden />
+}
 
 export default function Home() {
-  // Scroll to top on page load/reload
   useEffect(() => {
     window.scrollTo(0, 0)
-    // Also reset any hash in URL
     if (window.location.hash) {
       window.history.replaceState(null, '', window.location.pathname)
     }
@@ -17,13 +21,12 @@ export default function Home() {
 
   return (
     <>
-      {/* Navigation - Highest layer */}
       <Navigation />
       <MobileNav />
-
-      {/* Horizontal Layout - Main Scroll Container */}
       <main className="relative z-10 w-full h-[600vh]">
-        <HorizontalLayout />
+        <Suspense fallback={<MainFallback />}>
+          <HorizontalLayout />
+        </Suspense>
       </main>
     </>
   )

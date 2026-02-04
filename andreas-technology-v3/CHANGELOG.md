@@ -8,6 +8,8 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 - Improve font loading: Inter with `display: 'swap'` to reduce FCP/LCP impact and align globals.css with loaded font
 - Improve accessibility: raise contrast for secondary text (opacity-65/50/55 → 80/75) in Contact, Navigation, Experience, About, Projects
 - Fix identical-link purpose: add `aria-label="Contact via email"` to both mailto links in Contact and `aria-hidden` on decorative icons
+- Accessibility (PageSpeed 96→100): raise Experience vertical labels opacity-20→50; nav links opacity-75→90, MobileNav 70→85; unify mailto aria-label to "Contact via email" (Hero+Contact); add aria-label "GitHub profile" and aria-hidden on Projects CTA
+- Perf: lazy-load below-the-fold sections (Experience, Projects, Contact) and HorizontalLayout via next/dynamic; defer Lenis until after first paint (requestIdleCallback after load); preconnect fonts.gstatic.com; CustomCursor uses transform/scale instead of width/height (composited-only animation); add modern browserslist (defaults, not dead, not IE 11)
 
 ---
 
