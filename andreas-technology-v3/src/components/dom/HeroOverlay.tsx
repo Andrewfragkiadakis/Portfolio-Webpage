@@ -4,23 +4,13 @@ import { useContent } from '@/hooks/useContent'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Typewriter from 'typewriter-effect'
+import { scrollToSection as smoothScrollToSection } from '@/utils/smooth-scroll'
 
 export default function HeroOverlay() {
     const t = useContent()
 
     const scrollToSection = (id: string, index: number) => {
-        if (typeof window !== 'undefined') {
-            if (window.innerWidth >= 768) {
-                const maxScroll = document.documentElement.scrollHeight - window.innerHeight
-                const targetY = (index / 5) * maxScroll
-                window.scrollTo({ top: targetY, behavior: 'smooth' })
-            } else {
-                const element = document.getElementById(id)
-                if (element) {
-                    element.scrollIntoView({ behavior: 'smooth' })
-                }
-            }
-        }
+        smoothScrollToSection(index, id)
     }
 
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -145,7 +135,7 @@ export default function HeroOverlay() {
                 </a>
                 <a
                     href={`mailto:${t.email}`}
-                    aria-label="Send email"
+                    aria-label="Contact via email"
                     className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)]"
                 >
                     <i className="fas fa-envelope text-xl" aria-hidden></i>
@@ -161,9 +151,9 @@ export default function HeroOverlay() {
             >
                 <button
                     onClick={() => scrollToSection('projects', 4)}
-                    className="group relative px-6 sm:px-6 py-2.5 sm:py-3 bg-transparent overflow-hidden hover:shadow-[0_0_20px_var(--accent)] transition-shadow duration-300 w-full"
+                    className="group relative px-6 sm:px-6 py-2.5 sm:py-3 bg-transparent overflow-hidden hover:shadow-[0_0_20px_var(--accent)] transition-all duration-300 ease-out w-full"
                 >
-                    <span className="relative z-10 font-bold uppercase tracking-widest text-xs sm:text-xs text-foreground group-hover:text-background transition-colors duration-300 whitespace-nowrap">
+                    <span className="relative z-10 font-bold uppercase tracking-widest text-xs sm:text-xs text-foreground group-hover:text-background transition-all duration-300 ease-out whitespace-nowrap">
                         {t.hero.viewWork}
                     </span>
                     <div className="absolute inset-0 bg-foreground transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
@@ -172,9 +162,9 @@ export default function HeroOverlay() {
 
                 <button
                     onClick={() => scrollToSection('contact', 5)}
-                    className="group relative px-6 sm:px-6 py-2.5 sm:py-3 bg-transparent overflow-hidden hover:shadow-[0_0_20px_var(--accent)] transition-shadow duration-300 w-full"
+                    className="group relative px-6 sm:px-6 py-2.5 sm:py-3 bg-transparent overflow-hidden hover:shadow-[0_0_20px_var(--accent)] transition-all duration-300 ease-out w-full"
                 >
-                    <span className="relative z-10 font-bold uppercase tracking-widest text-xs sm:text-xs text-foreground group-hover:text-background transition-colors duration-300 whitespace-nowrap">
+                    <span className="relative z-10 font-bold uppercase tracking-widest text-xs sm:text-xs text-foreground group-hover:text-background transition-all duration-300 ease-out whitespace-nowrap">
                         {t.hero.getInTouch}
                     </span>
                     <div className="absolute inset-0 bg-foreground transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />

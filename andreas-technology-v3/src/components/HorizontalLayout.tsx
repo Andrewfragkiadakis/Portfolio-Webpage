@@ -79,8 +79,8 @@ export default function HorizontalLayout() {
 
                         // Faster animation for better responsiveness
                         animate(window.scrollY, targetY, {
-                            duration: 1.2,
-                            ease: [0.25, 0.1, 0.25, 1], // Smooth but faster
+                            duration: 1.4,
+                            ease: [0.33, 1, 0.68, 1],
                             onUpdate: (latest) => window.scrollTo({ top: latest })
                         }).then(() => {
                             setTimeout(() => setIsSnapping(false), 200)

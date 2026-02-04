@@ -40,7 +40,7 @@ export default function Contact() {
 
                         {/* Email */}
                         <a href={`mailto:${t.email}`} className="flex items-start sm:items-center gap-3 sm:gap-4 group" aria-label="Contact via email">
-                            <div className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-[var(--background)] transition-all duration-300 flex-shrink-0">
+                            <div className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-[var(--background)] transition-all duration-300 ease-out flex-shrink-0">
                                 <i className="fas fa-envelope text-xl" aria-hidden></i>
                             </div>
                             <div className="flex-1 min-w-0">
@@ -69,7 +69,7 @@ export default function Contact() {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     aria-label="GitHub profile"
-                                    className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)]"
+                                    className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 ease-out hover:shadow-[0_0_20px_var(--accent)]"
                                 >
                                     <i className="fab fa-github text-xl" aria-hidden></i>
                                 </a>
@@ -78,7 +78,7 @@ export default function Contact() {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     aria-label="LinkedIn profile"
-                                    className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)]"
+                                    className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 ease-out hover:shadow-[0_0_20px_var(--accent)]"
                                 >
                                     <i className="fab fa-linkedin text-xl" aria-hidden></i>
                                 </a>
@@ -110,7 +110,7 @@ export default function Contact() {
                             <a
                                 href={`mailto:${t.email}`}
                                 aria-label="Contact via email"
-                                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[var(--accent)] text-[var(--background)] font-bold uppercase tracking-widest hover:shadow-[0_0_30px_var(--accent)] transition-all duration-300"
+                                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[var(--accent)] text-[var(--background)] font-bold uppercase tracking-widest hover:shadow-[0_0_30px_var(--accent)] transition-all duration-300 ease-out"
                             >
                                 <i className="fas fa-paper-plane" aria-hidden></i>
                                 {t.contact.sendMessage}
@@ -119,7 +119,7 @@ export default function Contact() {
                             <a
                                 href={cvLink}
                                 download
-                                className="w-full flex items-center justify-center gap-2 px-6 py-4 border border-[var(--foreground)] text-[var(--foreground)] font-bold uppercase tracking-widest hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300"
+                                className="w-full flex items-center justify-center gap-2 px-6 py-4 border border-[var(--foreground)] text-[var(--foreground)] font-bold uppercase tracking-widest hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 ease-out"
                             >
                                 <i className="fas fa-download"></i>
                                 {t.contact.downloadResume}

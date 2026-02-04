@@ -217,9 +217,10 @@ export default function Projects() {
                         href="https://github.com/Andrewfragkiadakis"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-3 px-8 py-4 border border-[var(--foreground)] text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 font-bold uppercase tracking-widest hover:shadow-[0_0_20px_var(--accent)]"
+                        aria-label="GitHub profile"
+                        className="inline-flex items-center gap-3 px-8 py-4 border border-[var(--foreground)] text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 ease-out font-bold uppercase tracking-widest hover:shadow-[0_0_20px_var(--accent)]"
                     >
-                        <i className="fab fa-github text-xl"></i>
+                        <i className="fab fa-github text-xl" aria-hidden></i>
                         {t.projectsSection.githubCta}
                     </a>
                 </motion.div>

@@ -2,6 +2,7 @@
 
 import { useContent } from '@/hooks/useContent'
 import { motion } from 'framer-motion'
+import { scrollToSection } from '@/utils/smooth-scroll'
 
 export default function Services() {
     const t = useContent()
@@ -66,21 +67,8 @@ export default function Services() {
                         Have a unique project in mind?
                     </p>
                     <button
-                        onClick={() => {
-                            if (typeof window !== 'undefined') {
-                                if (window.innerWidth >= 768) {
-                                    const maxScroll = document.documentElement.scrollHeight - window.innerHeight
-                                    const targetY = (5 / 5) * maxScroll
-                                    window.scrollTo({ top: targetY, behavior: 'smooth' })
-                                } else {
-                                    const element = document.getElementById('contact')
-                                    if (element) {
-                                        element.scrollIntoView({ behavior: 'smooth' })
-                                    }
-                                }
-                            }
-                        }}
-                        className="inline-block px-8 py-4 border border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--accent)] hover:text-[var(--background)] transition-all duration-300 font-bold uppercase tracking-widest hover:shadow-[0_0_20px_var(--accent)] cursor-pointer"
+                        onClick={() => scrollToSection(5, 'contact')}
+                        className="inline-block px-8 py-4 border border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--accent)] hover:text-[var(--background)] transition-all duration-300 ease-out font-bold uppercase tracking-widest hover:shadow-[0_0_20px_var(--accent)] cursor-pointer"
                     >
                         Let&apos;s Talk
                     </button>

@@ -5,6 +5,7 @@ import { useContent } from '@/hooks/useContent'
 import { useTheme } from '@/contexts/ThemeContext'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { scrollToSection as smoothScrollToSection } from '@/utils/smooth-scroll'
 
 export default function Navigation() {
     const { language, setLanguage } = useLanguage()
@@ -13,37 +14,7 @@ export default function Navigation() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
     const scrollToSection = (id: string, index: number) => {
-        if (typeof window !== 'undefined') {
-            if (window.innerWidth >= 768) {
-                // Desktop: Horizontal Scroll assumes height mapping (100vh per section)
-                // Sections: Hero(0), About(1), Services(2), Experience(3), Projects(4), Contact(5)
-                // However, HorizontalLayout uses a transform. The track is sticky.
-                // We scroll the BODY down to drive the transform.
-                // Each 'section' of horizontal movement corresponds to 1 window height of vertical scroll?
-                // In HorizontalLayout: x maps [0, 1] to [0%, -500vw].
-                // Total height is 600vh.
-                // Scroll 0 -> Hero.
-                // Scroll 100vh -> About? No.
-                // 600vh total. 6 sections. 
-                // Scroll range is 0 to (600vh - 100vh) = 500vh? 
-                // Actually usually `h-[600vh]` means we can scroll 500vh distance.
-                // So index * (document.body.scrollHeight - window.innerHeight) / 5 ?
-                // Let's use precise proportion.
-                // x = scrollProgress * -500vw.
-                // We want x to be 0vw, -100vw, -200vw...
-                // scrollProgress = 0, 0.2, 0.4, 0.6, 0.8, 1.0
-                // So scroll position should be index/5 * maxScroll.
-                const maxScroll = document.documentElement.scrollHeight - window.innerHeight
-                const targetY = (index / 5) * maxScroll
-                window.scrollTo({ top: targetY, behavior: 'smooth' })
-            } else {
-                // Mobile: Normal vertical scroll
-                const element = document.getElementById(id)
-                if (element) {
-                    element.scrollIntoView({ behavior: 'smooth' })
-                }
-            }
-        }
+        smoothScrollToSection(index, id)
         setMobileMenuOpen(false)
     }
 
@@ -54,37 +25,37 @@ export default function Navigation() {
                 <div className="hidden md:flex gap-6 lg:gap-8 items-center">
                     <button
                         onClick={() => scrollToSection('hero', 0)}
-                        className="text-[var(--foreground)] opacity-75 hover:opacity-100 hover:text-[var(--accent)] transition-all text-sm uppercase tracking-widest cursor-pointer"
+                        className="text-[var(--foreground)] opacity-90 hover:opacity-100 hover:text-[var(--accent)] transition-all duration-300 ease-out text-sm uppercase tracking-widest cursor-pointer"
                     >
                         {language === 'en' ? 'Home' : 'ΑΡΧΙΚΗ'}
                     </button>
                     <button
                         onClick={() => scrollToSection('about', 1)}
-                        className="text-[var(--foreground)] opacity-75 hover:opacity-100 hover:text-[var(--accent)] transition-all text-sm uppercase tracking-widest cursor-pointer"
+                        className="text-[var(--foreground)] opacity-90 hover:opacity-100 hover:text-[var(--accent)] transition-all duration-300 ease-out text-sm uppercase tracking-widest cursor-pointer"
                     >
                         {language === 'en' ? 'About' : 'ΣΧΕΤΙΚΑ'}
                     </button>
                     <button
                         onClick={() => scrollToSection('services', 2)}
-                        className="text-[var(--foreground)] opacity-75 hover:opacity-100 hover:text-[var(--accent)] transition-all text-sm uppercase tracking-widest cursor-pointer"
+                        className="text-[var(--foreground)] opacity-90 hover:opacity-100 hover:text-[var(--accent)] transition-all duration-300 ease-out text-sm uppercase tracking-widest cursor-pointer"
                     >
                         {language === 'en' ? 'Services' : 'ΥΠΗΡΕΣΙΕΣ'}
                     </button>
                     <button
                         onClick={() => scrollToSection('experience', 3)}
-                        className="text-[var(--foreground)] opacity-75 hover:opacity-100 hover:text-[var(--accent)] transition-all text-sm uppercase tracking-widest cursor-pointer"
+                        className="text-[var(--foreground)] opacity-90 hover:opacity-100 hover:text-[var(--accent)] transition-all duration-300 ease-out text-sm uppercase tracking-widest cursor-pointer"
                     >
                         {language === 'en' ? 'Experience' : 'ΕΜΠΕΙΡΙΑ'}
                     </button>
                     <button
                         onClick={() => scrollToSection('projects', 4)}
-                        className="text-[var(--foreground)] opacity-75 hover:opacity-100 hover:text-[var(--accent)] transition-all text-sm uppercase tracking-widest cursor-pointer"
+                        className="text-[var(--foreground)] opacity-90 hover:opacity-100 hover:text-[var(--accent)] transition-all duration-300 ease-out text-sm uppercase tracking-widest cursor-pointer"
                     >
                         {language === 'en' ? 'Projects' : 'ΕΡΓΑ'}
                     </button>
                     <button
                         onClick={() => scrollToSection('contact', 5)}
-                        className="text-[var(--foreground)] opacity-75 hover:opacity-100 hover:text-[var(--accent)] transition-all text-sm uppercase tracking-widest cursor-pointer"
+                        className="text-[var(--foreground)] opacity-90 hover:opacity-100 hover:text-[var(--accent)] transition-all duration-300 ease-out text-sm uppercase tracking-widest cursor-pointer"
                     >
                         {language === 'en' ? 'Contact' : 'ΕΠΙΚΟΙΝΩΝΙΑ'}
                     </button>
@@ -92,7 +63,7 @@ export default function Navigation() {
                     {/* Language Toggle */}
                     <button
                         onClick={() => setLanguage(language === 'en' ? 'gr' : 'en')}
-                        className="ml-4 px-3 py-1 bg-[var(--foreground)]/10 hover:bg-[var(--foreground)]/20 text-[var(--foreground)] rounded transition-all duration-200 text-sm font-medium cursor-pointer"
+                        className="ml-4 px-3 py-1 bg-[var(--foreground)]/10 hover:bg-[var(--foreground)]/20 text-[var(--foreground)] rounded transition-all duration-300 ease-out text-sm font-medium cursor-pointer"
                     >
                         {language === 'en' ? 'GR' : 'EN'}
                     </button>
@@ -101,7 +72,7 @@ export default function Navigation() {
                 {/* Mobile Menu Button - Animated hamburger / close */}
                 <button
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                    className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 text-[var(--foreground)] p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-[var(--foreground)]/10 active:bg-[var(--foreground)]/15 transition-colors duration-200"
+                    className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 text-[var(--foreground)] p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-[var(--foreground)]/10 active:bg-[var(--foreground)]/15 transition-colors duration-300 ease-out"
                     aria-label="Toggle menu"
                 >
                     <motion.span
@@ -153,7 +124,7 @@ export default function Navigation() {
                 <div className="flex justify-between items-center px-6 pt-8 pb-4 border-b border-[var(--foreground)]/10">
                     <button
                         onClick={() => setMobileMenuOpen(false)}
-                        className="px-5 py-3 border border-[var(--foreground)] text-[var(--foreground)] font-mono text-sm uppercase tracking-widest hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-200"
+                        className="px-5 py-3 border border-[var(--foreground)] text-[var(--foreground)] font-mono text-sm uppercase tracking-widest hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 ease-out"
                         aria-label="Close menu"
                     >
                         {language === 'en' ? 'Close' : 'ΚΛΕΙΣΙΜΟ'}
@@ -161,7 +132,7 @@ export default function Navigation() {
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                            className="flex items-center gap-2 px-4 py-2 border border-[var(--foreground)] rounded-full hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-colors duration-200"
+                            className="flex items-center gap-2 px-4 py-2 border border-[var(--foreground)] rounded-full hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-colors duration-300 ease-out"
                             aria-label="Toggle theme"
                         >
                             <span className="text-xs font-mono uppercase tracking-widest">
@@ -173,7 +144,7 @@ export default function Navigation() {
                             onClick={() => {
                                 setLanguage(language === 'en' ? 'gr' : 'en')
                             }}
-                            className="px-4 py-2 text-[var(--foreground)] font-mono text-xs uppercase tracking-widest border border-[var(--foreground)]/30 hover:border-[var(--foreground)] hover:bg-[var(--foreground)]/5 transition-all"
+                            className="px-4 py-2 text-[var(--foreground)] font-mono text-xs uppercase tracking-widest border border-[var(--foreground)]/30 hover:border-[var(--foreground)] hover:bg-[var(--foreground)]/5 transition-all duration-300 ease-out"
                         >
                             {language === 'en' ? 'GR' : 'EN'}
                         </button>
@@ -210,7 +181,7 @@ export default function Navigation() {
                                 <span className="text-[10px] font-mono text-[var(--foreground)] opacity-75 uppercase tracking-[0.2em]">{item.index}</span>
                                 <button
                                     onClick={() => scrollToSection(item.section, item.i)}
-                                    className="flex-1 text-left py-2 px-2 min-h-[48px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-200 text-xl sm:text-2xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
+                                    className="flex-1 text-left py-2 px-2 min-h-[48px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-300 ease-out text-xl sm:text-2xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
                                 >
                                     {item.label}
                                 </button>

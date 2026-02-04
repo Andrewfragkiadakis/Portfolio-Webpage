@@ -49,7 +49,7 @@ export default function CinematicEntry() {
                             animate={{ opacity: 1, scale: 1 }}
                             whileHover={{ scale: 1.1, textShadow: "0 0 8px var(--accent)" }}
                             onClick={() => setEntered(true)}
-                            className="px-8 py-4 border border-[var(--accent)] text-[var(--accent)] font-bold uppercase tracking-[0.2em] hover:bg-[var(--accent)]/10 transition-colors"
+                            className="px-8 py-4 border border-[var(--accent)] text-[var(--accent)] font-bold uppercase tracking-[0.2em] hover:bg-[var(--accent)]/10 transition-all duration-300 ease-out"
                         >
                             Enter System
                         </motion.button>

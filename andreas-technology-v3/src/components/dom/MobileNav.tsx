@@ -2,6 +2,7 @@
 
 import { useContent } from '@/hooks/useContent'
 import { useState, useEffect } from 'react'
+import { smoothScrollToElement } from '@/utils/smooth-scroll'
 
 export default function MobileNav() {
     const t = useContent()
@@ -12,7 +13,7 @@ export default function MobileNav() {
     const scrollToSection = (id: string) => {
         const element = document.getElementById(id)
         if (element) {
-            element.scrollIntoView({ behavior: 'smooth' })
+            smoothScrollToElement(element)
             setActiveSection(id)
         }
     }
@@ -88,9 +89,9 @@ export default function MobileNav() {
                     <button
                         key={item.id}
                         onClick={() => scrollToSection(item.id)}
-                        className={`relative flex flex-1 flex-col items-center justify-center gap-1.5 min-h-[52px] min-w-0 py-2 px-2 rounded-xl transition-colors duration-200 ${activeSection === item.id
+                        className={`relative flex flex-1 flex-col items-center justify-center gap-1.5 min-h-[52px] min-w-0 py-2 px-2 rounded-xl transition-colors duration-300 ease-out ${activeSection === item.id
                             ? 'text-[var(--accent)] bg-[var(--foreground)]/10'
-                            : 'text-[var(--foreground)] opacity-70 hover:opacity-100 hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10'
+                            : 'text-[var(--foreground)] opacity-85 hover:opacity-100 hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10'
                             }`}
                     >
                         <i className={`${item.icon} text-lg`} aria-hidden></i>
