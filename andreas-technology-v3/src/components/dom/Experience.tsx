@@ -323,7 +323,7 @@ export default function Experience() {
                 >
                     {/* 1. PROFESSIONAL CARDS */}
                     <div className="hidden md:flex flex-shrink-0 items-center justify-center w-[50px] border-r border-[var(--foreground)]/10 mr-2 md:mr-4">
-                        <span className="text-[var(--foreground)] opacity-20 [writing-mode:vertical-rl] rotate-180 uppercase tracking-[0.3em] font-black text-xs md:text-sm">
+                        <span className="text-[var(--foreground)] opacity-50 [writing-mode:vertical-rl] rotate-180 uppercase tracking-[0.3em] font-black text-xs md:text-sm">
                             {t.experienceSection.professional}
                         </span>
                     </div>
@@ -378,7 +378,7 @@ export default function Experience() {
 
                     {/* 2. ACADEMIC CARDS */}
                     <div className="hidden md:flex flex-shrink-0 items-center justify-center w-[50px] border-r border-[var(--foreground)]/10 mr-2 md:mr-4">
-                        <span className="text-[var(--foreground)] opacity-20 [writing-mode:vertical-rl] rotate-180 uppercase tracking-[0.3em] font-black text-xs md:text-sm">
+                        <span className="text-[var(--foreground)] opacity-50 [writing-mode:vertical-rl] rotate-180 uppercase tracking-[0.3em] font-black text-xs md:text-sm">
                             {t.experienceSection.education}
                         </span>
                     </div>
