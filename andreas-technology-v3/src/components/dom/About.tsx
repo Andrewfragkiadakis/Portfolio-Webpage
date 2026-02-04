@@ -36,6 +36,7 @@ function AnimatedCounter({ value, suffix = '', duration = 2 }: { value: number; 
 
 export default function About() {
     const t = useContent()
+    const [expandedSkill, setExpandedSkill] = useState<number | null>(null)
 
     // Stats data with numeric values for animation
     const stats = [
@@ -137,24 +138,34 @@ export default function About() {
 
                 {/* Skills Grid - 4 Cards */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    {t.skills.slice(0, 4).map((skill: any, index: number) => (
-                        <motion.div
-                            key={index}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.4 + index * 0.1 }}
-                            className="border border-[var(--foreground)]/30 p-3 hover:border-[var(--accent)] transition-all duration-300 group"
-                        >
-                            <div className="w-9 h-9 border border-[var(--foreground)]/50 flex items-center justify-center text-[var(--foreground)] group-hover:border-[var(--accent)] group-hover:text-[var(--accent)] transition-colors mb-2">
-                                <i className={`${skill.icon} text-base`}></i>
-                            </div>
-                            <h4 className="font-bold text-sm text-[var(--foreground)] mb-1">{skill.label}</h4>
-                            <p className="text-[10px] text-[var(--foreground)] opacity-80 leading-relaxed line-clamp-2">
-                                {skill.detail || 'Building innovative solutions'}
-                            </p>
-                        </motion.div>
-                    ))}
+                    {t.skills.slice(0, 4).map((skill: any, index: number) => {
+                        const isExpanded = expandedSkill === index
+                        return (
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: 0.4 + index * 0.1 }}
+                                className="border border-[var(--foreground)]/30 p-3 hover:border-[var(--accent)] transition-all duration-300 group flex flex-col"
+                            >
+                                <div className="w-9 h-9 border border-[var(--foreground)]/50 flex items-center justify-center text-[var(--foreground)] group-hover:border-[var(--accent)] group-hover:text-[var(--accent)] transition-colors mb-2">
+                                    <i className={`${skill.icon} text-base`}></i>
+                                </div>
+                                <h4 className="font-bold text-sm text-[var(--foreground)] mb-1">{skill.label}</h4>
+                                <p className={`text-[10px] text-[var(--foreground)] opacity-80 leading-relaxed ${isExpanded ? '' : 'line-clamp-2'}`}>
+                                    {skill.detail || 'Building innovative solutions'}
+                                </p>
+                                <button
+                                    type="button"
+                                    onClick={() => setExpandedSkill(isExpanded ? null : index)}
+                                    className="mt-2 text-[10px] font-mono uppercase tracking-wider text-[var(--accent)] hover:underline text-left"
+                                >
+                                    {isExpanded ? t.about.showLess : t.about.readMore}
+                                </button>
+                            </motion.div>
+                        )
+                    })}
                 </div>
             </div>
         </section>

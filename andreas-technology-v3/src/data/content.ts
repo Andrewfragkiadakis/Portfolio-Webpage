@@ -58,6 +58,8 @@ export interface Content {
         title: string
         tagline: string
         description: string[]
+        readMore: string
+        showLess: string
     }
     hero: {
         firstName: string
@@ -125,6 +127,8 @@ export const content: Record<'en' | 'gr', Content> = {
         about: {
             title: "ABOUT ME",
             tagline: "Computer Engineer with a passion for building exceptional digital products",
+            readMore: "Read more",
+            showLess: "Show less",
             description: [
                 "I am an IT & Computer Engineer (M.Eng.) specializing in SecOps, Infrastructure Automation, and AI Integration. My approach combines deep technical research with hands-on engineering to build secure, scalable, and automated environments.",
                 "Currently, I balance my role as an IT Engineer at Omilia, while fulfilling my military service as an IT Operations Administrator. My academic background is rooted in 5G research, specifically in Hybrid Wireless-Optical Networks (Radio over Fiber).",
@@ -421,6 +425,8 @@ export const content: Record<'en' | 'gr', Content> = {
         about: {
             title: "ΣΧΕΤΙΚΑ ΜΕ ΕΜΕΝΑ",
             tagline: "Μηχανικός Πληροφορικής με πάθος για την κατασκευή εξαιρετικών ψηφιακών προϊόντων",
+            readMore: "Διαβάστε περισσότερα",
+            showLess: "Λιγότερα",
             description: [
                 "Είμαι Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) με εξειδίκευση σε SecOps, αυτοματισμό υποδομών και ενσωμάτωση Τεχνητής Νοημοσύνης. Η προσέγγισή μου συνδυάζει τη βαθιά τεχνική έρευνα με την εφαρμοσμένη μηχανική για τη δημιουργία ασφαλών, κλιμακούμενων και αυτοματοποιημένων περιβαλλόντων.",
                 "Αυτή τη στιγμή, συνδυάζω τον ρόλο μου ως Μηχανικός Πληροφορικής στην Omilia, ενώ παράλληλα εκπληρώνω τις στρατιωτικές μου υποχρεώσεις ως Υπεύθυνος Πληροφορικής. Το ακαδημαϊκό μου υπόβαθρο βασίζεται στην έρευνα δικτύων 5G, και συγκεκριμένα στα Υβριδικά Ασύρματα-Οπτικά Δίκτυα (Radio over Fiber).",
