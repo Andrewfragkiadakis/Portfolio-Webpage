@@ -8,6 +8,7 @@ import CinematicEntry from '@/components/dom/CinematicEntry'
 import NoiseOverlay from '@/components/dom/NoiseOverlay'
 import ThemeToggle from '@/components/ui/ThemeToggle'
 import CustomCursor from '@/components/ui/CustomCursor'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' })
 
@@ -119,6 +120,7 @@ export default function RootLayout({
             </SmoothScroll>
           </LanguageProvider>
         </ThemeProvider>
+        <SpeedInsights />
       </body>
     </html>
   )
