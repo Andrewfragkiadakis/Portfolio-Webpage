@@ -1,4 +1,10 @@
-# Vercel deployment (Root Directory error)
+# Vercel deployment
+
+This app uses **dynamic OG image generation** (`app/opengraph-image.tsx`) and therefore runs as a **Node server** on Vercel (no static export). Use the default **Framework Preset: Next.js**; no extra config needed.
+
+---
+
+## Root Directory error
 
 If you see:
 

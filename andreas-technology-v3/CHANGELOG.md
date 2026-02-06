@@ -4,7 +4,11 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 
 ## [Unreleased]
 
+### Added
+- Dynamic OG image: `app/opengraph-image.tsx` generates 1200×630 PNG (dark bg, outlined name, M.ENG. subtitle) via `next/og`; layout metadata uses generated image
+
 ### Changed
+- Remove `output: 'export'` and static image OG; use Vercel/server build with dynamic opengraph-image route
 - Improve font loading: Inter with `display: 'swap'` to reduce FCP/LCP impact and align globals.css with loaded font
 - Improve accessibility: raise contrast for secondary text (opacity-65/50/55 → 80/75) in Contact, Navigation, Experience, About, Projects
 - Fix identical-link purpose: add `aria-label="Contact via email"` to both mailto links in Contact and `aria-hidden` on decorative icons

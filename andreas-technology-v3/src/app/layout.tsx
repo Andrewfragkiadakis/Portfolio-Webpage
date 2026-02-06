@@ -11,10 +11,18 @@ import CustomCursor from '@/components/ui/CustomCursor'
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' })
 
+const SITE_URL = 'https://andreas.technology'
+
 export const metadata: Metadata = {
-  metadataBase: new URL('https://andreas.technology'),
-  title: 'Andreas | IT & Security Engineer',
-  description: 'The digital portfolio of Andreas Fragkiadakis. IT & Computer Engineering Student, IT & Security Engineer.',
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: 'Andreas Fragkiadakis | IT & Security Engineer',
+    template: '%s | Andreas Fragkiadakis',
+  },
+  description: 'M.Eng. Computer Engineer specializing in SecOps, infrastructure automation, and AI. Portfolio of Andreas Fragkiadakis — IT & Security Engineer.',
+  keywords: ['Andreas Fragkiadakis', 'IT Engineer', 'Security Engineer', 'Computer Engineer', 'SecOps', 'Portfolio', 'Athens'],
+  authors: [{ name: 'Andreas Fragkiadakis', url: SITE_URL }],
+  creator: 'Andreas Fragkiadakis',
   alternates: {
     canonical: '/',
   },
@@ -29,26 +37,22 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: 'Andreas | IT & Security Engineer',
-    description: 'The digital portfolio of Andreas Fragkiadakis. IT & Computer Engineering Student, IT & Security Engineer.',
-    url: 'https://andreas.technology',
-    siteName: 'Andreas Fragkiadakis Portfolio',
-    images: [
-      {
-        url: '/images/Porftolio website/portfolio-site-2025.png',
-        width: 1200,
-        height: 630,
-        alt: 'Andreas Fragkiadakis Portfolio Preview',
-      },
-    ],
-    locale: 'en_US',
     type: 'website',
+    locale: 'en_US',
+    url: SITE_URL,
+    siteName: 'Andreas Fragkiadakis',
+    title: 'Andreas Fragkiadakis | IT & Security Engineer',
+    description: 'M.Eng. Computer Engineer — SecOps, infrastructure automation & AI. View portfolio and get in touch.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Andreas | IT & Security Engineer',
-    description: 'The digital portfolio of Andreas Fragkiadakis.',
-    images: ['/images/Porftolio website/portfolio-site-2025.png'],
+    title: 'Andreas Fragkiadakis | IT & Security Engineer',
+    description: 'M.Eng. Computer Engineer — SecOps, infrastructure automation & AI. Portfolio.',
+    creator: '@Andrewfragkiadakis',
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 }
 
@@ -82,7 +86,7 @@ export default function RootLayout({
               '@type': 'Person',
               name: 'Andreas Fragkiadakis',
               url: 'https://andreas.technology',
-              image: 'https://andreas.technology/images/Porftolio%20website/portfolio-site-2025.png',
+              image: `${SITE_URL}/opengraph-image`,
               jobTitle: 'IT & Security Engineer',
               worksFor: {
                 '@type': 'Organization',
