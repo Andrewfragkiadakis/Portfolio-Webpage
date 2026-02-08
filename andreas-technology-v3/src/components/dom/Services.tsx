@@ -3,6 +3,7 @@
 import { useContent } from '@/hooks/useContent'
 import { motion } from 'framer-motion'
 import { scrollToSection } from '@/utils/smooth-scroll'
+import type { Service } from '@/data/content'
 
 export default function Services() {
     const t = useContent()
@@ -21,12 +22,12 @@ export default function Services() {
                         {t.servicesTitle}
                     </motion.h2>
                     <span className="text-sm font-mono tracking-widest uppercase text-[var(--foreground)] pr-2">
-                        // WHAT I DO
+                        {t.servicesSubtitle}
                     </span>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {t.services.map((service: any, index: number) => (
+                    {t.services.map((service: Service, index: number) => (
                         <motion.div
                             key={index}
                             initial={{ opacity: 0, y: 30 }}
@@ -37,26 +38,22 @@ export default function Services() {
                         >
                             <div>
                                 <div className="w-16 h-16 mb-6 bg-[var(--foreground)]/10 rounded-full flex items-center justify-center text-3xl text-[var(--accent)] group-hover:scale-110 transition-transform duration-300">
-                                    <i className={service.icon}></i>
+                                    <i className={service.icon} aria-hidden="true" />
                                 </div>
-
                                 <h3 className="text-xl font-bold mb-3 text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors uppercase tracking-tight">
                                     {service.title}
                                 </h3>
-
                                 <p className="text-[var(--foreground)] opacity-80 leading-relaxed text-sm">
                                     {service.description}
                                 </p>
                             </div>
-
                             <div className="mt-8 flex justify-end">
-                                <i className="fas fa-plus text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                                <i className="fas fa-plus text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden="true" />
                             </div>
                         </motion.div>
                     ))}
                 </div>
 
-                {/* CTA Section */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -64,13 +61,13 @@ export default function Services() {
                     className="mt-12 text-center"
                 >
                     <p className="text-lg text-[var(--foreground)] opacity-90 mb-4">
-                        Have a unique project in mind?
+                        {t.servicesCta}
                     </p>
                     <button
                         onClick={() => scrollToSection(5, 'contact')}
                         className="inline-block px-8 py-4 border border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--accent)] hover:text-[var(--background)] transition-all duration-300 ease-out font-bold uppercase tracking-widest hover:shadow-[0_0_20px_var(--accent)] cursor-pointer"
                     >
-                        Let&apos;s Talk
+                        {t.servicesCtaButton}
                     </button>
                 </motion.div>
             </div>

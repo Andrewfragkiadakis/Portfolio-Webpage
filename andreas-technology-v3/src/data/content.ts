@@ -1,5 +1,3 @@
-// Bilingual content data for Andreas Fragkiadakis portfolio
-
 export interface Skill {
     icon: string
     label: string
@@ -48,6 +46,9 @@ export interface Content {
     github: string
     linkedin: string
     nav: {
+        home: string
+        close: string
+        languageLabel: string
         about: string
         experience: string
         projects: string
@@ -56,10 +57,14 @@ export interface Content {
     }
     about: {
         title: string
+        subtitle: string
         tagline: string
         description: string[]
         readMore: string
         showLess: string
+        currentFocus: string
+        currentFocusDetail: string
+        statsLabels: string[]
     }
     hero: {
         firstName: string
@@ -74,14 +79,19 @@ export interface Content {
         subtitle: string
         infoTitle: string
         socialTitle: string
-        opportunitesTitle: string
-        opportunitesDescription: string
+        opportunitiesTitle: string
+        opportunitiesDescription: string
         sendMessage: string
         downloadResume: string
+        emailLabel: string
+        locationLabel: string
     }
     skillsTitle: string
     skills: Skill[]
     servicesTitle: string
+    servicesSubtitle: string
+    servicesCta: string
+    servicesCtaButton: string
     services: Service[]
     experienceTitle: string
     experience: Experience[]
@@ -103,9 +113,17 @@ export interface Content {
         code: string
         githubCta: string
     }
+    cinematicEntry: {
+        initializing: string
+        loading: string
+        ready: string
+        enterSystem: string
+        skip: string
+    }
     contactTitle: string
     copyright: string
 }
+
 export const content: Record<'en' | 'gr', Content> = {
     en: {
         name: "ANDREAS FRAGKIADAKIS",
@@ -117,6 +135,9 @@ export const content: Record<'en' | 'gr', Content> = {
         linkedin: "https://www.linkedin.com/in/andreas-fragkiadakis/",
 
         nav: {
+            home: "HOME",
+            close: "CLOSE",
+            languageLabel: "English",
             about: "ABOUT",
             experience: "EXPERIENCE",
             projects: "PROJECTS",
@@ -126,9 +147,13 @@ export const content: Record<'en' | 'gr', Content> = {
 
         about: {
             title: "ABOUT ME",
+            subtitle: "// ABOUT ME",
             tagline: "Computer Engineer with a passion for building exceptional digital products",
             readMore: "Read more",
             showLess: "Show less",
+            currentFocus: "Current Focus",
+            currentFocusDetail: "Systems & AI Engineering",
+            statsLabels: ["Years Experience", "Projects Completed", "Technologies", "Commitment"],
             description: [
                 "I am an IT & Computer Engineer (M.Eng.) specializing in SecOps, Infrastructure Automation, and AI Integration. My approach combines deep technical research with hands-on engineering to build secure, scalable, and automated environments.",
                 "Currently, I balance my role as an IT Engineer at Omilia, while fulfilling my military service as an IT Operations Administrator. My academic background is rooted in 5G research, specifically in Hybrid Wireless-Optical Networks (Radio over Fiber).",
@@ -137,35 +162,38 @@ export const content: Record<'en' | 'gr', Content> = {
                 "I am a Computer and IT Engineer (M.Eng.) specializing in SecOps, infrastructure automation, and AI integration. Graduate of a Polytechnic-level University of computer engineering and informatics."
             ]
         },
+
         hero: {
             firstName: "ANDREAS",
             lastName: "FRAGKIADAKIS",
             typewriter: [
-                    "MSc. COMPUTER ENGINEER",
-                    "IT ENGINEER",
-                    "FRONTEND DEVELOPER",
-                    "PROBLEM SOLVER",
-                    "ITIL V4 CERTIFIED",
-                    "SCRIPTING EXPERT",
-                    "INFRASTRUCTURE & SECURITY ENGINEER",
-                    "CONVERSATIONAL AI ENGINEER",
-                    "AI AUTOMATION SPECIALIST",
-                    "CLOUD & DEVOPS ENTHUSIAST",
-                
+                "M.ENG. COMPUTER ENGINEER",
+                "IT ENGINEER",
+                "FRONTEND DEVELOPER",
+                "PROBLEM SOLVER",
+                "ITIL V4 CERTIFIED",
+                "SCRIPTING EXPERT",
+                "INFRASTRUCTURE & SECURITY ENGINEER",
+                "CONVERSATIONAL AI ENGINEER",
+                "AI AUTOMATION SPECIALIST",
+                "CLOUD & DEVOPS ENTHUSIAST",
             ],
             viewWork: "View My Work",
             getInTouch: "Get In Touch",
             scroll: "SCROLL TO NAVIGATE"
         },
+
         contact: {
             title: "CONNECT",
             subtitle: "GET IN TOUCH",
             infoTitle: "Contact Information",
             socialTitle: "Find me on",
-            opportunitesTitle: "Open to Opportunities",
-            opportunitesDescription: "Looking for full-time positions, freelance projects, or interesting collaborations. Let's build something amazing together.",
+            opportunitiesTitle: "Open to Opportunities",
+            opportunitiesDescription: "Looking for full-time positions, freelance projects, or interesting collaborations. Let's build something amazing together.",
             sendMessage: "Send Message",
-            downloadResume: "Download Resume"
+            downloadResume: "Download Resume",
+            emailLabel: "Email",
+            locationLabel: "Location"
         },
 
         skillsTitle: "CORE SKILLS",
@@ -203,6 +231,9 @@ export const content: Record<'en' | 'gr', Content> = {
         ],
 
         servicesTitle: "WHAT I DO",
+        servicesSubtitle: "// WHAT I DO",
+        servicesCta: "Have a unique project in mind?",
+        servicesCtaButton: "Let's Talk",
         services: [
             {
                 icon: "fas fa-laptop-code",
@@ -279,7 +310,7 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 degree: "Integrated Master's Degree (5 Years), Computer Science",
                 institution: "University of West Attica, Athens, Greece",
-                duration: "September 2019 – Present",
+                duration: "September 2019 – June 2025",
                 details: [
                     "Distinguished member of the university's Tech Society",
                     "Relevant coursework: Advanced Computer Systems, AI, Network Security, Databases, Web Development, Cloud Computing",
@@ -297,9 +328,10 @@ export const content: Record<'en' | 'gr', Content> = {
                 institution: "AXELOS Global Best Practice",
                 duration: "2024",
                 details: ["Knowledge of the ITIL 4 framework", "Focus on IT service management (ITSM) best practices"],
-                link: "https://media.licdn.com/dms/document/media/v2/D4D1FAQFne7vVBSwMWg/feedshare-document-pdf-analyzed/B4DZpe2rFjJIAY-/0/1762527984124?e=1767225600&v=beta&t=qq_xBVY_ZcmQxX3w1qg6PVRKpANaqFN9jhh_BW15tBs"
+                link: "/files/itil-v4-cert.pdf"
             }
         ],
+
         experienceSection: {
             title: "Career",
             subtitle: "Timeline: Work & Education",
@@ -307,6 +339,7 @@ export const content: Record<'en' | 'gr', Content> = {
             education: "Education",
             verify: "Verify Credential"
         },
+
         projectsSection: {
             title: "PROJECTS",
             subtitle: "SELECTED WORK",
@@ -314,6 +347,15 @@ export const content: Record<'en' | 'gr', Content> = {
             code: "Code",
             githubCta: "View Full Portfolio on GitHub"
         },
+
+        cinematicEntry: {
+            initializing: "> INITIALIZING SYSTEM...",
+            loading: "> LOADING ASSETS...",
+            ready: "> READY.",
+            enterSystem: "Enter System",
+            skip: "Skip"
+        },
+
         projectsTitle: "PROJECTS",
         projects: [
             {
@@ -322,7 +364,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 tags: ["Next.js", "Three.js", "React", "TypeScript", "Framer Motion"],
                 description: "Designed and built this modern portfolio (2026) with 3D graphics, smooth interactions, and animated sections. Features dark mode, responsive design, and professional animations.",
                 githubLink: "https://github.com/Andrewfragkiadakis/andrewfragkiadakis.github.io",
-                image: "/images/Porftolio website/2026.png"
+                image: "/images/portfolio-website/2026.png"
             },
             {
                 name: "Plano Plus - Signs & Visual Identity",
@@ -415,6 +457,9 @@ export const content: Record<'en' | 'gr', Content> = {
         linkedin: "https://www.linkedin.com/in/andreas-fragkiadakis/",
 
         nav: {
+            home: "ΑΡΧΙΚΗ",
+            close: "ΚΛΕΙΣΙΜΟ",
+            languageLabel: "Ελληνικά",
             about: "ΣΧΕΤΙΚΑ",
             experience: "ΕΜΠΕΙΡΙΑ",
             projects: "PROJECTS",
@@ -424,9 +469,13 @@ export const content: Record<'en' | 'gr', Content> = {
 
         about: {
             title: "ΣΧΕΤΙΚΑ ΜΕ ΕΜΕΝΑ",
+            subtitle: "// ΣΧΕΤΙΚΑ ΜΕ ΕΜΕΝΑ",
             tagline: "Μηχανικός Πληροφορικής με πάθος για την κατασκευή εξαιρετικών ψηφιακών προϊόντων",
             readMore: "Διαβάστε περισσότερα",
             showLess: "Λιγότερα",
+            currentFocus: "Τρεχουσα Εστιαση",
+            currentFocusDetail: "Systems & AI Engineering",
+            statsLabels: ["Χρονια Εμπειριας", "Ολοκληρωμενα Εργα", "Τεχνολογιες", "Αφοσιωση"],
             description: [
                 "Είμαι Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) με εξειδίκευση σε SecOps, αυτοματισμό υποδομών και ενσωμάτωση Τεχνητής Νοημοσύνης. Η προσέγγισή μου συνδυάζει τη βαθιά τεχνική έρευνα με την εφαρμοσμένη μηχανική για τη δημιουργία ασφαλών, κλιμακούμενων και αυτοματοποιημένων περιβαλλόντων.",
                 "Αυτή τη στιγμή, συνδυάζω τον ρόλο μου ως Μηχανικός Πληροφορικής στην Omilia, ενώ παράλληλα εκπληρώνω τις στρατιωτικές μου υποχρεώσεις ως Υπεύθυνος Πληροφορικής. Το ακαδημαϊκό μου υπόβαθρο βασίζεται στην έρευνα δικτύων 5G, και συγκεκριμένα στα Υβριδικά Ασύρματα-Οπτικά Δίκτυα (Radio over Fiber).",
@@ -435,6 +484,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 "Είμαι Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) με εξειδίκευση σε SecOps, αυτοματισμό υποδομών και ενσωμάτωση Τεχνητής Νοημοσύνης. Απόφοιτος Πολυτεχνικού επιπέδου σχολής μηχανικών ηλεκτρονικών υπολογιστών και πληροφορικής."
             ]
         },
+
         hero: {
             firstName: "ΑΝΔΡΕΑΣ",
             lastName: "ΦΡΑΓΚΙΑΔΑΚΗΣ",
@@ -447,19 +497,22 @@ export const content: Record<'en' | 'gr', Content> = {
                 "APPLIED COMPUTER SCIENCE SPECIALIST",
                 "CREATIVE PROBLEM SOLVER"
             ],
-            viewWork: "View My Work",
-            getInTouch: "Get In Touch",
-            scroll: "SCROLL TO NAVIGATE"
+            viewWork: "Δειτε τη Δουλεια μου",
+            getInTouch: "Επικοινωνηστε μαζι μου",
+            scroll: "ΣΚΡΟΛΑΡΕΤΕ ΓΙΑ ΠΛΟΗΓΗΣΗ"
         },
+
         contact: {
             title: "ΕΠΙΚΟΙΝΩΝΙΑ",
             subtitle: "ΕΛΑΤΕ ΣΕ ΕΠΑΦΗ",
-            infoTitle: "Στοιχεία Επικοινωνίας",
-            socialTitle: "Βρείτε με στα social",
-            opportunitesTitle: "Διαθέσιμος για νέες ευκαιρίες",
-            opportunitesDescription: "Freelance projects ή ενδιαφέρουσες συνεργασίες. Ας δημιουργήσουμε κάτι μοναδικό μαζί.",
+            infoTitle: "Στοιχεια Επικοινωνιας",
+            socialTitle: "Βρειτε με στα social",
+            opportunitiesTitle: "Διαθεσιμος για νεες ευκαιριες",
+            opportunitiesDescription: "Freelance projects ή ενδιαφέρουσες συνεργασίες. Ας δημιουργήσουμε κάτι μοναδικό μαζί.",
             sendMessage: "Αποστολη Μηνυματος",
-            downloadResume: "Ληψη Βιογραφικου"
+            downloadResume: "Ληψη Βιογραφικου",
+            emailLabel: "Email",
+            locationLabel: "Τοποθεσια"
         },
 
         skillsTitle: "ΒΑΣΙΚΕΣ ΔΕΞΙΟΤΗΤΕΣ",
@@ -497,10 +550,13 @@ export const content: Record<'en' | 'gr', Content> = {
         ],
 
         servicesTitle: "ΥΠΗΡΕΣΙΕΣ",
+        servicesSubtitle: "// ΥΠΗΡΕΣΙΕΣ",
+        servicesCta: "Εχετε ενα συγκεκριμενο project στο μυαλο σας;",
+        servicesCtaButton: "Ας Μιλησουμε",
         services: [
             {
                 icon: "fas fa-laptop-code",
-                title: "Ανάπτυξη Web",
+                title: "Αναπτυξη Web",
                 description: "Κατασκευή γρήγορων, responsive και κλιμακούμενων εφαρμογών με σύγχρονα frameworks (Next.js, React, TypeScript), εστιάζοντας στον καθαρό κώδικα και την εμπειρία χρήστη."
             },
             {
@@ -510,7 +566,7 @@ export const content: Record<'en' | 'gr', Content> = {
             },
             {
                 icon: "fas fa-robot",
-                title: "AI & Αυτοματισμός",
+                title: "AI & Αυτοματισμος",
                 description: "Ανάπτυξη και ενσωμάτωση λύσεων AI και αυτοματοποίηση ροών εργασίας για αύξηση της αποδοτικότητας και βελτιστοποίηση επιχειρηματικών διαδικασιών."
             }
         ],
@@ -573,7 +629,7 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 degree: "Integrated Master's in Computer Science (5ετές)",
                 institution: "Πανεπιστήμιο Δυτικής Αττικής",
-                duration: "Σεπτέμβριος 2019 - Παρόν",
+                duration: "Σεπτέμβριος 2019 - Ιούνιος 2025",
                 details: [
                     "Ενεργό μέλος του Tech Society του πανεπιστημίου",
                     "Σχετικά μαθήματα: Προηγμένα Υπολογιστικά Συστήματα, AI, Ασφάλεια Δικτύων, Βάσεις Δεδομένων, Web Development, Cloud Computing",
@@ -591,9 +647,10 @@ export const content: Record<'en' | 'gr', Content> = {
                 institution: "AXELOS Global Best Practice",
                 duration: "2024",
                 details: ["Πιστοποίηση στο πλαίσιο ITIL 4", "Εξειδίκευση στις βέλτιστες πρακτικές διαχείρισης υπηρεσιών πληροφορικής (ITSM)"],
-                link: "https://media.licdn.com/dms/document/media/v2/D4D1FAQFne7vVBSwMWg/feedshare-document-pdf-analyzed/B4DZpe2rFjJIAY-/0/1762527984124?e=1767225600&v=beta&t=qq_xBVY_ZcmQxX3w1qg6PVRKpANaqFN9jhh_BW15tBs"
+                link: "/files/itil-v4-cert.pdf"
             }
         ],
+
         experienceSection: {
             title: "ΚΑΡΙΕΡΑ",
             subtitle: "ΧΡΟΝΟΛΟΓΙΟ: ΕΡΓΑΣΙΑ & ΕΚΠΑΙΔΕΥΣΗ",
@@ -601,25 +658,35 @@ export const content: Record<'en' | 'gr', Content> = {
             education: "ΕΚΠΑΙΔΕΥΣΗ",
             verify: "ΠΙΣΤΟΠΟΙΗΣΗ"
         },
+
         projectsSection: {
             title: "PROJECTS",
             subtitle: "ΕΠΙΛΕΓΜΕΝΑ ΕΡΓΑ",
             live: "Live",
             code: "Code",
-            githubCta: "Δείτε το πλήρες Portfolio στο GitHub"
+            githubCta: "Δειτε το πληρες Portfolio στο GitHub"
         },
+
+        cinematicEntry: {
+            initializing: "> ΕΚΚΙΝΗΣΗ ΣΥΣΤΗΜΑΤΟΣ...",
+            loading: "> ΦΟΡΤΩΣΗ ΑΡΧΕΙΩΝ...",
+            ready: "> ΕΤΟΙΜΟ.",
+            enterSystem: "Εισοδος στο Συστημα",
+            skip: "Παραλειψη"
+        },
+
         projectsTitle: "PROJECTS",
         projects: [
             {
-                name: "Προσωπική Ιστοσελίδα Portfolio",
+                name: "Προσωπικη Ιστοσελιδα Portfolio",
                 year: 2026,
                 tags: ["Next.js", "Three.js", "React", "TypeScript", "Framer Motion"],
                 description: "Σχεδίαση και υλοποίηση modern portfolio με 3D γραφικά, ομαλές αλληλεπιδράσεις (animations) και Dark Mode.",
                 githubLink: "https://github.com/Andrewfragkiadakis/andrewfragkiadakis.github.io",
-                image: "/images/Porftolio website/2026.png"
+                image: "/images/portfolio-website/2026.png"
             },
             {
-                name: "Plano Plus - Επιγραφές & Οπτική Ταυτότητα",
+                name: "Plano Plus - Επιγραφες & Οπτικη Ταυτοτητα",
                 year: 2026,
                 tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion", "Resend"],
                 description: "Ιστοσελίδα στούντιο επιγραφών και οπτικής επικοινωνίας με Next.js App Router. Χαρακτηριστικά: light/dark theme, parallax effects, smooth scrolling, φόρμα επικοινωνίας με email integration, και σύγχρονο UI/UX. Εξυπηρετεί πελάτες σε όλη την Κρήτη με επαγγελματικές λύσεις επιγραφών και branding.",
@@ -654,7 +721,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 image: "/images/NexusPartyApp/nexuspartyapp.png"
             },
             {
-                name: "HappyFox 🦊 - Εφαρμογή Ψυχικής Υγείας",
+                name: "HappyFox 🦊 - Εφαρμογη Ψυχικης Υγειας",
                 year: 2026,
                 tags: ["UI/UX Design", "Figma", "Team Project", "SRH Heidelberg"],
                 description: "Σχεδιασμός UI/UX για εφαρμογή ψυχικής υγείας με στόχο την προώθηση της συναισθηματικής ευεξίας. Υλοποιήθηκε στα πλαίσια μεταπτυχιακού μαθήματος.",
@@ -662,7 +729,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 image: "/images/happyfox/happyfox-app.png"
             },
             {
-                name: "Ιστοσελίδα Κέντρων Ξένων Γλωσσών Schiller",
+                name: "Ιστοσελιδα Κεντρων Ξενων Γλωσσων Schiller",
                 year: 2026,
                 tags: ["Wix", "Wix Studio", "Web Development", "Educational"],
                 description: "Ανάπτυξη ιστοσελίδας για τα εκπαιδευτικά κέντρα Schiller στο Ρέθυμνο. Παρουσίαση προγραμμάτων σπουδών Αγγλικών, Γερμανικών και Εκπαιδευτικής Ρομποτικής.",
@@ -677,7 +744,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 image: "/images/Raspberry Pi Adblocker & Streamer/raspberry-pi.png"
             },
             {
-                name: "Έρευνα: LLMs & Ανθρώπινη Γνώση",
+                name: "Ερευνα: LLMs & Ανθρωπινη Γνωση",
                 year: 2024,
                 tags: ["Research", "Cognitive Science", "LLMs", "GPT-3", "Python"],
                 description: "Συγκριτική μελέτη απόδοσης GPT-3 και ανθρώπων στο 'False Belief Task'. Η έρευνα δημοσιεύθηκε στο περιοδικό Cognitive Science.",

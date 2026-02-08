@@ -1,4 +1,5 @@
 'use client'
+
 import { useContent } from '@/hooks/useContent'
 import { motion } from 'framer-motion'
 
@@ -9,7 +10,6 @@ export default function Contact() {
     return (
         <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-4 md:py-0 overflow-visible md:overflow-hidden">
             <div className="max-w-6xl mx-auto w-full">
-                {/* Header - Editorial Style */}
                 <div id="contact" className="flex flex-col items-start gap-2 mb-8 md:mb-12">
                     <motion.h2
                         initial={{ opacity: 0, x: -50 }}
@@ -25,9 +25,7 @@ export default function Contact() {
                     </span>
                 </div>
 
-                {/* Two Column Layout */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
-                    {/* Left Column - Contact Information */}
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -38,29 +36,26 @@ export default function Contact() {
                             {t.contact.infoTitle}
                         </h3>
 
-                        {/* Email */}
                         <a href={`mailto:${t.email}`} className="flex items-start sm:items-center gap-3 sm:gap-4 group" aria-label="Contact via email">
                             <div className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-[var(--background)] transition-all duration-300 ease-out flex-shrink-0">
-                                <i className="fas fa-envelope text-xl" aria-hidden></i>
+                                <i className="fas fa-envelope text-xl" aria-hidden="true" />
                             </div>
                             <div className="flex-1 min-w-0">
-                                <div className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase">Email</div>
+                                <div className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase">{t.contact.emailLabel}</div>
                                 <div className="text-sm sm:text-lg font-bold text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors break-all">{t.email}</div>
                             </div>
                         </a>
 
-                        {/* Location */}
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--accent)]">
-                                <i className="fas fa-map-marker-alt text-xl"></i>
+                                <i className="fas fa-map-marker-alt text-xl" aria-hidden="true" />
                             </div>
                             <div>
-                                <div className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase">Location</div>
+                                <div className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase">{t.contact.locationLabel}</div>
                                 <div className="text-lg font-bold text-[var(--foreground)]">{t.location}</div>
                             </div>
                         </div>
 
-                        {/* Social Links */}
                         <div className="pt-4">
                             <div className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase mb-4">{t.contact.socialTitle}</div>
                             <div className="flex gap-3">
@@ -71,7 +66,7 @@ export default function Contact() {
                                     aria-label="GitHub profile"
                                     className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 ease-out hover:shadow-[0_0_20px_var(--accent)]"
                                 >
-                                    <i className="fab fa-github text-xl" aria-hidden></i>
+                                    <i className="fab fa-github text-xl" aria-hidden="true" />
                                 </a>
                                 <a
                                     href={t.linkedin}
@@ -80,13 +75,12 @@ export default function Contact() {
                                     aria-label="LinkedIn profile"
                                     className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 ease-out hover:shadow-[0_0_20px_var(--accent)]"
                                 >
-                                    <i className="fab fa-linkedin text-xl" aria-hidden></i>
+                                    <i className="fab fa-linkedin text-xl" aria-hidden="true" />
                                 </a>
                             </div>
                         </div>
                     </motion.div>
 
-                    {/* Right Column - Open to Opportunities */}
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -96,13 +90,13 @@ export default function Contact() {
                     >
                         <div>
                             <div className="flex items-center gap-3 mb-4">
-                                <i className="fas fa-star text-[var(--accent)] text-2xl"></i>
+                                <i className="fas fa-star text-[var(--accent)] text-2xl" aria-hidden="true" />
                                 <h3 className="text-xl font-bold uppercase tracking-wider text-[var(--foreground)]">
-                                    {t.contact.opportunitesTitle}
+                                    {t.contact.opportunitiesTitle}
                                 </h3>
                             </div>
                             <p className="text-[var(--foreground)] opacity-80 text-sm leading-relaxed mb-6">
-                                {t.contact.opportunitesDescription}
+                                {t.contact.opportunitiesDescription}
                             </p>
                         </div>
 
@@ -112,7 +106,7 @@ export default function Contact() {
                                 aria-label="Contact via email"
                                 className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[var(--accent)] text-[var(--background)] font-bold uppercase tracking-widest hover:shadow-[0_0_30px_var(--accent)] transition-all duration-300 ease-out"
                             >
-                                <i className="fas fa-paper-plane" aria-hidden></i>
+                                <i className="fas fa-paper-plane" aria-hidden="true" />
                                 {t.contact.sendMessage}
                             </a>
 
@@ -121,14 +115,13 @@ export default function Contact() {
                                 download
                                 className="w-full flex items-center justify-center gap-2 px-6 py-4 border border-[var(--foreground)] text-[var(--foreground)] font-bold uppercase tracking-widest hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 ease-out"
                             >
-                                <i className="fas fa-download"></i>
+                                <i className="fas fa-download" aria-hidden="true" />
                                 {t.contact.downloadResume}
                             </a>
                         </div>
                     </motion.div>
                 </div>
 
-                {/* Footer - enough padding on mobile so copyright stays above bottom nav */}
                 <div className="mt-6 pb-[7rem] md:pb-0 text-center text-xs font-mono text-[var(--foreground)] opacity-75">
                     <p>{t.copyright}</p>
                 </div>
@@ -136,4 +129,3 @@ export default function Contact() {
         </section>
     )
 }
-

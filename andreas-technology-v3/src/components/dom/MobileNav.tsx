@@ -18,34 +18,23 @@ export default function MobileNav() {
         }
     }
 
-    // Handle scroll for active section and visibility
     useEffect(() => {
-        const scroller = document.getElementById('scroller')
-
         const handleScroll = () => {
-            const currentScrollY = scroller ? scroller.scrollTop : window.scrollY
+            const currentScrollY = window.scrollY
 
-            // Determine visibility based on scroll direction
-            // We use a small threshold (10) to prevent jitter at the very top
             if (currentScrollY > lastScrollY && currentScrollY > 50) {
-                // Scrolling down & past top threshold -> Hide
                 setIsVisible(false)
             } else if (currentScrollY < lastScrollY || currentScrollY < 50) {
-                // Scrolling up or near top -> Show
                 setIsVisible(true)
             }
             setLastScrollY(currentScrollY)
 
-            // Update active section
             const sections = ['hero', 'about', 'services', 'projects', 'contact']
-            // Adjust scroll position calculation for the scrolling container
             const scrollPosition = currentScrollY + window.innerHeight / 2
 
             for (const section of sections) {
                 const element = document.getElementById(section)
                 if (element) {
-                    // For the scroller container, we need to check position relative to the container
-                    // Since sections are inside the scroller, strict offsetTop works well
                     const { offsetTop, offsetHeight } = element
                     if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
                         setActiveSection(section)
@@ -55,26 +44,15 @@ export default function MobileNav() {
             }
         }
 
-        if (scroller) {
-            scroller.addEventListener('scroll', handleScroll)
-        } else {
-            window.addEventListener('scroll', handleScroll)
-        }
-
-        return () => {
-            if (scroller) {
-                scroller.removeEventListener('scroll', handleScroll)
-            } else {
-                window.removeEventListener('scroll', handleScroll)
-            }
-        }
+        window.addEventListener('scroll', handleScroll, { passive: true })
+        return () => window.removeEventListener('scroll', handleScroll)
     }, [lastScrollY])
 
     const navItems = [
-        { id: 'hero', icon: 'fas fa-home', label: 'Home' },
-        { id: 'about', icon: 'fas fa-user', label: 'About' },
-        { id: 'projects', icon: 'fas fa-code', label: 'Projects' },
-        { id: 'contact', icon: 'fas fa-envelope', label: 'Contact' },
+        { id: 'hero', icon: 'fas fa-home', label: t.nav.home },
+        { id: 'about', icon: 'fas fa-user', label: t.nav.about },
+        { id: 'projects', icon: 'fas fa-code', label: t.nav.projects },
+        { id: 'contact', icon: 'fas fa-envelope', label: t.nav.contact },
     ]
 
     return (
@@ -94,12 +72,12 @@ export default function MobileNav() {
                             : 'text-[var(--foreground)] opacity-85 hover:opacity-100 hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10'
                             }`}
                     >
-                        <i className={`${item.icon} text-lg`} aria-hidden></i>
+                        <i className={`${item.icon} text-lg`} aria-hidden="true" />
                         <span className="text-[10px] font-semibold uppercase tracking-widest truncate w-full text-center">
                             {item.label}
                         </span>
                         {activeSection === item.id && (
-                            <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-0.5 rounded-full bg-[var(--accent)]" aria-hidden />
+                            <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-0.5 rounded-full bg-[var(--accent)]" aria-hidden="true" />
                         )}
                     </button>
                 ))}

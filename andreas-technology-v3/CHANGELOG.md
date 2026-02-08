@@ -6,6 +6,21 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 
 ### Added
 - Dynamic OG image: `app/opengraph-image.tsx` generates 1200×630 PNG (dark bg, outlined name, M.ENG. subtitle) via `next/og`; layout metadata uses generated image
+- Skip-to-content link in layout.tsx for keyboard/screen-reader accessibility
+- `theme-color` meta tags (light + dark variants via `prefers-color-scheme` media)
+- Inline `<script>` in `<head>` to read localStorage theme before React hydrates (eliminates theme flash)
+- Shared `useCardScroll` hook for consistent card-centering scroll logic across Experience and Projects
+- `MainContent` client wrapper enabling `page.tsx` to be a server component
+- Bilingual support for all UI copy: about subtitle, services CTA, cinematic entry, contact labels, navigation labels via `content.ts`
+- `cinematicEntry` content keys with full EN/GR translations
+- Session-based CinematicEntry: only shows once per session (sessionStorage); includes a visible "Skip" button
+- `aria-live="polite"` region around typewriter text + visually-hidden static copy for screen readers
+- `role="status"` on cinematic entry typewriter for live announcements
+- Project card descriptions (`line-clamp-2`) below tags
+- Resize handler in HorizontalLayout that snaps to nearest section on viewport resize (desktop)
+- "Athens, Greece" added to meta description for local SEO
+- Greek translations for hero CTA buttons (`viewWork`, `getInTouch`)
+- Language persistence to `localStorage` in LanguageContext (mirrors ThemeContext pattern)
 
 ### Changed
 - Remove `output: 'export'` and static image OG; use Vercel/server build with dynamic opengraph-image route
@@ -14,6 +29,37 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 - Fix identical-link purpose: add `aria-label="Contact via email"` to both mailto links in Contact and `aria-hidden` on decorative icons
 - Accessibility (PageSpeed 96→100): raise Experience vertical labels opacity-20→50; nav links opacity-75→90, MobileNav 70→85; unify mailto aria-label to "Contact via email" (Hero+Contact); add aria-label "GitHub profile" and aria-hidden on Projects CTA
 - Perf: lazy-load below-the-fold sections (Experience, Projects, Contact) and HorizontalLayout via next/dynamic; defer Lenis until after first paint (requestIdleCallback after load); preconnect fonts.gstatic.com; CustomCursor uses transform/scale instead of width/height (composited-only animation); add modern browserslist (defaults, not dead, not IE 11)
+- Merge dual `<h1>` in HeroOverlay into single `<h1>` with `<span>` children
+- Switch hero spotlight from `mask-position` animation to `clip-path: circle()` for compositor-friendly rendering with `will-change: clip-path`
+- Refactor `dom/Experience.tsx` from 445 LOC to ~230 LOC: extract `ExperienceCard`, `EducationCard`, `ScrollButton` components; use shared `useCardScroll` hook; eliminate desktop/mobile card duplication
+- Replace `unoptimized` prop on project `<Image>` with responsive `sizes` for automatic WebP and responsive images
+- Mobile Experience/Education scroll buttons increased to `w-11 h-11` (44px touch target)
+- Navigation component now reads all labels from `content.ts` instead of hardcoded ternaries
+- MobileNav now reads labels from `content.ts`; removed dead `getElementById('scroller')` references
+- Canvas animation loop: add 30 FPS cap via timestamp delta; add `visibilitychange` listener to pause/resume when tab is hidden; remove dead `getElementById('scroller')` code
+- ThemeContext: read `localStorage` synchronously in `useState` initializer to prevent flash
+- `page.tsx` converted from client component to server component (scroll-reset logic moved to `MainContent`)
+- Fix `opportunitesTitle`/`opportunitesDescription` typo → `opportunitiesTitle`/`opportunitiesDescription` in Content interface and data
+- Fix "MSc." → "M.ENG." in hero typewriter strings
+- Fix university duration "September 2019 – Present" → "September 2019 – June 2025"
+- Fix ITIL credential link from expiring LinkedIn URL to permanent `/files/itil-v4-cert.pdf`
+- Fix GR `nav.projects` inconsistency: set to "PROJECTS" in both content.ts and Navigation
+- Update `site.webmanifest` icon paths to include `/favicons/` prefix; set `theme_color` and `background_color` to `#030014`
+- Rename `public/images/Porftolio website/` to `public/images/portfolio-website/` (fix typo + kebab-case) and update all references
+- Replace all `any` types in component mappings with proper Content types (`Experience`, `Education`, `Project`, `Service`, `Skill`)
+
+### Removed
+- 6 unused dependencies: `three`, `@react-three/fiber`, `@react-three/drei`, `@types/three`, `@studio-freight/react-lenis`, `react-parallax-tilt` (massive bundle reduction)
+- `SmoothScroll.tsx` no-op wrapper component
+- `favicon.ico` reference from metadata (file did not exist; using PNG favicons instead)
+
+### Fixed
+- CinematicEntry overflow cleanup: add `return () => { document.body.style.overflow = 'auto' }` in useEffect
+- Theme flash on page load eliminated via synchronous inline script + synchronous useState initializer
+
+### Security
+- Update Next.js 16.0.7 → 16.1.6 to fix 5 high-severity vulnerabilities (GHSA-w37m, GHSA-mwv6, GHSA-9g9p, GHSA-h25m, GHSA-5f7q)
+- `npm audit`: 0 vulnerabilities
 
 ---
 

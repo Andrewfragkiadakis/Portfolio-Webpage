@@ -29,8 +29,6 @@ export default function HeroOverlay() {
             onMouseLeave={() => setIsHovering(false)}
             className="absolute top-0 left-0 w-full h-screen flex flex-col justify-center items-center overflow-hidden z-10"
         >
-
-            {/* Massive Typography - Background Layer */}
             <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -38,77 +36,72 @@ export default function HeroOverlay() {
                 className="relative z-10 flex flex-col items-center justify-center w-full"
             >
                 <div className="relative">
-                    {/* Base Layer - Outline */}
                     <div id="hero" className="flex flex-col items-center">
-                        <h1
-                            className="text-[12vw] leading-[0.8] font-black tracking-tighter text-transparent select-none transition-all duration-500"
-                            style={{ WebkitTextStroke: '2px var(--foreground)' }}
-                        >
-                            {t.hero.firstName}
-                        </h1>
-                        <h1
-                            className="text-[10vw] leading-[0.8] font-black tracking-tighter text-transparent select-none mt-2"
-                            style={{ WebkitTextStroke: '2px var(--foreground)' }}
-                        >
-                            {t.hero.lastName}
+                        <h1 className="flex flex-col items-center">
+                            <span
+                                className="text-[12vw] leading-[0.8] font-black tracking-tighter text-transparent select-none transition-all duration-500 block"
+                                style={{ WebkitTextStroke: '2px var(--foreground)' }}
+                            >
+                                {t.hero.firstName}
+                            </span>
+                            <span
+                                className="text-[10vw] leading-[0.8] font-black tracking-tighter text-transparent select-none mt-2 block"
+                                style={{ WebkitTextStroke: '2px var(--foreground)' }}
+                            >
+                                {t.hero.lastName}
+                            </span>
                         </h1>
                     </div>
-                    {/* Spotlight Layer - Filled */}
                     <motion.div
-                        className="absolute top-0 left-0 w-full h-full flex flex-col items-center pointer-events-none"
+                        className="absolute top-0 left-0 w-full h-full hidden md:flex flex-col items-center pointer-events-none"
+                        aria-hidden="true"
                         animate={{
-                            // Position spotlight above and to the right of cursor
-                            // X: subtract less to move right relative to cursor
-                            // Y: subtract more to move above the cursor
                             WebkitMaskPosition: `${mousePosition.x - 25}px ${mousePosition.y - 200}px`,
                             maskPosition: `${mousePosition.x - 25}px ${mousePosition.y - 500}px`,
                         } as any}
-                        // TIMING FIX: Reduced duration significantly to remove "drag"
                         transition={{ type: "tween", ease: "backOut", duration: 0.35 }}
                         style={{
-                            // Original size preserved
                             maskImage: 'radial-gradient(circle 150px at center, black 100%, transparent 100%)',
                             WebkitMaskImage: 'radial-gradient(circle 150px at center, black 100%, transparent 100%)',
-
-                            // IMPORTANT: Define the box size explicitly (Diameter = Radius * 2)
-                            // This ensures the mask is calculated as a 300x300 box
                             maskSize: '300px 300px',
                             WebkitMaskSize: '300px 300px',
-
                             WebkitMaskRepeat: 'no-repeat',
                             maskRepeat: 'no-repeat',
-                            opacity: isHovering ? 1 : 0
+                            opacity: isHovering ? 1 : 0,
                         }}
                     >
-                        <h1 className="text-[12vw] leading-[0.8] font-black tracking-tighter text-[var(--accent)] select-none">
+                        <span className="text-[12vw] leading-[0.8] font-black tracking-tighter text-[var(--accent)] select-none">
                             {t.hero.firstName}
-                        </h1>
-                        <h1 className="text-[10vw] leading-[0.8] font-black tracking-tighter text-[var(--accent)] select-none mt-2">
+                        </span>
+                        <span className="text-[10vw] leading-[0.8] font-black tracking-tighter text-[var(--accent)] select-none mt-2">
                             {t.hero.lastName}
-                        </h1>
+                        </span>
                     </motion.div>
                 </div>
             </motion.div>
 
-            {/* Role / Subtitle */}
             <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 1 }}
                 className="mt-12 text-lg sm:text-xl md:text-2xl font-light tracking-widest text-[var(--foreground)] uppercase h-12 flex items-center"
             >
-                <Typewriter
-                    options={{
-                        strings: t.hero.typewriter,
-                        autoStart: true,
-                        loop: true,
-                        delay: 50,
-                        deleteSpeed: 30,
-                    }}
-                />
+                <div role="status" aria-live="polite">
+                    <span className="sr-only">{t.hero.typewriter.join(' | ')}</span>
+                    <span aria-hidden="true">
+                        <Typewriter
+                            options={{
+                                strings: t.hero.typewriter,
+                                autoStart: true,
+                                loop: true,
+                                delay: 50,
+                                deleteSpeed: 30,
+                            }}
+                        />
+                    </span>
+                </div>
             </motion.div>
 
-            {/* Social Icon Buttons */}
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -122,7 +115,7 @@ export default function HeroOverlay() {
                     aria-label="LinkedIn profile"
                     className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)]"
                 >
-                    <i className="fab fa-linkedin text-xl" aria-hidden></i>
+                    <i className="fab fa-linkedin text-xl" aria-hidden="true" />
                 </a>
                 <a
                     href={t.github}
@@ -131,18 +124,17 @@ export default function HeroOverlay() {
                     aria-label="GitHub profile"
                     className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)]"
                 >
-                    <i className="fab fa-github text-xl" aria-hidden></i>
+                    <i className="fab fa-github text-xl" aria-hidden="true" />
                 </a>
                 <a
                     href={`mailto:${t.email}`}
                     aria-label="Contact via email"
                     className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)]"
                 >
-                    <i className="fas fa-envelope text-xl" aria-hidden></i>
+                    <i className="fas fa-envelope text-xl" aria-hidden="true" />
                 </a>
             </motion.div>
 
-            {/* CTA Buttons */}
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
