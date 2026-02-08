@@ -52,7 +52,7 @@ export default function Contact() {
                             </div>
                             <div>
                                 <div className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase">{t.contact.locationLabel}</div>
-                                <div className="text-lg font-bold text-[var(--foreground)]">{t.location}</div>
+                                <div className="text-sm sm:text-lg font-bold text-[var(--foreground)]">{t.location}</div>
                             </div>
                         </div>
 

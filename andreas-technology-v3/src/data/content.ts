@@ -489,7 +489,8 @@ export const content: Record<'en' | 'gr', Content> = {
             firstName: "ΑΝΔΡΕΑΣ",
             lastName: "ΦΡΑΓΚΙΑΔΑΚΗΣ",
             typewriter: [
-                "SYSTEM ENGINEER // IT & SECURITY ENGINEER",
+                "IT & SECURITY ENGINEER",
+                "SYSTEMS ENGINEER",
                 "NETWORK & SYSTEMS ENGINEER",
                 "CONVERSATIONAL AI ENGINEER",
                 "INFRASTRUCTURE & SUPPORT ENGINEER",
