@@ -231,7 +231,7 @@ export const content: Record<'en' | 'gr', Content> = {
         ],
 
         servicesTitle: "WHAT I DO",
-        servicesSubtitle: "// WHAT I DO",
+        servicesSubtitle: "// SERVICES & EXPERTISE",
         servicesCta: "Have a unique project in mind?",
         servicesCtaButton: "Let's Talk",
         services: [
@@ -475,7 +475,7 @@ export const content: Record<'en' | 'gr', Content> = {
             showLess: "Λιγότερα",
             currentFocus: "Τρεχουσα Εστιαση",
             currentFocusDetail: "Systems & AI Engineering",
-            statsLabels: ["Χρονια Εμπειριας", "Ολοκληρωμενα Εργα", "Τεχνολογιες", "Αφοσιωση"],
+            statsLabels: ["Χρονια Εμπειριας", "Ολοκληρωμενα Projects", "Τεχνολογιες", "Αφοσιωση"],
             description: [
                 "Είμαι Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) με εξειδίκευση σε SecOps, αυτοματισμό υποδομών και ενσωμάτωση Τεχνητής Νοημοσύνης. Η προσέγγισή μου συνδυάζει τη βαθιά τεχνική έρευνα με την εφαρμοσμένη μηχανική για τη δημιουργία ασφαλών, κλιμακούμενων και αυτοματοποιημένων περιβαλλόντων.",
                 "Αυτή τη στιγμή, συνδυάζω τον ρόλο μου ως Μηχανικός Πληροφορικής στην Omilia, ενώ παράλληλα εκπληρώνω τις στρατιωτικές μου υποχρεώσεις ως Υπεύθυνος Πληροφορικής. Το ακαδημαϊκό μου υπόβαθρο βασίζεται στην έρευνα δικτύων 5G, και συγκεκριμένα στα Υβριδικά Ασύρματα-Οπτικά Δίκτυα (Radio over Fiber).",
@@ -504,10 +504,10 @@ export const content: Record<'en' | 'gr', Content> = {
 
         contact: {
             title: "ΕΠΙΚΟΙΝΩΝΙΑ",
-            subtitle: "ΕΛΑΤΕ ΣΕ ΕΠΑΦΗ",
+            subtitle: "ΕΛΑΤΕ ΣΕ ΕΠΑΦΗ ΜΑΖΙ ΜΟΥ",
             infoTitle: "Στοιχεια Επικοινωνιας",
             socialTitle: "Βρειτε με στα social",
-            opportunitiesTitle: "Διαθεσιμος για νεες ευκαιριες",
+            opportunitiesTitle: "Διαθεσιμος για νεες προκλησεις",
             opportunitiesDescription: "Freelance projects ή ενδιαφέρουσες συνεργασίες. Ας δημιουργήσουμε κάτι μοναδικό μαζί.",
             sendMessage: "Αποστολη Μηνυματος",
             downloadResume: "Ληψη Βιογραφικου",
@@ -550,7 +550,7 @@ export const content: Record<'en' | 'gr', Content> = {
         ],
 
         servicesTitle: "ΥΠΗΡΕΣΙΕΣ",
-        servicesSubtitle: "// ΥΠΗΡΕΣΙΕΣ",
+        servicesSubtitle: "// ΕΞΕΙΔΙΚΕΥΣΗ & ΔΕΞΙΟΤΗΤΕΣ",
         servicesCta: "Εχετε ενα συγκεκριμενο project στο μυαλο σας;",
         servicesCtaButton: "Ας Μιλησουμε",
         services: [

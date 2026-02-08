@@ -7,14 +7,14 @@ import { useContent } from '@/hooks/useContent'
 
 export default function CinematicEntry() {
     const t = useContent()
+    const [hasVisited, setHasVisited] = useState(false)
     const [entered, setEntered] = useState(false)
     const [showButton, setShowButton] = useState(false)
 
     useEffect(() => {
         try {
             if (localStorage.getItem('cinematic-entered') === 'true') {
-                setEntered(true)
-                return
+                setHasVisited(true)
             }
         } catch {
             // localStorage unavailable
@@ -22,7 +22,7 @@ export default function CinematicEntry() {
     }, [])
 
     useEffect(() => {
-        if (!entered) {
+        if (!hasVisited && !entered) {
             document.body.style.overflow = 'hidden'
         } else {
             document.body.style.overflow = 'auto'
@@ -30,7 +30,7 @@ export default function CinematicEntry() {
         return () => {
             document.body.style.overflow = 'auto'
         }
-    }, [entered])
+    }, [hasVisited, entered])
 
     const handleEnter = () => {
         setEntered(true)
@@ -41,7 +41,7 @@ export default function CinematicEntry() {
         }
     }
 
-    if (entered) return null
+    if (hasVisited) return null
 
     return (
         <AnimatePresence>
