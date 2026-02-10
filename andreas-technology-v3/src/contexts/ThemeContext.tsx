@@ -11,6 +11,14 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
+const SUNRISE_HOUR = 7
+const SUNSET_HOUR = 20
+
+function getThemeByTime(): Theme {
+    const hour = new Date().getHours()
+    return hour >= SUNRISE_HOUR && hour < SUNSET_HOUR ? 'light' : 'dark'
+}
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
     const [theme, setThemeState] = useState<Theme>('dark')
 
@@ -19,8 +27,19 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         if (stored === 'light' || stored === 'dark') {
             setThemeState(stored)
         } else {
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-            setThemeState(prefersDark ? 'dark' : 'light')
+            const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+            if (mediaQuery.media !== 'not all' && mediaQuery.matches !== undefined) {
+                const hasExplicitPreference =
+                    window.matchMedia('(prefers-color-scheme: dark)').matches ||
+                    window.matchMedia('(prefers-color-scheme: light)').matches
+                if (hasExplicitPreference) {
+                    setThemeState(mediaQuery.matches ? 'dark' : 'light')
+                } else {
+                    setThemeState(getThemeByTime())
+                }
+            } else {
+                setThemeState(getThemeByTime())
+            }
         }
 
         const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
