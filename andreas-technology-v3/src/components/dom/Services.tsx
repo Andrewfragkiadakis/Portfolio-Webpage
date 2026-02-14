@@ -1,12 +1,19 @@
 'use client'
 
 import { useContent } from '@/hooks/useContent'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { scrollToSection } from '@/utils/smooth-scroll'
+import { useState } from 'react'
 import type { Service } from '@/data/content'
+import SpotlightCard from '@/components/ui/SpotlightCard'
 
 export default function Services() {
     const t = useContent()
+    const [expandedIndex, setExpandedIndex] = useState<number | null>(null)
+
+    const toggleExpand = (index: number) => {
+        setExpandedIndex(expandedIndex === index ? null : index)
+    }
 
     return (
         <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-4 md:py-0 overflow-visible md:overflow-hidden">
@@ -30,26 +37,55 @@ export default function Services() {
                     {t.services.map((service: Service, index: number) => (
                         <motion.div
                             key={index}
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
                             viewport={{ once: true }}
-                            transition={{ delay: index * 0.2 }}
-                            className="bg-[var(--background)] p-6 border border-[var(--foreground)]/50 hover:border-[var(--accent)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)] group flex flex-col justify-between h-full"
+                            transition={{ delay: index * 0.15 }}
                         >
-                            <div>
-                                <div className="w-16 h-16 mb-6 bg-[var(--foreground)]/10 rounded-full flex items-center justify-center text-3xl text-[var(--accent)] group-hover:scale-110 transition-transform duration-300">
-                                    <i className={service.icon} aria-hidden="true" />
+                            <SpotlightCard className="bg-[var(--background)] p-6 border border-[var(--foreground)]/50 hover:border-[var(--accent)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)] group flex flex-col justify-between h-full">
+                                <div className="relative z-10">
+                                    <div className="w-16 h-16 mb-6 bg-[var(--foreground)]/10 rounded-full flex items-center justify-center text-3xl text-[var(--accent)] group-hover:scale-110 transition-transform duration-300">
+                                        <i className={service.icon} aria-hidden="true" />
+                                    </div>
+                                    <h3 className="text-xl font-bold mb-3 text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors uppercase tracking-tight">
+                                        {service.title}
+                                    </h3>
+
+                                    <div className="hidden md:block">
+                                        <p className="text-[var(--foreground)] opacity-80 leading-relaxed text-sm">
+                                            {service.description}
+                                        </p>
+                                    </div>
+
+                                    <div className="md:hidden">
+                                        <AnimatePresence initial={false}>
+                                            {expandedIndex === index && (
+                                                <motion.div
+                                                    initial={{ height: 0, opacity: 0 }}
+                                                    animate={{ height: 'auto', opacity: 1 }}
+                                                    exit={{ height: 0, opacity: 0 }}
+                                                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                                    className="overflow-hidden"
+                                                >
+                                                    <p className="text-[var(--foreground)] opacity-80 leading-relaxed text-sm pt-2">
+                                                        {service.description}
+                                                    </p>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </div>
                                 </div>
-                                <h3 className="text-xl font-bold mb-3 text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors uppercase tracking-tight">
-                                    {service.title}
-                                </h3>
-                                <p className="text-[var(--foreground)] opacity-80 leading-relaxed text-sm">
-                                    {service.description}
-                                </p>
-                            </div>
-                            <div className="mt-8 flex justify-end">
-                                <i className="fas fa-plus text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden="true" />
-                            </div>
+                                <div className="relative z-10 mt-4 flex justify-between items-center">
+                                    <button
+                                        onClick={() => toggleExpand(index)}
+                                        className="md:hidden text-xs font-mono text-[var(--accent)] uppercase tracking-wider"
+                                        aria-expanded={expandedIndex === index}
+                                    >
+                                        {expandedIndex === index ? 'Less' : 'More'}
+                                    </button>
+                                    <i className="fas fa-plus text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity ml-auto" aria-hidden="true" />
+                                </div>
+                            </SpotlightCard>
                         </motion.div>
                     ))}
                 </div>

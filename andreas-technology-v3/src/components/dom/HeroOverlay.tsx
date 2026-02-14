@@ -1,26 +1,74 @@
 'use client'
 
 import { useContent } from '@/hooks/useContent'
-import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { useState, useRef, useCallback } from 'react'
+import dynamic from 'next/dynamic'
+import { motion, useSpring, useMotionTemplate } from 'framer-motion'
 import Typewriter from 'typewriter-effect'
 import { scrollToSection as smoothScrollToSection } from '@/utils/smooth-scroll'
 
+const LetterGlitch = dynamic(() => import('@/components/ui/LetterGlitch'), { ssr: false })
+
+/**
+ * Hero blob cursor (trail) – edit this object to tune the effect.
+ * Uses mask gradients + Framer Motion springs (no inner dot/shadow in this build).
+ *
+ * Trail Count: number of trailing blobs (fixed 2 in code; lead + 1 trail).
+ * Lead Blob Size (px): radius of the blob that follows the cursor immediately.
+ * Trail Blob Size (px): radius of the single trailing blob.
+ * Lead/Trail Gradient Stops (%): 0–100, where the gradient goes from solid to transparent (higher = harder edge).
+ * Fast Duration / Slow Duration: approximate “snap” vs “trail” feel; mapped to spring stiffness/damping.
+ * Lead Stiffness/Damping: spring for lead blob (higher stiffness = faster).
+ * Trail Stiffness/Damping: spring for the trailing blob – lower = slower, more wobble.
+ * Z-Index: stacking order of the blob overlay.
+ *
+ * Not used here (mask-only): Inner Color, Lead Inner Dot Size, Shadow Color/Blur/Offset.
+ */
+const BLOB_CURSOR = {
+    trailCount: 2,
+    leadBlobSize: 92,
+    trailBlobSize: 78,
+    leadBlobOpacity: 1,
+    trailBlobOpacity: 0.6,
+    leadGradientStop: 48,
+    trailGradientStop: 40,
+    fastDuration: 0.42,
+    slowDuration: 0.51,
+    leadStiffness: 220,
+    leadDamping: 24,
+    trailStiffness: 105,
+    trailDamping: 20,
+    zIndex: 100,
+}
+
 export default function HeroOverlay() {
     const t = useContent()
+    const nameRef = useRef<HTMLDivElement>(null)
+    const [isHovering, setIsHovering] = useState(false)
 
     const scrollToSection = (id: string, index: number) => {
         smoothScrollToSection(index, id)
     }
 
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-    const [isHovering, setIsHovering] = useState(false)
+    const blobX1 = useSpring(0, { stiffness: BLOB_CURSOR.leadStiffness, damping: BLOB_CURSOR.leadDamping })
+    const blobY1 = useSpring(0, { stiffness: BLOB_CURSOR.leadStiffness, damping: BLOB_CURSOR.leadDamping })
+    const blobX2 = useSpring(0, { stiffness: BLOB_CURSOR.trailStiffness, damping: BLOB_CURSOR.trailDamping })
+    const blobY2 = useSpring(0, { stiffness: BLOB_CURSOR.trailStiffness, damping: BLOB_CURSOR.trailDamping })
 
-    const handleMouseMove = (e: React.MouseEvent) => {
-        const { clientX, clientY } = e
-        const { left, top } = e.currentTarget.getBoundingClientRect()
-        setMousePosition({ x: clientX - left, y: clientY - top })
-    }
+    const handleMouseMove = useCallback((e: React.MouseEvent) => {
+        if (!nameRef.current) return
+        const rect = nameRef.current.getBoundingClientRect()
+        const x = e.clientX - rect.left
+        const y = e.clientY - rect.top
+        blobX1.set(x); blobY1.set(y)
+        blobX2.set(x); blobY2.set(y)
+    }, [blobX1, blobY1, blobX2, blobY2])
+
+    const r1 = BLOB_CURSOR.leadBlobSize
+    const r2 = BLOB_CURSOR.trailBlobSize
+    const g1 = BLOB_CURSOR.leadGradientStop
+    const g2 = BLOB_CURSOR.trailGradientStop
+    const blobMask = useMotionTemplate`radial-gradient(circle ${r1}px at ${blobX1}px ${blobY1}px, black ${g1}%, transparent 100%), radial-gradient(circle ${r2}px at ${blobX2}px ${blobY2}px, black ${g2}%, transparent 100%)`
 
     return (
         <div
@@ -35,7 +83,7 @@ export default function HeroOverlay() {
                 transition={{ duration: 1, delay: 0.5 }}
                 className="relative z-10 flex flex-col items-center justify-center w-full"
             >
-                <div className="relative">
+                <div ref={nameRef} className="relative">
                     <div id="hero" className="flex flex-col items-center">
                         <h1 className="flex flex-col items-center">
                             <span
@@ -53,29 +101,35 @@ export default function HeroOverlay() {
                         </h1>
                     </div>
                     <motion.div
-                        className="absolute top-0 left-0 w-full h-full hidden md:flex flex-col items-center pointer-events-none"
+                        className="absolute top-0 left-0 w-full h-full hidden md:block pointer-events-none"
                         aria-hidden="true"
-                        animate={{
-                            WebkitMaskPosition: `${mousePosition.x - 25}px ${mousePosition.y - 200}px`,
-                            maskPosition: `${mousePosition.x - 25}px ${mousePosition.y - 500}px`,
-                        } as any}
-                        transition={{ type: "tween", ease: "backOut", duration: 0.35 }}
                         style={{
-                            maskImage: 'radial-gradient(circle 150px at center, black 100%, transparent 100%)',
-                            WebkitMaskImage: 'radial-gradient(circle 150px at center, black 100%, transparent 100%)',
-                            maskSize: '300px 300px',
-                            WebkitMaskSize: '300px 300px',
-                            WebkitMaskRepeat: 'no-repeat',
-                            maskRepeat: 'no-repeat',
+                            maskImage: blobMask,
+                            WebkitMaskImage: blobMask,
                             opacity: isHovering ? 1 : 0,
-                        }}
+                            transition: 'opacity 0.3s ease',
+                            isolation: 'isolate',
+                            zIndex: BLOB_CURSOR.zIndex,
+                        } as any}
                     >
-                        <span className="text-[12vw] leading-[0.8] font-black tracking-tighter text-[var(--accent)] select-none">
-                            {t.hero.firstName}
-                        </span>
-                        <span className="text-[10vw] leading-[0.8] font-black tracking-tighter text-[var(--accent)] select-none mt-2">
-                            {t.hero.lastName}
-                        </span>
+                        <div className="absolute inset-0 z-0">
+                            <LetterGlitch
+                                backgroundColor="transparent"
+                                glitchColors={['#6366f1', '#818cf8', '#a5b4fc']}
+                                glitchSpeed={80}
+                                centerVignette={false}
+                                outerVignette={false}
+                                smooth
+                            />
+                        </div>
+                        <div className="absolute inset-0 z-10 flex flex-col items-center text-knockout">
+                            <span className="text-[12vw] leading-[0.8] font-black tracking-tighter select-none">
+                                {t.hero.firstName}
+                            </span>
+                            <span className="text-[10vw] leading-[0.8] font-black tracking-tighter select-none mt-2">
+                                {t.hero.lastName}
+                            </span>
+                        </div>
                     </motion.div>
                 </div>
             </motion.div>

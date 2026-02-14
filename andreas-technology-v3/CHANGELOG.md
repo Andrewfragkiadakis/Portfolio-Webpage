@@ -7,6 +7,11 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 ### Added
 - SEO: full absolute canonical URL (`andreas.technology`), WebSite + Person JSON-LD with `mainEntityOfPage` and `sameAs` (portfolio first), explicit Open Graph image, expanded keywords (M.Eng, Infrastructure Automation)
 - `docs/seo-github-pages.md`: guide to de-emphasize old GitHub Pages (andrewfragkiadakis.github.io) in DuckDuckGo/Google (redirect, noindex, GSC/Bing removals)
+- SpotlightCard (ReactBits): mouse-following radial spotlight overlay on skill cards, About code block, and service cards
+- LogoLoop tech marquee (ReactBits): 12-item tech stack horizontal ticker under About skills (Python, TypeScript, React, Next.js, Docker, Linux, Git, Bash, Cisco, Active Directory, VMware/ESXi, Jira) with fade edges and pause-on-hover
+- LetterGlitch ambient background (ReactBits): canvas letter animation inside About "Current Focus" code block at very low opacity (6%)
+- Gradient text accent class: `gradient-text` CSS class with accent-to-purple gradient for animated stat counters
+- Mobile accordion on Services: tap to expand/collapse service descriptions; desktop shows all content
 - Dynamic OG image: `app/opengraph-image.tsx` generates 1200×630 PNG (dark bg, outlined name, M.ENG. subtitle) via `next/og`; layout metadata uses generated image
 - Skip-to-content link in layout.tsx for keyboard/screen-reader accessibility
 - `theme-color` meta tags (light + dark variants via `prefers-color-scheme` media)
