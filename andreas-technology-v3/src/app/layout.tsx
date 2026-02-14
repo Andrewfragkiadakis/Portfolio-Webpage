@@ -20,11 +20,11 @@ export const metadata: Metadata = {
         template: '%s | Andreas Fragkiadakis',
     },
     description: 'M.Eng. Computer Engineer specializing in SecOps, infrastructure automation, and AI. Portfolio of Andreas Fragkiadakis — IT & Security Engineer based in Athens, Greece.',
-    keywords: ['Andreas Fragkiadakis', 'IT Engineer', 'Security Engineer', 'Computer Engineer', 'SecOps', 'Portfolio', 'Athens', 'Greece'],
+    keywords: ['Andreas Fragkiadakis', 'IT Engineer', 'Security Engineer', 'Computer Engineer', 'M.Eng', 'SecOps', 'Infrastructure Automation', 'Portfolio', 'Athens', 'Greece'],
     authors: [{ name: 'Andreas Fragkiadakis', url: SITE_URL }],
     creator: 'Andreas Fragkiadakis',
     alternates: {
-        canonical: '/',
+        canonical: SITE_URL,
     },
     icons: {
         icon: [
@@ -42,6 +42,7 @@ export const metadata: Metadata = {
         siteName: 'Andreas Fragkiadakis',
         title: 'Andreas Fragkiadakis | IT & Security Engineer',
         description: 'M.Eng. Computer Engineer — SecOps, infrastructure automation & AI. View portfolio and get in touch.',
+        images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'Andreas Fragkiadakis | IT & Security Engineer' }],
     },
     twitter: {
         card: 'summary_large_image',
@@ -103,26 +104,41 @@ export default function RootLayout({
                     dangerouslySetInnerHTML={{
                         __html: JSON.stringify({
                             '@context': 'https://schema.org',
+                            '@type': 'WebSite',
+                            name: 'Andreas Fragkiadakis',
+                            url: SITE_URL,
+                            description: 'Portfolio of Andreas Fragkiadakis — IT & Security Engineer (M.Eng.), SecOps, Infrastructure Automation & AI.',
+                            publisher: {
+                                '@type': 'Person',
+                                name: 'Andreas Fragkiadakis',
+                                url: SITE_URL,
+                                jobTitle: 'IT & Security Engineer',
+                                image: `${SITE_URL}/opengraph-image`,
+                                sameAs: [
+                                    SITE_URL,
+                                    'https://github.com/Andrewfragkiadakis',
+                                    'https://www.linkedin.com/in/andreas-fragkiadakis/',
+                                ],
+                            },
+                        }),
+                    }}
+                />
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify({
+                            '@context': 'https://schema.org',
                             '@type': 'Person',
                             name: 'Andreas Fragkiadakis',
-                            url: 'https://andreas.technology',
+                            url: SITE_URL,
+                            mainEntityOfPage: SITE_URL,
                             image: `${SITE_URL}/opengraph-image`,
                             jobTitle: 'IT & Security Engineer',
-                            worksFor: {
-                                '@type': 'Organization',
-                                name: 'OMILIA LTD',
-                            },
-                            sameAs: [
-                                'https://github.com/Andrewfragkiadakis',
-                                'https://www.linkedin.com/in/andreas-fragkiadakis/',
-                            ],
+                            worksFor: { '@type': 'Organization', name: 'OMILIA LTD' },
+                            sameAs: [SITE_URL, 'https://github.com/Andrewfragkiadakis', 'https://www.linkedin.com/in/andreas-fragkiadakis/'],
                             email: 'andrewfragkiadakis@gmail.com',
                             telephone: '+30-697-345-3683',
-                            address: {
-                                '@type': 'PostalAddress',
-                                addressLocality: 'Athens',
-                                addressCountry: 'GR',
-                            },
+                            address: { '@type': 'PostalAddress', addressLocality: 'Athens', addressCountry: 'GR' },
                         }),
                     }}
                 />

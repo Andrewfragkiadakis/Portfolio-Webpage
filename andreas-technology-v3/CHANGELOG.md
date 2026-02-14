@@ -5,6 +5,8 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 ## [Unreleased]
 
 ### Added
+- SEO: full absolute canonical URL (`andreas.technology`), WebSite + Person JSON-LD with `mainEntityOfPage` and `sameAs` (portfolio first), explicit Open Graph image, expanded keywords (M.Eng, Infrastructure Automation)
+- `docs/seo-github-pages.md`: guide to de-emphasize old GitHub Pages (andrewfragkiadakis.github.io) in DuckDuckGo/Google (redirect, noindex, GSC/Bing removals)
 - Dynamic OG image: `app/opengraph-image.tsx` generates 1200×630 PNG (dark bg, outlined name, M.ENG. subtitle) via `next/og`; layout metadata uses generated image
 - Skip-to-content link in layout.tsx for keyboard/screen-reader accessibility
 - `theme-color` meta tags (light + dark variants via `prefers-color-scheme` media)
