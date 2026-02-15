@@ -1,0 +1,322 @@
+/* Root variables for light theme - Defines default colors for the page */
+:root {
+    --bg-color: #f5fbf8;        /* Background color */
+    --text-color: #333333;      /* Text color */
+    --card-bg: #ffffff;         /* Background for cards/sections */
+    --accent-color: #266144;    /* Highlight color for buttons and titles */
+    --icon-color: #266144;      /* Color for icons */
+    --shadow-color: rgba(0, 0, 0, 0.1); /* Shadow color */
+}
+
+/* Dark theme variables - Overrides colors when dark mode is active */
+[data-theme="dark"] {
+    --bg-color: #121D16;       /* Dark, greenish background */
+    --text-color: #E6F0EA;      /* Soft, off-white text */
+    --card-bg: #202020;        /* Dark surface for cards */
+    --accent-color: #4AA17C;    /* Lightened accent for buttons */
+    --icon-color: #6BC7A1;      /* Brighter variant for icons */
+    --shadow-color: rgba(0, 0, 0, 0.3); /* Darker shadow */
+}
+
+/* Reset and base styles - Ensures consistent styling across browsers */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;     /* Makes padding/borders part of element size */
+    font-family: 'Roboto', sans-serif; /* Default font */
+}
+
+/* Body styling - Sets the overall page appearance */
+body {
+    background-color: var(--bg-color); /* Uses theme variable */
+    color: var(--text-color);          /* Uses theme variable */
+    line-height: 1.6;                  /* Spacing between lines */
+    padding: 1rem;                     /* Space around the page */
+    transition: all 0.3s ease;         /* Smooth theme transitions */
+}
+
+/* Container for main content - Centers and limits width of content */
+.container {
+    max-width: 900px;    /* Maximum width of content */
+    margin: 0 auto;      /* Centers the container */
+    padding: 1rem;       /* Inner spacing */
+}
+
+/* Theme and language toggle buttons - Styles for the buttons at the top */
+.theme-toggle, .lang-toggle {
+    position: fixed;     /* Stays in place when scrolling */
+    top: 10px;           /* Distance from top */
+    z-index: 1000;       /* Stays above other elements */
+    padding: 0.5rem 1rem; /* Button padding */
+    background-color: var(--card-bg); /* Uses theme variable */
+    border: none;        /* No border */
+    border-radius: 5px;  /* Rounded corners */
+    cursor: pointer;     /* Hand cursor on hover */
+    box-shadow: 0 2px 5px var(--shadow-color); /* Shadow effect */
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease; /* Smooth changes */
+    color: var(--text-color); /* Text/icon color */
+    display: flex;       /* Aligns icon and text */
+    align-items: center; /* Vertically centers content */
+    gap: 0.5rem;         /* Space between icon and text */
+}
+
+.theme-toggle {
+    right: 20px;         /* Positioned on the right */
+}
+
+.lang-toggle {
+    left: 20px;          /* Positioned on the left */
+}
+
+/* Hover effects for toggle buttons */
+.theme-toggle:hover, .lang-toggle:hover {
+    background-color: var(--accent-color); /* Changes background on hover */
+    color: var(--bg-color);                /* Changes text color */
+}
+
+/* Hides buttons when scrolling down */
+.hide-on-scroll {
+    transform: translateY(-140%); /* Moves buttons out of view */
+}
+
+/* Content transition for language toggle - Fades content in/out */
+.content {
+    transition: opacity 0.5s ease; /* Smooth fade effect */
+    opacity: 1;                    /* Fully visible by default */
+}
+
+.content.hidden {
+    opacity: 0;                    /* Hidden content fades out */
+    display: none;                 /* Removes from layout */
+}
+
+/* Header styling - Styles the top section with your name and contact info */
+.header {
+    text-align: center;    /* Centers content */
+    margin-bottom: 2rem;   /* Space below header */
+    animation: fadeIn 1s ease-in; /* Fade-in animation */
+}
+
+.header h1 {
+    font-size: 3rem;       /* Large title size */
+    color: var(--accent-color); /* Uses theme variable */
+    margin-bottom: 0.5rem; /* Space below title */
+}
+
+/* Download button - Styles the CV download link */
+.download-btn {
+    display: inline-block; /* Behaves like a button */
+    padding: 0.5rem 1rem;  /* Inner spacing */
+    background: var(--accent-color); /* Uses theme variable */
+    color: var(--bg-color);          /* Text color */
+    text-decoration: none;           /* No underline */
+    border-radius: 5px;              /* Rounded corners */
+    transition: opacity 0.3s;        /* Smooth hover effect */
+    margin-top: 1rem;                /* Space above */
+}
+
+.download-btn:hover {
+    opacity: 0.8;                    /* Slightly transparent on hover */
+}
+
+/* Contact information - Styles the contact links/icons */
+.contact-info {
+    display: flex;         /* Aligns items horizontally */
+    justify-content: center; /* Centers items */
+    gap: 1.5rem;           /* Space between items */
+    margin-bottom: 1rem;   /* Space below */
+    animation: slideIn 1s ease-in; /* Slide-in animation */
+    flex-wrap: wrap;       /* Wraps on small screens */
+}
+
+.contact-info a, .contact-info span {
+    color: var(--icon-color); /* Uses theme variable */
+    text-decoration: none;    /* No underline */
+    display: flex;            /* Aligns icon and text */
+    align-items: center;      /* Vertically centers */
+    gap: 0.5rem;              /* Space between icon and text */
+    transition: color 0.3s ease; /* Smooth color change */
+}
+
+.contact-info a:hover {
+    color: #0056b3;           /* Blue on hover */
+}
+
+/* Section styling - Styles each content block (About, Education, etc.) */
+.section {
+    background-color: var(--card-bg); /* Uses theme variable */
+    padding: 1.5rem;                  /* Inner spacing */
+    margin-bottom: 1.5rem;            /* Space below */
+    border-radius: 10px;              /* Rounded corners */
+    box-shadow: 0 4px 6px var(--shadow-color); /* Shadow effect */
+    animation: scaleUp 0.5s ease-in;  /* Scale-up animation */
+}
+
+.section h2 {
+    color: var(--accent-color); /* Uses theme variable */
+    margin-bottom: 1rem;        /* Space below */
+    font-size: 1.5rem;          /* Title size */
+    display: flex;              /* Aligns icon and text */
+    align-items: center;        /* Vertically centers */
+    gap: 0.5rem;                /* Space between icon and text */
+}
+
+/* List styling within sections */
+.section ul {
+    list-style-type: none;      /* No bullets */
+    padding-left: 0;            /* No indent */
+}
+
+.section ul li {
+    margin-bottom: 0.5rem;      /* Space between items */
+    position: relative;         /* For positioning bullet */
+    padding-left: 1.5rem;       /* Space for custom bullet */
+}
+
+.section ul li::before {
+    content: '\f058';           /* Font Awesome checkmark */
+    font-family: 'Font Awesome 6 Free'; /* Icon font */
+    font-weight: 900;           /* Solid icon */
+    position: absolute;         /* Positioned before text */
+    left: 0;                    /* Aligned to left */
+    color: var(--accent-color); /* Uses theme variable */
+}
+
+/* Experience and education items - Styles individual entries */
+.experience-item, .education-item {
+    margin-bottom: 1.5rem;      /* Space below each item */
+}
+
+.experience-item h3, .education-item h3 {
+    color: var(--text-color);   /* Uses theme variable */
+    font-size: 1.2rem;          /* Title size */
+    margin-bottom: 0.25rem;     /* Space below */
+}
+
+.experience-item p, .education-item p {
+    color: var(--accent-color); /* Uses theme variable */
+    font-size: 0.9rem;          /* Smaller text */
+    margin-bottom: 0.5rem;      /* Space below */
+}
+
+/* Skills list - Styles the skills section */
+.skills-list {
+    margin-top: 1rem;           /* Space above */
+}
+
+.skill-item {
+    margin-bottom: 1rem;        /* Space between skills */
+}
+
+.skill-item p {
+    margin-bottom: 0.25rem;     /* Space below skill name */
+    color: var(--text-color);   /* Uses theme variable */
+}
+
+/* Skill bar - Container for progress bar */
+.skill-bar {
+    width: 100%;                /* Full width */
+    height: 20px;               /* Bar height */
+    background: #ddd;           /* Gray background */
+    border-radius: 10px;        /* Rounded corners */
+    overflow: hidden;           /* Hides overflow */
+}
+
+/* Skill fill - Animated progress inside bar */
+.skill-fill {
+    height: 100%;               /* Fills bar height */
+    background: var(--accent-color); /* Uses theme variable */
+    width: 0;                   /* Starts at 0 width */
+    transition: width 2s ease-in-out; /* Smooth animation */
+}
+
+.skill-fill.animate {
+    width: var(--skill-width);  /* Expands to set width */
+}
+
+/* Footer - Styles the bottom section */
+footer {
+    text-align: center;         /* Centers text */
+    padding: 1rem;              /* Inner spacing */
+    background-color: var(--card-bg); /* Uses theme variable */
+    color: var(--text-color);   /* Uses theme variable */
+    margin-top: 2rem;           /* Space above */
+    border-radius: 10px;        /* Rounded corners */
+    box-shadow: 0 4px 6px var(--shadow-color); /* Shadow effect */
+}
+
+/* Animations - Defines animation effects */
+@keyframes fadeIn {
+    from { opacity: 0; }        /* Starts invisible */
+    to { opacity: 1; }          /* Ends visible */
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-20px); opacity: 0; } /* Starts above and invisible */
+    to { transform: translateY(0); opacity: 1; }       /* Ends in place and visible */
+}
+
+@keyframes scaleUp {
+    from { transform: scale(0.95); opacity: 0; } /* Starts smaller and invisible */
+    to { transform: scale(1); opacity: 1; }       /* Ends full size and visible */
+}
+
+/* Media queries for responsiveness - Adjusts styles for different screen sizes */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;          /* Reduces padding on small screens */
+    }
+
+    .header h1 {
+        font-size: 2rem;        /* Smaller title */
+    }
+
+    .section {
+        padding: 1rem;          /* Less padding */
+    }
+
+    .contact-info {
+        flex-direction: column; /* Stacks items vertically */
+        gap: 0.5rem;            /* Less space between */
+    }
+
+    .theme-toggle, .lang-toggle {
+        padding: 0.5rem;        /* Smaller buttons */
+    }
+
+    .theme-toggle span, .lang-toggle span {
+        display: none;          /* Hides text on small screens */
+    }
+}
+
+@media (min-width: 769px) {
+    .theme-toggle span, .lang-toggle span {
+        display: inline;        /* Shows text on larger screens */
+    }
+}
+
+/* See more button styling - Styles the expandable section button */
+.see-more-btn {
+    background-color: var(--accent-color); /* Uses theme variable */
+    color: var(--bg-color);     /* Text color */
+    padding: 0.5rem 1rem;       /* Inner spacing */
+    border: none;               /* No border */
+    border-radius: 5px;         /* Rounded corners */
+    cursor: pointer;            /* Hand cursor */
+    display: flex;              /* Aligns icon and text */
+    align-items: center;        /* Vertically centers */
+    justify-content: center;    /* Horizontally centers */
+    gap: 0.5rem;                /* Space between icon and text */
+    margin: 1rem auto;          /* Centers button */
+}
+
+/* More experience section - Controls hidden content with animation */
+.more-experience {
+    max-height: 0;              /* Hidden by default */
+    overflow: hidden;           /* Hides overflow */
+    transition: max-height 2s ease; /* Smooth expansion */
+}
+
+.more-experience.expanded {
+    max-height: 1000px;         /* Expands to show content (adjust if needed) */
+}

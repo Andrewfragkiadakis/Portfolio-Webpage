@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andreas Fragkiadakis - Personal CV and Portfolio</title>
+    <meta property="og:title" content="Andreas Fragkiadakis - Personal CV and Portfolio">
+    <meta property="og:description" content="IT & Computer Engineering student with expertise in networking, system administration, and web development. Fluent in English and German.">
+    <!-- Favicon Links -->
+    <link rel="icon" type="image/x-icon" href="favicons/favicon.ico">
+    <link rel="icon" type="image/png" href="favicons/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="favicons/favicon-16x16.png" sizes="16x16">
+    <link rel="apple-touch-icon" href="favicons/apple-touch-icon.png">
+    <link rel="manifest" href="favicons/site.webmanifest">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts for Roboto -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <!-- CSS Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- Language Toggle Button -->
+    <button class="lang-toggle" onclick="toggleLanguage()">
+        <i class="fas fa-globe" style="color: var(--icon-color);"></i><span id="language-text">GR/EN</span>
+    </button>
+
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon" style="color: var(--icon-color);"></i><span>Night Mode</span>
+    </button>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- English Content - Shown by default -->
+        <div class="language-content content en active">
+            <!-- Header Section -->
+            <header class="header">
+                <h1>ANDREAS FRAGKIADAKIS</h1>
+                <div class="contact-info">
+                    <span><i class="fas fa-map-marker-alt"></i> Athens, Greece</span>
+                    <a href="tel:+306973453683"><i class="fas fa-phone"></i> (+30) 697-345-3683</a>
+                    <a href="mailto:andrewfragkiadakis@gmail.com"><i class="fas fa-envelope"></i> Email</a>
+                    <a href="https://linkedin.com/in/andreas-fragkiadakis" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                </div>
+                <a href="https://drive.google.com/uc?export=download&id=1b-GiyMU1D_6yxr70bmpufj_kIqKgW38A" class="download-btn">
+                    <i class="fas fa-download"></i> Download CV
+                </a>
+            </header>
+
+            <!-- About Me Section -->
+            <section class="section">
+                <h2><i class="fas fa-user"></i> ABOUT ME</h2>
+                <p>Dedicated IT & Computer Engineering student with expertise in networking, system administration, and project management. Analytical and detail-oriented, with hands-on experience in web development, technical support, and infrastructure coordination. Fluent in English (C2) and German (B2), delivering innovative solutions to drive efficiency and growth.</p>
+            </section>
+
+            <!-- Education Section -->
+            <section class="section">
+                <h2><i class="fas fa-graduation-cap"></i> EDUCATION</h2>
+                <div class="education-item">
+                    <h3>Integrated Master's Degree (5 Years), Computer Science</h3>
+                    <p>University of West Attica, Athens, Greece | September 2019 – Present</p>
+                    <ul>
+                        <li>Distinguished member of the university’s Tech Society</li>
+                        <li>Relevant coursework: Advanced Computer Systems, AI, Network Security, Databases, Web Development, Cloud Computing</li>
+                        <li>GPA: 2.98</li>
+                    </ul>
+                </div>
+                <div class="education-item">
+                    <h3>Master of Science, Applied Computer Science</h3>
+                    <p>SRH Hochschule Heidelberg, Germany | April 2023 – October 2023 (ERASMUS+ Semester)</p>
+                    <ul>
+                        <li>Awarded presenter and team leader</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Experience Section -->
+            <section class="section">
+                <h2><i class="fas fa-briefcase"></i> WORK EXPERIENCE</h2>
+                <div class="experience-item">
+                    <h3>Information Technology Support Engineer</h3>
+                    <p>OMILIA LTD, Athens, Greece | September 2024 – Present</p>
+                    <ul>
+                        <li>Provide internal user support and troubleshoot IT infrastructure using tools like Anydesk and RDP</li>
+                        <li>Manage endpoint hardening and implement policies for PCI and SOC2 audits</li>
+                        <li>Oversee cloud and network infrastructure with Jira Cloud, Cisco ISE, Microsoft Active Directory, and ESXi</li>
+                        <li>Administer security and productivity tools including Google Workspace, HID systems, and 1Password</li>
+                    </ul>
+                </div>
+                <div class="experience-item">
+                    <h3>Information Technology Support & Infrastructure Coordinator</h3>
+                    <p>KEEP EAT HEALTHY, Athens, Greece | May 2022 – Present</p>
+                    <ul>
+                        <li>Coordinate IT infrastructure installation and maintenance</li>
+                        <li>Troubleshoot technical issues and propose modern solutions</li>
+                    </ul>
+                </div>
+                <button id="see-more-btn-en" class="see-more-btn">See More <i class="fas fa-arrow-down"></i></button>
+                <div id="more-experience-en" class="more-experience">
+                    <div class="experience-item">
+                        <h3>Information Technology Support Specialist</h3>
+                        <p>ANEMOMYLOI ANDROS AE, Andros, Greece | January 2023 – February 2024</p>
+                        <ul>
+                            <li>Delivered remote IT support and consultation services</li>
+                            <li>Supported company projects with IT infrastructure management</li>
+                            <li>Organized work portfolios and financial records</li>
+                        </ul>
+                    </div>
+                    <div class="experience-item">
+                        <h3>Web Developer</h3>
+                        <p>Self-Employed, Athens, Greece | 2020 – November 2023</p>
+                        <ul>
+                            <li>Developed and launched two fully operational websites</li>
+                            <li>Self-taught web development technologies and methodologies</li>
+                        </ul>
+                    </div>
+                    <div class="experience-item">
+                        <h3>Network Systems Installation & Configuration Technician</h3>
+                        <p>Weballdesign, Athens, Greece | 2020 – November 2022</p>
+                        <ul>
+                            <li>Installed and configured server/client systems in educational institutions</li>
+                            <li>Maintained network infrastructure (switches, routers, UPS) and performed diagnostics</li>
+                            <li>Trained on-site personnel and documented procedures</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Skills Section -->
+            <section class="section">
+                <h2><i class="fas fa-tools"></i> Skills</h2>
+                <div class="skills-list">
+                    <div class="skill-item">
+                        <p>Advanced IT Skills</p>
+                        <div class="skill-bar"><div class="skill-fill" style="--skill-width: 91%;"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <p>Web Development</p>
+                        <div class="skill-bar"><div class="skill-fill" style="--skill-width: 85%;"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <p>Exceptional Communication (English C2 / German B2)</p>
+                        <div class="skill-bar"><div class="skill-fill" style="--skill-width: 90%;"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <p>Troubleshooting</p>
+                        <div class="skill-bar"><div class="skill-fill" style="--skill-width: 92%;"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <p>Project Management</p>
+                        <div class="skill-bar"><div class="skill-fill" style="--skill-width: 80%;"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <p>Security Systems</p>
+                        <div class="skill-bar"><div class="skill-fill" style="--skill-width: 85%;"></div></div>
+                    </div>
+                </div>
+            </section>
+            <!-- Personal Projects Section - Showcases past IT-related projects -->
+            <section class="section">
+                <h2><i class="fas fa-laptop-code"></i> Personal Projects</h2>
+                <div class="project-item">
+                    <h3>Portfolio Website</h3>
+                    <p>Self-developed | 2023 – Present</p>
+                    <ul>
+                        <li>Designed and built a responsive personal CV webpage using HTML, CSS, and JavaScript.</li>
+                        <li>Implemented light/dark mode, language toggle (English/Greek), and a collapsible experience section.</li>
+                        <li>Deployed on <a href="https://github.com/Andrewfragkiadakis/andrewfragkiadakis.github.io" target="_blank"> GitHub Pages</a> for public access and continuous updates.</li>
+                    </ul>
+                </div>
+
+                <div class="project-item">
+                    <h3>HappyFox 🦊 - A Mental Health Application</h3>
+                    <p>Team Project at SRH University Heidelberg | April 2023 – October 2023</p>
+                    <ul>
+                        <li>Developed a user-friendly mental health app for the Master Course "Fundamentals of UI & UX" at SRH University Heidelberg, aimed at promoting emotional well-being and mental balance through intuitive design.</li>
+                        <li>Deployed on <a href="https://github.com/Andrewfragkiadakis/Mental-Health-Project/tree/main" target="_blank"> GitHub</a> for public access and continuous updates.</li>
+
+                </div>
+                <div class="project-item">
+                    <h3>Raspberry Pi Adblocker & Media Streamer</h3>
+                    <p>Personal Experiment | 2021</p>
+                    <ul>
+                        <li>Configured a Raspberry Pi as an adblocker using Pi-hole to filter network-wide advertisements.</li>
+                        <li>Set up photo and video streaming with Plex, enabling access across devices on the home network.</li>
+                        <li>Installed and managed Linux (Raspbian), optimized for low resource usage and stability.</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+
+        <!-- Greek Content - Hidden by default -->
+        <div class="language-content content gr hidden">
+            <!-- Header Section (Greek) -->
+            <header class="header">
+                <h1>ΑΝΔΡΕΑΣ ΦΡΑΓΚΙΑΔΑΚΗΣ</h1>
+                <div class="contact-info">
+                    <span><i class="fas fa-map-marker-alt"></i> Αθήνα, Ελλάδα</span>
+                    <a href="tel:+306973453683"><i class="fas fa-phone"></i> (+30) 697-345-3683</a>
+                    <a href="mailto:andrewfragkiadakis@gmail.com"><i class="fas fa-envelope"></i> Email</a>
+                    <a href="https://linkedin.com/in/andreas-fragkiadakis" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                </div>
+                <a href="https://drive.google.com/uc?export=download&id=1b-GiyMU1D_6yxr70bmpufj_kIqKgW38A" class="download-btn">
+                    <i class="fas fa-download"></i> Λήψη CV
+                </a>
+            </header>
+
+            <!-- About Me Section (Greek) -->
+            <section class="section">
+                <h2><i class="fas fa-user"></i> ΣΧΕΤΙΚΑ ΜΕ ΕΜΕΝΑ</h2>
+                <p>Αφοσιωμένος και παθιασμένος φοιτητής Πληροφορικής & Μηχανικής Υπολογιστών, με γερά θεμέλια στη Μηχανική Δικτύων, τη Διαχείριση Συστημάτων και τη Διαχείριση Έργων. Αναλυτικός, οργανωμένος και προσανατολισμένος στη λεπτομέρεια, με αποδεδειγμένη ικανότητα να διαχειρίζομαι έργα υποστήριξης και υποδομών Πληροφορικής. Αναγνωρισμένος για την παροχή καινοτόμων λύσεων που επιλύουν τεχνικές προκλήσεις και προάγουν την επιχειρηματική ανάπτυξη. Το υπόβαθρό μου περιλαμβάνει πρακτική εμπειρία στην ανάπτυξη ιστοσελίδων, την τεχνική υποστήριξη και τη διαχείριση έργων, σε συνδυασμό με ισχυρές δεξιότητες επικοινωνίας και επάρκεια σε πολλές γλώσσες.</p>
+            </section>
+
+            <!-- Education Section (Greek) -->
+            <section class="section">
+                <h2><i class="fas fa-graduation-cap"></i> ΕΚΠΑΙΔΕΥΣΗ</h2>
+                <div class="education-item">
+                    <h3>Integrated Master's degree (5yrs), Computer Science</h3>
+                    <p>Πανεπιστήμιο Δυτικής Αττικής | Σεπτέμβριος 2019 - Παρόν</p>
+                    <ul>
+                        <li>Διακεκριμένο μέλος του Tech Society του πανεπιστημίου</li>
+                        <li>Σχετικές γνώσεις: Υπολογιστικά Συστήματα, Τεχνητή Νοημοσύνη, Ασφάλεια Δικτύων, Συστήματα Διαχείρισης Βάσεων Δεδομένων, Τεχνολογία Λογισμικού, Ανάπτυξη Ιστού, Υπολογιστικό Νέφος</li>
+                        <li>ΜΈΣΟΣ ΌΡΟΣ ΒΑΘΜΟΛΟΓΊΑΣ: 7.6 (2.98 GPA)</li>
+                    </ul>
+                </div>
+                <div class="education-item">
+                    <h3>Μεταπτυχιακός τίτλος σπουδών (MS), Εφαρμοσμένη Πληροφορική</h3>
+                    <p>SRH Hochschule Heidelberg | Απρίλιος 2023 - Οκτώβριος 2023 (Ακαδ. Εξάμηνο)</p>
+                    <ul>
+                        <li>Φοιτητικό εξάμηνο ERASMUS+</li>
+                        <li>Βραβευμένος ομιλητής & επικεφαλής ομάδας</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Experience Section (Greek) -->
+            <section class="section">
+                <h2><i class="fas fa-briefcase"></i> ΕΠΑΓΓΕΛΜΑΤΙΚΗ ΕΜΠΕΙΡΙΑ</h2>
+                <div class="experience-item">
+                    <h3>Μηχανικός Υποστήριξης Πληροφορικής</h3>
+                    <p>OMILIA LTD, Αθήνα, Ελλάδα | Σεπτέμβριος 2024 – Σήμερα</p>
+                    <ul>
+                        <li>Παροχή εσωτερικής υποστήριξης χρηστών και αντιμετώπιση προβλημάτων υποδομής Πληροφορικής με εργαλεία όπως Anydesk και RDP</li>
+                        <li>Διαχείριση ενίσχυσης τερματικών και εφαρμογή πολιτικών για ελέγχους PCI και SOC2</li>
+                        <li>Επίβλεψη υποδομών cloud και δικτύου με εργαλεία όπως Jira Cloud, Cisco ISE, Microsoft Active Directory και ESXi</li>
+                        <li>Διαχείριση λύσεων ασφάλειας και παραγωγικότητας όπως Google Workspace, συστήματα HID και 1Password</li>
+                    </ul>
+                </div>
+                <div class="experience-item">
+                    <h3>Συντονιστής Υποστήριξης & Υποδομών Πληροφορικής</h3>
+                    <p>KEEP EAT HEALTHY, Αθήνα, Ελλάδα | Μάιος 2022 - Σήμερα</p>
+                    <ul>
+                        <li>Παροχή υποστήριξης πληροφορικής και συντονισμός υποδομών</li>
+                        <li>Επίβλεψη της εγκατάστασης και της συντήρησης των συστημάτων ΤΠ</li>
+                        <li>Αντιμετώπιση τεχνικών ζητημάτων και πρόταση σύγχρονων λύσεων</li>
+                    </ul>
+                </div>
+                <button id="see-more-btn-gr" class="see-more-btn">Δείτε Περισσότερα <i class="fas fa-arrow-down"></i></button>
+                <div id="more-experience-gr" class="more-experience">
+                    <div class="experience-item">
+                        <h3>Ειδικός Υποστήριξης Πληροφορικής</h3>
+                        <p>ANEMOMYLOI ANDROS AE, Άνδρος, Νότιο Αιγαίο, Ελλάδα | Ιανουάριος 2023 - Φεβρουάριος 2024</p>
+                        <ul>
+                            <li>Παροχή υπηρεσιών απομακρυσμένης υποστήριξης και συμβουλών ΤΠ</li>
+                            <li>Συνδρομή στην υποδομή πληροφορικής και την υποστήριξη εταιρικών έργων</li>
+                            <li>Οργάνωση portfolio εταιρίας & οικονομικών αρχείων</li>
+                        </ul>
+                    </div>
+                    <div class="experience-item">
+                        <h3>Web Developer</h3>
+                        <p>Freelance, Αθήνα, Ελλάδα | 2020 - Νοέμβριος 2023</p>
+                        <ul>
+                            <li>Ανάπτυξη και λανσάρισμα λειτουργίας δύο πλήρως λειτουργικών ιστότοπων</li>
+                        </ul>
+                    </div>
+                    <div class="experience-item">
+                        <h3>Τεχνικός Εγκατάστασης και Διαμόρφωσης Δικτυακών Συστημάτων</h3>
+                        <p>Weballdesign, Αθήνα, Ελλάδα | 2020 - Νοέμβριος 2022</p>
+                        <ul>
+                            <li>Ρύθμιση και διαμόρφωση συστημάτων διακομιστών και πελατών σε εκπαιδευτικά ιδρύματα & σχολεία</li>
+                            <li>Ρύθμιση και συντήρηση υποδομών δικτύου, συμπεριλαμβανομένων Routers, Switches και UPS</li>
+                            <li>Διασφάλιση της σωστής συνδεσιμότητα δικτύου και διενέργεια διαγνωστικών δικτύου</li>
+                            <li>Διαμόρφωση ρυθμίσεων BIOS και εκκίνησης δικτύου για υπολογιστές-πελάτες</li>
+                            <li>Παροχή κατάρτισης και υποστήριξης στο προσωπικό για τη συνεχή συντήρηση και διαχείριση</li>
+                            <li>Λεπτομερής καταγραφή διαδικασιών εγκατάστασης και διαμόρφωσης για μελλοντική αναφορά και επίλυση προβλημάτων</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Skills Section (Greek) -->
+            <section class="section">
+                <h2><i class="fas fa-tools"></i> ΔΕΞΙΟΤΗΤΕΣ</h2>
+                <div class="skills-list">
+                    <div class="skill-item">
+                        <p>Προηγμένες Δεξιότητες Πληροφορικής</p>
+                        <div class="skill-bar"><div class="skill-fill" style="--skill-width: 91%;"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <p>Ανάπτυξη Ιστοσελίδων</p>
+                        <div class="skill-bar"><div class="skill-fill" style="--skill-width: 85%;"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <p>Εξαιρετική Επικοινωνία (Αγγλικά C2 / Γερμανικά B2)</p>
+                        <div class="skill-bar"><div class="skill-fill" style="--skill-width: 90%;"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <p>Αντιμετώπιση Προβλημάτων</p>
+                        <div class="skill-bar"><div class="skill-fill" style="--skill-width: 92%;"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <p>Διαχείριση Έργων (Project Management)</p>
+                        <div class="skill-bar"><div class="skill-fill" style="--skill-width: 80%;"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <p>Συστήματα Ασφαλείας (AV-EDR)</p>
+                        <div class="skill-bar"><div class="skill-fill" style="--skill-width: 85%;"></div></div>
+                    </div>
+                </div>
+            </section>
+            <!-- Personal Projects Section - ((NEEDS Greek)) Showcases past IT-related projects -->
+            <section class="section">
+                <h2><i class="fas fa-laptop-code"></i> Personal Projects</h2>
+                <div class="project-item">
+                    <h3>Portfolio Website</h3>
+                    <p>Self-developed | 2023 – Present</p>
+                    <ul>
+                        <li>Designed and built a responsive personal CV webpage using HTML, CSS, and JavaScript.</li>
+                        <li>Implemented light/dark mode, language toggle (English/Greek), and a collapsible experience section.</li>
+                        <li>Deployed on <a href="https://github.com/Andrewfragkiadakis/andrewfragkiadakis.github.io" target="_blank"> GitHub Pages</a> for public access and continuous updates.</li>
+                    </ul>
+                </div>
+
+                <div class="project-item">
+                    <h3>HappyFox 🦊 - A Mental Health Application</h3>
+                    <p>Team Project at SRH University Heidelberg | April 2023 – October 2023</p>
+                    <ul>
+                        <li>Developed a user-friendly mental health app for the Master Course "Fundamentals of UI & UX" at SRH University Heidelberg, aimed at promoting emotional well-being and mental balance through intuitive design.</li>
+                        <li>Deployed on <a href="https://github.com/Andrewfragkiadakis/Mental-Health-Project/tree/main" target="_blank"> GitHub</a> for public access and continuous updates.</li>
+
+                </div>
+                <div class="project-item">
+                    <h3>Raspberry Pi Adblocker & Media Streamer</h3>
+                    <p>Personal Experiment | 2021</p>
+                    <ul>
+                        <li>Configured a Raspberry Pi as an adblocker using Pi-hole to filter network-wide advertisements.</li>
+                        <li>Set up photo and video streaming with Plex, enabling access across devices on the home network.</li>
+                        <li>Installed and managed Linux (Raspbian), optimized for low resource usage and stability.</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Andreas Fragkiadakis. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/script.js"></script>
+</body>
+
+</html>
