@@ -49,15 +49,18 @@ Personal portfolio and CV for **Andreas Fragkiadakis** (IT & Security Engineer, 
 
 ```
 Portfolio-Webpage/
-├── andreas-technology-v3/     # Next.js app (deploy this, e.g. Vercel)
+├── andreas-technology-v3/     # Next.js app (deploy root on Vercel)
 │   ├── src/
 │   │   ├── app/               # App Router, layout, globals
-│   │   ├── components/       # dom/, ui/
+│   │   ├── components/        # dom/, ui/
 │   │   ├── data/              # content.ts (EN/GR)
-│   │   └── ...
-│   └── public/
+│   │   └── contexts/          # Language, Theme providers
+│   ├── docs/                  # deploy, migration, SEO, title guide
+│   └── public/                # images, favicons, files
 └── README.md
 ```
+
+See [`andreas-technology-v3/docs/`](andreas-technology-v3/docs/) for deployment, migration, SEO, and content editing guides.
 
 ---
 

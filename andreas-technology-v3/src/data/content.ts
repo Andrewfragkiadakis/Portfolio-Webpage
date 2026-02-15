@@ -124,6 +124,11 @@ export interface Content {
     copyright: string
 }
 
+export const SOCIAL_URLS = {
+    github: "https://github.com/Andrewfragkiadakis",
+    linkedin: "https://www.linkedin.com/in/andreas-fragkiadakis/",
+} as const
+
 export const content: Record<'en' | 'gr', Content> = {
     en: {
         name: "ANDREAS FRAGKIADAKIS",
@@ -131,8 +136,8 @@ export const content: Record<'en' | 'gr', Content> = {
         location: "Athens, Greece",
         phone: "(+30) 697-345-3683",
         email: "andrewfragkiadakis@gmail.com",
-        github: "https://github.com/Andrewfragkiadakis",
-        linkedin: "https://www.linkedin.com/in/andreas-fragkiadakis/",
+        github: SOCIAL_URLS.github,
+        linkedin: SOCIAL_URLS.linkedin,
 
         nav: {
             home: "HOME",
@@ -367,7 +372,8 @@ export const content: Record<'en' | 'gr', Content> = {
                 year: 2026,
                 tags: ["Next.js", "Three.js", "React", "TypeScript", "Framer Motion"],
                 description: "Designed and built this modern portfolio (2026) with 3D graphics, smooth interactions, and animated sections. Features dark mode, responsive design, and professional animations.",
-                githubLink: "https://github.com/Andrewfragkiadakis/andrewfragkiadakis.github.io",
+                liveSiteLink: "https://andreas.technology",
+                githubLink: "https://github.com/Andrewfragkiadakis/Portfolio-Webpage",
                 image: "/images/portfolio-website/2026.png"
             },
             {
@@ -457,8 +463,8 @@ export const content: Record<'en' | 'gr', Content> = {
         location: "Αθήνα, Ελλάδα",
         phone: "(+30) 697-345-3683",
         email: "andrewfragkiadakis@gmail.com",
-        github: "https://github.com/Andrewfragkiadakis",
-        linkedin: "https://www.linkedin.com/in/andreas-fragkiadakis/",
+        github: SOCIAL_URLS.github,
+        linkedin: SOCIAL_URLS.linkedin,
 
         nav: {
             home: "ΑΡΧΙΚΗ",
@@ -689,7 +695,8 @@ export const content: Record<'en' | 'gr', Content> = {
                 year: 2026,
                 tags: ["Next.js", "Three.js", "React", "TypeScript", "Framer Motion"],
                 description: "Σχεδίαση και υλοποίηση modern portfolio με 3D γραφικά, ομαλές αλληλεπιδράσεις (animations) και Dark Mode.",
-                githubLink: "https://github.com/Andrewfragkiadakis/andrewfragkiadakis.github.io",
+                liveSiteLink: "https://andreas.technology",
+                githubLink: "https://github.com/Andrewfragkiadakis/Portfolio-Webpage",
                 image: "/images/portfolio-website/2026.png"
             },
             {

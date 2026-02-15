@@ -8,6 +8,7 @@ import NoiseOverlay from '@/components/dom/NoiseOverlay'
 import ThemeToggle from '@/components/ui/ThemeToggle'
 import CustomCursor from '@/components/ui/CustomCursor'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import { SOCIAL_URLS } from '@/data/content'
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' })
 
@@ -116,8 +117,8 @@ export default function RootLayout({
                                 image: `${SITE_URL}/opengraph-image`,
                                 sameAs: [
                                     SITE_URL,
-                                    'https://github.com/Andrewfragkiadakis',
-                                    'https://www.linkedin.com/in/andreas-fragkiadakis/',
+                                    SOCIAL_URLS.github,
+                                    SOCIAL_URLS.linkedin,
                                 ],
                             },
                         }),
@@ -135,7 +136,7 @@ export default function RootLayout({
                             image: `${SITE_URL}/opengraph-image`,
                             jobTitle: 'IT & Security Engineer',
                             worksFor: { '@type': 'Organization', name: 'OMILIA LTD' },
-                            sameAs: [SITE_URL, 'https://github.com/Andrewfragkiadakis', 'https://www.linkedin.com/in/andreas-fragkiadakis/'],
+                            sameAs: [SITE_URL, SOCIAL_URLS.github, SOCIAL_URLS.linkedin],
                             email: 'andrewfragkiadakis@gmail.com',
                             telephone: '+30-697-345-3683',
                             address: { '@type': 'PostalAddress', addressLocality: 'Athens', addressCountry: 'GR' },

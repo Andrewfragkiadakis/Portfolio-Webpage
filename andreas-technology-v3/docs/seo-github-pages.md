@@ -1,3 +1,5 @@
+> **Historical note (Feb 2026):** The old GitHub Pages site at `andrewfragkiadakis.github.io` has been deleted. The portfolio now lives exclusively at [andreas.technology](https://andreas.technology). The instructions below are kept for reference.
+
 # De‑emphasizing Old GitHub Pages (andrewfragkiadakis.github.io) in Search
 
 Your current portfolio lives at **https://andreas.technology**. Search engines (Google, DuckDuckGo, Bing) may still show your old GitHub Pages URL **https://andrewfragkiadakis.github.io** for queries like "Andreas Fragkiadakis". You cannot remove that URL from search results by changing only andreas.technology; you must act on the old site and use search-engine tools.
