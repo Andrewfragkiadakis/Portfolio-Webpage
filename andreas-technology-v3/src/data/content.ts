@@ -259,10 +259,12 @@ export const content: Record<'en' | 'gr', Content> = {
                 company: "OMILIA LTD, Athens, Greece",
                 duration: "September 2024 – Present",
                 tasks: [
-                    "Provide internal user support and troubleshoot IT infrastructure using tools like Anydesk and RDP",
-                    "Manage endpoint hardening and implement policies for PCI and SOC2 audits",
-                    "Oversee cloud and network infrastructure with Jira Cloud, Cisco ISE, Microsoft Active Directory, and ESXi",
-                    "Administer security and productivity tools including Google Workspace, HID systems, and 1Password"
+                    "Build and maintain automation for IT support and ticketing workflows",
+                    "Manage device onboarding and endpoint deployment using MDM and zero-touch enrollment",
+                    "Implement security hardening and compliance measures (CIS benchmarks, firewall policies)",
+                    "Automate deployment of endpoint security tools and maintain scripts for policy enforcement",
+                    "Support internal AI and productivity tool rollouts; create and maintain IT documentation and runbooks",
+                    "Curate corporate software catalog; plan fleet upgrades and manage critical vendor escalations"
                 ]
             },
             {
@@ -320,8 +322,10 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 degree: "Master of Science, Applied Computer Science",
                 institution: "SRH Hochschule Heidelberg, Germany",
-                duration: "April 2023 – October 2023 (ERASMUS+ Semester)",
-                details: ["Awarded presenter and team leader"]
+                duration: "April 2023 – October 2023",
+                details: ["Awarded presenter and team leader",
+                        "ERASMUS+ Semester",
+                ]
             },
             {
                 degree: "ITIL 4 Foundation certified in IT Service Management",
@@ -579,10 +583,12 @@ export const content: Record<'en' | 'gr', Content> = {
                 company: "OMILIA LTD, Αθήνα",
                 duration: "Σεπτέμβριος 2024 – Σήμερα",
                 tasks: [
-                    "Παροχή εσωτερικής υποστήριξης χρηστών και troubleshooting υποδομών IT (Anydesk, RDP)",
-                    "Διαχείριση θωράκισης τερματικών (endpoint hardening) και εφαρμογή πολιτικών για ελέγχους PCI και SOC2",
-                    "Επίβλεψη υποδομών Cloud και δικτύου (Jira Cloud, Cisco ISE, Active Directory, ESXi)",
-                    "Διαχείριση εργαλείων ασφάλειας και παραγωγικότητας (Google Workspace, HID systems, 1Password)"
+                    "Διαχείριση onboarding συσκευών και ανάπτυξης τερματικών μέσω MDM και zero-touch enrollment",
+                    "Εφαρμογή μέτρων θωράκισης και συμμόρφωσης (CIS benchmarks, πολιτικές firewall)",
+                    "Αυτοματισμός ανάπτυξης εργαλείων ασφάλειας τερματικών και συντήρηση scripts για εφαρμογή πολιτικών",
+                    "Ανάπτυξη και συντήρηση αυτοματισμών για workflows IT υποστήριξης και ticketing",
+                    "Υποστήριξη rollout εργαλείων AI και παραγωγικότητας· δημιουργία και συντήρηση τεκμηρίωσης και runbooks",
+                    "Διαχείριση εταιρικού catalog λογισμικού· σχεδιασμός αναβαθμίσεων fleet και διαχείριση κρίσιμων vendor escalations"
                 ]
             },
             {
