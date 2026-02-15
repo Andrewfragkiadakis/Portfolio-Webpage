@@ -1,20 +1,21 @@
-images/silence-hero/desktop.ini
 node_modules
-DEPLOY_GUIDE.md
 
-# Next.js metadata files (not needed for GitHub Pages)
+# Next.js build output
+_next/
+.next/
 __next.*
-*.txt
-!CNAME
 _not-found.html
 _not-found/
-favicon.ico
+
+# OS / IDE
+.DS_Store
+.vscode
+.idea
 
 # Backup folders
 *-backup-*
 backup_*
 
-# IDE
-.vscode
-.idea
-.DS_Store
+# Misc
+DEPLOY_GUIDE.md
+images/silence-hero/desktop.ini
