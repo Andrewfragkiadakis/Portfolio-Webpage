@@ -1,32 +1,107 @@
 # Andreas Fragkiadakis – Portfolio
 
-[![Website](https://img.shields.io/badge/Website-andreas.technology-blue?style=for-the-badge&logo=google-chrome)](https://andreas.technology)
+<div align="center">
 
-Personal portfolio and CV for **Andreas Fragkiadakis** (IT & Security Engineer, M.Eng.). Built with **Next.js 16**, **TypeScript**, and **Tailwind CSS**. Showcases experience, projects, and skills with a horizontal-scroll layout, bilingual support (EN/GR), and modern UI components.
+[![Website](https://img.shields.io/badge/Website-andreas.technology-4f46e5?style=for-the-badge&logo=google-chrome)](https://andreas.technology)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com/)
+[![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/)
 
-## Live site
+</div>
 
-[https://andreas.technology](https://andreas.technology)
+Personal portfolio and CV for **Andreas Fragkiadakis** (IT & Security Engineer, M.Eng.). Horizontal-scroll layout, blob cursor, bilingual EN/GR, and modern UI—live at **[andreas.technology](https://andreas.technology)**.
+
+---
+
+## Contents
+
+- [Preview](#-preview)
+- [Features](#-features)
+- [Tech stack](#-tech-stack)
+- [Getting started](#-getting-started)
+- [Project structure](#-project-structure)
+- [License](#-license)
+
+---
+
+## Preview
+
+**[→ View live site](https://andreas.technology)**
+
+| Light | Dark |
+|-------|------|
+| Clean, minimal layout | Same layout with dark theme |
+
+*Add a screenshot or GIF here if you like—e.g. from [andreas.technology](https://andreas.technology).*
+
+---
 
 ## Features
 
-- **Next.js 16** (App Router), **TypeScript**, **Tailwind CSS**
-- **Horizontal scroll** section layout with snap and responsive behaviour
-- **Blob cursor** on hero name (configurable trail, LetterGlitch inside letters)
-- **SpotlightCard** and **LogoLoop** (tech stack marquee) in About/Services
-- **Framer Motion** for scroll and hover animations
-- **EN/GR** language switching; light/dark theme
-- **SEO**: canonical URL, JSON-LD (WebSite + Person), Open Graph, sitemap
+- **Horizontal scroll** – Section-based layout with snap and smooth scroll
+- **Blob cursor** – Configurable trail on hero name with LetterGlitch inside the letters
+- **SpotlightCard & LogoLoop** – Mouse-follow spotlight on cards; tech-stack marquee in About
+- **Framer Motion** – Scroll and hover animations
+- **Bilingual** – English / Greek with persisted preference
+- **Theme** – Light and dark mode
+- **SEO** – Canonical URL, JSON-LD (WebSite + Person), Open Graph, sitemap
+
+---
+
+## Tech stack
+
+| Category   | Tech |
+|-----------|------|
+| Framework | [Next.js 16](https://nextjs.org/) (App Router) |
+| Language  | [TypeScript](https://www.typescriptlang.org/) |
+| Styling   | [Tailwind CSS](https://tailwindcss.com/) |
+| Animation | [Framer Motion](https://www.framer.com/motion/) |
+| Icons     | [Font Awesome](https://fontawesome.com/) |
+
+---
+
+## Getting started
+
+```bash
+git clone https://github.com/Andrewfragkiadakis/Portfolio-Webpage.git
+cd Portfolio-Webpage/andreas-technology-v3
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+| Script        | Description        |
+|---------------|--------------------|
+| `npm run dev` | Start dev server   |
+| `npm run build` | Production build |
+| `npm run start` | Run production build |
+
+---
 
 ## Project structure
 
-- `andreas-technology-v3/` – Next.js app (source, deploy from here e.g. Vercel)
-- `andreas-technology-v3/public/` – Static assets
+```
+Portfolio-Webpage/
+├── andreas-technology-v3/     # Next.js app (deploy this, e.g. Vercel)
+│   ├── src/
+│   │   ├── app/               # App Router, layout, globals
+│   │   ├── components/       # dom/, ui/
+│   │   ├── data/              # content.ts (EN/GR)
+│   │   └── ...
+│   └── public/
+└── README.md
+```
 
-## Built with
-
-- [Next.js 16](https://nextjs.org/) · [TypeScript](https://www.typescriptlang.org/) · [Tailwind CSS](https://tailwindcss.com/) · [Framer Motion](https://www.framer.com/motion/) · [Font Awesome](https://fontawesome.com/)
+---
 
 ## License
 
 © 2026 Andreas Fragkiadakis. All rights reserved.
+
+---
+
+<p align="center">
+  <sub>Crafted with TypeScript, Framer Motion & Tailwind</sub>
+</p>
