@@ -3,6 +3,7 @@
 <div align="center">
 
 [![Website](https://img.shields.io/badge/Website-andreas.technology-4f46e5?style=for-the-badge&logo=google-chrome)](https://andreas.technology)
+
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com/)
@@ -10,30 +11,13 @@
 
 </div>
 
-Personal portfolio and CV for **Andreas Fragkiadakis** (IT & Security Engineer, M.Eng.). Horizontal-scroll layout, blob cursor, bilingual EN/GR, and modern UI—live at **[andreas.technology](https://andreas.technology)**.
+Personal portfolio and CV for **Andreas Fragkiadakis** (IT & Security Engineer, M.Eng.). Horizontal-scroll layout, blob cursor, bilingual EN/GR, and modern UI.
 
 ---
 
-## Contents
+## Live site
 
-- [Preview](#-preview)
-- [Features](#-features)
-- [Tech stack](#-tech-stack)
-- [Getting started](#-getting-started)
-- [Project structure](#-project-structure)
-- [License](#-license)
-
----
-
-## Preview
-
-**[→ View live site](https://andreas.technology)**
-
-| Light | Dark |
-|-------|------|
-| Clean, minimal layout | Same layout with dark theme |
-
-*Add a screenshot or GIF here if you like—e.g. from [andreas.technology](https://andreas.technology).*
+**[andreas.technology](https://andreas.technology)**
 
 ---
 
@@ -51,32 +35,13 @@ Personal portfolio and CV for **Andreas Fragkiadakis** (IT & Security Engineer, 
 
 ## Tech stack
 
-| Category   | Tech |
-|-----------|------|
-| Framework | [Next.js 16](https://nextjs.org/) (App Router) |
-| Language  | [TypeScript](https://www.typescriptlang.org/) |
-| Styling   | [Tailwind CSS](https://tailwindcss.com/) |
-| Animation | [Framer Motion](https://www.framer.com/motion/) |
-| Icons     | [Font Awesome](https://fontawesome.com/) |
+*The usual suspects —*
 
----
-
-## Getting started
-
-```bash
-git clone https://github.com/Andrewfragkiadakis/Portfolio-Webpage.git
-cd Portfolio-Webpage/andreas-technology-v3
-npm install
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000).
-
-| Script        | Description        |
-|---------------|--------------------|
-| `npm run dev` | Start dev server   |
-| `npm run build` | Production build |
-| `npm run start` | Run production build |
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
+[![Framer Motion](https://img.shields.io/badge/Framer_Motion-magenta?style=flat-square&logo=framer)](https://www.framer.com/motion/)
+[![Font Awesome](https://img.shields.io/badge/Font_Awesome-528dd7?style=flat-square&logo=font-awesome)](https://fontawesome.com/)
 
 ---
 
