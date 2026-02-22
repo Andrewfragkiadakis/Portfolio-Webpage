@@ -26,6 +26,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         localStorage.setItem('language', lang)
     }
 
+    // Sync <html lang> attribute with active language
+    useEffect(() => {
+        document.documentElement.lang = language === 'gr' ? 'el' : language
+    }, [language])
+
     return (
         <LanguageContext.Provider value={{ language, setLanguage }}>
             {children}

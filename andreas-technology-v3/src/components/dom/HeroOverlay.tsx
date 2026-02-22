@@ -183,6 +183,8 @@ export default function HeroOverlay() {
                 </a>
                 <a
                     href={gmailComposeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     aria-label="Contact via email"
                     className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)]"
                 >

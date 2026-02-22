@@ -37,7 +37,7 @@ export default function Contact() {
                             {t.contact.infoTitle}
                         </h3>
 
-                        <a href={gmailComposeUrl} className="flex items-start sm:items-center gap-3 sm:gap-4 group" aria-label="Contact via email">
+                        <a href={gmailComposeUrl} target="_blank" rel="noopener noreferrer" className="flex items-start sm:items-center gap-3 sm:gap-4 group" aria-label="Contact via email">
                             <div className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-[var(--background)] transition-all duration-300 ease-out flex-shrink-0">
                                 <i className="fas fa-envelope text-xl" aria-hidden="true" />
                             </div>
@@ -104,6 +104,8 @@ export default function Contact() {
                         <div className="space-y-3">
                             <a
                                 href={gmailComposeUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 aria-label="Contact via email"
                                 className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[var(--accent)] text-[var(--background)] font-bold uppercase tracking-widest hover:shadow-[0_0_30px_var(--accent)] transition-all duration-300 ease-out"
                             >

@@ -163,8 +163,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 "I am an IT & Computer Engineer (M.Eng.) specializing in SecOps, Infrastructure Automation, and AI Integration. My approach combines deep technical research with hands-on engineering to build secure, scalable, and automated environments.",
                 "Currently, I balance my role as an IT Engineer at Omilia, while fulfilling my military service as an IT Operations Administrator. My academic background is rooted in 5G research, specifically in Hybrid Wireless-Optical Networks (Radio over Fiber).",
                 "With a focus on Endpoint Hardening, Network Security, and AI-driven operations (Atlassian Rovo, Gemini), I bridge the gap between complex infrastructure and operational efficiency.",
-                "Based in Greece | Fluent in English (C2) & German (B2)",
-                "I am a Computer and IT Engineer (M.Eng.) specializing in SecOps, infrastructure automation, and AI integration. Graduate of a Polytechnic-level University of computer engineering and informatics."
+                "Based in Greece | Fluent in English (C2) & German (B2)"
             ]
         },
 
@@ -380,7 +379,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 name: "Signature Craft",
                 year: 2026,
                 tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Email Signatures"],
-                description: "Email signature builder web app with a modern landing experience and polished UI for creating professional signatures quickly.",
+                description: "Open-source email signature builder with 32+ templates, zero sign-up, and a polished dark-mode UI. Design stunning HTML signatures for Gmail, Outlook, Apple Mail, Yahoo & Thunderbird in minutes — completely free.",
                 liveSiteLink: "https://signature-craft-tau.vercel.app/",
                 image: "/images/signature-craft/signature-craft.png"
             },
@@ -421,7 +420,7 @@ export const content: Record<'en' | 'gr', Content> = {
             },
             {
                 name: "HappyFox 🦊 - Mental Health App",
-                year: 2026,
+                year: 2023,
                 tags: ["UI/UX Design", "Figma", "Team Project", "SRH Heidelberg"],
                 description: "Developed UI/UX concepts for a user-friendly mental health app aimed at promoting emotional well-being during a Master's course.",
                 githubLink: "https://github.com/Andrewfragkiadakis/Mental-Health-Project/tree/main",
@@ -498,8 +497,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 "Είμαι Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) με εξειδίκευση σε SecOps, αυτοματισμό υποδομών και ενσωμάτωση Τεχνητής Νοημοσύνης. Η προσέγγισή μου συνδυάζει τη βαθιά τεχνική έρευνα με την εφαρμοσμένη μηχανική για τη δημιουργία ασφαλών, κλιμακούμενων και αυτοματοποιημένων περιβαλλόντων.",
                 "Αυτή τη στιγμή, συνδυάζω τον ρόλο μου ως Μηχανικός Πληροφορικής στην Omilia, ενώ παράλληλα εκπληρώνω τις στρατιωτικές μου υποχρεώσεις ως Υπεύθυνος Πληροφορικής. Το ακαδημαϊκό μου υπόβαθρο βασίζεται στην έρευνα δικτύων 5G, και συγκεκριμένα στα Υβριδικά Ασύρματα-Οπτικά Δίκτυα (Radio over Fiber).",
                 "Με έμφαση στην ενίσχυση τερματικών σημείων (Endpoint Hardening), την ασφάλεια δικτύων και τις λειτουργίες που βασίζονται στην Τεχνητή Νοημοσύνη (Atlassian Rovo, Gemini), γεφυρώνω το χάσμα μεταξύ πολύπλοκων υποδομών και επιχειρησιακής αποτελεσματικότητας.",
-                "Με έδρα την Ελλάδα | Άριστη γνώση Αγγλικών (C2) & Γερμανικών (B2)",
-                "Είμαι Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) με εξειδίκευση σε SecOps, αυτοματισμό υποδομών και ενσωμάτωση Τεχνητής Νοημοσύνης. Απόφοιτος Πολυτεχνικού επιπέδου σχολής μηχανικών ηλεκτρονικών υπολογιστών και πληροφορικής."
+                "Με έδρα την Ελλάδα | Άριστη γνώση Αγγλικών (C2) & Γερμανικών (B2)"
             ]
         },
 
@@ -711,7 +709,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 name: "Signature Craft",
                 year: 2026,
                 tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Email Signatures"],
-                description: "Web εφαρμογή δημιουργίας email signatures με σύγχρονο design και εύκολη διαδικασία παραγωγής επαγγελματικής υπογραφής.",
+                description: "Open-source εργαλείο δημιουργίας email signatures με 32+ templates, χωρίς εγγραφή, και σύγχρονο dark-mode UI. Σχεδιάστε επαγγελματικές HTML υπογραφές για Gmail, Outlook, Apple Mail, Yahoo & Thunderbird σε λίγα λεπτά — εντελώς δωρεάν.",
                 liveSiteLink: "https://signature-craft-tau.vercel.app/",
                 image: "/images/signature-craft/signature-craft.png"
             },
@@ -752,7 +750,7 @@ export const content: Record<'en' | 'gr', Content> = {
             },
             {
                 name: "HappyFox 🦊 - Εφαρμογη Ψυχικης Υγειας",
-                year: 2026,
+                year: 2023,
                 tags: ["UI/UX Design", "Figma", "Team Project", "SRH Heidelberg"],
                 description: "Σχεδιασμός UI/UX για εφαρμογή ψυχικής υγείας με στόχο την προώθηση της συναισθηματικής ευεξίας. Υλοποιήθηκε στα πλαίσια μεταπτυχιακού μαθήματος.",
                 githubLink: "https://github.com/Andrewfragkiadakis/Mental-Health-Project/tree/main",
