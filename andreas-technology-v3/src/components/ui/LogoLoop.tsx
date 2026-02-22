@@ -39,6 +39,7 @@ export default function LogoLoop({
     const [seqWidth, setSeqWidth] = useState(0)
     const [copyCount, setCopyCount] = useState(MIN_COPIES)
     const [isHovered, setIsHovered] = useState(false)
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
     const targetVelocity = useMemo(() => {
         const magnitude = Math.abs(speed)
@@ -128,7 +129,17 @@ export default function LogoLoop({
                 {Array.from({ length: copyCount }, (_, ci) => (
                     <div key={ci} className="logoloop__list" aria-hidden={ci > 0} ref={ci === 0 ? seqRef : undefined}>
                         {logos.map((item, ii) => (
-                            <div key={`${ci}-${ii}`} className="logoloop__item">
+                            <div
+                                key={`${ci}-${ii}`}
+                                className="logoloop__item"
+                                onMouseEnter={() => scaleOnHover && setHoveredIndex(ii)}
+                                onMouseLeave={() => scaleOnHover && setHoveredIndex(null)}
+                                style={scaleOnHover ? {
+                                    transform: hoveredIndex === ii ? 'scale(1.15)' : 'scale(1)',
+                                    transition: 'transform 0.1s cubic-bezier(0.4,0,0.2,1)',
+                                    transformOrigin: 'center center',
+                                } : undefined}
+                            >
                                 {'node' in item ? (
                                     <span className="logoloop__node">{item.node}</span>
                                 ) : (

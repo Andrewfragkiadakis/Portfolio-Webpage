@@ -1,8 +1,9 @@
 'use client'
 
 import { useContent } from '@/hooks/useContent'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { useRef, useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import type { Skill } from '@/data/content'
 import SpotlightCard from '@/components/ui/SpotlightCard'
 import LogoLoop from '@/components/ui/LogoLoop'
@@ -57,6 +58,9 @@ const TECH_STACK: LogoItem[] = [
 
 export default function About() {
     const t = useContent()
+    const [activeSkill, setActiveSkill] = useState<Skill | null>(null)
+    const [mounted, setMounted] = useState(false)
+    useEffect(() => { setMounted(true) }, [])
 
     const stats = [
         { value: 6, suffix: '+' },
@@ -155,7 +159,10 @@ export default function About() {
                             viewport={{ once: true }}
                             transition={{ delay: 0.4 + index * 0.1 }}
                         >
-                            <SpotlightCard className="border border-[var(--foreground)]/30 p-3 hover:border-[var(--accent)] transition-all duration-300 group h-full">
+                            <SpotlightCard
+                                className="border border-[var(--foreground)]/30 p-3 hover:border-[var(--accent)] transition-all duration-300 group h-full cursor-pointer"
+                                onClick={() => setActiveSkill(skill)}
+                            >
                                 <div className="relative z-10">
                                     <div className="w-9 h-9 border border-[var(--foreground)]/50 flex items-center justify-center text-[var(--foreground)] group-hover:border-[var(--accent)] group-hover:text-[var(--accent)] transition-colors mb-2">
                                         <i className={`${skill.icon} text-base`} aria-hidden="true" />
@@ -164,11 +171,53 @@ export default function About() {
                                     <p className="text-[10px] text-[var(--foreground)] opacity-80 leading-relaxed line-clamp-2">
                                         {skill.detail || 'Building innovative solutions'}
                                     </p>
+                                    <span className="text-[9px] font-mono text-[var(--accent)] opacity-0 group-hover:opacity-60 transition-opacity mt-1 block">click to expand ↗</span>
                                 </div>
                             </SpotlightCard>
                         </motion.div>
                     ))}
                 </div>
+
+                {/* Skill detail modal — rendered via portal to avoid hydration mismatch */}
+                {mounted && createPortal(
+                    <AnimatePresence>
+                        {activeSkill && (
+                            <motion.div
+                                key="skill-modal"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.18 }}
+                                className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+                                onClick={() => setActiveSkill(null)}
+                            >
+                                <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.92, y: 16 }}
+                                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                                    exit={{ opacity: 0, scale: 0.92, y: 16 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="relative z-10 bg-[var(--background)] border border-[var(--accent)] p-6 max-w-sm w-full shadow-[0_0_40px_var(--accent)]"
+                                    onClick={e => e.stopPropagation()}
+                                >
+                                    <button
+                                        onClick={() => setActiveSkill(null)}
+                                        className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center text-[var(--foreground)] hover:text-[var(--accent)] transition-colors"
+                                        aria-label="Close"
+                                    >
+                                        <i className="fas fa-times" />
+                                    </button>
+                                    <div className="w-10 h-10 border border-[var(--accent)] flex items-center justify-center text-[var(--accent)] mb-4">
+                                        <i className={`${activeSkill.icon} text-base`} aria-hidden="true" />
+                                    </div>
+                                    <h4 className="font-black text-base text-[var(--accent)] uppercase tracking-tight mb-3">{activeSkill.label}</h4>
+                                    <p className="text-sm text-[var(--foreground)] opacity-80 leading-relaxed">{activeSkill.detail}</p>
+                                </motion.div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>,
+                    document.body
+                )}
 
                 <motion.div
                     initial={{ opacity: 0 }}
@@ -182,7 +231,6 @@ export default function About() {
                         direction="left"
                         logoHeight={32}
                         gap={16}
-                        pauseOnHover
                         fadeOut
                         scaleOnHover
                     />

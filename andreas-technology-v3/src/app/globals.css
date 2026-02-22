@@ -160,18 +160,9 @@ html[data-entered="true"] [data-cinematic] {
   display: block;
   object-fit: contain;
   pointer-events: none;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.logoloop--scale-hover .logoloop__item:hover img,
-.logoloop--scale-hover .logoloop__item:hover .logoloop__node {
-  transform: scale(1.2);
-  transform-origin: center center;
-}
-
-.logoloop--scale-hover .logoloop__node {
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* scale-on-hover is handled via React inline styles in LogoLoop.tsx */
 
 .logoloop--fade::before,
 .logoloop--fade::after {
