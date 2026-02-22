@@ -368,15 +368,6 @@ export const content: Record<'en' | 'gr', Content> = {
         projectsTitle: "PROJECTS",
         projects: [
             {
-                name: "Portfolio Website",
-                year: 2026,
-                tags: ["Next.js", "Three.js", "React", "TypeScript", "Framer Motion"],
-                description: "Designed and built this modern portfolio (2026) with 3D graphics, smooth interactions, and animated sections. Features dark mode, responsive design, and professional animations.",
-                liveSiteLink: "https://andreas.technology",
-                githubLink: "https://github.com/Andrewfragkiadakis/Portfolio-Webpage",
-                image: "/images/portfolio-website/2026.png"
-            },
-            {
                 name: "Plano Plus - Signs & Visual Identity",
                 year: 2026,
                 tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion", "Resend"],
@@ -384,6 +375,23 @@ export const content: Record<'en' | 'gr', Content> = {
                 liveSiteLink: "https://www.planoplus.gr/",
                 githubLink: "https://github.com/Andrewfragkiadakis/Plano-Plus",
                 image: "/images/PlanoPlus/plano.png"
+            },
+            {
+                name: "Signature Craft",
+                year: 2026,
+                tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Email Signatures"],
+                description: "Email signature builder web app with a modern landing experience and polished UI for creating professional signatures quickly.",
+                liveSiteLink: "https://signature-craft-tau.vercel.app/",
+                image: "/images/signature-craft/signature-craft.png"
+            },
+            {
+                name: "Portfolio Website",
+                year: 2026,
+                tags: ["Next.js", "Three.js", "React", "TypeScript", "Framer Motion"],
+                description: "Designed and built this modern portfolio (2026) with 3D graphics, smooth interactions, and animated sections. Features dark mode, responsive design, and professional animations.",
+                liveSiteLink: "https://andreas.technology",
+                githubLink: "https://github.com/Andrewfragkiadakis/Portfolio-Webpage",
+                image: "/images/portfolio-website/2026.png"
             },
             {
                 name: "Thesis: Hybrid Wireless-Optical Networks for 5G",
@@ -691,15 +699,6 @@ export const content: Record<'en' | 'gr', Content> = {
         projectsTitle: "PROJECTS",
         projects: [
             {
-                name: "Προσωπικη Ιστοσελιδα Portfolio",
-                year: 2026,
-                tags: ["Next.js", "Three.js", "React", "TypeScript", "Framer Motion"],
-                description: "Σχεδίαση και υλοποίηση modern portfolio με 3D γραφικά, ομαλές αλληλεπιδράσεις (animations) και Dark Mode.",
-                liveSiteLink: "https://andreas.technology",
-                githubLink: "https://github.com/Andrewfragkiadakis/Portfolio-Webpage",
-                image: "/images/portfolio-website/2026.png"
-            },
-            {
                 name: "Plano Plus - Επιγραφες & Οπτικη Ταυτοτητα",
                 year: 2026,
                 tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion", "Resend"],
@@ -707,6 +706,23 @@ export const content: Record<'en' | 'gr', Content> = {
                 liveSiteLink: "https://www.planoplus.gr/",
                 githubLink: "https://github.com/Andrewfragkiadakis/Plano-Plus",
                 image: "/images/PlanoPlus/plano.png"
+            },
+            {
+                name: "Signature Craft",
+                year: 2026,
+                tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Email Signatures"],
+                description: "Web εφαρμογή δημιουργίας email signatures με σύγχρονο design και εύκολη διαδικασία παραγωγής επαγγελματικής υπογραφής.",
+                liveSiteLink: "https://signature-craft-tau.vercel.app/",
+                image: "/images/signature-craft/signature-craft.png"
+            },
+            {
+                name: "Προσωπικη Ιστοσελιδα Portfolio",
+                year: 2026,
+                tags: ["Next.js", "Three.js", "React", "TypeScript", "Framer Motion"],
+                description: "Σχεδίαση και υλοποίηση modern portfolio με 3D γραφικά, ομαλές αλληλεπιδράσεις (animations) και Dark Mode.",
+                liveSiteLink: "https://andreas.technology",
+                githubLink: "https://github.com/Andrewfragkiadakis/Portfolio-Webpage",
+                image: "/images/portfolio-website/2026.png"
             },
             {
                 name: "Thesis: Hybrid Wireless-Optical Networks for 5G",

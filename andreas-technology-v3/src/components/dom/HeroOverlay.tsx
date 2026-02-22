@@ -43,6 +43,7 @@ const BLOB_CURSOR = {
 
 export default function HeroOverlay() {
     const t = useContent()
+    const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(t.email)}&su=${encodeURIComponent('Project Collaboration // Andreas Technology')}`
     const nameRef = useRef<HTMLDivElement>(null)
     const [isHovering, setIsHovering] = useState(false)
 
@@ -181,7 +182,7 @@ export default function HeroOverlay() {
                     <i className="fab fa-github text-xl" aria-hidden="true" />
                 </a>
                 <a
-                    href={`mailto:${t.email}`}
+                    href={gmailComposeUrl}
                     aria-label="Contact via email"
                     className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)]"
                 >
