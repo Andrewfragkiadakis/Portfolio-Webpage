@@ -134,9 +134,8 @@ export default function LogoLoop({
                                 className="logoloop__item"
                                 onMouseEnter={() => scaleOnHover && setHoveredIndex(ii)}
                                 onMouseLeave={() => scaleOnHover && setHoveredIndex(null)}
-                                style={scaleOnHover ? {
-                                    transform: hoveredIndex === ii ? 'scale(1.15)' : 'scale(1)',
-                                    transition: 'transform 0.1s cubic-bezier(0.4,0,0.2,1)',
+                                style={(scaleOnHover && hoveredIndex === ii) ? {
+                                    transform: 'scale(1.15)',
                                     transformOrigin: 'center center',
                                 } : undefined}
                             >

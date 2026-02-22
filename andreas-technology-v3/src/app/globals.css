@@ -162,7 +162,11 @@ html[data-entered="true"] [data-cinematic] {
   pointer-events: none;
 }
 
-/* scale-on-hover is handled via React inline styles in LogoLoop.tsx */
+/* scale-on-hover transform is applied via React inline style; transition defined here */
+.logoloop--scale-hover .logoloop__item {
+  transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center center;
+}
 
 .logoloop--fade::before,
 .logoloop--fade::after {
