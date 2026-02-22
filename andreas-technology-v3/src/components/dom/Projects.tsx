@@ -58,9 +58,10 @@ export default function Projects() {
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.15 }}
-                            className="min-w-[280px] sm:min-w-[320px] md:min-w-[380px] lg:min-w-[400px] w-[280px] sm:w-[320px] md:w-[380px] lg:w-[400px] min-h-[420px] sm:min-h-[440px] md:min-h-0 md:aspect-square border border-[var(--foreground)]/40 bg-[var(--background)] flex-shrink-0 group overflow-hidden hover:border-[var(--accent)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)] flex flex-col scroll-snap-align-start"
+                            className="min-w-[280px] sm:min-w-[320px] md:min-w-[380px] lg:min-w-[400px] w-[280px] sm:w-[320px] md:w-[380px] lg:w-[400px] border border-[var(--foreground)]/40 bg-[var(--background)] flex-shrink-0 group overflow-hidden hover:border-[var(--accent)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)] flex flex-col scroll-snap-align-start"
                         >
-                            <div className="relative flex-[0_0_35%] md:flex-[0_0_42%] min-h-0 overflow-hidden bg-[var(--background)]">
+                            {/* Image — fixed pixel height so card height is content-driven, not circular */}
+                            <div className="relative h-[160px] sm:h-[180px] md:h-[200px] flex-shrink-0 overflow-hidden bg-[var(--background)]">
                                 {project.image && (
                                     <Image
                                         src={project.image}
@@ -75,23 +76,22 @@ export default function Projects() {
                                 </div>
                             </div>
 
-                            <div className="flex-1 flex flex-col justify-between p-4 sm:p-5 md:p-6 min-h-0">
-                                <div>
-                                    <h3 className="text-lg md:text-xl font-black text-[var(--accent)] uppercase tracking-tight mb-2 line-clamp-2">
-                                        {project.name}
-                                    </h3>
-                                    <div className="flex flex-wrap gap-1.5 mb-2">
-                                        {project.tags.slice(0, 3).map((tag, i) => (
-                                            <span key={i} className="text-[10px] font-mono border border-[var(--foreground)] px-2 py-0.5 text-[var(--foreground)]">
-                                                {tag}
-                                            </span>
-                                        ))}
-                                    </div>
-                                    <p className="text-xs text-[var(--foreground)] opacity-70 leading-relaxed line-clamp-2 mb-2">
-                                        {project.description}
-                                    </p>
+                            {/* Content — flex-col with mt-auto on buttons always pins them to the bottom */}
+                            <div className="flex-1 flex flex-col p-4 sm:p-5 md:p-6">
+                                <h3 className="text-lg md:text-xl font-black text-[var(--accent)] uppercase tracking-tight mb-2 line-clamp-2">
+                                    {project.name}
+                                </h3>
+                                <div className="flex flex-wrap gap-1.5 mb-3">
+                                    {project.tags.slice(0, 3).map((tag, i) => (
+                                        <span key={i} className="text-[10px] font-mono border border-[var(--foreground)] px-2 py-0.5 text-[var(--foreground)]">
+                                            {tag}
+                                        </span>
+                                    ))}
                                 </div>
-                                <div className="flex gap-3 flex-shrink-0 pt-2">
+                                <p className="text-xs text-[var(--foreground)] opacity-70 leading-relaxed md:line-clamp-3 mb-3">
+                                    {project.description}
+                                </p>
+                                <div className="flex gap-3 mt-auto pt-2 border-t border-[var(--foreground)]/10">
                                     {project.liveSiteLink && (
                                         <a href={project.liveSiteLink} target="_blank" rel="noopener noreferrer" className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)] hover:text-[var(--accent)] flex items-center gap-1 transition-colors">
                                             <i className="fas fa-external-link-alt" aria-hidden="true" /> {t.projectsSection.live}
