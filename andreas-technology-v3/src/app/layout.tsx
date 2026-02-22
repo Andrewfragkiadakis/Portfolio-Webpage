@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
@@ -21,7 +22,10 @@ export const metadata: Metadata = {
         template: '%s | Andreas Fragkiadakis',
     },
     description: 'M.Eng. Computer Engineer specializing in SecOps, infrastructure automation, and AI. Portfolio of Andreas Fragkiadakis — IT & Security Engineer based in Athens, Greece.',
-    keywords: ['Andreas Fragkiadakis', 'IT Engineer', 'Security Engineer', 'Computer Engineer', 'M.Eng', 'SecOps', 'Infrastructure Automation', 'Portfolio', 'Athens', 'Greece'],
+    keywords: [
+        'Andreas Fragkiadakis', 'Fragkiadakis', 'IT Engineer', 'Security Engineer', 'Computer Engineer', 'M.Eng', 'SecOps', 'Infrastructure Automation', 'ITIL', 'Next.js Developer', 'Frontend Developer Greece', 'Web Developer Athens', 'Portfolio', 'Athens', 'Greece',
+        'Ανδρέας Φραγκιαδάκης', 'Φραγκιαδάκης', 'Μηχανικός Πληροφορικής', 'Μηχανικός Υπολογιστών', 'Μηχανικός Ασφαλείας IT', 'Web Developer Αθήνα', 'Προγραμματιστής Αθήνα', 'IT Support Ελλάδα', 'Ασφάλεια Πληροφοριακών Συστημάτων', 'Αυτοματισμός Υποδομών',
+    ],
     authors: [{ name: 'Andreas Fragkiadakis', url: SITE_URL }],
     creator: 'Andreas Fragkiadakis',
     alternates: {
