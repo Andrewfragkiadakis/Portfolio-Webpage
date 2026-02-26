@@ -2,17 +2,15 @@
 
 import React, { useRef } from 'react'
 
-interface SpotlightCardProps extends React.PropsWithChildren {
-    className?: string
+interface SpotlightCardProps extends React.HTMLAttributes<HTMLDivElement> {
     spotlightColor?: string
-    onClick?: () => void
 }
 
 export default function SpotlightCard({
     children,
     className = '',
     spotlightColor = 'rgba(165, 180, 252, 0.15)',
-    onClick,
+    ...rest
 }: SpotlightCardProps) {
     const divRef = useRef<HTMLDivElement>(null)
 
@@ -25,7 +23,7 @@ export default function SpotlightCard({
     }
 
     return (
-        <div ref={divRef} onMouseMove={handleMouseMove} onClick={onClick} className={`card-spotlight ${className}`}>
+        <div ref={divRef} onMouseMove={handleMouseMove} className={`card-spotlight ${className}`} {...rest}>
             {children}
         </div>
     )

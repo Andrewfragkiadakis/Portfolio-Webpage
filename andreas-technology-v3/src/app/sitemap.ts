@@ -10,11 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
             changeFrequency: 'monthly',
             priority: 1,
         },
-        {
-            url: 'https://andreas.technology/thesis-presentation.html',
-            lastModified: new Date(),
-            changeFrequency: 'monthly',
-            priority: 0.8,
-        },
+        // Add thesis-presentation back once the page/route exists at that URL
+        // { url: 'https://andreas.technology/thesis-presentation', lastModified: new Date(), changeFrequency: 'yearly', priority: 0.7 },
     ]
 }

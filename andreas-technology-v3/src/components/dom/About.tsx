@@ -60,7 +60,28 @@ export default function About() {
     const t = useContent()
     const [activeSkill, setActiveSkill] = useState<Skill | null>(null)
     const [mounted, setMounted] = useState(false)
+    const modalRef = useRef<HTMLDivElement>(null)
+    const closeBtnRef = useRef<HTMLButtonElement>(null)
     useEffect(() => { setMounted(true) }, [])
+
+    // Move focus to close button when modal opens
+    useEffect(() => {
+        if (activeSkill) { closeBtnRef.current?.focus() }
+    }, [activeSkill])
+
+    // Trap focus and handle Escape inside the modal
+    const handleModalKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Escape') { setActiveSkill(null); return }
+        if (e.key !== 'Tab' || !modalRef.current) return
+        const focusable = Array.from(
+            modalRef.current.querySelectorAll<HTMLElement>('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])')
+        )
+        if (!focusable.length) return
+        const first = focusable[0]
+        const last = focusable[focusable.length - 1]
+        if (e.shiftKey) { if (document.activeElement === first) { e.preventDefault(); last.focus() } }
+        else { if (document.activeElement === last) { e.preventDefault(); first.focus() } }
+    }
 
     const stats = [
         { value: 6, suffix: '+' },
@@ -160,8 +181,12 @@ export default function About() {
                             transition={{ delay: 0.4 + index * 0.1 }}
                         >
                             <SpotlightCard
-                                className="border border-[var(--foreground)]/30 p-3 hover:border-[var(--accent)] transition-all duration-300 group h-full cursor-pointer"
+                                role="button"
+                                tabIndex={0}
+                                aria-label={`${skill.label} — click to expand`}
+                                className="border border-[var(--foreground)]/30 p-3 hover:border-[var(--accent)] transition-all duration-300 group h-full cursor-pointer focus:outline-none focus:border-[var(--accent)] focus:shadow-[0_0_0_2px_var(--accent)]"
                                 onClick={() => setActiveSkill(skill)}
+                                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveSkill(skill) } }}
                             >
                                 <div className="relative z-10">
                                     <div className="w-9 h-9 border border-[var(--foreground)]/50 flex items-center justify-center text-[var(--foreground)] group-hover:border-[var(--accent)] group-hover:text-[var(--accent)] transition-colors mb-2">
@@ -171,7 +196,7 @@ export default function About() {
                                     <p className="text-[10px] text-[var(--foreground)] opacity-80 leading-relaxed line-clamp-2">
                                         {skill.detail || 'Building innovative solutions'}
                                     </p>
-                                    <span className="text-[9px] font-mono text-[var(--accent)] opacity-0 group-hover:opacity-60 transition-opacity mt-1 block">click to expand ↗</span>
+                                    <span className="text-[9px] font-mono text-[var(--accent)] opacity-0 group-hover:opacity-60 group-focus:opacity-60 transition-opacity mt-1 block">press Enter to expand ↗</span>
                                 </div>
                             </SpotlightCard>
                         </motion.div>
@@ -190,9 +215,14 @@ export default function About() {
                                 transition={{ duration: 0.18 }}
                                 className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
                                 onClick={() => setActiveSkill(null)}
+                                onKeyDown={handleModalKeyDown}
                             >
-                                <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+                                <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" aria-hidden="true" />
                                 <motion.div
+                                    ref={modalRef}
+                                    role="dialog"
+                                    aria-modal="true"
+                                    aria-labelledby="skill-modal-title"
                                     initial={{ opacity: 0, scale: 0.92, y: 16 }}
                                     animate={{ opacity: 1, scale: 1, y: 0 }}
                                     exit={{ opacity: 0, scale: 0.92, y: 16 }}
@@ -201,16 +231,17 @@ export default function About() {
                                     onClick={e => e.stopPropagation()}
                                 >
                                     <button
+                                        ref={closeBtnRef}
                                         onClick={() => setActiveSkill(null)}
-                                        className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center text-[var(--foreground)] hover:text-[var(--accent)] transition-colors"
-                                        aria-label="Close"
+                                        className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center text-[var(--foreground)] hover:text-[var(--accent)] transition-colors focus:outline-none focus:text-[var(--accent)]"
+                                        aria-label="Close skill detail"
                                     >
-                                        <i className="fas fa-times" />
+                                        <i className="fas fa-times" aria-hidden="true" />
                                     </button>
                                     <div className="w-10 h-10 border border-[var(--accent)] flex items-center justify-center text-[var(--accent)] mb-4">
                                         <i className={`${activeSkill.icon} text-base`} aria-hidden="true" />
                                     </div>
-                                    <h4 className="font-black text-base text-[var(--accent)] uppercase tracking-tight mb-3">{activeSkill.label}</h4>
+                                    <h4 id="skill-modal-title" className="font-black text-base text-[var(--accent)] uppercase tracking-tight mb-3">{activeSkill.label}</h4>
                                     <p className="text-sm text-[var(--foreground)] opacity-80 leading-relaxed">{activeSkill.detail}</p>
                                 </motion.div>
                             </motion.div>

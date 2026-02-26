@@ -1,7 +1,7 @@
 'use client'
 
 import { useContent } from '@/hooks/useContent'
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { motion, useSpring, useMotionTemplate } from 'framer-motion'
 import Typewriter from 'typewriter-effect'
@@ -44,7 +44,18 @@ const BLOB_CURSOR = {
 export default function HeroOverlay() {
     const t = useContent()
     const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(t.email)}&su=${encodeURIComponent('Project Collaboration // Andreas Technology')}`
+    const mailtoUrl = `mailto:andrewfragkiadakis@gmail.com`
     const nameRef = useRef<HTMLDivElement>(null)
+
+    const [isMobile, setIsMobile] = useState(false)
+    useEffect(() => {
+        const check = () => setIsMobile(window.innerWidth < 768)
+        check()
+        window.addEventListener('resize', check)
+        return () => window.removeEventListener('resize', check)
+    }, [])
+
+    const emailUrl = isMobile ? mailtoUrl : gmailComposeUrl
     const [isHovering, setIsHovering] = useState(false)
 
     const scrollToSection = (id: string, index: number) => {
@@ -182,7 +193,7 @@ export default function HeroOverlay() {
                     <i className="fab fa-github text-xl" aria-hidden="true" />
                 </a>
                 <a
-                    href={gmailComposeUrl}
+                    href={emailUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Contact via email"

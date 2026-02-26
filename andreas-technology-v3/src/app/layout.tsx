@@ -21,15 +21,25 @@ export const metadata: Metadata = {
         default: 'Andreas Fragkiadakis | IT & Security Engineer',
         template: '%s | Andreas Fragkiadakis',
     },
-    description: 'M.Eng. Computer Engineer specializing in SecOps, infrastructure automation, and AI. Portfolio of Andreas Fragkiadakis — IT & Security Engineer based in Athens, Greece.',
+    // ≤155 chars for clean SERP display
+    description: 'M.Eng. Computer Engineer — SecOps, infrastructure automation & AI. Portfolio of Andreas Fragkiadakis, IT & Security Engineer, Athens Greece.',
     keywords: [
-        'Andreas Fragkiadakis', 'Fragkiadakis', 'IT Engineer', 'Security Engineer', 'Computer Engineer', 'M.Eng', 'SecOps', 'Infrastructure Automation', 'ITIL', 'Next.js Developer', 'Frontend Developer Greece', 'Web Developer Athens', 'Portfolio', 'Athens', 'Greece',
-        'Ανδρέας Φραγκιαδάκης', 'Φραγκιαδάκης', 'Μηχανικός Πληροφορικής', 'Μηχανικός Υπολογιστών', 'Μηχανικός Ασφαλείας IT', 'Web Developer Αθήνα', 'Προγραμματιστής Αθήνα', 'IT Support Ελλάδα', 'Ασφάλεια Πληροφοριακών Συστημάτων', 'Αυτοματισμός Υποδομών',
+        'Andreas Fragkiadakis', 'Fragkiadakis', 'IT Engineer Athens', 'Security Engineer Greece',
+        'SecOps', 'Infrastructure Automation', 'ITIL 4', 'Next.js Developer Greece',
+        'Web Developer Athens', 'Freelance Developer Athens', 'IT Support Engineer Greece',
+        'Ανδρέας Φραγκιαδάκης', 'Μηχανικός Πληροφορικής Αθήνα', 'Web Developer Αθήνα',
+        'IT Support Ελλάδα', 'Ασφάλεια Πληροφοριακών Συστημάτων',
     ],
     authors: [{ name: 'Andreas Fragkiadakis', url: SITE_URL }],
     creator: 'Andreas Fragkiadakis',
+    // hreflang: both EN and EL served at the same URL (single-page bilingual app)
     alternates: {
         canonical: SITE_URL,
+        languages: {
+            'en': SITE_URL,
+            'el': SITE_URL,
+            'x-default': SITE_URL,
+        },
     },
     icons: {
         icon: [
@@ -43,6 +53,7 @@ export const metadata: Metadata = {
     openGraph: {
         type: 'website',
         locale: 'en_US',
+        alternateLocale: ['el_GR'],
         url: SITE_URL,
         siteName: 'Andreas Fragkiadakis',
         title: 'Andreas Fragkiadakis | IT & Security Engineer',
@@ -53,7 +64,6 @@ export const metadata: Metadata = {
         card: 'summary_large_image',
         title: 'Andreas Fragkiadakis | IT & Security Engineer',
         description: 'M.Eng. Computer Engineer — SecOps, infrastructure automation & AI. Portfolio.',
-        creator: '@Andrewfragkiadakis',
     },
     robots: {
         index: true,
@@ -74,6 +84,7 @@ export default function RootLayout({
             <head>
                 <meta name="theme-color" content="#030014" media="(prefers-color-scheme: dark)" />
                 <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
+                <link rel="manifest" href="/favicons/site.webmanifest" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
                 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
                 <link
@@ -144,6 +155,21 @@ export default function RootLayout({
                             email: 'andrewfragkiadakis@gmail.com',
                             telephone: '+30-697-345-3683',
                             address: { '@type': 'PostalAddress', addressLocality: 'Athens', addressCountry: 'GR' },
+                            alumniOf: [
+                                { '@type': 'EducationalOrganization', name: 'University of West Attica', address: { '@type': 'PostalAddress', addressLocality: 'Athens', addressCountry: 'GR' } },
+                                { '@type': 'EducationalOrganization', name: 'SRH Hochschule Heidelberg', address: { '@type': 'PostalAddress', addressLocality: 'Heidelberg', addressCountry: 'DE' } },
+                            ],
+                            hasCredential: {
+                                '@type': 'EducationalOccupationalCredential',
+                                name: 'ITIL 4 Foundation Certificate in IT Service Management',
+                                credentialCategory: 'Professional Certification',
+                                recognizedBy: { '@type': 'Organization', name: 'AXELOS Global Best Practice' },
+                            },
+                            knowsLanguage: [
+                                { '@type': 'Language', name: 'English' },
+                                { '@type': 'Language', name: 'Greek' },
+                                { '@type': 'Language', name: 'German' },
+                            ],
                         }),
                     }}
                 />

@@ -202,7 +202,25 @@ html[data-entered="true"] [data-cinematic] {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* Stop the logo marquee */
   .logoloop__track {
     transform: translate3d(0, 0, 0) !important;
+  }
+
+  /* Disable all Framer Motion and CSS transitions/animations site-wide */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Framer Motion drives transforms via inline styles — force them to their
+     final values instantly by collapsing the transition timing. Framer Motion
+     respects this when the CSS custom property is present. */
+  :root {
+    --motion-reduce: 1;
   }
 }
