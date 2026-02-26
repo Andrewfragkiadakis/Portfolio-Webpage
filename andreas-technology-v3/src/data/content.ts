@@ -397,7 +397,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 year: 2026,
                 tags: ["Thesis", "5G", "Radio over Fiber", "Research"],
                 description: "Master's thesis on new hybrid wireless-optical networks (Radio over Fiber) for 5G. Includes research and full thesis documentation.",
-                liveSiteLink: "/thesis-presentation",
+                liveSiteLink: "/thesis-presentation.html",
                 reportLink: "https://drive.usercontent.google.com/download?id=1iayG5SCoUykioRzLPl1BeOkO7iwxxHkD&export=download&authuser=0",
                 image: "/images/thesis-presentation/thesis-image.png"
             },
@@ -727,7 +727,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 year: 2026,
                 tags: ["Διπλωματική", "5G", "Radio over Fiber", "Έρευνα"],
                 description: "Διπλωματική εργασία στα υβριδικά ασύρματα-οπτικά δίκτυα (Radio over Fiber) για δίκτυα 5ης γενιάς. Περιλαμβάνει τεχνική έρευνα και τεκμηρίωση.",
-                liveSiteLink: "/thesis-presentation",
+                liveSiteLink: "/thesis-presentation.html",
                 reportLink: "https://drive.usercontent.google.com/download?id=1iayG5SCoUykioRzLPl1BeOkO7iwxxHkD&export=download&authuser=0",
                 image: "/images/thesis-presentation/thesis-image.png"
             },
