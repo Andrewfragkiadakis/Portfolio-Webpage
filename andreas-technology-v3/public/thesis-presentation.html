@@ -309,11 +309,10 @@
             pointer-events: none;
         }
 
-        /* ── Mobile: stack vertically, no fixed aspect ratio ── */
+        /* ── Mobile: stack vertically, auto height ── */
         @media (max-width: 640px) {
             #presentation-container {
                 aspect-ratio: auto;
-                min-height: 420px;
                 margin: 0 0.5rem;
             }
             .slide {
@@ -321,19 +320,67 @@
                 opacity: 1 !important;
                 transform: none !important;
                 display: none;
-                min-height: 420px;
             }
             .slide.active { display: flex; }
-            .slide-content { padding: 1.25rem 1rem; }
-            .slide-content.flex-row { flex-direction: column; }
-            .slide-content h2 { font-size: 1.4rem; }
-            .slide-content h3 { font-size: 1rem; }
-            .slide-content p, .slide-content li { font-size: 0.82rem; }
-            .visual-diagram { padding: 0.75rem; margin-top: 0.75rem; }
-            #topbar { padding: 0.5rem 0.5rem; }
-            .topbar-btn { font-size: 0.72rem; padding: 0.35rem 0.7rem; }
-            #controls { flex-wrap: wrap; }
+
+            .slide-content {
+                padding: 1.25rem 1rem 2.75rem; /* extra bottom padding for fixed footer */
+                justify-content: flex-start;
+                align-items: center;
+            }
+            /* Keep vertical centering for pure-visual / title slides */
+            [data-slide="1"] .slide-content,
+            [data-slide="12"] .slide-content { justify-content: center; }
+
+            /* Flex-row slides: stack columns, tighten gap */
+            .slide-content.flex-row { flex-direction: column; gap: 0.75rem; }
+            .slide-content.flex-row > div { width: 100% !important; }
+
+            /* Typography scale-down */
+            .slide-content h1 { font-size: 1.45rem !important; line-height: 1.25 !important; }
+            .slide-content h2 { font-size: 1.2rem; }
+            .slide-content h3 { font-size: 0.92rem; }
+            .slide-content h4 { font-size: 0.85rem; }
+            .slide-content p, .slide-content li { font-size: 0.8rem; }
+            .slide-content ul { padding-left: 1.1rem; }
+            .slide-content .space-y-3 > * + * { margin-top: 0.35rem; }
+            /* Trim large Tailwind margins inside slides */
+            .slide-content .mb-8 { margin-bottom: 0.75rem !important; }
+            .slide-content .mb-4 { margin-bottom: 0.45rem !important; }
+            .slide-content .mt-4 { margin-top: 0.45rem !important; }
+
+            /* ToC grid: single column, tight gap */
+            .slide-content .grid { grid-template-columns: 1fr !important; gap: 0.4rem !important; }
+
+            /* Images in flex-row slides (supporting visuals — cap height) */
+            .slide-content.flex-row img.visual-diagram {
+                max-height: 160px;
+                width: 100%;
+                object-fit: contain;
+            }
+            /* Images in centred slides (5, 10, 11) — primary content, allow taller */
+            [data-slide="5"] img, [data-slide="10"] img, [data-slide="11"] img {
+                width: 100% !important;
+                max-height: 240px;
+                object-fit: contain;
+            }
+
+            .visual-diagram { padding: 0.5rem; margin-top: 0.5rem; }
+
+            /* Controls: hide dots (12 dots wrap on small screens), keep prev/next/counter */
+            #dots { display: none; }
+            #controls { flex-wrap: nowrap; padding: 0.4rem 0.5rem; gap: 0.4rem; }
+            .nav-button { padding: 0.45rem 0.85rem; font-size: 0.75rem; }
+            #aux-controls { gap: 0.3rem; }
             #key-hint { display: none; }
+
+            /* Top bar */
+            #topbar { padding: 0.5rem; }
+            .topbar-btn { font-size: 0.72rem; padding: 0.35rem 0.7rem; }
+
+            /* Slide footer: hide long institution text, keep counter only */
+            #slide-footer > span:first-child { display: none; }
+            #slide-footer { justify-content: flex-end; padding: 0.35rem 0.75rem; }
         }
 
         @media print { body { display: none !important; } }
@@ -366,16 +413,16 @@
         <!-- Slide 1: Title -->
         <div class="slide active" data-slide="1" role="group" aria-label="Διαφάνεια 1: Τίτλος">
             <div class="slide-content text-center">
-                <div class="mb-6">
-                    <img src="images/thesis-presentation/placeholder-logo.png" alt="Λογότυπο Πανεπιστημίου Δυτικής Αττικής" class="h-28 mx-auto mb-6">
-                    <p class="text-xl">ΠΑΝΕΠΙΣΤΗΜΙΟ ΔΥΤΙΚΗΣ ΑΤΤΙΚΗΣ</p>
-                    <p class="text-lg">ΣΧΟΛΗ ΜΗΧΑΝΙΚΩΝ</p>
-                    <p class="text-lg">ΤΜΗΜΑ ΜΗΧΑΝΙΚΩΝ ΠΛΗΡΟΦΟΡΙΚΗΣ ΚΑΙ ΥΠΟΛΟΓΙΣΤΩΝ</p>
+                <div class="mb-2 sm:mb-6">
+                    <img src="images/thesis-presentation/placeholder-logo.png" alt="Λογότυπο Πανεπιστημίου Δυτικής Αττικής" class="h-16 sm:h-28 mx-auto mb-3 sm:mb-6">
+                    <p class="text-sm sm:text-xl">ΠΑΝΕΠΙΣΤΗΜΙΟ ΔΥΤΙΚΗΣ ΑΤΤΙΚΗΣ</p>
+                    <p class="text-xs sm:text-lg">ΣΧΟΛΗ ΜΗΧΑΝΙΚΩΝ</p>
+                    <p class="text-xs sm:text-lg">ΤΜΗΜΑ ΜΗΧΑΝΙΚΩΝ ΠΛΗΡΟΦΟΡΙΚΗΣ ΚΑΙ ΥΠΟΛΟΓΙΣΤΩΝ</p>
                 </div>
-                <div class="w-24 h-1 bg-[#156082] mx-auto my-6"></div>
-                <p class="text-2xl font-semibold mb-4">ΔΙΠΛΩΜΑΤΙΚΗ ΕΡΓΑΣΙΑ</p>
-                <h1 class="text-4xl font-bold">Νέα Υβριδικά Ασύρματα – Οπτικά δίκτυα (Radio over Fiber) για δίκτυα Πέμπτης γενιάς (5G)</h1>
-                <div class="mt-10 text-xl text-gray-300">
+                <div class="w-16 sm:w-24 h-1 bg-[#156082] mx-auto my-3 sm:my-6"></div>
+                <p class="text-lg sm:text-2xl font-semibold mb-2 sm:mb-4">ΔΙΠΛΩΜΑΤΙΚΗ ΕΡΓΑΣΙΑ</p>
+                <h1 class="text-xl sm:text-4xl font-bold leading-snug">Νέα Υβριδικά Ασύρματα – Οπτικά δίκτυα (Radio over Fiber) για δίκτυα Πέμπτης γενιάς (5G)</h1>
+                <div class="mt-4 sm:mt-10 text-base sm:text-xl text-gray-300">
                     <p>ΦΡΑΓΚΙΑΔΑΚΗΣ ΑΝΔΡΕΑΣ | ΑΜ: 19390297</p>
                 </div>
             </div>
@@ -384,7 +431,7 @@
         <!-- Slide 2: Table of Contents -->
         <div class="slide" data-slide="2" role="group" aria-label="Διαφάνεια 2: Πίνακας Περιεχομένων">
             <div class="slide-content">
-                <h2 class="mb-8">Πίνακας Περιεχομένων</h2>
+                <h2 class="mb-4 sm:mb-8">Πίνακας Περιεχομένων</h2>
                 <div class="grid grid-cols-2 grid-rows-3 gap-x-12 gap-y-6 text-left max-w-5xl w-full">
                     <div class="bg-gray-900/40 p-4 rounded-lg">
                         <h3 class="font-bold text-blue-300">01. Η πρόκληση του 5G</h3>
@@ -533,7 +580,7 @@
         <!-- Slide 10: Challenges -->
         <div class="slide" data-slide="10" role="group" aria-label="Διαφάνεια 10: Προκλήσεις και Ερευνητικές Κατευθύνσεις">
             <div class="slide-content">
-                <h2 class="mb-8">6. Προκλήσεις &amp; Ερευνητικές Κατευθύνσεις</h2>
+                <h2 class="mb-4 sm:mb-8">6. Προκλήσεις &amp; Ερευνητικές Κατευθύνσεις</h2>
                 <div class="w-full max-w-6xl">
                     <img src="images/thesis-presentation/placeholder-challenges-research.png" alt="Προκλήσεις και μελλοντικές ερευνητικές κατευθύνσεις" class="visual-diagram object-contain">
                 </div>
@@ -553,12 +600,12 @@
         <!-- Slide 12: Thank You -->
         <div class="slide" data-slide="12" role="group" aria-label="Διαφάνεια 12: Ευχαριστώ">
             <div class="slide-content">
-                <h1 class="text-5xl font-bold">Ευχαριστώ για τον χρόνο σας!</h1>
-                <div class="mt-10">
-                    <img src="images/thesis-presentation/qr-code.png" alt="QR Code για πρόσβαση στην εργασία" class="h-52 w-52 mx-auto">
+                <h1 class="text-3xl sm:text-5xl font-bold">Ευχαριστώ για τον χρόνο σας!</h1>
+                <div class="mt-4 sm:mt-10">
+                    <img src="images/thesis-presentation/qr-code.png" alt="QR Code για πρόσβαση στην εργασία" class="h-32 w-32 sm:h-52 sm:w-52 mx-auto">
                 </div>
-                <p class="mt-4 text-sm text-gray-400">Σαρώστε για πρόσβαση στη διπλωματική</p>
-                <div class="mt-8 flex gap-4 flex-wrap justify-center" style="pointer-events: auto;">
+                <p class="mt-2 sm:mt-4 text-xs sm:text-sm text-gray-400">Σαρώστε για πρόσβαση στη διπλωματική</p>
+                <div class="mt-4 sm:mt-8 flex gap-3 sm:gap-4 flex-wrap justify-center" style="pointer-events: auto;">
                     <a href="https://drive.usercontent.google.com/download?id=1iayG5SCoUykioRzLPl1BeOkO7iwxxHkD&export=download&authuser=0"
                        style="display:inline-flex; align-items:center; gap:0.4rem; padding:0.6rem 1.4rem; background:#156082; color:white; border-radius:9999px; font-weight:600; font-size:0.85rem; text-decoration:none; transition:background 0.2s;"
                        onmouseover="this.style.background='#1d7ba8'" onmouseout="this.style.background='#156082'">
@@ -570,7 +617,7 @@
                         ← Portfolio
                     </a>
                 </div>
-                <div class="mt-8 text-lg text-gray-400">
+                <div class="mt-4 sm:mt-8 text-sm sm:text-lg text-gray-400">
                     <p>ΦΡΑΓΚΙΑΔΑΚΗΣ ΑΝΔΡΕΑΣ | ΑΜ: 19390297</p>
                 </div>
             </div>
