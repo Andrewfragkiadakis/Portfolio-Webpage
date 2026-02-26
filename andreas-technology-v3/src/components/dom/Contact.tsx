@@ -2,11 +2,23 @@
 
 import { useContent } from '@/hooks/useContent'
 import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react'
 
 export default function Contact() {
     const t = useContent()
     const cvLink = "https://drive.google.com/uc?export=download&id=1b-GiyMU1D_6yxr70bmpufj_kIqKgW38A"
     const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(t.email)}&su=${encodeURIComponent('Project Collaboration // Andreas Technology')}`
+    const mailtoUrl = `mailto:andrewfragkiadakis@gmail.com`
+
+    const [isMobile, setIsMobile] = useState(false)
+    useEffect(() => {
+        const check = () => setIsMobile(window.innerWidth < 768)
+        check()
+        window.addEventListener('resize', check)
+        return () => window.removeEventListener('resize', check)
+    }, [])
+
+    const emailUrl = isMobile ? mailtoUrl : gmailComposeUrl
 
     return (
         <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-4 md:py-0 overflow-visible md:overflow-hidden">
@@ -37,7 +49,7 @@ export default function Contact() {
                             {t.contact.infoTitle}
                         </h3>
 
-                        <a href={gmailComposeUrl} target="_blank" rel="noopener noreferrer" className="flex items-start sm:items-center gap-3 sm:gap-4 group" aria-label="Contact via email">
+                        <a href={emailUrl} target="_blank" rel="noopener noreferrer" className="flex items-start sm:items-center gap-3 sm:gap-4 group" aria-label="Contact via email">
                             <div className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-[var(--background)] transition-all duration-300 ease-out flex-shrink-0">
                                 <i className="fas fa-envelope text-xl" aria-hidden="true" />
                             </div>
@@ -103,7 +115,7 @@ export default function Contact() {
 
                         <div className="space-y-3">
                             <a
-                                href={gmailComposeUrl}
+                                href={emailUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 aria-label="Contact via email"
