@@ -100,7 +100,7 @@ export default function HorizontalLayout() {
 
     return (
         <div ref={targetRef} className="relative bg-[var(--background)]">
-            <div className="flex flex-col md:hidden gap-[10vh]">
+            <div className="flex flex-col md:hidden gap-[10vh] overflow-x-hidden">
                 <div className="min-h-screen w-full overflow-hidden relative">
                     <HeroOverlay />
                 </div>

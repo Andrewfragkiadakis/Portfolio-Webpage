@@ -4,6 +4,9 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 
 ## [Unreleased]
 
+### Fixed
+- Mobile: prevent horizontal page scroll by adding `overflow-x: hidden` to `html`/`body` and to the mobile column wrapper in HorizontalLayout
+
 ### Added
 - SEO: full absolute canonical URL (`andreas.technology`), WebSite + Person JSON-LD with `mainEntityOfPage` and `sameAs` (portfolio first), explicit Open Graph image, expanded keywords (M.Eng, Infrastructure Automation)
 - `docs/seo-github-pages.md`: guide to de-emphasize old GitHub Pages (andrewfragkiadakis.github.io) in DuckDuckGo/Google (redirect, noindex, GSC/Bing removals)
