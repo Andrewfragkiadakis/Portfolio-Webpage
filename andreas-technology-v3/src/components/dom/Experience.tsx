@@ -132,7 +132,7 @@ export default function Experience() {
     }
 
     return (
-        <section className="w-full h-auto md:h-screen md:max-h-[1080px] flex flex-col justify-center px-4 sm:px-6 md:px-12 lg:px-24 py-4 md:py-0 overflow-visible md:overflow-hidden relative">
+        <section className="w-full h-auto md:h-screen md:max-h-[1080px] flex flex-col justify-center px-4 sm:px-6 md:px-12 lg:px-24 py-4 md:py-0 overflow-x-clip overflow-y-visible md:overflow-hidden relative">
             <div className="max-w-[1920px] mx-auto w-full h-full flex flex-col justify-center">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 sm:mb-8 md:mb-12 gap-4 md:gap-6">
                     <div id="experience" className="flex flex-col items-start gap-2">

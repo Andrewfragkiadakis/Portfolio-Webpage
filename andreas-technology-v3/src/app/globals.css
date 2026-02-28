@@ -24,12 +24,7 @@
   --font-sans: var(--font-display);
 }
 
-html {
-  overflow-x: hidden;
-}
-
 body {
-  overflow-x: hidden;
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
