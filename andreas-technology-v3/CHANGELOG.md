@@ -5,6 +5,8 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 ## [Unreleased]
 
 ### Fixed
+- Mobile: remove nested scroll constraints from Projects section (`max-h-screen`, `overflow-hidden` wrapper) to allow full-page scrolling and prevent "stuck" behavior
+- Mobile: remove horizontal overflow containment from layout wrapper (rely on `body` overflow-x: hidden) to prevent potential stacking context issues
 - Mobile: prevent horizontal page scroll by adding `overflow-x: hidden` to `html`/`body` and to the mobile column wrapper in HorizontalLayout
 
 ### Added

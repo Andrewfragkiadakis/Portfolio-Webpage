@@ -100,7 +100,7 @@ export default function HorizontalLayout() {
 
     return (
         <div ref={targetRef} className="relative bg-[var(--background)]">
-            <div className="flex flex-col md:hidden gap-[10vh] overflow-x-hidden">
+            <div className="flex flex-col md:hidden gap-[10vh]">
                 <div className="min-h-screen w-full overflow-hidden relative">
                     <HeroOverlay />
                 </div>
@@ -115,7 +115,7 @@ export default function HorizontalLayout() {
                         <Experience />
                     </Suspense>
                 </div>
-                <div className="min-h-0 max-h-screen w-full overflow-hidden relative mb-[-2vh]">
+                <div className="min-h-0 w-full relative">
                     <Suspense fallback={<SectionFallback />}>
                         <Projects />
                     </Suspense>
