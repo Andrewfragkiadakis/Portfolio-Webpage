@@ -5,6 +5,7 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 ## [Unreleased]
 
 ### Fixed
+- GSC: `X-Robots-Tag` and static `<meta name="robots">` for thesis presentation; `robots.txt` disallows `/opengraph-image`; sitemap lists only the homepage; root `/favicon.ico` for stable icon URL (thesis HTML restored under `public/`)
 - Mobile: fix horizontal page scroll by using `overflow-x-clip` on Experience and Projects sections instead of `overflow-x: hidden` on html/body (which killed momentum scrolling on mobile browsers)
 
 ### Added
