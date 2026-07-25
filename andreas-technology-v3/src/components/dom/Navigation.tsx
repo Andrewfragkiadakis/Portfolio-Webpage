@@ -3,46 +3,98 @@
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useContent } from '@/hooks/useContent'
 import { useTheme } from '@/contexts/ThemeContext'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { scrollToSection as smoothScrollToSection } from '@/utils/smooth-scroll'
+import { SECTION_IDS, SECTION_STEPS } from '@/data/sections'
 
 export default function Navigation() {
     const { language, setLanguage } = useLanguage()
     const { theme, setTheme } = useTheme()
     const t = useContent()
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const [activeIndex, setActiveIndex] = useState(0)
 
     const scrollToSection = (id: string, index: number) => {
         smoothScrollToSection(index, id)
         setMobileMenuOpen(false)
     }
 
-    const navItems = [
-        { label: t.nav.home, section: 'hero', i: 0 },
-        { label: t.nav.about, section: 'about', i: 1 },
-        { label: t.nav.services, section: 'services', i: 2 },
-        { label: t.nav.experience, section: 'experience', i: 3 },
-        { label: t.nav.projects, section: 'projects', i: 4 },
-        { label: t.nav.contact, section: 'contact', i: 5 },
-    ]
+    // Derive the active section from scroll progress along the track.
+    useEffect(() => {
+        let ticking = false
+
+        const update = () => {
+            const maxScroll = document.documentElement.scrollHeight - window.innerHeight
+            const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0
+            setActiveIndex(Math.round(progress * SECTION_STEPS))
+            ticking = false
+        }
+
+        const onScroll = () => {
+            if (ticking) return
+            ticking = true
+            requestAnimationFrame(update)
+        }
+
+        window.addEventListener('scroll', onScroll, { passive: true })
+        update()
+        return () => window.removeEventListener('scroll', onScroll)
+    }, [])
+
+    // Close the mobile menu with Escape.
+    useEffect(() => {
+        if (!mobileMenuOpen) return
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') setMobileMenuOpen(false)
+        }
+        document.addEventListener('keydown', onKeyDown)
+        return () => document.removeEventListener('keydown', onKeyDown)
+    }, [mobileMenuOpen])
+
+    const navLabels: Record<(typeof SECTION_IDS)[number], string> = {
+        hero: t.nav.home,
+        about: t.nav.about,
+        services: t.nav.services,
+        experience: t.nav.experience,
+        projects: t.nav.projects,
+        contact: t.nav.contact,
+    }
+
+    const navItems = SECTION_IDS.map((section, i) => ({ section, i, label: navLabels[section] }))
 
     return (
         <nav className="fixed top-0 left-0 right-0 z-50 bg-[var(--background)] border-b border-[var(--foreground)]/20 transition-all duration-300" aria-label="Main navigation">
             <div className="max-w-7xl mx-auto px-4 sm:px-8 py-4 sm:py-4 min-h-[56px] flex justify-center items-center relative">
                 <div className="hidden md:flex gap-6 lg:gap-8 items-center">
-                    {navItems.map((item) => (
-                        <button
-                            key={item.section}
-                            onClick={() => scrollToSection(item.section, item.i)}
-                            className="text-[var(--foreground)] opacity-90 hover:opacity-100 hover:text-[var(--accent)] transition-all duration-300 ease-out text-sm uppercase tracking-widest cursor-pointer"
-                        >
-                            {item.label}
-                        </button>
-                    ))}
+                    {navItems.map((item) => {
+                        const isActive = activeIndex === item.i
+                        return (
+                            <button
+                                key={item.section}
+                                onClick={() => scrollToSection(item.section, item.i)}
+                                aria-current={isActive ? 'true' : undefined}
+                                className={`relative text-sm uppercase tracking-widest cursor-pointer transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] rounded-sm px-0.5 ${isActive
+                                    ? 'text-[var(--accent)] opacity-100'
+                                    : 'text-[var(--foreground)] opacity-90 hover:opacity-100 hover:text-[var(--accent)]'
+                                    }`}
+                            >
+                                {item.label}
+                                {isActive && (
+                                    <motion.span
+                                        layoutId="nav-active-underline"
+                                        className="absolute -bottom-1.5 left-0 right-0 h-0.5 bg-[var(--accent)]"
+                                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                                        aria-hidden="true"
+                                    />
+                                )}
+                            </button>
+                        )
+                    })}
                     <button
                         onClick={() => setLanguage(language === 'en' ? 'gr' : 'en')}
-                        className="ml-4 px-3 py-1 bg-[var(--foreground)]/10 hover:bg-[var(--foreground)]/20 text-[var(--foreground)] rounded transition-all duration-300 ease-out text-sm font-medium cursor-pointer"
+                        aria-label={language === 'en' ? 'Switch to Greek' : 'Switch to English'}
+                        className="ml-4 px-3 py-1 bg-[var(--foreground)]/10 hover:bg-[var(--foreground)]/20 text-[var(--foreground)] rounded transition-all duration-300 ease-out text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
                     >
                         {language === 'en' ? 'GR' : 'EN'}
                     </button>
@@ -112,7 +164,7 @@ export default function Navigation() {
                     </div>
                 </div>
 
-                <nav className="flex-1 flex flex-col justify-start pt-6 pb-8 overflow-y-auto px-6" aria-label="Mobile navigation">
+                <nav className="flex-1 flex flex-col justify-start pt-6 pb-8 overflow-y-auto px-6" aria-label="Mobile menu">
                     <motion.div
                         className="flex flex-col gap-0"
                         initial="closed"

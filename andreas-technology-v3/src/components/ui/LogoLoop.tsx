@@ -58,6 +58,8 @@ export default function LogoLoop({
         }
     }, [])
 
+    // Marquee geometry depends on measured DOM widths, which only exist after layout.
+    /* eslint-disable react-hooks/set-state-in-effect */
     useEffect(() => {
         if (!window.ResizeObserver) {
             window.addEventListener('resize', updateDimensions)
@@ -90,14 +92,23 @@ export default function LogoLoop({
         })
         return () => images.forEach(img => { img.removeEventListener('load', onLoad); img.removeEventListener('error', onLoad) })
     }, [updateDimensions, logos, gap, logoHeight])
+    /* eslint-enable react-hooks/set-state-in-effect */
 
     useEffect(() => {
         const track = trackRef.current
+        const container = containerRef.current
         if (!track || seqWidth <= 0) return
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            track.style.transform = 'translate3d(0, 0, 0)'
+            return
+        }
+
         let rafId: number | null = null
         let lastTs: number | null = null
         let offset = 0
         let velocity = 0
+        let isOnScreen = true
 
         const animate = (ts: number) => {
             if (lastTs === null) lastTs = ts
@@ -109,8 +120,37 @@ export default function LogoLoop({
             track.style.transform = `translate3d(${-offset}px, 0, 0)`
             rafId = requestAnimationFrame(animate)
         }
-        rafId = requestAnimationFrame(animate)
-        return () => { if (rafId !== null) cancelAnimationFrame(rafId) }
+
+        const start = () => {
+            if (rafId !== null) return
+            lastTs = null
+            rafId = requestAnimationFrame(animate)
+        }
+
+        const stop = () => {
+            if (rafId !== null) cancelAnimationFrame(rafId)
+            rafId = null
+        }
+
+        // Don't burn frames scrolling a marquee nobody is looking at.
+        const sync = () => (isOnScreen && !document.hidden ? start() : stop())
+
+        let observer: IntersectionObserver | undefined
+        if (container) {
+            observer = new IntersectionObserver(([entry]) => {
+                isOnScreen = entry.isIntersecting
+                sync()
+            }, { threshold: 0 })
+            observer.observe(container)
+        }
+        document.addEventListener('visibilitychange', sync)
+        sync()
+
+        return () => {
+            stop()
+            observer?.disconnect()
+            document.removeEventListener('visibilitychange', sync)
+        }
     }, [targetVelocity, seqWidth, isHovered, pauseOnHover])
 
     const rootClassName = ['logoloop', fadeOut && 'logoloop--fade', scaleOnHover && 'logoloop--scale-hover', className].filter(Boolean).join(' ')

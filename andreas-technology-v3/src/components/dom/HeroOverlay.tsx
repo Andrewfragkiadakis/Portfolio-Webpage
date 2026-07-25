@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic'
 import { motion, useSpring, useMotionTemplate } from 'framer-motion'
 import Typewriter from 'typewriter-effect'
 import { scrollToSection as smoothScrollToSection } from '@/utils/smooth-scroll'
+import { sectionIndex, type SectionId } from '@/data/sections'
 
 const LetterGlitch = dynamic(() => import('@/components/ui/LetterGlitch'), { ssr: false })
 
@@ -47,8 +48,8 @@ export default function HeroOverlay() {
     const nameRef = useRef<HTMLDivElement>(null)
     const [isHovering, setIsHovering] = useState(false)
 
-    const scrollToSection = (id: string, index: number) => {
-        smoothScrollToSection(index, id)
+    const scrollToSection = (id: SectionId) => {
+        smoothScrollToSection(sectionIndex(id), id)
     }
 
     const blobX1 = useSpring(0, { stiffness: BLOB_CURSOR.leadStiffness, damping: BLOB_CURSOR.leadDamping })
@@ -88,13 +89,13 @@ export default function HeroOverlay() {
                     <div id="hero" className="flex flex-col items-center">
                         <h1 className="flex flex-col items-center">
                             <span
-                                className="text-[12vw] leading-[0.8] font-black tracking-tighter text-transparent select-none transition-all duration-500 block"
+                                className="text-[clamp(2.5rem,12vw,11rem)] leading-[0.8] font-black tracking-tighter text-transparent select-none transition-all duration-500 block"
                                 style={{ WebkitTextStroke: '2px var(--foreground)' }}
                             >
                                 {t.hero.firstName}
                             </span>
                             <span
-                                className="text-[10vw] leading-[0.8] font-black tracking-tighter text-transparent select-none mt-2 block"
+                                className="text-[clamp(2rem,10vw,9rem)] leading-[0.8] font-black tracking-tighter text-transparent select-none mt-2 block"
                                 style={{ WebkitTextStroke: '2px var(--foreground)' }}
                             >
                                 {t.hero.lastName}
@@ -111,7 +112,7 @@ export default function HeroOverlay() {
                             transition: 'opacity 0.3s ease',
                             isolation: 'isolate',
                             zIndex: BLOB_CURSOR.zIndex,
-                        } as any}
+                        }}
                     >
                         <div className="absolute inset-0 z-0">
                             <LetterGlitch
@@ -124,10 +125,10 @@ export default function HeroOverlay() {
                             />
                         </div>
                         <div className="absolute inset-0 z-10 flex flex-col items-center text-knockout">
-                            <span className="text-[12vw] leading-[0.8] font-black tracking-tighter select-none">
+                            <span className="text-[clamp(2.5rem,12vw,11rem)] leading-[0.8] font-black tracking-tighter select-none">
                                 {t.hero.firstName}
                             </span>
-                            <span className="text-[10vw] leading-[0.8] font-black tracking-tighter select-none mt-2">
+                            <span className="text-[clamp(2rem,10vw,9rem)] leading-[0.8] font-black tracking-tighter select-none mt-2">
                                 {t.hero.lastName}
                             </span>
                         </div>
@@ -199,8 +200,8 @@ export default function HeroOverlay() {
                 className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8 pointer-events-auto w-full sm:w-auto max-w-xs sm:max-w-none"
             >
                 <button
-                    onClick={() => scrollToSection('projects', 4)}
-                    className="group relative px-6 sm:px-6 py-2.5 sm:py-3 bg-transparent overflow-hidden hover:shadow-[0_0_20px_var(--accent)] transition-all duration-300 ease-out w-full"
+                    onClick={() => scrollToSection('projects')}
+                    className="group relative px-6 sm:px-6 py-2.5 sm:py-3 bg-transparent overflow-hidden hover:shadow-[0_0_20px_var(--accent)] transition-all duration-300 ease-out w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]"
                 >
                     <span className="relative z-10 font-bold uppercase tracking-widest text-xs sm:text-xs text-foreground group-hover:text-background transition-all duration-300 ease-out whitespace-nowrap">
                         {t.hero.viewWork}
@@ -210,8 +211,8 @@ export default function HeroOverlay() {
                 </button>
 
                 <button
-                    onClick={() => scrollToSection('contact', 5)}
-                    className="group relative px-6 sm:px-6 py-2.5 sm:py-3 bg-transparent overflow-hidden hover:shadow-[0_0_20px_var(--accent)] transition-all duration-300 ease-out w-full"
+                    onClick={() => scrollToSection('contact')}
+                    className="group relative px-6 sm:px-6 py-2.5 sm:py-3 bg-transparent overflow-hidden hover:shadow-[0_0_20px_var(--accent)] transition-all duration-300 ease-out w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]"
                 >
                     <span className="relative z-10 font-bold uppercase tracking-widest text-xs sm:text-xs text-foreground group-hover:text-background transition-all duration-300 ease-out whitespace-nowrap">
                         {t.hero.getInTouch}
@@ -225,7 +226,7 @@ export default function HeroOverlay() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 2, duration: 1 }}
-                className="absolute bottom-12 left-1/2 -translate-x-1/2 text-xs font-mono text-[var(--accent)] animate-pulse"
+                className="hidden md:block absolute bottom-12 left-1/2 -translate-x-1/2 text-xs font-mono text-[var(--accent)] animate-pulse"
             >
                 {t.hero.scroll}
             </motion.div>

@@ -3,6 +3,7 @@
 import { useContent } from '@/hooks/useContent'
 import { motion, AnimatePresence } from 'framer-motion'
 import { scrollToSection } from '@/utils/smooth-scroll'
+import { sectionIndex } from '@/data/sections'
 import { useState } from 'react'
 import type { Service } from '@/data/content'
 import SpotlightCard from '@/components/ui/SpotlightCard'
@@ -100,8 +101,8 @@ export default function Services() {
                         {t.servicesCta}
                     </p>
                     <button
-                        onClick={() => scrollToSection(5, 'contact')}
-                        className="inline-block px-8 py-4 border border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--accent)] hover:text-[var(--background)] transition-all duration-300 ease-out font-bold uppercase tracking-widest hover:shadow-[0_0_20px_var(--accent)] cursor-pointer"
+                        onClick={() => scrollToSection(sectionIndex('contact'), 'contact')}
+                        className="inline-block px-8 py-4 border border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--accent)] hover:text-[var(--background)] transition-all duration-300 ease-out font-bold uppercase tracking-widest hover:shadow-[0_0_20px_var(--accent)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]"
                     >
                         {t.servicesCtaButton}
                     </button>

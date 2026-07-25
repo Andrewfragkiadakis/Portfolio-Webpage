@@ -1,6 +1,12 @@
 import type { NextConfig } from "next";
+import path from "node:path";
 
 const nextConfig: NextConfig = {
+  // Pin the workspace root: a stray lockfile in the parent folder otherwise
+  // makes Turbopack infer the wrong root and emit a build warning.
+  turbopack: {
+    root: path.join(__dirname),
+  },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'andreas.technology', pathname: '/**' },

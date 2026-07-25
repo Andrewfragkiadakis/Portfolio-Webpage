@@ -8,11 +8,12 @@ import type { Experience as ExperienceType, Education as EducationType } from '@
 
 const ONE_CARD_SCROLL_MOBILE = 296
 
-function ScrollButton({ onClick, direction, label }: { onClick: () => void; direction: 'left' | 'right'; label: string }) {
+function ScrollButton({ onClick, direction, label, disabled = false }: { onClick: () => void; direction: 'left' | 'right'; label: string; disabled?: boolean }) {
     return (
         <button
             onClick={onClick}
-            className="w-11 h-11 md:w-12 md:h-12 border border-[var(--foreground)]/30 flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 active:scale-95"
+            disabled={disabled}
+            className="w-11 h-11 md:w-12 md:h-12 border border-[var(--foreground)]/30 flex items-center justify-center text-[var(--foreground)] transition-all duration-300 cursor-pointer hover:bg-[var(--foreground)] hover:text-[var(--background)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[var(--foreground)] disabled:active:scale-100"
             aria-label={label}
         >
             <i className={`fas fa-chevron-${direction} text-sm md:text-base`} aria-hidden="true" />
@@ -116,7 +117,7 @@ function EducationCard({ edu, index, verifyLabel }: { edu: EducationType; index:
 
 export default function Experience() {
     const t = useContent()
-    const { scrollContainerRef, scroll } = useCardScroll('[data-card="true"]')
+    const { scrollContainerRef, scroll, canScrollLeft, canScrollRight } = useCardScroll('[data-card="true"]')
     const expMobileRef = useRef<HTMLDivElement>(null)
     const eduMobileRef = useRef<HTMLDivElement>(null)
 
@@ -146,12 +147,12 @@ export default function Experience() {
                             {t.experienceSection.title}
                         </motion.h2>
                         <span className="text-sm font-mono tracking-widest uppercase text-[var(--foreground)] pl-2">
-                            // {t.experienceSection.subtitle}
+                            {`// ${t.experienceSection.subtitle}`}
                         </span>
                     </div>
                     <div className="hidden md:flex gap-2">
-                        <ScrollButton onClick={() => scroll('left')} direction="left" label="Scroll left" />
-                        <ScrollButton onClick={() => scroll('right')} direction="right" label="Scroll right" />
+                        <ScrollButton onClick={() => scroll('left')} direction="left" label="Scroll left" disabled={!canScrollLeft} />
+                        <ScrollButton onClick={() => scroll('right')} direction="right" label="Scroll right" disabled={!canScrollRight} />
                     </div>
                 </div>
 

@@ -12,6 +12,9 @@ _not-found/
 .vscode
 .idea
 
+# Local agent/tooling config (contains machine-specific absolute paths)
+.claude/
+
 # Backup folders
 *-backup-*
 backup_*

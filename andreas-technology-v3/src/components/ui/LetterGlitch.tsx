@@ -81,9 +81,11 @@ export default function LetterGlitch({
     }
 
     const drawLetters = () => {
-        if (!context.current || letters.current.length === 0) return
+        const canvas = canvasRef.current
+        // The rAF loop can outlive the canvas by a frame during unmount.
+        if (!context.current || !canvas || letters.current.length === 0) return
         const ctx = context.current
-        const { width, height } = canvasRef.current!.getBoundingClientRect()
+        const { width, height } = canvas.getBoundingClientRect()
         ctx.clearRect(0, 0, width, height)
         ctx.font = `${fontSize}px monospace`
         ctx.textBaseline = 'top'
@@ -145,21 +147,60 @@ export default function LetterGlitch({
         if (!canvas) return
         context.current = canvas.getContext('2d')
         resizeCanvas()
-        animateFn()
+
+        // A continuously running canvas loop is wasteful when nobody can see it,
+        // so pause whenever the element scrolls away or the tab is hidden.
+        let isOnScreen = true
+        let isRunning = false
+
+        const start = () => {
+            if (isRunning) return
+            isRunning = true
+            lastGlitchTime.current = Date.now()
+            animateFn()
+        }
+
+        const stop = () => {
+            isRunning = false
+            if (animationRef.current !== null) cancelAnimationFrame(animationRef.current)
+            animationRef.current = null
+        }
+
+        const sync = () => {
+            if (isOnScreen && !document.hidden) start()
+            else stop()
+        }
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                isOnScreen = entry.isIntersecting
+                sync()
+            },
+            { threshold: 0 }
+        )
+        observer.observe(canvas)
+
+        document.addEventListener('visibilitychange', sync)
 
         let resizeTimeout: ReturnType<typeof setTimeout>
         const handleResize = () => {
             clearTimeout(resizeTimeout)
             resizeTimeout = setTimeout(() => {
-                cancelAnimationFrame(animationRef.current as number)
+                stop()
                 resizeCanvas()
-                animateFn()
+                sync()
             }, 100)
         }
         window.addEventListener('resize', handleResize)
+
+        sync()
+
         return () => {
-            cancelAnimationFrame(animationRef.current!)
+            stop()
+            observer.disconnect()
+            document.removeEventListener('visibilitychange', sync)
             window.removeEventListener('resize', handleResize)
+            clearTimeout(resizeTimeout)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [glitchSpeed, smooth])

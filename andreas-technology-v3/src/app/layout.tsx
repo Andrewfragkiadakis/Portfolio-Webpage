@@ -1,6 +1,7 @@
 
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { MotionConfig } from 'framer-motion'
 import './globals.css'
 import { LanguageProvider } from '@/contexts/LanguageContext'
 import { ThemeProvider } from '@/contexts/ThemeContext'
@@ -158,11 +159,13 @@ export default function RootLayout({
                 </a>
                 <ThemeProvider>
                     <LanguageProvider>
-                        <CinematicEntry />
-                        <NoiseOverlay />
-                        <ThemeToggle />
-                        <CustomCursor />
-                        {children}
+                        <MotionConfig reducedMotion="user">
+                            <CinematicEntry />
+                            <NoiseOverlay />
+                            <ThemeToggle />
+                            <CustomCursor />
+                            {children}
+                        </MotionConfig>
                     </LanguageProvider>
                 </ThemeProvider>
                 <SpeedInsights />

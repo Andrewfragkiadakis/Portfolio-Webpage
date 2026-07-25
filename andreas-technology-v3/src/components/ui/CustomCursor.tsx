@@ -1,58 +1,73 @@
 'use client'
+
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useMotionValue, useSpring } from 'framer-motion'
+
+const SIZE = 40
+const IDLE_SCALE = 16 / SIZE
 
 export default function CustomCursor() {
-    const [position, setPosition] = useState({ x: 0, y: 0 })
     const [isHovering, setIsHovering] = useState(false)
     const [isVisible, setIsVisible] = useState(false)
+    // Only devices with a real pointer get a custom cursor; a width query would
+    // wrongly enable it on large touch tablets.
+    const [hasFinePointer, setHasFinePointer] = useState(false)
+
+    // Motion values keep pointer tracking off the React render path entirely.
+    const rawX = useMotionValue(0)
+    const rawY = useMotionValue(0)
+    const springConfig = { stiffness: 150, damping: 15, mass: 0.1 }
+    const x = useSpring(rawX, springConfig)
+    const y = useSpring(rawY, springConfig)
 
     useEffect(() => {
+        const mq = window.matchMedia('(pointer: fine)')
+        const sync = () => setHasFinePointer(mq.matches)
+        sync()
+        mq.addEventListener('change', sync)
+        return () => mq.removeEventListener('change', sync)
+    }, [])
+
+    useEffect(() => {
+        if (!hasFinePointer) return
+
+        const scale = isHovering ? 1 : IDLE_SCALE
+        const offset = (SIZE * scale) / 2
+
         const updatePosition = (e: MouseEvent) => {
-            setPosition({ x: e.clientX, y: e.clientY })
-            if (!isVisible) setIsVisible(true)
+            rawX.set(e.clientX - offset)
+            rawY.set(e.clientY - offset)
+            setIsVisible(true)
         }
 
         const handleMouseOver = (e: MouseEvent) => {
-            const target = e.target as HTMLElement
-            if (target.tagName === 'BUTTON' || target.tagName === 'A' || target.closest('button') || target.closest('a')) {
-                setIsHovering(true)
-            } else {
-                setIsHovering(false)
-            }
+            const target = e.target as HTMLElement | null
+            if (!target?.closest) return
+            setIsHovering(Boolean(target.closest('button, a, [role="button"], input, textarea, select')))
         }
 
-        window.addEventListener('mousemove', updatePosition)
-        window.addEventListener('mouseover', handleMouseOver)
+        const handleLeave = () => setIsVisible(false)
+
+        window.addEventListener('mousemove', updatePosition, { passive: true })
+        window.addEventListener('mouseover', handleMouseOver, { passive: true })
+        document.addEventListener('mouseleave', handleLeave)
 
         return () => {
             window.removeEventListener('mousemove', updatePosition)
             window.removeEventListener('mouseover', handleMouseOver)
+            document.removeEventListener('mouseleave', handleLeave)
         }
-    }, [isVisible])
+    }, [hasFinePointer, isHovering, rawX, rawY])
 
-    if (!isVisible) return null
-
-    const size = 40
-    const scale = isHovering ? 1 : 16 / size
-    const offset = (size * scale) / 2
+    if (!hasFinePointer || !isVisible) return null
 
     return (
         <motion.div
             aria-hidden="true"
-            className="fixed top-0 left-0 pointer-events-none z-[100000] hidden md:block origin-center"
-            style={{ width: size, height: size }}
-            animate={{
-                x: position.x - offset,
-                y: position.y - offset,
-                scale,
-            }}
-            transition={{
-                type: "spring",
-                stiffness: 150,
-                damping: 15,
-                mass: 0.1
-            }}
+            className="fixed top-0 left-0 pointer-events-none z-[100000] origin-center"
+            style={{ width: SIZE, height: SIZE, x, y }}
+            animate={{ scale: isHovering ? 1 : IDLE_SCALE }}
+            transition={{ type: 'spring', stiffness: 150, damping: 15, mass: 0.1 }}
         >
             <div className={`w-full h-full bg-[var(--accent)] transition-all duration-300 ${isHovering ? 'rounded-full opacity-50' : 'rounded-none opacity-100'}`} />
 

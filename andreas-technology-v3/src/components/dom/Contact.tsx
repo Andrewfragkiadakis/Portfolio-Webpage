@@ -22,7 +22,7 @@ export default function Contact() {
                         {t.contact.title}
                     </motion.h2>
                     <span className="text-sm font-mono tracking-widest uppercase text-[var(--foreground)] pl-2">
-                        // {t.contact.subtitle}
+                        {`// ${t.contact.subtitle}`}
                     </span>
                 </div>
 

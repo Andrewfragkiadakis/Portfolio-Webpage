@@ -320,7 +320,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 details: [
                     "Distinguished member of the university's Tech Society",
                     "Relevant coursework: Advanced Computer Systems, AI, Network Security, Databases, Web Development, Cloud Computing",
-                    "GPA: 2.98"
+                    "GPA: 7.6 / 10"
                 ]
             },
             {
@@ -386,8 +386,8 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 name: "Portfolio Website",
                 year: 2026,
-                tags: ["Next.js", "Three.js", "React", "TypeScript", "Framer Motion"],
-                description: "Designed and built this modern portfolio (2026) with 3D graphics, smooth interactions, and animated sections. Features dark mode, responsive design, and professional animations.",
+                tags: ["Next.js", "React", "TypeScript", "Framer Motion", "Canvas"],
+                description: "Designed and built this modern portfolio (2026) with a horizontal scroll experience, an interactive Canvas glitch effect, and motion-driven sections. Features dark/light mode, full bilingual support, and responsive design.",
                 liveSiteLink: "https://andreas.technology",
                 githubLink: "https://github.com/Andrewfragkiadakis/Portfolio-Webpage",
                 image: "/images/portfolio-website/2026.png"
@@ -479,7 +479,7 @@ export const content: Record<'en' | 'gr', Content> = {
             languageLabel: "Ελληνικά",
             about: "ΣΧΕΤΙΚΑ",
             experience: "ΕΜΠΕΙΡΙΑ",
-            projects: "PROJECTS",
+            projects: "ΕΡΓΑ",
             services: "ΥΠΗΡΕΣΙΕΣ",
             contact: "ΕΠΙΚΟΙΝΩΝΙΑ"
         },
@@ -716,8 +716,8 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 name: "Προσωπικη Ιστοσελιδα Portfolio",
                 year: 2026,
-                tags: ["Next.js", "Three.js", "React", "TypeScript", "Framer Motion"],
-                description: "Σχεδίαση και υλοποίηση modern portfolio με 3D γραφικά, ομαλές αλληλεπιδράσεις (animations) και Dark Mode.",
+                tags: ["Next.js", "React", "TypeScript", "Framer Motion", "Canvas"],
+                description: "Σχεδίαση και υλοποίηση modern portfolio με horizontal scroll εμπειρία, διαδραστικό Canvas glitch effect, animations και υποστήριξη Dark/Light mode σε δύο γλώσσες.",
                 liveSiteLink: "https://andreas.technology",
                 githubLink: "https://github.com/Andrewfragkiadakis/Portfolio-Webpage",
                 image: "/images/portfolio-website/2026.png"

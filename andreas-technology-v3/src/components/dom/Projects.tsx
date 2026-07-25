@@ -8,7 +8,8 @@ import type { Project } from '@/data/content'
 
 export default function Projects() {
     const t = useContent()
-    const { scrollContainerRef, scroll: scrollProjects } = useCardScroll('[data-project-card]')
+    const { scrollContainerRef, scroll: scrollProjects, canScrollLeft, canScrollRight } = useCardScroll('[data-project-card]')
+    const arrowClass = "w-11 h-11 md:w-12 md:h-12 border border-[var(--foreground)]/30 flex items-center justify-center text-[var(--foreground)] transition-all duration-300 cursor-pointer hover:bg-[var(--foreground)] hover:text-[var(--background)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[var(--foreground)] disabled:active:scale-100"
 
     return (
         <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-4 md:py-0 overflow-x-clip overflow-y-visible md:overflow-hidden">
@@ -24,21 +25,23 @@ export default function Projects() {
                         {t.projectsSection.title}
                     </motion.h2>
                     <span className="text-sm font-mono tracking-widest uppercase text-[var(--foreground)] pr-2">
-                        // {t.projectsSection.subtitle}
+                        {`// ${t.projectsSection.subtitle}`}
                     </span>
                 </div>
 
                 <div className="flex justify-end gap-2 mb-4">
                     <button
                         onClick={() => scrollProjects('left')}
-                        className="w-11 h-11 md:w-12 md:h-12 border border-[var(--foreground)]/30 flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 active:scale-95"
+                        disabled={!canScrollLeft}
+                        className={arrowClass}
                         aria-label="Previous project"
                     >
                         <i className="fas fa-chevron-left text-sm md:text-base" aria-hidden="true" />
                     </button>
                     <button
                         onClick={() => scrollProjects('right')}
-                        className="w-11 h-11 md:w-12 md:h-12 border border-[var(--foreground)]/30 flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 active:scale-95"
+                        disabled={!canScrollRight}
+                        className={arrowClass}
                         aria-label="Next project"
                     >
                         <i className="fas fa-chevron-right text-sm md:text-base" aria-hidden="true" />

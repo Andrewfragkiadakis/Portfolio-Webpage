@@ -14,6 +14,8 @@ export default function CinematicEntry() {
     useEffect(() => {
         try {
             if (localStorage.getItem('cinematic-entered') === 'true') {
+                // Browser-only value; unavailable during SSR so it must be read after mount.
+                // eslint-disable-next-line react-hooks/set-state-in-effect
                 setHasVisited(true)
             }
         } catch {
@@ -52,6 +54,13 @@ export default function CinematicEntry() {
                     exit={{ y: '-100%', transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } }}
                     className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[var(--background)] text-[var(--foreground)]"
                 >
+                    <button
+                        onClick={handleEnter}
+                        className="absolute top-6 right-6 text-xs font-mono uppercase tracking-[0.2em] text-[var(--foreground)] opacity-60 hover:opacity-100 hover:text-[var(--accent)] transition-all duration-300"
+                    >
+                        {t.cinematicEntry.skip} →
+                    </button>
+
                     <div className="font-mono text-xl md:text-2xl tracking-widest text-[var(--accent)] mb-8">
                         <Typewriter
                             onInit={(typewriter) => {

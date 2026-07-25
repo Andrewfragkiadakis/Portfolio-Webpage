@@ -1,13 +1,14 @@
 'use client'
 
 import { useTheme } from '@/contexts/ThemeContext'
-import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 
 export default function ThemeToggle() {
     const { theme, setTheme } = useTheme() // Assuming setTheme handles the switch or I need to update Context
     const [mounted, setMounted] = useState(false)
 
+    // Theme is only knowable after hydration; render nothing until then to avoid a flash.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     useEffect(() => setMounted(true), [])
 
     if (!mounted) return null

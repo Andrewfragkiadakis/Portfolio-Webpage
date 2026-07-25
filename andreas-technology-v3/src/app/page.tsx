@@ -12,7 +12,7 @@ export default function Home() {
         <>
             <Navigation />
             <MobileNav />
-            <main id="main-content" className="relative z-10 w-full h-[600vh]">
+            <main id="main-content" className="relative z-10 w-full">
                 <Suspense fallback={<MainFallback />}>
                     <MainContent />
                 </Suspense>

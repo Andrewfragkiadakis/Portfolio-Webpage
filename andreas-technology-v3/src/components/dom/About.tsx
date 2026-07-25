@@ -60,7 +60,36 @@ export default function About() {
     const t = useContent()
     const [activeSkill, setActiveSkill] = useState<Skill | null>(null)
     const [mounted, setMounted] = useState(false)
+    const closeButtonRef = useRef<HTMLButtonElement>(null)
+    const lastFocusedRef = useRef<HTMLElement | null>(null)
+    // Portal target only exists after hydration.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     useEffect(() => { setMounted(true) }, [])
+
+    // Modal: close on Escape, keep focus inside, and hand focus back on close.
+    useEffect(() => {
+        if (!activeSkill) return
+
+        lastFocusedRef.current = document.activeElement as HTMLElement
+        closeButtonRef.current?.focus()
+
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                setActiveSkill(null)
+                return
+            }
+            if (e.key !== 'Tab') return
+            // Only the close button is focusable, so keep Tab pinned to it.
+            e.preventDefault()
+            closeButtonRef.current?.focus()
+        }
+
+        document.addEventListener('keydown', onKeyDown)
+        return () => {
+            document.removeEventListener('keydown', onKeyDown)
+            lastFocusedRef.current?.focus()
+        }
+    }, [activeSkill])
 
     const stats = [
         { value: 6, suffix: '+' },
@@ -160,8 +189,9 @@ export default function About() {
                             transition={{ delay: 0.4 + index * 0.1 }}
                         >
                             <SpotlightCard
-                                className="border border-[var(--foreground)]/30 p-3 hover:border-[var(--accent)] transition-all duration-300 group h-full cursor-pointer"
+                                className="border border-[var(--foreground)]/30 p-3 hover:border-[var(--accent)] transition-all duration-300 group h-full"
                                 onClick={() => setActiveSkill(skill)}
+                                label={`${skill.label} — read more`}
                             >
                                 <div className="relative z-10">
                                     <div className="w-9 h-9 border border-[var(--foreground)]/50 flex items-center justify-center text-[var(--foreground)] group-hover:border-[var(--accent)] group-hover:text-[var(--accent)] transition-colors mb-2">
@@ -171,7 +201,10 @@ export default function About() {
                                     <p className="text-[10px] text-[var(--foreground)] opacity-80 leading-relaxed line-clamp-2">
                                         {skill.detail || 'Building innovative solutions'}
                                     </p>
-                                    <span className="text-[9px] font-mono text-[var(--accent)] opacity-0 group-hover:opacity-60 transition-opacity mt-1 block">click to expand ↗</span>
+                                    {/* Always visible: touch devices have no hover to reveal this. */}
+                                    <span className="text-[9px] font-mono text-[var(--accent)] opacity-60 md:opacity-40 md:group-hover:opacity-80 transition-opacity mt-1 block">
+                                        {t.about.readMore} ↗
+                                    </span>
                                 </div>
                             </SpotlightCard>
                         </motion.div>
@@ -193,6 +226,9 @@ export default function About() {
                             >
                                 <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
                                 <motion.div
+                                    role="dialog"
+                                    aria-modal="true"
+                                    aria-labelledby="skill-modal-title"
                                     initial={{ opacity: 0, scale: 0.92, y: 16 }}
                                     animate={{ opacity: 1, scale: 1, y: 0 }}
                                     exit={{ opacity: 0, scale: 0.92, y: 16 }}
@@ -201,16 +237,17 @@ export default function About() {
                                     onClick={e => e.stopPropagation()}
                                 >
                                     <button
+                                        ref={closeButtonRef}
                                         onClick={() => setActiveSkill(null)}
-                                        className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center text-[var(--foreground)] hover:text-[var(--accent)] transition-colors"
+                                        className="absolute top-3 right-3 w-11 h-11 flex items-center justify-center cursor-pointer text-[var(--foreground)] hover:text-[var(--accent)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
                                         aria-label="Close"
                                     >
-                                        <i className="fas fa-times" />
+                                        <i className="fas fa-times" aria-hidden="true" />
                                     </button>
                                     <div className="w-10 h-10 border border-[var(--accent)] flex items-center justify-center text-[var(--accent)] mb-4">
                                         <i className={`${activeSkill.icon} text-base`} aria-hidden="true" />
                                     </div>
-                                    <h4 className="font-black text-base text-[var(--accent)] uppercase tracking-tight mb-3">{activeSkill.label}</h4>
+                                    <h4 id="skill-modal-title" className="font-black text-base text-[var(--accent)] uppercase tracking-tight mb-3 pr-8">{activeSkill.label}</h4>
                                     <p className="text-sm text-[var(--foreground)] opacity-80 leading-relaxed">{activeSkill.detail}</p>
                                 </motion.div>
                             </motion.div>

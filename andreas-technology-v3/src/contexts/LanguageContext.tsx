@@ -17,6 +17,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     useEffect(() => {
         const stored = localStorage.getItem('language') as Language
         if (stored === 'en' || stored === 'gr') {
+            // localStorage is browser-only, so the stored preference lands after hydration.
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setLanguageState(stored)
         }
     }, [])

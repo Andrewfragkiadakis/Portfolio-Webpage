@@ -23,6 +23,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const [theme, setThemeState] = useState<Theme>('dark')
 
     useEffect(() => {
+        // localStorage and matchMedia are browser-only, so the real theme can only be
+        // resolved after hydration. An inline script in <head> paints the correct theme
+        // first so this never causes a visible flash.
+        /* eslint-disable react-hooks/set-state-in-effect */
         const stored = localStorage.getItem('theme') as Theme | null
         if (stored === 'light' || stored === 'dark') {
             setThemeState(stored)
@@ -41,6 +45,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
                 setThemeState(getThemeByTime())
             }
         }
+        /* eslint-enable react-hooks/set-state-in-effect */
 
         const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
         const updateTheme = (e: MediaQueryListEvent) => {
