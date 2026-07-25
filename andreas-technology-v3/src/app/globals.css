@@ -7,6 +7,13 @@
   --glow: rgba(79, 70, 229, 0.15);
 
   --font-display: "Inter", sans-serif;
+
+  /*
+   * Height of the fixed desktop navigation. Panels reserve this at the top so
+   * vertically-centred content is centred in the *visible* area rather than
+   * behind the bar.
+   */
+  --nav-h: 3.9rem;
 }
 
 .dark {

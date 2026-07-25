@@ -450,7 +450,6 @@ export const content: Record<'en' | 'gr', Content> = {
                     "Live and serving real client enquiries"
                 ],
                 liveSiteLink: "https://www.planoplus.gr/",
-                githubLink: "https://github.com/Andrewfragkiadakis/Plano-Plus",
                 image: "/images/PlanoPlus/plano.png"
             },
             {
@@ -533,7 +532,6 @@ export const content: Record<'en' | 'gr', Content> = {
                     "State managed with Zustand; animated with Framer Motion"
                 ],
                 liveSiteLink: "https://nexus-party-app.vercel.app/",
-                githubLink: "https://github.com/Andrewfragkiadakis/nexus-party-app",
                 image: "/images/NexusPartyApp/nexuspartyapp.png"
             },
             {
@@ -925,7 +923,6 @@ export const content: Record<'en' | 'gr', Content> = {
                     "Σε λειτουργία, εξυπηρετεί πραγματικά αιτήματα πελατών"
                 ],
                 liveSiteLink: "https://www.planoplus.gr/",
-                githubLink: "https://github.com/Andrewfragkiadakis/Plano-Plus",
                 image: "/images/PlanoPlus/plano.png"
             },
             {
@@ -1008,7 +1005,6 @@ export const content: Record<'en' | 'gr', Content> = {
                     "Διαχείριση κατάστασης με Zustand, animations με Framer Motion"
                 ],
                 liveSiteLink: "https://nexus-party-app.vercel.app/",
-                githubLink: "https://github.com/Andrewfragkiadakis/nexus-party-app",
                 image: "/images/NexusPartyApp/nexuspartyapp.png"
             },
             {

@@ -77,14 +77,14 @@ export default function About() {
     ]
 
     return (
-        <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-4 md:py-0 overflow-visible md:overflow-hidden">
+        <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-4 md:py-0 overflow-visible md:overflow-x-hidden md:overflow-y-auto no-scrollbar">
             <div className="max-w-7xl mx-auto w-full">
                 <div id="about" className="flex flex-col items-start gap-2 mb-6 md:mb-8">
                     <motion.h2
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-[12vw] md:text-[7vw] leading-[0.8] font-black tracking-tighter text-transparent select-none"
+                        className="text-[12vw] md:text-[min(7vw,9vh)] leading-[0.8] font-black tracking-tighter text-transparent select-none"
                         style={{ WebkitTextStroke: '2px var(--foreground)' }}
                     >
                         {t.about.title}

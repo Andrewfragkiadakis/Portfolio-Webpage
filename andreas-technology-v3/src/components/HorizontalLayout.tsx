@@ -1,6 +1,6 @@
 import { useEffect, useRef, Suspense, useCallback } from 'react'
 import dynamic from 'next/dynamic'
-import { motion, useScroll, useTransform, useSpring, useVelocity, animate, useReducedMotion } from 'framer-motion'
+import { motion, useScroll, useTransform, useSpring, useVelocity, useMotionValue, animate, useReducedMotion } from 'framer-motion'
 import HeroOverlay from '@/components/dom/HeroOverlay'
 import About from '@/components/dom/About'
 import Services from '@/components/dom/Services'
@@ -29,7 +29,23 @@ export default function HorizontalLayout() {
 
     const { scrollYProgress } = useScroll({ target: targetRef })
 
-    const x = useTransform(scrollYProgress, [0, 1], ['0vw', `-${TRACK_TRAVEL_VW}vw`])
+    // Gates for the two scroll-linked transforms. These are motion values rather than
+    // plain booleans on purpose: swapping `style` between a motion value and a literal
+    // leaves the last transform stuck on the element, so a desktop→mobile resize would
+    // strand the vertical stack off-screen. Keeping one stable binding whose output
+    // collapses to zero avoids that entirely.
+    const trackGate = useMotionValue(0)
+    const scaleGate = useMotionValue(0)
+
+    useEffect(() => {
+        trackGate.set(isDesktop ? 1 : 0)
+        scaleGate.set(isDesktop && !prefersReducedMotion ? 1 : 0)
+    }, [isDesktop, prefersReducedMotion, trackGate, scaleGate])
+
+    const x = useTransform(
+        [scrollYProgress, trackGate],
+        ([progress, gate]: number[]) => `${-progress * gate * TRACK_TRAVEL_VW}vw`
+    )
 
     // Gentle "breathing" as each section passes centre. Purely decorative.
     const scale = useTransform(
@@ -38,6 +54,10 @@ export default function HorizontalLayout() {
         [1, 0.98, 1, 0.98, 1, 0.98, 1, 0.98, 1, 0.98, 1]
     )
     const smoothScale = useSpring(scale, { stiffness: 60, damping: 25, restDelta: 0.001 })
+    const gatedScale = useTransform(
+        [smoothScale, scaleGate],
+        ([value, gate]: number[]) => (gate ? value : 1)
+    )
 
     const velocity = useVelocity(scrollYProgress)
     // A ref, not state: the snap guard is read inside listeners and must never
@@ -112,13 +132,6 @@ export default function HorizontalLayout() {
         <Suspense key="contact" fallback={<SectionFallback />}><Contact /></Suspense>,
     ]
 
-    // Below the breakpoint the track must sit at origin. Explicit zeroes are required:
-    // dropping the motion values would leave the last desktop transform stuck on the
-    // element, pushing the vertical stack off-screen after a resize or device rotation.
-    const trackStyle = isDesktop
-        ? { x, scale: prefersReducedMotion ? 1 : smoothScale }
-        : { x: '0vw', scale: 1 }
-
     return (
         <div
             ref={targetRef}
@@ -127,7 +140,7 @@ export default function HorizontalLayout() {
         >
             <div className="md:sticky md:top-0 md:left-0 md:flex md:h-screen md:w-full md:items-center md:overflow-hidden">
                 <motion.div
-                    style={trackStyle}
+                    style={{ x, scale: gatedScale }}
                     className="flex flex-col gap-[10vh] md:flex-row md:gap-0 md:h-screen md:items-center md:will-change-transform"
                 >
                     {/*
@@ -138,7 +151,7 @@ export default function HorizontalLayout() {
                     {sections.map((section, index) => (
                         <div
                             key={index}
-                            className="relative w-full min-h-screen overflow-x-clip md:h-screen md:w-screen md:min-h-0 md:flex-shrink-0 md:flex md:items-center md:justify-center md:overflow-hidden"
+                            className="relative w-full min-h-screen overflow-x-clip md:h-screen md:w-screen md:min-h-0 md:flex-shrink-0 md:flex md:items-center md:justify-center md:overflow-hidden md:pt-[var(--nav-h)]"
                         >
                             {section}
                         </div>

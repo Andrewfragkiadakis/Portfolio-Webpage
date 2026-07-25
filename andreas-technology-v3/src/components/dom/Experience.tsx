@@ -133,7 +133,7 @@ export default function Experience() {
     }
 
     return (
-        <section className="w-full h-auto md:h-screen md:max-h-[1080px] flex flex-col justify-center px-4 sm:px-6 md:px-12 lg:px-24 py-4 md:py-0 overflow-x-clip overflow-y-visible md:overflow-hidden relative">
+        <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-6 md:px-12 lg:px-24 py-4 md:py-0 overflow-x-clip overflow-y-visible md:overflow-x-hidden md:overflow-y-auto no-scrollbar relative">
             <div className="max-w-[1920px] mx-auto w-full h-full flex flex-col justify-center">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 sm:mb-8 md:mb-12 gap-4 md:gap-6">
                     <div id="experience" className="flex flex-col items-start gap-2">
@@ -141,7 +141,7 @@ export default function Experience() {
                             initial={{ opacity: 0, x: -50 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
-                            className="text-[12vw] md:text-[8vw] lg:text-[6vw] leading-[0.8] font-black tracking-tighter text-transparent select-none uppercase"
+                            className="text-[12vw] md:text-[min(6vw,8vh)] leading-[0.8] font-black tracking-tighter text-transparent select-none uppercase"
                             style={{ WebkitTextStroke: '2px var(--foreground)' }}
                         >
                             {t.experienceSection.title}

@@ -9,14 +9,14 @@ export default function Contact() {
     const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(t.email)}&su=${encodeURIComponent('Project Collaboration // Andreas Technology')}`
 
     return (
-        <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-4 md:py-0 overflow-visible md:overflow-hidden">
+        <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-4 md:py-0 overflow-visible md:overflow-x-hidden md:overflow-y-auto no-scrollbar">
             <div className="max-w-6xl mx-auto w-full">
                 <div id="contact" className="flex flex-col items-start gap-2 mb-8 md:mb-12">
                     <motion.h2
                         initial={{ opacity: 0, x: -50 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        className="text-[12vw] md:text-[8vw] leading-[0.8] font-black tracking-tighter text-transparent select-none"
+                        className="text-[12vw] md:text-[min(8vw,9vh)] leading-[0.8] font-black tracking-tighter text-transparent select-none"
                         style={{ WebkitTextStroke: '2px var(--foreground)' }}
                     >
                         {t.contact.title}
