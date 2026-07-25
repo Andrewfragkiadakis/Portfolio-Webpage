@@ -1,7 +1,14 @@
 import { useEffect, useState } from 'react'
 
-/** Tailwind's `md` breakpoint — the point where the layout switches to the horizontal journey. */
-export const DESKTOP_BREAKPOINT_PX = 768
+/**
+ * The point where the layout switches to the horizontal journey.
+ *
+ * Must stay in sync with `--breakpoint-md` in globals.css, which is overridden to the
+ * same value so every `md:` utility flips at exactly this width. Tablets stay on the
+ * vertical layout: scroll-jacking a touch device through a horizontal track is worse
+ * than simply scrolling down.
+ */
+export const DESKTOP_BREAKPOINT_PX = 1024
 
 /**
  * Tracks whether the viewport is in desktop (horizontal journey) mode.

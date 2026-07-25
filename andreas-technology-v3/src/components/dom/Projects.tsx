@@ -4,10 +4,13 @@ import { useContent } from '@/hooks/useContent'
 import { useCardScroll } from '@/hooks/useCardScroll'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+import { useState } from 'react'
 import type { Project } from '@/data/content'
+import Modal from '@/components/ui/Modal'
 
 export default function Projects() {
     const t = useContent()
+    const [activeProject, setActiveProject] = useState<Project | null>(null)
     const { scrollContainerRef, scroll: scrollProjects, canScrollLeft, canScrollRight } = useCardScroll('[data-project-card]')
     const arrowClass = "w-11 h-11 md:w-12 md:h-12 border border-[var(--foreground)]/30 flex items-center justify-center text-[var(--foreground)] transition-all duration-300 cursor-pointer hover:bg-[var(--foreground)] hover:text-[var(--background)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[var(--foreground)] disabled:active:scale-100"
 
@@ -94,16 +97,26 @@ export default function Projects() {
                                 <p className="text-xs text-[var(--foreground)] opacity-70 leading-relaxed md:line-clamp-3 mb-3">
                                     {project.description}
                                 </p>
-                                <div className="flex gap-3 mt-auto pt-2 border-t border-[var(--foreground)]/10">
+                                <div className="flex flex-wrap items-center gap-3 mt-auto pt-2 border-t border-[var(--foreground)]/10">
                                     {project.liveSiteLink && (
-                                        <a href={project.liveSiteLink} target="_blank" rel="noopener noreferrer" className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)] hover:text-[var(--accent)] flex items-center gap-1 transition-colors">
+                                        <a href={project.liveSiteLink} target="_blank" rel="noopener noreferrer" className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)] hover:text-[var(--accent)] flex items-center gap-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]">
                                             <i className="fas fa-external-link-alt" aria-hidden="true" /> {t.projectsSection.live}
                                         </a>
                                     )}
                                     {project.githubLink && (
-                                        <a href={project.githubLink} target="_blank" rel="noopener noreferrer" className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)] hover:text-[var(--accent)] flex items-center gap-1 transition-colors">
+                                        <a href={project.githubLink} target="_blank" rel="noopener noreferrer" className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)] hover:text-[var(--accent)] flex items-center gap-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]">
                                             <i className="fab fa-github" aria-hidden="true" /> {t.projectsSection.code}
                                         </a>
+                                    )}
+                                    {project.detail && (
+                                        <button
+                                            type="button"
+                                            onClick={() => setActiveProject(project)}
+                                            aria-label={`${project.name} — ${t.projectsSection.details}`}
+                                            className="ml-auto text-xs font-bold uppercase tracking-wider text-[var(--accent)] hover:text-[var(--foreground)] flex items-center gap-1 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+                                        >
+                                            {t.projectsSection.details} <i className="fas fa-arrow-right" aria-hidden="true" />
+                                        </button>
                                     )}
                                 </div>
                             </div>
@@ -129,6 +142,100 @@ export default function Projects() {
                     </a>
                 </motion.div>
             </div>
+
+            <Modal
+                open={Boolean(activeProject)}
+                onClose={() => setActiveProject(null)}
+                labelledBy="project-modal-title"
+                closeLabel={t.projectsSection.close}
+                className="max-w-2xl w-full"
+            >
+                {activeProject && (
+                    <>
+                        {activeProject.image && (
+                            <div className="relative h-[200px] sm:h-[240px] w-full overflow-hidden bg-[var(--background)]">
+                                <Image
+                                    src={activeProject.image}
+                                    alt=""
+                                    fill
+                                    sizes="(max-width: 768px) 100vw, 672px"
+                                    className="object-cover"
+                                />
+                            </div>
+                        )}
+
+                        <div className="p-6 sm:p-8">
+                            <div className="flex items-baseline justify-between gap-4 mb-3">
+                                <h3 id="project-modal-title" className="text-xl sm:text-2xl font-black text-[var(--accent)] uppercase tracking-tight">
+                                    {activeProject.name}
+                                </h3>
+                                {activeProject.year && (
+                                    <span className="font-mono text-sm text-[var(--foreground)] opacity-60 shrink-0">
+                                        {activeProject.year}
+                                    </span>
+                                )}
+                            </div>
+
+                            {activeProject.role && (
+                                <p className="text-xs font-mono uppercase tracking-widest text-[var(--foreground)] opacity-70 mb-5">
+                                    {t.projectsSection.roleLabel}: {activeProject.role}
+                                </p>
+                            )}
+
+                            <div className="flex flex-wrap gap-1.5 mb-5">
+                                {activeProject.tags.map((tag, i) => (
+                                    <span key={i} className="text-[10px] font-mono border border-[var(--foreground)]/40 px-2 py-0.5 text-[var(--foreground)]">
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+
+                            <p className="text-sm text-[var(--foreground)] opacity-85 leading-relaxed mb-6">
+                                {activeProject.detail}
+                            </p>
+
+                            {activeProject.highlights && activeProject.highlights.length > 0 && (
+                                <div className="mb-6">
+                                    <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--accent)] mb-3">
+                                        {t.projectsSection.highlightsLabel}
+                                    </h4>
+                                    <ul className="space-y-2">
+                                        {activeProject.highlights.map((item, i) => (
+                                            <li key={i} className="flex items-start gap-2.5 text-sm text-[var(--foreground)] opacity-85">
+                                                <i className="fas fa-check text-[var(--accent)] text-[11px] mt-1 shrink-0" aria-hidden="true" />
+                                                <span className="leading-relaxed">{item}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+
+                            <div className="flex flex-wrap gap-3 pt-4 border-t border-[var(--foreground)]/15">
+                                {activeProject.liveSiteLink && (
+                                    <a href={activeProject.liveSiteLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2.5 bg-[var(--accent)] text-[var(--background)] text-xs font-bold uppercase tracking-widest hover:shadow-[0_0_20px_var(--glow)] transition-all">
+                                        <i className="fas fa-external-link-alt" aria-hidden="true" /> {t.projectsSection.live}
+                                    </a>
+                                )}
+                                {activeProject.githubLink && (
+                                    <a href={activeProject.githubLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2.5 border border-[var(--foreground)] text-[var(--foreground)] text-xs font-bold uppercase tracking-widest hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all">
+                                        <i className="fab fa-github" aria-hidden="true" /> {t.projectsSection.code}
+                                    </a>
+                                )}
+                                {activeProject.reportLink && (
+                                    <a href={activeProject.reportLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2.5 border border-[var(--foreground)] text-[var(--foreground)] text-xs font-bold uppercase tracking-widest hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all">
+                                        <i className="fas fa-file-lines" aria-hidden="true" /> {t.projectsSection.report}
+                                    </a>
+                                )}
+                                {activeProject.publicationLink && (
+                                    <a href={activeProject.publicationLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2.5 border border-[var(--foreground)] text-[var(--foreground)] text-xs font-bold uppercase tracking-widest hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all">
+                                        <i className="fas fa-book-open" aria-hidden="true" /> {t.projectsSection.publication}
+                                    </a>
+                                )}
+                            </div>
+                        </div>
+                    </>
+                )}
+            </Modal>
         </section>
     )
 }

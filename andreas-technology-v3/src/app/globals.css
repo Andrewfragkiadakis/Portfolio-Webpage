@@ -24,6 +24,16 @@
   --font-sans: var(--font-display);
 }
 
+/*
+ * The layout switches from the vertical stack to the horizontal journey at `md`.
+ * Raising it to 1024px keeps tablets on the vertical layout — scroll-jacking a touch
+ * device through a horizontal track is worse than letting it scroll normally.
+ * Must stay in sync with DESKTOP_BREAKPOINT_PX in src/hooks/useIsDesktop.ts.
+ */
+@theme {
+  --breakpoint-md: 1024px;
+}
+
 body {
   background-color: var(--background);
   color: var(--foreground);

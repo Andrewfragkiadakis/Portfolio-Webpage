@@ -1,11 +1,11 @@
 'use client'
 
 import { useContent } from '@/hooks/useContent'
-import { motion, useInView, AnimatePresence } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 import { useRef, useEffect, useState } from 'react'
-import { createPortal } from 'react-dom'
 import type { Skill } from '@/data/content'
 import SpotlightCard from '@/components/ui/SpotlightCard'
+import Modal from '@/components/ui/Modal'
 import LogoLoop from '@/components/ui/LogoLoop'
 import type { LogoItem } from '@/components/ui/LogoLoop'
 
@@ -42,60 +42,38 @@ function AnimatedCounter({ value, suffix = '', duration = 2 }: { value: number; 
 const TECH_PILL = "flex items-center gap-2 px-3 py-1.5 border border-[var(--foreground)]/20 text-sm font-mono text-[var(--foreground)] whitespace-nowrap"
 
 const TECH_STACK: LogoItem[] = [
+    { node: <span className={TECH_PILL}><i className="fab fa-apple" /> Jamf Pro</span> },
+    { node: <span className={TECH_PILL}><i className="fab fa-apple" /> macOS</span> },
+    { node: <span className={TECH_PILL}><i className="fas fa-shield-halved" /> Checkpoint Harmony</span> },
+    { node: <span className={TECH_PILL}><i className="fas fa-satellite-dish" /> Microsoft Sentinel</span> },
     { node: <span className={TECH_PILL}><i className="fab fa-python" /> Python</span> },
+    { node: <span className={TECH_PILL}><i className="fas fa-terminal" /> Bash</span> },
     { node: <span className={TECH_PILL}><i className="fab fa-js" /> TypeScript</span> },
     { node: <span className={TECH_PILL}><i className="fab fa-react" /> React</span> },
     { node: <span className={TECH_PILL}><i className="fab fa-react" /> Next.js</span> },
-    { node: <span className={TECH_PILL}><i className="fab fa-docker" /> Docker</span> },
     { node: <span className={TECH_PILL}><i className="fab fa-linux" /> Linux</span> },
-    { node: <span className={TECH_PILL}><i className="fab fa-git-alt" /> Git</span> },
-    { node: <span className={TECH_PILL}><i className="fas fa-terminal" /> Bash</span> },
-    { node: <span className={TECH_PILL}><i className="fas fa-network-wired" /> Cisco</span> },
+    { node: <span className={TECH_PILL}><i className="fas fa-network-wired" /> Cisco ISE</span> },
     { node: <span className={TECH_PILL}><i className="fas fa-users-cog" /> Active Directory</span> },
     { node: <span className={TECH_PILL}><i className="fas fa-server" /> VMware / ESXi</span> },
+    { node: <span className={TECH_PILL}><i className="fas fa-server" /> Proxmox</span> },
+    { node: <span className={TECH_PILL}><i className="fas fa-key" /> DUO MFA</span> },
+    { node: <span className={TECH_PILL}><i className="fas fa-lock" /> 1Password</span> },
+    { node: <span className={TECH_PILL}><i className="fab fa-docker" /> Docker</span> },
+    { node: <span className={TECH_PILL}><i className="fab fa-git-alt" /> Git</span> },
     { node: <span className={TECH_PILL}><i className="fab fa-jira" /> Jira</span> },
 ]
 
 export default function About() {
     const t = useContent()
     const [activeSkill, setActiveSkill] = useState<Skill | null>(null)
-    const [mounted, setMounted] = useState(false)
-    const closeButtonRef = useRef<HTMLButtonElement>(null)
-    const lastFocusedRef = useRef<HTMLElement | null>(null)
-    // Portal target only exists after hydration.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    useEffect(() => { setMounted(true) }, [])
 
-    // Modal: close on Escape, keep focus inside, and hand focus back on close.
-    useEffect(() => {
-        if (!activeSkill) return
-
-        lastFocusedRef.current = document.activeElement as HTMLElement
-        closeButtonRef.current?.focus()
-
-        const onKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') {
-                setActiveSkill(null)
-                return
-            }
-            if (e.key !== 'Tab') return
-            // Only the close button is focusable, so keep Tab pinned to it.
-            e.preventDefault()
-            closeButtonRef.current?.focus()
-        }
-
-        document.addEventListener('keydown', onKeyDown)
-        return () => {
-            document.removeEventListener('keydown', onKeyDown)
-            lastFocusedRef.current?.focus()
-        }
-    }, [activeSkill])
-
+    // Order matches t.about.statsLabels:
+    // years experience · endpoints managed · faster onboarding · languages
     const stats = [
-        { value: 6, suffix: '+' },
-        { value: 10, suffix: '+' },
-        { value: 15, suffix: '+' },
-        { value: 100, suffix: '%' },
+        { value: 7, suffix: '+' },
+        { value: 400, suffix: '+' },
+        { value: 70, suffix: '%' },
+        { value: 3, suffix: '' },
     ]
 
     return (
@@ -211,50 +189,22 @@ export default function About() {
                     ))}
                 </div>
 
-                {/* Skill detail modal — rendered via portal to avoid hydration mismatch */}
-                {mounted && createPortal(
-                    <AnimatePresence>
-                        {activeSkill && (
-                            <motion.div
-                                key="skill-modal"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                transition={{ duration: 0.18 }}
-                                className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
-                                onClick={() => setActiveSkill(null)}
-                            >
-                                <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-                                <motion.div
-                                    role="dialog"
-                                    aria-modal="true"
-                                    aria-labelledby="skill-modal-title"
-                                    initial={{ opacity: 0, scale: 0.92, y: 16 }}
-                                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                                    exit={{ opacity: 0, scale: 0.92, y: 16 }}
-                                    transition={{ duration: 0.2 }}
-                                    className="relative z-10 bg-[var(--background)] border border-[var(--accent)] p-6 max-w-sm w-full shadow-[0_0_40px_var(--accent)]"
-                                    onClick={e => e.stopPropagation()}
-                                >
-                                    <button
-                                        ref={closeButtonRef}
-                                        onClick={() => setActiveSkill(null)}
-                                        className="absolute top-3 right-3 w-11 h-11 flex items-center justify-center cursor-pointer text-[var(--foreground)] hover:text-[var(--accent)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
-                                        aria-label="Close"
-                                    >
-                                        <i className="fas fa-times" aria-hidden="true" />
-                                    </button>
-                                    <div className="w-10 h-10 border border-[var(--accent)] flex items-center justify-center text-[var(--accent)] mb-4">
-                                        <i className={`${activeSkill.icon} text-base`} aria-hidden="true" />
-                                    </div>
-                                    <h4 id="skill-modal-title" className="font-black text-base text-[var(--accent)] uppercase tracking-tight mb-3 pr-8">{activeSkill.label}</h4>
-                                    <p className="text-sm text-[var(--foreground)] opacity-80 leading-relaxed">{activeSkill.detail}</p>
-                                </motion.div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>,
-                    document.body
-                )}
+                <Modal
+                    open={Boolean(activeSkill)}
+                    onClose={() => setActiveSkill(null)}
+                    labelledBy="skill-modal-title"
+                    className="p-6 max-w-sm w-full"
+                >
+                    {activeSkill && (
+                        <>
+                            <div className="w-10 h-10 border border-[var(--accent)] flex items-center justify-center text-[var(--accent)] mb-4">
+                                <i className={`${activeSkill.icon} text-base`} aria-hidden="true" />
+                            </div>
+                            <h4 id="skill-modal-title" className="font-black text-base text-[var(--accent)] uppercase tracking-tight mb-3 pr-8">{activeSkill.label}</h4>
+                            <p className="text-sm text-[var(--foreground)] opacity-80 leading-relaxed">{activeSkill.detail}</p>
+                        </>
+                    )}
+                </Modal>
 
                 <motion.div
                     initial={{ opacity: 0 }}
