@@ -174,7 +174,7 @@ export const content: Record<'en' | 'gr', Content> = {
             statsLabels: ["Years Experience", "Endpoints Managed", "Faster Onboarding", "Languages"],
             description: [
                 "I am an IT & Computer Engineer (M.Eng.) leading Apple Fleet & IT Automation at Omilia, a global conversational-AI company, across a 400+ device environment. I own the Jamf Pro platform end-to-end and lead endpoint engineering for Checkpoint Harmony EDR, Microsoft Sentinel SIEM pipelines, and SSL certificate automation.",
-                "My work sits where security, automation and scale meet: CIS Benchmark hardening ahead of PCI-DSS and SOC 2 audits, zero-touch macOS enrollment that cut onboarding time by 70%, and certificate renewal pipelines that removed manual cert toil across Cisco ISE, ESXi, Proxmox and HPE iLO.",
+                "My work sits where security, automation and scale meet: CIS Benchmark hardening ahead of PCI-DSS and SOC 2 audits, and zero-touch macOS enrollment that cut onboarding time by 70%.",
                 "I also drive enterprise AI adoption — Google Gemini org-wide, Atlassian Rovo Agents, and an AI-powered ticket-triage pipeline that cut average triage time across 350+ tickets a year.",
                 "Licensed Computer Science Engineer (TEE) | ITIL 4 certified | Based in Athens | English (C2), Greek (Native), German (B2)"
             ]
@@ -651,7 +651,7 @@ export const content: Record<'en' | 'gr', Content> = {
             statsLabels: ["Χρονια Εμπειριας", "Συσκευες υπο Διαχειριση", "Ταχυτερο Onboarding", "Γλωσσες"],
             description: [
                 "Είμαι Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) και ηγούμαι του τομέα Apple Fleet & IT Automation στην Omilia, μια παγκόσμια εταιρεία conversational AI, σε περιβάλλον άνω των 400 συσκευών. Διαχειρίζομαι εξ ολοκλήρου την πλατφόρμα Jamf Pro και ηγούμαι του endpoint engineering για Checkpoint Harmony EDR, pipelines Microsoft Sentinel SIEM και αυτοματοποίηση πιστοποιητικών SSL.",
-                "Η δουλειά μου βρίσκεται στο σημείο όπου συναντώνται η ασφάλεια, ο αυτοματισμός και η κλίμακα: θωράκιση κατά CIS Benchmarks ενόψει ελέγχων PCI-DSS και SOC 2, zero-touch enrollment για macOS που μείωσε τον χρόνο onboarding κατά 70%, και pipelines ανανέωσης πιστοποιητικών που εξάλειψαν τη χειροκίνητη εργασία σε Cisco ISE, ESXi, Proxmox και HPE iLO.",
+                "Η δουλειά μου βρίσκεται στο σημείο όπου συναντώνται η ασφάλεια, ο αυτοματισμός και η κλίμακα: θωράκιση κατά CIS Benchmarks ενόψει ελέγχων PCI-DSS και SOC 2, και zero-touch enrollment για macOS που μείωσε τον χρόνο onboarding κατά 70%.",
                 "Παράλληλα οδηγώ την υιοθέτηση AI σε εταιρικό επίπεδο — Google Gemini, Atlassian Rovo Agents και ένα AI pipeline διαλογής αιτημάτων που μείωσε τον μέσο χρόνο triage σε 350+ tickets ετησίως.",
                 "Αδειούχος Μηχανικός Πληροφορικής (ΤΕΕ) | Πιστοποίηση ITIL 4 | Με έδρα την Αθήνα | Αγγλικά (C2), Ελληνικά (Μητρική), Γερμανικά (B2)"
             ]
