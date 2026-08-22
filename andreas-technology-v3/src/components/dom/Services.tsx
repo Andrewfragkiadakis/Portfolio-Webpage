@@ -62,7 +62,7 @@ export default function Services() {
                                         </p>
                                     </div>
 
-                                    <div className="md:hidden">
+                                    <div className="md:hidden" id={`service-desc-${index}`}>
                                         <AnimatePresence initial={false}>
                                             {expandedIndex === index && (
                                                 <motion.div
@@ -85,6 +85,7 @@ export default function Services() {
                                         onClick={() => toggleExpand(index)}
                                         className="md:hidden text-xs font-mono text-[var(--accent)] uppercase tracking-wider"
                                         aria-expanded={expandedIndex === index}
+                                        aria-controls={`service-desc-${index}`}
                                     >
                                         {expandedIndex === index ? 'Less' : 'More'}
                                     </button>

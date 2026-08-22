@@ -110,15 +110,23 @@ export default function HorizontalLayout() {
     useEffect(() => {
         if (!isDesktop) return
 
+        let resizeTimer: ReturnType<typeof setTimeout>
+
         const handleResize = () => {
-            const progress = scrollYProgress.get()
-            const nearest = Math.round(progress * SECTION_STEPS) / SECTION_STEPS
-            const maxScroll = document.documentElement.scrollHeight - window.innerHeight
-            window.scrollTo({ top: nearest * maxScroll })
+            clearTimeout(resizeTimer)
+            resizeTimer = setTimeout(() => {
+                const progress = scrollYProgress.get()
+                const nearest = Math.round(progress * SECTION_STEPS) / SECTION_STEPS
+                const maxScroll = document.documentElement.scrollHeight - window.innerHeight
+                window.scrollTo({ top: nearest * maxScroll })
+            }, 150)
         }
 
         window.addEventListener('resize', handleResize)
-        return () => window.removeEventListener('resize', handleResize)
+        return () => {
+            window.removeEventListener('resize', handleResize)
+            clearTimeout(resizeTimer)
+        }
     }, [isDesktop, scrollYProgress])
 
     // Sections are declared once. The wrapper's CSS — not a second copy of the tree —

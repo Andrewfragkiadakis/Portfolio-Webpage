@@ -2,7 +2,8 @@ import { SECTION_STEPS } from '@/data/sections'
 import { DESKTOP_BREAKPOINT_PX } from '@/hooks/useIsDesktop'
 
 const SECTION_SCROLL_DURATION_MS = 1200
-const FIXED_NAV_OFFSET_PX = 64
+/** Mirrors `--nav-h: 3.9rem` in globals.css (at the default 16px root size). */
+const FIXED_NAV_OFFSET_PX = 62.4
 
 function easeOutCubic(t: number): number {
     return 1 - Math.pow(1 - t, 3)
