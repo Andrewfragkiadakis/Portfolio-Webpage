@@ -1,0 +1,202 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 856" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <defs>
+    <linearGradient id="flagship-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#cfe4ff" />
+      <stop offset="50%" stop-color="#e2d6ff" />
+      <stop offset="100%" stop-color="#ffd9ec" />
+    </linearGradient>
+    <linearGradient id="flagship-text" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#2a78d6" />
+      <stop offset="55%" stop-color="#8a5cf6" />
+      <stop offset="100%" stop-color="#e0578a" />
+    </linearGradient>
+    <linearGradient id="tile16-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#12203b" />
+      <stop offset="100%" stop-color="#050608" />
+    </linearGradient>
+    <radialGradient id="tile16-glow" cx="30%" cy="25%" r="75%">
+      <stop offset="0%" stop-color="#3987e5" stop-opacity="0.55" />
+      <stop offset="100%" stop-color="#3987e5" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="chip-ts" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3987e5" />
+      <stop offset="100%" stop-color="#1c5cab" />
+    </linearGradient>
+    <radialGradient id="fm-glow" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#9085e9" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#2a1f45" stop-opacity="1" />
+    </radialGradient>
+    <filter id="soft-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#000000" flood-opacity="0.07" />
+    </filter>
+  </defs>
+
+  <rect x="0" y="0" width="1500" height="856" fill="#f5f5f7" />
+
+  <!-- ============ ROW 1 ============ -->
+
+  <!-- A: Accessibility -->
+  <g filter="url(#soft-shadow)">
+    <rect x="24" y="24" width="210" height="190" rx="28" fill="#ddf6df" />
+  </g>
+  <circle cx="129" cy="82" r="30" fill="none" stroke="#1ba64c" stroke-width="6" />
+  <path d="M 114 82 L 124 92 L 146 68" fill="none" stroke="#1ba64c" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+  <text x="129" y="152" text-anchor="middle" font-size="24" font-weight="800" fill="#0b2e15">100/100</text>
+  <text x="129" y="180" text-anchor="middle" font-size="19" font-weight="700" fill="#0b2e15">Accessibility</text>
+
+  <!-- B: Bilingual -->
+  <g filter="url(#soft-shadow)">
+    <rect x="250" y="24" width="140" height="190" rx="28" fill="#eeeef0" />
+  </g>
+  <text x="320" y="70" text-anchor="middle" font-size="30" font-weight="800" fill="#1d1d1f">EN/GR</text>
+  <circle cx="320" cy="140" r="26" fill="none" stroke="#1d1d1f" stroke-width="3.5" />
+  <ellipse cx="320" cy="140" rx="10" ry="26" fill="none" stroke="#1d1d1f" stroke-width="2.5" />
+  <path d="M 294 140 L 346 140 M 300 122 L 340 122 M 300 158 L 340 158" stroke="#1d1d1f" stroke-width="2.5" />
+
+  <!-- C: Next.js 16 app-icon tile -->
+  <g filter="url(#soft-shadow)">
+    <rect x="406" y="24" width="210" height="190" rx="28" fill="#eeeef0" />
+  </g>
+  <rect x="422" y="40" width="178" height="158" rx="32" fill="url(#tile16-bg)" />
+  <rect x="422" y="40" width="178" height="158" rx="32" fill="url(#tile16-glow)" />
+  <text x="440" y="66" font-size="13" font-weight="700" letter-spacing="2" fill="#8fb8ee">NEXT.JS</text>
+  <text x="511" y="158" text-anchor="middle" font-size="72" font-weight="800" fill="#ffffff">16</text>
+
+  <!-- D: Performance -->
+  <g filter="url(#soft-shadow)">
+    <rect x="632" y="24" width="210" height="190" rx="28" fill="#eeeef0" />
+  </g>
+  <path d="M 703 100 A 34 34 0 0 1 771 100" fill="none" stroke="#1d1d1f" stroke-width="5" stroke-linecap="round" />
+  <path d="M 737 100 L 722 78" stroke="#e34948" stroke-width="5" stroke-linecap="round" />
+  <circle cx="737" cy="100" r="6" fill="#1d1d1f" />
+  <text x="737" y="152" text-anchor="middle" font-size="21" font-weight="800" fill="#1d1d1f">Fast by</text>
+  <text x="737" y="178" text-anchor="middle" font-size="21" font-weight="800" fill="#1d1d1f">design</text>
+
+  <!-- E: Flagship gradient tile -->
+  <g filter="url(#soft-shadow)">
+    <rect x="858" y="24" width="430" height="190" rx="28" fill="url(#flagship-bg)" />
+  </g>
+  <text x="1073" y="103" text-anchor="middle" font-size="42" font-weight="800" fill="url(#flagship-text)">Horizontal</text>
+  <text x="1073" y="151" text-anchor="middle" font-size="42" font-weight="800" fill="url(#flagship-text)">Scroll Journey</text>
+
+  <!-- F: Brand mark -->
+  <g filter="url(#soft-shadow)">
+    <rect x="1304" y="24" width="172" height="190" rx="28" fill="#1d1d1f" />
+  </g>
+  <text x="1390" y="140" text-anchor="middle" font-size="64" font-weight="800" fill="#ffffff" letter-spacing="2">AF</text>
+
+  <!-- ============ ROW 2 ============ -->
+
+  <!-- G: React 19 -->
+  <g filter="url(#soft-shadow)">
+    <rect x="24" y="230" width="210" height="190" rx="28" fill="#eeeef0" />
+  </g>
+  <text x="48" y="278" font-size="19" font-weight="700" fill="#6e6e73">React</text>
+  <text x="46" y="378" font-size="80" font-weight="800" fill="#1d1d1f">19</text>
+
+  <!-- H: TypeScript chip -->
+  <g filter="url(#soft-shadow)">
+    <rect x="250" y="230" width="140" height="190" rx="28" fill="#14151a" />
+  </g>
+  <rect x="292" y="256" width="56" height="56" rx="14" fill="url(#chip-ts)" />
+  <text x="320" y="294" text-anchor="middle" font-size="24" font-weight="800" fill="#ffffff">TS</text>
+  <text x="320" y="374" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">TypeScript 5</text>
+
+  <!-- K: Keyboard / a11y toolkit -->
+  <g filter="url(#soft-shadow)">
+    <rect x="858" y="230" width="618" height="190" rx="28" fill="#eeeef0" />
+  </g>
+  <text x="890" y="272" font-size="24" font-weight="800" fill="#1d1d1f">Full keyboard navigation</text>
+  <g font-size="12" font-weight="700" fill="#1d1d1f">
+    <rect x="890" y="300" width="64" height="56" rx="14" fill="#ffffff" stroke="#d8d8dc" />
+    <text x="922" y="333" text-anchor="middle">TAB</text>
+    <rect x="966" y="300" width="64" height="56" rx="14" fill="#ffffff" stroke="#d8d8dc" />
+    <text x="998" y="333" text-anchor="middle">←</text>
+    <rect x="1042" y="300" width="64" height="56" rx="14" fill="#3987e5" />
+    <text x="1074" y="333" text-anchor="middle" fill="#ffffff">→</text>
+    <rect x="1118" y="300" width="64" height="56" rx="14" fill="#ffffff" stroke="#d8d8dc" />
+    <text x="1150" y="333" text-anchor="middle">ESC</text>
+    <rect x="1194" y="300" width="64" height="56" rx="14" fill="#ffffff" stroke="#d8d8dc" />
+    <text x="1226" y="333" text-anchor="middle">↵</text>
+    <rect x="1270" y="300" width="64" height="56" rx="14" fill="#ffffff" stroke="#d8d8dc" />
+    <text x="1302" y="333" text-anchor="middle">FOCUS</text>
+  </g>
+
+  <!-- ============ ROW 3 ============ -->
+
+  <!-- I: Framer Motion glow (spans col1+2) -->
+  <g filter="url(#soft-shadow)">
+    <rect x="24" y="436" width="366" height="190" rx="28" fill="#1a1030" />
+  </g>
+  <rect x="24" y="436" width="366" height="190" rx="28" fill="url(#fm-glow)" />
+  <rect x="153" y="466" width="84" height="84" rx="20" fill="#ffffff" fill-opacity="0.14" stroke="#ffffff" stroke-opacity="0.5" />
+  <text x="195" y="521" text-anchor="middle" font-size="30" font-weight="800" fill="#ffffff">FM</text>
+  <text x="195" y="588" text-anchor="middle" font-size="21" font-weight="800" fill="#ffffff">Framer Motion 12</text>
+
+  <!-- J: Center visual — the site itself -->
+  <g filter="url(#soft-shadow)">
+    <rect x="406" y="230" width="436" height="396" rx="28" fill="#ffffff" />
+  </g>
+  <rect x="438" y="262" width="372" height="292" rx="20" fill="#0d0d0d" />
+  <circle cx="462" cy="286" r="6" fill="#e34948" />
+  <circle cx="482" cy="286" r="6" fill="#eda100" />
+  <circle cx="502" cy="286" r="6" fill="#1baf7a" />
+  <text x="624" y="392" text-anchor="middle" font-size="20" font-weight="800" letter-spacing="3" fill="#ffffff">ANDREAS</text>
+  <text x="624" y="418" text-anchor="middle" font-size="20" font-weight="800" letter-spacing="3" fill="#ffffff">FRAGKIADAKIS</text>
+  <path d="M 580 460 L 596 460 M 585 454 L 579 460 L 585 466 M 668 460 L 652 460 M 663 454 L 669 460 L 663 466" stroke="#3987e5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  <g>
+    <circle cx="594" cy="500" r="5" fill="#3987e5" />
+    <circle cx="612" cy="500" r="5" fill="#ffffff" fill-opacity="0.3" />
+    <circle cx="630" cy="500" r="5" fill="#ffffff" fill-opacity="0.3" />
+    <circle cx="648" cy="500" r="5" fill="#ffffff" fill-opacity="0.3" />
+    <circle cx="666" cy="500" r="5" fill="#ffffff" fill-opacity="0.3" />
+    <circle cx="684" cy="500" r="5" fill="#ffffff" fill-opacity="0.3" />
+  </g>
+  <text x="624" y="600" text-anchor="middle" font-size="15" font-weight="600" fill="#6e6e73">andreas.technology</text>
+
+  <!-- L: Lighthouse score -->
+  <g filter="url(#soft-shadow)">
+    <rect x="858" y="436" width="618" height="190" rx="28" fill="#eeeef0" />
+  </g>
+  <text x="1167" y="548" text-anchor="middle" font-size="92" font-weight="800" fill="#1d1d1f">100</text>
+  <text x="1167" y="596" text-anchor="middle" font-size="20" font-weight="700" fill="#6e6e73">Lighthouse accessibility score</text>
+
+  <!-- ============ ROW 4 (bottom strip) ============ -->
+
+  <!-- BT1: SEO -->
+  <g filter="url(#soft-shadow)">
+    <rect x="24" y="642" width="404" height="190" rx="28" fill="#eeeef0" />
+  </g>
+  <circle cx="76" cy="694" r="16" fill="none" stroke="#1d1d1f" stroke-width="4" />
+  <path d="M 88 706 L 100 718" stroke="#1d1d1f" stroke-width="4" stroke-linecap="round" />
+  <text x="48" y="758" font-size="24" font-weight="800" fill="#1d1d1f">SEO built in</text>
+  <text x="48" y="788" font-size="16" font-weight="600" fill="#6e6e73">JSON-LD · dynamic OG images · sitemap</text>
+
+  <!-- BT2: Reduced motion -->
+  <g filter="url(#soft-shadow)">
+    <rect x="444" y="642" width="298" height="190" rx="28" fill="#eeeef0" />
+  </g>
+  <path d="M 570 694 Q 580 674 590 694 T 610 694 T 630 694" fill="none" stroke="#1d1d1f" stroke-width="4" stroke-linecap="round" />
+  <line x1="565" y1="674" x2="635" y2="714" stroke="#e34948" stroke-width="4" stroke-linecap="round" />
+  <text x="468" y="758" font-size="22" font-weight="800" fill="#1d1d1f">Reduced-motion</text>
+  <text x="468" y="784" font-size="22" font-weight="800" fill="#1d1d1f">support</text>
+
+  <!-- BT3: Skip links / aria-live -->
+  <g filter="url(#soft-shadow)">
+    <rect x="758" y="642" width="298" height="190" rx="28" fill="#ddf6df" />
+  </g>
+  <circle cx="907" cy="694" r="22" fill="none" stroke="#1ba64c" stroke-width="4.5" />
+  <path d="M 897 694 L 904 701 L 918 686" fill="none" stroke="#1ba64c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+  <text x="782" y="758" font-size="22" font-weight="800" fill="#0b2e15">Skip links &amp;</text>
+  <text x="782" y="784" font-size="22" font-weight="800" fill="#0b2e15">aria-live</text>
+
+  <!-- BT4: Playful micro-UI -->
+  <g filter="url(#soft-shadow)">
+    <rect x="1072" y="642" width="404" height="190" rx="28" fill="#eeeef0" />
+  </g>
+  <text x="1096" y="700" font-size="24" font-weight="800" fill="#1d1d1f">Playful micro-UI</text>
+  <text x="1096" y="728" font-size="16" font-weight="600" fill="#6e6e73">Blob cursor · spotlight cards</text>
+  <text x="1096" y="750" font-size="16" font-weight="600" fill="#6e6e73">logo loop</text>
+  <path d="M 1400 760 L 1400 800 L 1410 792 L 1416 806 L 1422 803 L 1416 789 L 1428 788 Z" fill="#3987e5" />
+  <path d="M 1440 720 L 1443 728 L 1451 731 L 1443 734 L 1440 742 L 1437 734 L 1429 731 L 1437 728 Z" fill="#3987e5" />
+</svg>

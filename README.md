@@ -15,6 +15,12 @@ Personal portfolio and CV for **Andreas Fragkiadakis** (IT & Security Engineer, 
 
 ---
 
+## At a glance
+
+![Feature map of andreas.technology: 100/100 accessibility, EN/GR bilingual, Next.js 16, compositor-first performance, the horizontal-scroll journey, React 19, TypeScript 5, Framer Motion 12, full keyboard navigation, a 100 Lighthouse accessibility score, SEO built in, reduced-motion support, skip links & aria-live, and playful micro-UI with a blob cursor and spotlight cards.](docs/bento-infographic.svg)
+
+---
+
 ## Live site
 
 **[andreas.technology](https://andreas.technology)**
