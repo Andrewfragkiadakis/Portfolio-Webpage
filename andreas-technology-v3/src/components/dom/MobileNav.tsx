@@ -4,6 +4,7 @@ import { useContent } from '@/hooks/useContent'
 import { useState, useEffect, useRef } from 'react'
 import { smoothScrollToElement } from '@/utils/smooth-scroll'
 import { SECTION_IDS } from '@/data/sections'
+import { useHaptics } from '@/hooks/useHaptics'
 
 /** Hide the bar only after a deliberate downward scroll, not on jitter. */
 const HIDE_AFTER_SCROLL_PX = 50
@@ -13,15 +14,42 @@ export default function MobileNav() {
     const [activeSection, setActiveSection] = useState<string>(SECTION_IDS[0])
     const [isVisible, setIsVisible] = useState(true)
     const lastScrollY = useRef(0)
+    const haptics = useHaptics()
 
     const scrollToSection = (id: string) => {
         const element = document.getElementById(id)
         if (element) {
+            haptics.select()
             smoothScrollToElement(element)
             setActiveSection(id)
         }
     }
 
+    // Active section comes from an IntersectionObserver rather than per-frame offset maths.
+    // The observer fires only when a section actually crosses the middle band of the
+    // viewport, so scrolling costs nothing until the answer changes.
+    useEffect(() => {
+        if (typeof IntersectionObserver === 'undefined') return
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                for (const entry of entries) {
+                    if (entry.isIntersecting) setActiveSection(entry.target.id)
+                }
+            },
+            // A thin band across the vertical centre: whatever is in it, owns the viewport.
+            { rootMargin: '-45% 0px -45% 0px', threshold: 0 }
+        )
+
+        for (const id of SECTION_IDS) {
+            const element = document.getElementById(id)
+            if (element) observer.observe(element)
+        }
+
+        return () => observer.disconnect()
+    }, [])
+
+    // Show/hide is all this listener does now — a direction comparison, no layout reads.
     useEffect(() => {
         let ticking = false
 
@@ -34,18 +62,6 @@ export default function MobileNav() {
                 setIsVisible(true)
             }
             lastScrollY.current = currentScrollY
-
-            // Whichever section owns the middle of the viewport is the active one.
-            const midpoint = currentScrollY + window.innerHeight / 2
-            for (const section of SECTION_IDS) {
-                const element = document.getElementById(section)
-                if (!element) continue
-                const top = element.offsetTop
-                if (midpoint >= top && midpoint < top + element.offsetHeight) {
-                    setActiveSection(section)
-                    break
-                }
-            }
             ticking = false
         }
 
@@ -71,7 +87,7 @@ export default function MobileNav() {
             className={`md:hidden fixed left-4 right-4 z-50 transition-all duration-300 ease-out ${isVisible ? 'bottom-5 opacity-100 translate-y-0' : 'bottom-0 opacity-0 translate-y-4 pointer-events-none'}`}
         >
             <nav
-                className="mx-auto max-w-md rounded-2xl border border-[var(--foreground)]/20 bg-[var(--background)]/95 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.12)] py-3 px-4 flex items-center justify-around gap-1"
+                className="liquid-glass relative mx-auto max-w-md rounded-2xl py-3 px-4 flex items-center justify-around gap-1"
                 aria-label="Mobile navigation"
             >
                 {navItems.map((item) => {

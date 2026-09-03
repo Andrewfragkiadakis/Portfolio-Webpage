@@ -7,6 +7,7 @@ import { sectionIndex } from '@/data/sections'
 import { useState } from 'react'
 import type { Service } from '@/data/content'
 import SpotlightCard from '@/components/ui/SpotlightCard'
+import ScrambleText from '@/components/ui/ScrambleText'
 
 export default function Services() {
     const t = useContent()
@@ -27,7 +28,7 @@ export default function Services() {
                         className="text-[12vw] md:text-[min(8vw,9vh)] leading-[0.8] font-black tracking-tighter text-transparent select-none"
                         style={{ WebkitTextStroke: '2px var(--foreground)' }}
                     >
-                        {t.servicesTitle}
+                        <ScrambleText text={t.servicesTitle} />
                     </motion.h2>
                     <span className="text-sm font-mono tracking-widest uppercase text-[var(--foreground)] pr-2">
                         {t.servicesSubtitle}

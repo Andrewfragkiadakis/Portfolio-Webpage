@@ -2,6 +2,7 @@
 
 import { useContent } from '@/hooks/useContent'
 import { motion } from 'framer-motion'
+import ScrambleText from '@/components/ui/ScrambleText'
 
 export default function Contact() {
     const t = useContent()
@@ -19,7 +20,7 @@ export default function Contact() {
                         className="text-[12vw] md:text-[min(8vw,9vh)] leading-[0.8] font-black tracking-tighter text-transparent select-none"
                         style={{ WebkitTextStroke: '2px var(--foreground)' }}
                     >
-                        {t.contact.title}
+                        <ScrambleText text={t.contact.title} />
                     </motion.h2>
                     <span className="text-sm font-mono tracking-widest uppercase text-[var(--foreground)] pl-2">
                         {`// ${t.contact.subtitle}`}

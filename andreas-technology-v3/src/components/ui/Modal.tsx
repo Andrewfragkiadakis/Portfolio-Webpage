@@ -101,7 +101,7 @@ export default function Modal({
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.94, y: 16 }}
                         transition={{ duration: 0.2 }}
-                        className={`relative z-10 bg-[var(--background)] border border-[var(--accent)] shadow-[0_0_40px_var(--glow)] max-h-[85vh] overflow-y-auto ${className}`}
+                        className={`liquid-glass relative z-10 !border-[var(--accent)] shadow-[0_0_40px_var(--glow)] max-h-[85vh] overflow-y-auto ${className}`}
                         onClick={e => e.stopPropagation()}
                     >
                         <button

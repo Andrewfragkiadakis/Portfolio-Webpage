@@ -5,6 +5,7 @@ import { useCardScroll } from '@/hooks/useCardScroll'
 import { motion } from 'framer-motion'
 import { useRef } from 'react'
 import type { Experience as ExperienceType, Education as EducationType } from '@/data/content'
+import ScrambleText from '@/components/ui/ScrambleText'
 
 const ONE_CARD_SCROLL_MOBILE = 296
 
@@ -144,7 +145,7 @@ export default function Experience() {
                             className="text-[12vw] md:text-[min(6vw,8vh)] leading-[0.8] font-black tracking-tighter text-transparent select-none uppercase"
                             style={{ WebkitTextStroke: '2px var(--foreground)' }}
                         >
-                            {t.experienceSection.title}
+                            <ScrambleText text={t.experienceSection.title} />
                         </motion.h2>
                         <span className="text-sm font-mono tracking-widest uppercase text-[var(--foreground)] pl-2">
                             {`// ${t.experienceSection.subtitle}`}

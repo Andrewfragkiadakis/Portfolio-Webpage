@@ -8,6 +8,7 @@ import SpotlightCard from '@/components/ui/SpotlightCard'
 import Modal from '@/components/ui/Modal'
 import LogoLoop from '@/components/ui/LogoLoop'
 import type { LogoItem } from '@/components/ui/LogoLoop'
+import ScrambleText from '@/components/ui/ScrambleText'
 
 function AnimatedCounter({ value, suffix = '', duration = 2 }: { value: number; suffix?: string; duration?: number }) {
     const [count, setCount] = useState(0)
@@ -87,7 +88,7 @@ export default function About() {
                         className="text-[12vw] md:text-[min(7vw,9vh)] leading-[0.8] font-black tracking-tighter text-transparent select-none"
                         style={{ WebkitTextStroke: '2px var(--foreground)' }}
                     >
-                        {t.about.title}
+                        <ScrambleText text={t.about.title} />
                     </motion.h2>
                     <span className="text-sm font-mono tracking-widest uppercase text-[var(--foreground)] pl-2">
                         {t.about.subtitle}

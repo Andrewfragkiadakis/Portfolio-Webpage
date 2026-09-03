@@ -159,7 +159,15 @@ export default function HorizontalLayout() {
                     {sections.map((section, index) => (
                         <div
                             key={index}
-                            className="relative w-full min-h-screen overflow-x-clip md:h-screen md:w-screen md:min-h-0 md:flex-shrink-0 md:flex md:items-center md:justify-center md:overflow-hidden md:pt-[var(--nav-h)]"
+                            /*
+                             * `reveal-on-scroll` is a compositor-driven `animation-timeline: view()`
+                             * reveal, and only mobile gets it: on the desktop track the panels are
+                             * inside a transformed, sticky element where a view timeline has no
+                             * meaningful progress to read.
+                             */
+                            className={`relative w-full min-h-screen overflow-x-clip md:h-screen md:w-screen md:min-h-0 md:flex-shrink-0 md:flex md:items-center md:justify-center md:overflow-hidden md:pt-[var(--nav-h)] ${
+                                isDesktop === false && index > 0 ? 'reveal-on-scroll' : ''
+                            }`}
                         >
                             {section}
                         </div>
@@ -170,6 +178,15 @@ export default function HorizontalLayout() {
             <motion.div
                 className="hidden md:block fixed bottom-0 left-0 h-1 bg-[var(--accent)] z-50 origin-left w-full"
                 style={{ scaleX: scrollYProgress }}
+                aria-hidden="true"
+            />
+
+            {/*
+              The mobile equivalent, driven by `animation-timeline: scroll()` instead of a
+              motion value — same bar, but the main thread never learns the page scrolled.
+            */}
+            <div
+                className="scroll-progress md:hidden fixed bottom-0 left-0 h-1 bg-[var(--accent)] z-50 w-full"
                 aria-hidden="true"
             />
         </div>

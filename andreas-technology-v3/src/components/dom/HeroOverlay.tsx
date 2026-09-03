@@ -9,6 +9,7 @@ import { scrollToSection as smoothScrollToSection } from '@/utils/smooth-scroll'
 import { sectionIndex, type SectionId } from '@/data/sections'
 
 const LetterGlitch = dynamic(() => import('@/components/ui/LetterGlitch'), { ssr: false })
+const BeamsBackground = dynamic(() => import('@/components/ui/BeamsBackground'), { ssr: false })
 
 /**
  * Hero blob cursor (trail) – edit this object to tune the effect.
@@ -79,6 +80,8 @@ export default function HeroOverlay() {
             onMouseLeave={() => setIsHovering(false)}
             className="absolute top-0 left-0 w-full h-screen flex flex-col justify-center items-center overflow-hidden z-10"
         >
+            <BeamsBackground />
+
             <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}

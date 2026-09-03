@@ -64,7 +64,7 @@ export default function Navigation() {
     const navItems = SECTION_IDS.map((section, i) => ({ section, i, label: navLabels[section] }))
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-[var(--background)] border-b border-[var(--foreground)]/20 transition-all duration-300" aria-label="Main navigation">
+        <nav className="liquid-glass fixed top-0 left-0 right-0 z-50 !rounded-none !border-x-0 !border-t-0 transition-all duration-300" aria-label="Main navigation">
             <div className="max-w-7xl mx-auto px-4 sm:px-8 py-4 sm:py-4 min-h-[56px] flex justify-center items-center relative">
                 <div className="hidden md:flex gap-6 lg:gap-8 items-center">
                     {navItems.map((item) => {

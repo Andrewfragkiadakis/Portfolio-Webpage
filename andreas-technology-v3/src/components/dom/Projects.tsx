@@ -6,12 +6,44 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import type { Project } from '@/data/content'
+import { flushSync } from 'react-dom'
 import Modal from '@/components/ui/Modal'
+import ProjectsBento from '@/components/dom/ProjectsBento'
+import ScrambleText from '@/components/ui/ScrambleText'
+import { useIsDesktop } from '@/hooks/useIsDesktop'
+import { startViewTransition } from '@/utils/view-transition'
 
 export default function Projects() {
     const t = useContent()
     const [activeProject, setActiveProject] = useState<Project | null>(null)
+    const isDesktop = useIsDesktop()
     const { scrollContainerRef, scroll: scrollProjects, canScrollLeft, canScrollRight } = useCardScroll('[data-project-card]')
+
+    /**
+     * The tapped card's media and the dialog's media share `view-transition-name`, so the
+     * browser morphs one into the other instead of cross-fading two unrelated rectangles.
+     *
+     * Two things make this correct rather than merely pretty:
+     * - `flushSync` forces React to commit inside the transition callback. Without it the
+     *   DOM is still the old one when the browser takes its "after" snapshot.
+     * - The name is removed from the card in the same commit. A duplicate name in a single
+     *   frame makes the browser skip the whole transition.
+     */
+    const openProject = (project: Project, trigger: HTMLElement) => {
+        const media = trigger.closest('[data-project-card]')?.querySelector<HTMLElement>('[data-project-media]')
+        media?.style.setProperty('view-transition-name', 'project-media')
+
+        startViewTransition(() => {
+            media?.style.removeProperty('view-transition-name')
+            flushSync(() => setActiveProject(project))
+        })
+    }
+
+    const closeProject = () => {
+        startViewTransition(() => {
+            flushSync(() => setActiveProject(null))
+        })
+    }
     const arrowClass = "w-11 h-11 md:w-12 md:h-12 border border-[var(--foreground)]/30 flex items-center justify-center text-[var(--foreground)] transition-all duration-300 cursor-pointer hover:bg-[var(--foreground)] hover:text-[var(--background)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[var(--foreground)] disabled:active:scale-100"
 
     return (
@@ -25,13 +57,23 @@ export default function Projects() {
                         className="text-[12vw] md:text-[min(8vw,9vh)] leading-[0.8] font-black tracking-tighter text-transparent select-none"
                         style={{ WebkitTextStroke: '2px var(--foreground)' }}
                     >
-                        {t.projectsSection.title}
+                        <ScrambleText text={t.projectsSection.title} />
                     </motion.h2>
                     <span className="text-sm font-mono tracking-widest uppercase text-[var(--foreground)] pr-2">
                         {`// ${t.projectsSection.subtitle}`}
                     </span>
                 </div>
 
+                {/*
+                  One layout tree at a time. `isDesktop` is null until mounted, so neither
+                  branch renders during SSR and the two never coexist in the DOM.
+                */}
+                {isDesktop === false && (
+                    <ProjectsBento projects={t.projects} labels={t.projectsSection} />
+                )}
+
+                {isDesktop === true && (
+                <>
                 <div className="flex justify-end gap-2 mb-4">
                     <button
                         onClick={() => scrollProjects('left')}
@@ -67,7 +109,7 @@ export default function Projects() {
                             className="min-w-[280px] sm:min-w-[320px] md:min-w-[380px] lg:min-w-[400px] w-[280px] sm:w-[320px] md:w-[380px] lg:w-[400px] border border-[var(--foreground)]/40 bg-[var(--background)] flex-shrink-0 group overflow-hidden hover:border-[var(--accent)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)] flex flex-col scroll-snap-align-start"
                         >
                             {/* Image — fixed pixel height so card height is content-driven, not circular */}
-                            <div className="relative h-[160px] sm:h-[180px] md:h-[200px] flex-shrink-0 overflow-hidden bg-[var(--background)]">
+                            <div data-project-media className="relative h-[160px] sm:h-[180px] md:h-[200px] flex-shrink-0 overflow-hidden bg-[var(--background)]">
                                 {project.image && (
                                     <Image
                                         src={project.image}
@@ -111,7 +153,7 @@ export default function Projects() {
                                     {project.detail && (
                                         <button
                                             type="button"
-                                            onClick={() => setActiveProject(project)}
+                                            onClick={(event) => openProject(project, event.currentTarget)}
                                             aria-label={`${project.name} — ${t.projectsSection.details}`}
                                             className="ml-auto text-xs font-bold uppercase tracking-wider text-[var(--accent)] hover:text-[var(--foreground)] flex items-center gap-1 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
                                         >
@@ -141,11 +183,13 @@ export default function Projects() {
                         {t.projectsSection.githubCta}
                     </a>
                 </motion.div>
+                </>
+                )}
             </div>
 
             <Modal
                 open={Boolean(activeProject)}
-                onClose={() => setActiveProject(null)}
+                onClose={closeProject}
                 labelledBy="project-modal-title"
                 closeLabel={t.projectsSection.close}
                 className="max-w-2xl w-full"
@@ -153,7 +197,10 @@ export default function Projects() {
                 {activeProject && (
                     <>
                         {activeProject.image && (
-                            <div className="relative h-[200px] sm:h-[240px] w-full overflow-hidden bg-[var(--background)]">
+                            <div
+                                className="relative h-[200px] sm:h-[240px] w-full overflow-hidden bg-[var(--background)]"
+                                style={{ viewTransitionName: 'project-media' } as React.CSSProperties}
+                            >
                                 <Image
                                     src={activeProject.image}
                                     alt=""
