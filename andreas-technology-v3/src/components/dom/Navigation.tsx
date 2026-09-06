@@ -63,8 +63,13 @@ export default function Navigation() {
 
     const navItems = SECTION_IDS.map((section, i) => ({ section, i, label: navLabels[section] }))
 
+    // The glass lives on the inner bar, never on <nav> itself: `backdrop-filter`
+    // establishes a containing block for fixed-position descendants, so putting it on the
+    // root re-anchors the full-screen mobile menu below to the 56px bar and clips it to a
+    // sliver.
     return (
-        <nav className="liquid-glass fixed top-0 left-0 right-0 z-50 !rounded-none !border-x-0 !border-t-0 transition-all duration-300" aria-label="Main navigation">
+        <nav className="fixed top-0 left-0 right-0 z-50 transition-all duration-300" aria-label="Main navigation">
+            <div className="liquid-glass !rounded-none !border-x-0 !border-t-0">
             <div className="max-w-7xl mx-auto px-4 sm:px-8 py-4 sm:py-4 min-h-[56px] flex justify-center items-center relative">
                 <div className="hidden md:flex gap-6 lg:gap-8 items-center">
                     {navItems.map((item) => {
@@ -130,6 +135,7 @@ export default function Navigation() {
                         />
                     </motion.span>
                 </button>
+            </div>
             </div>
 
             <div

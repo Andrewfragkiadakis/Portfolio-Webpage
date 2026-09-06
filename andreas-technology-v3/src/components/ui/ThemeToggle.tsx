@@ -39,7 +39,8 @@ export default function ThemeToggle() {
             type="button"
             onClick={handleToggle}
             aria-label={isKernel ? 'Switch to light mode' : 'Switch to dark mode'}
-            className="liquid-glass fixed right-4 md:right-8 z-50 flex items-center gap-3 px-4 py-2 rounded-full hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-colors bottom-[7rem] md:bottom-8"
+            /* min-h-[44px]: the bar was 30px tall, under the 44px touch minimum. */
+            className="liquid-glass fixed right-4 md:right-8 z-50 flex items-center gap-3 px-4 py-2 min-h-[44px] rounded-full hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-colors bottom-[7rem] md:bottom-8"
         >
             <span className="text-xs font-mono uppercase tracking-widest hidden sm:block">
                 {isKernel ? 'DARK_MODE' : 'LIGHT_MODE'}
