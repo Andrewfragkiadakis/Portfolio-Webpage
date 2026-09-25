@@ -17,12 +17,22 @@ export interface Experience {
     tasks: string[]
 }
 
+export type EducationKind = 'degree' | 'certification' | 'license'
+
 export interface Education {
     degree: string
     institution: string
     duration: string
     details: string[]
     link?: string
+    /** Drives the card icon and whether it appears in the About credential strip. Defaults to 'degree'. */
+    kind?: EducationKind
+    /** Short label for credential badges, e.g. "JAMF 200". */
+    badge?: string
+    /** Font Awesome class overriding the default icon for this kind. */
+    icon?: string
+    /** Accent-highlight this entry in the credential strip. */
+    featured?: boolean
 }
 
 export interface Project {
@@ -72,6 +82,7 @@ export interface Content {
         currentFocus: string
         currentFocusDetail: string
         statsLabels: string[]
+        credentialsLabel: string
     }
     hero: {
         firstName: string
@@ -120,6 +131,7 @@ export interface Content {
         code: string
         githubCta: string
         details: string
+        caseStudy: string
         roleLabel: string
         highlightsLabel: string
         report: string
@@ -172,11 +184,12 @@ export const content: Record<'en' | 'gr', Content> = {
             currentFocus: "Current Focus",
             currentFocusDetail: "Fleet Automation & Endpoint Security",
             statsLabels: ["Years Experience", "Endpoints Managed", "Faster Onboarding", "Languages"],
+            credentialsLabel: "Credentials",
             description: [
                 "I am an IT & Computer Engineer (M.Eng.) leading Apple Fleet & IT Automation at Omilia, a global conversational-AI company, across a 400+ device environment. I own the Jamf Pro platform end-to-end and lead endpoint engineering for Checkpoint Harmony EDR, Microsoft Sentinel SIEM pipelines, and SSL certificate automation.",
                 "My work sits where security, automation and scale meet: CIS Benchmark hardening ahead of PCI-DSS and SOC 2 audits, and zero-touch macOS enrollment that cut onboarding time by 70%.",
                 "I also drive enterprise AI adoption — Google Gemini org-wide, Atlassian Rovo Agents, and an AI-powered ticket-triage pipeline that cut average triage time across 350+ tickets a year.",
-                "Licensed Computer Science Engineer (TEE) | ITIL 4 certified | Based in Athens | English (C2), Greek (Native), German (B2)"
+                "Jamf Certified Tech (Jamf 200) | Licensed Computer Science Engineer (TEE) | ITIL 4 certified | Based in Athens | English (C2), Greek (Native), German (B2)"
             ]
         },
 
@@ -187,7 +200,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 "APPLE FLEET & IT AUTOMATION LEAD",
                 "M.ENG. COMPUTER ENGINEER",
                 "ENDPOINT SECURITY ENGINEER",
-                "JAMF PRO ADMINISTRATOR",
+                "JAMF CERTIFIED TECH · JAMF 200",
                 "TEE-LICENSED ENGINEER",
                 "ITIL V4 CERTIFIED",
                 "INFRASTRUCTURE AUTOMATION ENGINEER",
@@ -260,7 +273,7 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fab fa-apple",
                 title: "Apple Fleet Engineering",
-                description: "Managing macOS at scale with Jamf Pro and Apple Business Manager — zero-touch enrollment, configuration profiles, patch strategy, and fleet hygiene across hundreds of devices."
+                description: "Jamf Certified Tech (Jamf 200). Managing macOS at scale with Jamf Pro and Apple Business Manager — zero-touch enrollment, configuration profiles, patch strategy, and fleet hygiene across hundreds of devices."
             },
             {
                 icon: "fas fa-gears",
@@ -381,9 +394,25 @@ export const content: Record<'en' | 'gr', Content> = {
                 ]
             },
             {
+                degree: "Jamf Certified Tech — Jamf Pro (Jamf 200)",
+                institution: "Jamf",
+                duration: "2026",
+                kind: "certification",
+                badge: "JAMF 200",
+                icon: "fab fa-apple",
+                featured: true,
+                details: [
+                    "Passed the Jamf 200 certification exam for Jamf Pro",
+                    "Enrollment, inventory, policies, configuration profiles, Self Service and scoping for macOS and iOS fleets"
+                ],
+                link: "https://www.credly.com/badges/05e1f049-b7fb-4a92-bc2b-fd27ad861755"
+            },
+            {
                 degree: "ITIL 4 Foundation certified in IT Service Management",
                 institution: "AXELOS Global Best Practice",
                 duration: "2024",
+                kind: "certification",
+                badge: "ITIL 4",
                 details: ["Knowledge of the ITIL 4 framework", "Focus on IT service management (ITSM) best practices"],
                 link: "/files/itil-v4-cert.pdf"
             },
@@ -391,6 +420,8 @@ export const content: Record<'en' | 'gr', Content> = {
                 degree: "Professional License — IT & Computer Science Engineer",
                 institution: "Technical Chamber of Greece (TEE)",
                 duration: "2025",
+                kind: "license",
+                badge: "TEE LICENSED",
                 details: [
                     "Statutory professional licence to practise as a Computer Science Engineer in Greece",
                     "Requires an accredited five-year integrated Master's degree"
@@ -400,6 +431,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 degree: "Career Essentials in Generative AI",
                 institution: "Microsoft & LinkedIn",
                 duration: "2024",
+                kind: "certification",
                 details: ["Foundations of generative AI systems and responsible adoption", "Applied to enterprise AI rollouts and agentic automation"]
             }
         ],
@@ -419,6 +451,7 @@ export const content: Record<'en' | 'gr', Content> = {
             code: "Code",
             githubCta: "View Full Portfolio on GitHub",
             details: "Details",
+            caseStudy: "Case study",
             roleLabel: "Role",
             highlightsLabel: "Highlights",
             report: "Report",
@@ -649,11 +682,12 @@ export const content: Record<'en' | 'gr', Content> = {
             currentFocus: "Τρεχουσα Εστιαση",
             currentFocusDetail: "Fleet Automation & Endpoint Security",
             statsLabels: ["Χρονια Εμπειριας", "Συσκευες υπο Διαχειριση", "Ταχυτερο Onboarding", "Γλωσσες"],
+            credentialsLabel: "Πιστοποιησεις",
             description: [
                 "Είμαι Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) και ηγούμαι του τομέα Apple Fleet & IT Automation στην Omilia, μια παγκόσμια εταιρεία conversational AI, σε περιβάλλον άνω των 400 συσκευών. Διαχειρίζομαι εξ ολοκλήρου την πλατφόρμα Jamf Pro και ηγούμαι του endpoint engineering για Checkpoint Harmony EDR, pipelines Microsoft Sentinel SIEM και αυτοματοποίηση πιστοποιητικών SSL.",
                 "Η δουλειά μου βρίσκεται στο σημείο όπου συναντώνται η ασφάλεια, ο αυτοματισμός και η κλίμακα: θωράκιση κατά CIS Benchmarks ενόψει ελέγχων PCI-DSS και SOC 2, και zero-touch enrollment για macOS που μείωσε τον χρόνο onboarding κατά 70%.",
                 "Παράλληλα οδηγώ την υιοθέτηση AI σε εταιρικό επίπεδο — Google Gemini, Atlassian Rovo Agents και ένα AI pipeline διαλογής αιτημάτων που μείωσε τον μέσο χρόνο triage σε 350+ tickets ετησίως.",
-                "Αδειούχος Μηχανικός Πληροφορικής (ΤΕΕ) | Πιστοποίηση ITIL 4 | Με έδρα την Αθήνα | Αγγλικά (C2), Ελληνικά (Μητρική), Γερμανικά (B2)"
+                "Jamf Certified Tech (Jamf 200) | Αδειούχος Μηχανικός Πληροφορικής (ΤΕΕ) | Πιστοποίηση ITIL 4 | Με έδρα την Αθήνα | Αγγλικά (C2), Ελληνικά (Μητρική), Γερμανικά (B2)"
             ]
         },
 
@@ -664,7 +698,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 "APPLE FLEET & IT AUTOMATION LEAD",
                 "M.ENG. ΜΗΧΑΝΙΚΟΣ ΥΠΟΛΟΓΙΣΤΩΝ",
                 "ENDPOINT SECURITY ENGINEER",
-                "JAMF PRO ADMINISTRATOR",
+                "JAMF CERTIFIED TECH · JAMF 200",
                 "ΑΔΕΙΟΥΧΟΣ ΜΗΧΑΝΙΚΟΣ (ΤΕΕ)",
                 "ITIL V4 CERTIFIED",
                 "INFRASTRUCTURE AUTOMATION ENGINEER",
@@ -735,7 +769,7 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fab fa-apple",
                 title: "Apple Fleet Engineering",
-                description: "Διαχείριση macOS σε κλίμακα με Jamf Pro και Apple Business Manager — zero-touch enrollment, configuration profiles, στρατηγική ενημερώσεων και συντήρηση εκατοντάδων συσκευών."
+                description: "Jamf Certified Tech (Jamf 200). Διαχείριση macOS σε κλίμακα με Jamf Pro και Apple Business Manager — zero-touch enrollment, configuration profiles, στρατηγική ενημερώσεων και συντήρηση εκατοντάδων συσκευών."
             },
             {
                 icon: "fas fa-gears",
@@ -854,9 +888,25 @@ export const content: Record<'en' | 'gr', Content> = {
                 details: ["Εξάμηνο φοίτησης ERASMUS+", "Διάκριση ως ομιλητής και επικεφαλής ομάδας"]
             },
             {
+                degree: "Jamf Certified Tech — Jamf Pro (Jamf 200)",
+                institution: "Jamf",
+                duration: "2026",
+                kind: "certification",
+                badge: "JAMF 200",
+                icon: "fab fa-apple",
+                featured: true,
+                details: [
+                    "Επιτυχία στις εξετάσεις πιστοποίησης Jamf 200 για το Jamf Pro",
+                    "Enrollment, inventory, policies, configuration profiles, Self Service και scoping για στόλους macOS και iOS"
+                ],
+                link: "https://www.credly.com/badges/05e1f049-b7fb-4a92-bc2b-fd27ad861755"
+            },
+            {
                 degree: "ITIL 4 Foundation Certificate in IT Service Management",
                 institution: "AXELOS Global Best Practice",
                 duration: "2024",
+                kind: "certification",
+                badge: "ITIL 4",
                 details: ["Πιστοποίηση στο πλαίσιο ITIL 4", "Εξειδίκευση στις βέλτιστες πρακτικές διαχείρισης υπηρεσιών πληροφορικής (ITSM)"],
                 link: "/files/itil-v4-cert.pdf"
             },
@@ -864,6 +914,8 @@ export const content: Record<'en' | 'gr', Content> = {
                 degree: "Άδεια Ασκήσεως Επαγγέλματος — Μηχανικός Πληροφορικής & Υπολογιστών",
                 institution: "Τεχνικό Επιμελητήριο Ελλάδας (ΤΕΕ)",
                 duration: "2025",
+                kind: "license",
+                badge: "ΤΕΕ",
                 details: [
                     "Θεσμοθετημένη άδεια άσκησης επαγγέλματος Μηχανικού Πληροφορικής στην Ελλάδα",
                     "Προϋποθέτει πενταετές ενιαίο και αδιάσπαστο μεταπτυχιακό δίπλωμα"
@@ -873,6 +925,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 degree: "Career Essentials in Generative AI",
                 institution: "Microsoft & LinkedIn",
                 duration: "2024",
+                kind: "certification",
                 details: ["Θεμέλια συστημάτων generative AI και υπεύθυνη υιοθέτηση", "Εφαρμογή σε εταιρικά rollouts AI και agentic automation"]
             }
         ],
@@ -892,6 +945,7 @@ export const content: Record<'en' | 'gr', Content> = {
             code: "Code",
             githubCta: "Δειτε το πληρες Portfolio στο GitHub",
             details: "Λεπτομερειες",
+            caseStudy: "Μελετη περιπτωσης",
             roleLabel: "Ρολος",
             highlightsLabel: "Βασικα Σημεια",
             report: "Αναφορα",

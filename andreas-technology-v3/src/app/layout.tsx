@@ -1,7 +1,7 @@
 
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { MotionConfig } from 'framer-motion'
+import { MotionConfig } from 'motion/react'
 import './globals.css'
 import { LanguageProvider } from '@/contexts/LanguageContext'
 import { ThemeProvider } from '@/contexts/ThemeContext'
@@ -10,7 +10,7 @@ import NoiseOverlay from '@/components/dom/NoiseOverlay'
 import ThemeToggle from '@/components/ui/ThemeToggle'
 import CustomCursor from '@/components/ui/CustomCursor'
 import { SpeedInsights } from '@vercel/speed-insights/next'
-import { SOCIAL_URLS } from '@/data/content'
+import { SOCIAL_URLS, content } from '@/data/content'
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' })
 
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     },
     description: 'M.Eng. Computer Engineer specializing in SecOps, infrastructure automation, and AI. Portfolio of Andreas Fragkiadakis — IT & Security Engineer based in Athens, Greece.',
     keywords: [
-        'Andreas Fragkiadakis', 'Fragkiadakis', 'IT Engineer', 'Security Engineer', 'Computer Engineer', 'M.Eng', 'SecOps', 'Infrastructure Automation', 'ITIL', 'Next.js Developer', 'Frontend Developer Greece', 'Web Developer Athens', 'Portfolio', 'Athens', 'Greece',
+        'Andreas Fragkiadakis', 'Fragkiadakis', 'IT Engineer', 'Security Engineer', 'Computer Engineer', 'M.Eng', 'SecOps', 'Infrastructure Automation', 'ITIL', 'Jamf 200', 'Jamf Certified Tech', 'Jamf Pro', 'Apple Fleet Management', 'Next.js Developer', 'Frontend Developer Greece', 'Web Developer Athens', 'Portfolio', 'Athens', 'Greece',
         'Ανδρέας Φραγκιαδάκης', 'Φραγκιαδάκης', 'Μηχανικός Πληροφορικής', 'Μηχανικός Υπολογιστών', 'Μηχανικός Ασφαλείας IT', 'Web Developer Αθήνα', 'Προγραμματιστής Αθήνα', 'IT Support Ελλάδα', 'Ασφάλεια Πληροφοριακών Συστημάτων', 'Αυτοματισμός Υποδομών',
     ],
     authors: [{ name: 'Andreas Fragkiadakis', url: SITE_URL }],
@@ -146,6 +146,16 @@ export default function RootLayout({
                             email: 'andrewfragkiadakis@gmail.com',
                             telephone: '+30-697-345-3683',
                             address: { '@type': 'PostalAddress', addressLocality: 'Athens', addressCountry: 'GR' },
+                            knowsAbout: ['Jamf Pro', 'macOS fleet management', 'Endpoint security', 'IT automation', 'ITIL 4'],
+                            hasCredential: content.en.education
+                                .filter((e) => e.kind === 'certification' || e.kind === 'license')
+                                .map((e) => ({
+                                    '@type': 'EducationalOccupationalCredential',
+                                    name: e.degree,
+                                    credentialCategory: e.kind === 'license' ? 'Professional License' : 'Certification',
+                                    recognizedBy: { '@type': 'Organization', name: e.institution },
+                                    ...(e.link ? { url: e.link.startsWith('http') ? e.link : `${SITE_URL}${e.link}` } : {}),
+                                })),
                         }),
                     }}
                 />

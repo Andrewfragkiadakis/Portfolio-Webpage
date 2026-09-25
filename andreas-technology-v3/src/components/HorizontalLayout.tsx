@@ -1,6 +1,6 @@
 import { useEffect, useRef, Suspense, useCallback } from 'react'
 import dynamic from 'next/dynamic'
-import { motion, useScroll, useTransform, useSpring, useVelocity, useMotionValue, animate, useReducedMotion } from 'framer-motion'
+import { motion, useScroll, useTransform, useSpring, useVelocity, useMotionValue, animate, useReducedMotion } from 'motion/react'
 import HeroOverlay from '@/components/dom/HeroOverlay'
 import About from '@/components/dom/About'
 import Services from '@/components/dom/Services'

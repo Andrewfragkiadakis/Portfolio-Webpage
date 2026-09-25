@@ -1,12 +1,13 @@
 'use client'
 
 import { useContent } from '@/hooks/useContent'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { scrollToSection } from '@/utils/smooth-scroll'
 import { sectionIndex } from '@/data/sections'
 import { useState } from 'react'
 import type { Service } from '@/data/content'
 import SpotlightCard from '@/components/ui/SpotlightCard'
+import SectionHeading from '@/components/ui/SectionHeading'
 
 export default function Services() {
     const t = useContent()
@@ -19,20 +20,7 @@ export default function Services() {
     return (
         <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-4 md:py-0 overflow-visible md:overflow-x-hidden md:overflow-y-auto no-scrollbar">
             <div className="max-w-7xl mx-auto w-full">
-                <div id="services" className="flex flex-col items-end gap-1.5 mb-5 sm:mb-6 w-full text-right">
-                    <motion.h2
-                        initial={{ opacity: 0, x: 50 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        className="text-[12vw] md:text-[min(8vw,9vh)] leading-[0.8] font-black tracking-tighter text-transparent select-none"
-                        style={{ WebkitTextStroke: '2px var(--foreground)' }}
-                    >
-                        {t.servicesTitle}
-                    </motion.h2>
-                    <span className="text-sm font-mono tracking-widest uppercase text-[var(--foreground)] pr-2">
-                        {t.servicesSubtitle}
-                    </span>
-                </div>
+                <SectionHeading id="services" title={t.servicesTitle} subtitle={t.servicesSubtitle} align="end" className="mb-5 sm:mb-6" />
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
                     {t.services.map((service: Service, index: number) => (

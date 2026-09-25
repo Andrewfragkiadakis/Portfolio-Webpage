@@ -4,6 +4,18 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 
 ## [Unreleased]
 
+### Added
+- Jamf Certified Tech — Jamf Pro (Jamf 200) credential (EN/GR) with Credly verification link, hero typewriter line, About summary and Apple Fleet service copy
+- `Education.kind` / `badge` / `icon` / `featured` fields: certifications and licences get their own icon, badge pill and (featured) accent treatment
+- About credential strip: Awwwards-style pill badges generated from certifications/licences; linked when verifiable
+- `SectionHeading`: shared outlined heading with masked per-letter reveal, replacing five duplicated heading blocks
+- JSON-LD `hasCredential` and `knowsAbout` on the Person schema; Jamf keywords in metadata
+
+### Changed
+- Project cards redesigned gallery-style: 4:3 image-first cards, slow hover zoom, rising "Case study" caption (always visible on touch), LIVE/OSS/PAPER status pills and year superscript
+- Migrate `framer-motion` to its successor package `motion` (`motion/react`)
+- Perf: stat counters animate via `animate()` writing to the DOM instead of 60 fps React state updates; honour reduced motion and render final values server-side
+
 ### Fixed
 - GSC: `X-Robots-Tag` and static `<meta name="robots">` for thesis presentation; `robots.txt` disallows `/opengraph-image`; sitemap lists only the homepage; root `/favicon.ico` for stable icon URL (thesis HTML restored under `public/`)
 - Mobile: fix horizontal page scroll by using `overflow-x-clip` on Experience and Projects sections instead of `overflow-x: hidden` on html/body (which killed momentum scrolling on mobile browsers)

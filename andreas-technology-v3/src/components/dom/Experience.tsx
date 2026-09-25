@@ -2,9 +2,16 @@
 
 import { useContent } from '@/hooks/useContent'
 import { useCardScroll } from '@/hooks/useCardScroll'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { useRef } from 'react'
-import type { Experience as ExperienceType, Education as EducationType } from '@/data/content'
+import type { Experience as ExperienceType, Education as EducationType, EducationKind } from '@/data/content'
+
+const KIND_ICON: Record<EducationKind, string> = {
+    degree: 'fas fa-graduation-cap',
+    certification: 'fas fa-award',
+    license: 'fas fa-id-card',
+}
+import SectionHeading from '@/components/ui/SectionHeading'
 
 const ONE_CARD_SCROLL_MOBILE = 296
 
@@ -65,6 +72,8 @@ function ExperienceCard({ exp, index }: { exp: ExperienceType; index: number }) 
 }
 
 function EducationCard({ edu, index, verifyLabel }: { edu: EducationType; index: number; verifyLabel: string }) {
+    const featured = Boolean(edu.featured)
+    const icon = edu.icon ?? KIND_ICON[edu.kind ?? 'degree']
     return (
         <motion.div
             data-card="true"
@@ -72,16 +81,29 @@ function EducationCard({ edu, index, verifyLabel }: { edu: EducationType; index:
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.1 }}
-            className="min-w-[280px] w-[280px] sm:min-w-[320px] sm:w-[320px] md:min-w-[380px] md:w-[380px] lg:min-w-[400px] lg:w-[400px] aspect-square bg-[var(--background)] border border-[var(--foreground)]/20 flex-shrink-0 p-4 sm:p-5 md:p-6 lg:p-8 flex flex-col justify-between hover:border-[var(--accent)] transition-all duration-300 group scroll-snap-align-start"
+            className={`min-w-[280px] w-[280px] sm:min-w-[320px] sm:w-[320px] md:min-w-[380px] md:w-[380px] lg:min-w-[400px] lg:w-[400px] aspect-square bg-[var(--background)] border flex-shrink-0 p-4 sm:p-5 md:p-6 lg:p-8 flex flex-col justify-between hover:border-[var(--accent)] transition-all duration-300 group scroll-snap-align-start relative overflow-hidden ${featured ? 'border-[var(--accent)]/70 shadow-[0_0_0_1px_var(--glow),0_0_40px_var(--glow)]' : 'border-[var(--foreground)]/20'}`}
         >
-            <div className="flex-1 flex flex-col">
-                <div className="flex items-center justify-between mb-4">
-                    <span className="w-12 h-12 flex items-center justify-center border border-[var(--foreground)]/30 text-[var(--foreground)] rounded-lg md:group-hover:bg-[var(--accent)] md:group-hover:text-[var(--background)] md:group-hover:border-[var(--accent)] transition-colors">
-                        <i className="fas fa-graduation-cap text-lg" aria-hidden="true" />
+            {featured && (
+                <div
+                    className="pointer-events-none absolute -top-24 -right-24 w-56 h-56 rounded-full bg-[var(--accent)] opacity-[0.12] blur-3xl"
+                    aria-hidden="true"
+                />
+            )}
+            <div className="flex-1 flex flex-col relative">
+                <div className="flex items-center justify-between mb-4 gap-3">
+                    <span className={`w-12 h-12 shrink-0 flex items-center justify-center border rounded-lg md:group-hover:bg-[var(--accent)] md:group-hover:text-[var(--background)] md:group-hover:border-[var(--accent)] transition-colors ${featured ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-[var(--foreground)]/30 text-[var(--foreground)]'}`}>
+                        <i className={`${icon} text-lg`} aria-hidden="true" />
                     </span>
-                    <span className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest">
-                        {edu.duration}
-                    </span>
+                    <div className="flex items-center gap-2 min-w-0">
+                        {edu.badge && (
+                            <span className={`text-[9px] font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 border whitespace-nowrap ${featured ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-[var(--foreground)]/40 text-[var(--foreground)] opacity-80'}`}>
+                                {edu.badge}
+                            </span>
+                        )}
+                        <span className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest whitespace-nowrap">
+                            {edu.duration}
+                        </span>
+                    </div>
                 </div>
                 <h3 className="text-lg md:text-xl font-bold text-[var(--foreground)] uppercase leading-tight mb-2 md:group-hover:text-[var(--accent)] transition-colors">
                     {edu.degree}
@@ -105,7 +127,7 @@ function EducationCard({ edu, index, verifyLabel }: { edu: EducationType; index:
                     href={edu.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest border border-[var(--foreground)] px-4 py-3 hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all justify-center w-full mt-auto"
+                    className={`relative inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest border px-4 py-3 transition-all justify-center w-full mt-auto ${featured ? 'border-[var(--accent)] bg-[var(--accent)] text-[var(--background)] hover:shadow-[0_0_24px_var(--glow)]' : 'border-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)]'}`}
                 >
                     <i className="fas fa-certificate" aria-hidden="true" />
                     {verifyLabel}
@@ -136,20 +158,7 @@ export default function Experience() {
         <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-6 md:px-12 lg:px-24 py-4 md:py-0 overflow-x-clip overflow-y-visible md:overflow-x-hidden md:overflow-y-auto no-scrollbar relative">
             <div className="max-w-[1920px] mx-auto w-full h-full flex flex-col justify-center">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 sm:mb-8 md:mb-12 gap-4 md:gap-6">
-                    <div id="experience" className="flex flex-col items-start gap-2">
-                        <motion.h2
-                            initial={{ opacity: 0, x: -50 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            className="text-[12vw] md:text-[min(6vw,8vh)] leading-[0.8] font-black tracking-tighter text-transparent select-none uppercase"
-                            style={{ WebkitTextStroke: '2px var(--foreground)' }}
-                        >
-                            {t.experienceSection.title}
-                        </motion.h2>
-                        <span className="text-sm font-mono tracking-widest uppercase text-[var(--foreground)] pl-2">
-                            {`// ${t.experienceSection.subtitle}`}
-                        </span>
-                    </div>
+                    <SectionHeading id="experience" title={t.experienceSection.title} subtitle={t.experienceSection.subtitle} sizeClass="text-[12vw] md:text-[min(6vw,8vh)]" />
                     <div className="hidden md:flex gap-2">
                         <ScrollButton onClick={() => scroll('left')} direction="left" label="Scroll left" disabled={!canScrollLeft} />
                         <ScrollButton onClick={() => scroll('right')} direction="right" label="Scroll right" disabled={!canScrollRight} />

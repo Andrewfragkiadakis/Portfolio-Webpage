@@ -1,41 +1,76 @@
 'use client'
 
 import { useContent } from '@/hooks/useContent'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView, useReducedMotion, animate } from 'motion/react'
 import { useRef, useEffect, useState } from 'react'
-import type { Skill } from '@/data/content'
+import type { Skill, Education } from '@/data/content'
 import SpotlightCard from '@/components/ui/SpotlightCard'
 import Modal from '@/components/ui/Modal'
 import LogoLoop from '@/components/ui/LogoLoop'
 import type { LogoItem } from '@/components/ui/LogoLoop'
+import SectionHeading from '@/components/ui/SectionHeading'
 
+/** Counts up once in view. Writes straight to the DOM so it never re-renders React per frame. */
 function AnimatedCounter({ value, suffix = '', duration = 2 }: { value: number; suffix?: string; duration?: number }) {
-    const [count, setCount] = useState(0)
-    const ref = useRef(null)
+    const ref = useRef<HTMLSpanElement>(null)
     const isInView = useInView(ref, { once: true })
+    const prefersReducedMotion = useReducedMotion()
 
     useEffect(() => {
-        if (isInView) {
-            let start = 0
-            const end = value
-            const increment = end / (duration * 60)
-            const timer = setInterval(() => {
-                start += increment
-                if (start >= end) {
-                    setCount(end)
-                    clearInterval(timer)
-                } else {
-                    setCount(Math.floor(start))
-                }
-            }, 1000 / 60)
-            return () => clearInterval(timer)
+        const el = ref.current
+        if (!el || !isInView) return
+        if (prefersReducedMotion) {
+            el.textContent = `${value}${suffix}`
+            return
         }
-    }, [isInView, value, duration])
+        const controls = animate(0, value, {
+            duration,
+            ease: [0.22, 1, 0.36, 1],
+            onUpdate: (latest) => { el.textContent = `${Math.round(latest)}${suffix}` },
+        })
+        return () => controls.stop()
+    }, [isInView, value, suffix, duration, prefersReducedMotion])
 
+    // Server/initial render shows the final value so it is correct without JS.
+    return <span ref={ref}>{value}{suffix}</span>
+}
+
+function CredentialStrip({ items, label }: { items: Education[]; label: string }) {
+    if (items.length === 0) return null
     return (
-        <span ref={ref}>
-            {count}{suffix}
-        </span>
+        <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            className="flex flex-wrap items-center gap-2 mb-4"
+        >
+            <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[var(--foreground)] opacity-70 mr-1">
+                {label}
+            </span>
+            {items.map((item) => {
+                const pill = item.featured
+                    ? 'border-[var(--accent)] text-[var(--accent)] bg-[var(--accent)]/10 hover:bg-[var(--accent)] hover:text-[var(--background)]'
+                    : 'border-[var(--foreground)]/35 text-[var(--foreground)] hover:border-[var(--foreground)]'
+                const body = (
+                    <>
+                        {item.icon && <i className={`${item.icon} text-[11px]`} aria-hidden="true" />}
+                        {item.badge}
+                        {item.link && <i className="fas fa-arrow-up-right-from-square text-[8px] opacity-70" aria-hidden="true" />}
+                    </>
+                )
+                const cls = `inline-flex items-center gap-1.5 px-2.5 py-1 border text-[11px] font-mono font-bold uppercase tracking-wider transition-colors duration-300 ${pill}`
+                return item.link ? (
+                    <a key={item.badge} href={item.link} target="_blank" rel="noopener noreferrer" className={cls} aria-label={`${item.degree} — ${item.institution} (opens credential)`}>
+                        {body}
+                    </a>
+                ) : (
+                    <span key={item.badge} className={cls} title={`${item.degree} — ${item.institution}`}>
+                        {body}
+                    </span>
+                )
+            })}
+        </motion.div>
     )
 }
 
@@ -79,20 +114,7 @@ export default function About() {
     return (
         <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-4 md:py-0 overflow-visible md:overflow-x-hidden md:overflow-y-auto no-scrollbar">
             <div className="max-w-7xl mx-auto w-full">
-                <div id="about" className="flex flex-col items-start gap-2 mb-6 md:mb-8">
-                    <motion.h2
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="text-[12vw] md:text-[min(7vw,9vh)] leading-[0.8] font-black tracking-tighter text-transparent select-none"
-                        style={{ WebkitTextStroke: '2px var(--foreground)' }}
-                    >
-                        {t.about.title}
-                    </motion.h2>
-                    <span className="text-sm font-mono tracking-widest uppercase text-[var(--foreground)] pl-2">
-                        {t.about.subtitle}
-                    </span>
-                </div>
+                <SectionHeading id="about" title={t.about.title} subtitle={t.about.subtitle} sizeClass="text-[12vw] md:text-[min(7vw,9vh)]" className="mb-6 md:mb-8" />
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                     <motion.div
@@ -127,6 +149,10 @@ export default function About() {
                         viewport={{ once: true }}
                         className="flex flex-col justify-center"
                     >
+                        <CredentialStrip
+                            items={t.education.filter((e) => e.badge && e.kind && e.kind !== 'degree')}
+                            label={t.about.credentialsLabel}
+                        />
                         <h3 className="text-xl md:text-2xl font-bold text-[var(--foreground)] mb-3">
                             {t.about.tagline}
                         </h3>

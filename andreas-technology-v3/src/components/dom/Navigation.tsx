@@ -4,7 +4,7 @@ import { useLanguage } from '@/contexts/LanguageContext'
 import { useContent } from '@/hooks/useContent'
 import { useTheme } from '@/contexts/ThemeContext'
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { scrollToSection as smoothScrollToSection } from '@/utils/smooth-scroll'
 import { SECTION_IDS, SECTION_STEPS } from '@/data/sections'
 

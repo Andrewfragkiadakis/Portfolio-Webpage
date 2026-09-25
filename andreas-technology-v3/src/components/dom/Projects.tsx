@@ -3,10 +3,11 @@
 import { useContent } from '@/hooks/useContent'
 import { useCardScroll } from '@/hooks/useCardScroll'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { useState } from 'react'
 import type { Project } from '@/data/content'
 import Modal from '@/components/ui/Modal'
+import SectionHeading from '@/components/ui/SectionHeading'
 
 export default function Projects() {
     const t = useContent()
@@ -17,20 +18,7 @@ export default function Projects() {
     return (
         <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-4 md:py-0 overflow-x-clip overflow-y-visible md:overflow-x-hidden md:overflow-y-auto no-scrollbar">
             <div className="max-w-[1920px] mx-auto w-full max-h-[calc(100vh-8rem)] md:max-h-none overflow-y-auto md:overflow-visible">
-                <div id="projects" className="flex flex-col items-end gap-2 mb-6 sm:mb-8 w-full text-right">
-                    <motion.h2
-                        initial={{ opacity: 0, x: 50 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        className="text-[12vw] md:text-[min(8vw,9vh)] leading-[0.8] font-black tracking-tighter text-transparent select-none"
-                        style={{ WebkitTextStroke: '2px var(--foreground)' }}
-                    >
-                        {t.projectsSection.title}
-                    </motion.h2>
-                    <span className="text-sm font-mono tracking-widest uppercase text-[var(--foreground)] pr-2">
-                        {`// ${t.projectsSection.subtitle}`}
-                    </span>
-                </div>
+                <SectionHeading id="projects" title={t.projectsSection.title} subtitle={t.projectsSection.subtitle} align="end" className="mb-6 sm:mb-8" />
 
                 <div className="flex justify-end gap-2 mb-4">
                     <button
@@ -56,72 +44,109 @@ export default function Projects() {
                     className="flex gap-4 md:gap-6 overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 md:-mx-0 md:px-0 scroll-smooth items-stretch"
                     style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
                 >
-                    {t.projects.map((project: Project, index: number) => (
-                        <motion.div
-                            key={index}
-                            data-project-card
-                            initial={{ opacity: 0, x: 50 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.15 }}
-                            className="min-w-[280px] sm:min-w-[320px] md:min-w-[380px] lg:min-w-[400px] w-[280px] sm:w-[320px] md:w-[380px] lg:w-[400px] border border-[var(--foreground)]/40 bg-[var(--background)] flex-shrink-0 group overflow-hidden hover:border-[var(--accent)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)] flex flex-col scroll-snap-align-start"
-                        >
-                            {/* Image — fixed pixel height so card height is content-driven, not circular */}
-                            <div className="relative h-[160px] sm:h-[180px] md:h-[200px] flex-shrink-0 overflow-hidden bg-[var(--background)]">
+                    {t.projects.map((project: Project, index: number) => {
+                        const openDetail = project.detail ? () => setActiveProject(project) : undefined
+                        const statuses = [
+                            project.liveSiteLink && { label: 'LIVE', accent: true },
+                            project.githubLink && { label: 'OSS', accent: false },
+                            (project.reportLink || project.publicationLink) && { label: 'PAPER', accent: false },
+                        ].filter(Boolean) as { label: string; accent: boolean }[]
+
+                        const media = (
+                            <>
                                 {project.image && (
                                     <Image
                                         src={project.image}
                                         alt={project.name}
                                         fill
-                                        sizes="(max-width: 640px) 280px, (max-width: 768px) 320px, (max-width: 1024px) 380px, 400px"
-                                        className="object-cover opacity-100 md:opacity-70 md:group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 grayscale-0 md:grayscale-[20%] md:group-hover:grayscale-0"
+                                        sizes="(max-width: 640px) 300px, (max-width: 1024px) 360px, 440px"
+                                        className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
                                     />
                                 )}
-                                <div className="absolute top-3 right-3 font-mono text-xl text-[var(--accent)] opacity-70 font-bold">
+                                <span className="absolute top-3 left-3 z-10 font-mono text-[11px] font-bold px-2 py-1 bg-[var(--background)]/85 backdrop-blur text-[var(--foreground)] border border-[var(--foreground)]/15">
                                     {(index + 1).toString().padStart(2, '0')}
-                                </div>
-                            </div>
+                                </span>
+                                {/* Hover caption, Awwwards-style: rises from the bottom edge. Always shown on touch. */}
+                                <span className="absolute inset-x-0 bottom-0 z-10 flex items-end justify-between gap-3 p-4 pt-16 bg-gradient-to-t from-black/85 via-black/40 to-transparent text-white transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] translate-y-0 opacity-100 md:translate-y-4 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 md:group-focus-within:translate-y-0 md:group-focus-within:opacity-100">
+                                    <span className="min-w-0 text-left">
+                                        <span className="block text-[10px] font-mono uppercase tracking-[0.2em] opacity-75">{t.projectsSection.caseStudy}</span>
+                                        <span className="block text-sm font-semibold truncate">{project.name}</span>
+                                    </span>
+                                    <i className="fas fa-arrow-right text-sm shrink-0 -rotate-45 transition-transform duration-500 group-hover:rotate-0" aria-hidden="true" />
+                                </span>
+                            </>
+                        )
 
-                            {/* Content — flex-col with mt-auto on buttons always pins them to the bottom */}
-                            <div className="flex-1 flex flex-col p-4 sm:p-5 md:p-6">
-                                <h3 className="text-lg md:text-xl font-black text-[var(--accent)] uppercase tracking-tight mb-2 line-clamp-2">
-                                    {project.name}
-                                </h3>
-                                <div className="flex flex-wrap gap-1.5 mb-3">
-                                    {project.tags.slice(0, 3).map((tag, i) => (
-                                        <span key={i} className="text-[10px] font-mono border border-[var(--foreground)] px-2 py-0.5 text-[var(--foreground)]">
-                                            {tag}
-                                        </span>
-                                    ))}
+                        return (
+                            <motion.article
+                                key={project.name}
+                                data-project-card
+                                initial={{ opacity: 0, y: 40 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, amount: 0.3 }}
+                                transition={{ delay: index * 0.08, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                                className="w-[300px] sm:w-[340px] md:w-[400px] lg:w-[440px] flex-shrink-0 group flex flex-col scroll-snap-align-start"
+                            >
+                                {openDetail ? (
+                                    <button
+                                        type="button"
+                                        onClick={openDetail}
+                                        aria-label={`${project.name} — ${t.projectsSection.details}`}
+                                        className="relative block w-full aspect-[4/3] overflow-hidden bg-[var(--foreground)]/5 border border-[var(--foreground)]/15 transition-[border-color,box-shadow] duration-500 hover:border-[var(--accent)] hover:shadow-[0_20px_60px_-20px_var(--glow)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+                                    >
+                                        {media}
+                                    </button>
+                                ) : (
+                                    <div className="relative w-full aspect-[4/3] overflow-hidden bg-[var(--foreground)]/5 border border-[var(--foreground)]/15">
+                                        {media}
+                                    </div>
+                                )}
+
+                                <div className="flex items-start justify-between gap-3 pt-4">
+                                    <h3 className="text-base md:text-lg font-bold text-[var(--foreground)] leading-tight line-clamp-2 group-hover:text-[var(--accent)] transition-colors">
+                                        {project.name}
+                                        {project.year && (
+                                            <sup className="ml-1 text-[9px] font-mono font-bold tracking-wider opacity-60 align-super">{project.year}</sup>
+                                        )}
+                                    </h3>
+                                    {statuses.length > 0 && (
+                                        <div className="flex gap-1.5 shrink-0 pt-0.5">
+                                            {statuses.map((st) => (
+                                                <span
+                                                    key={st.label}
+                                                    className={`text-[9px] font-mono font-bold tracking-wider px-1.5 py-0.5 border ${st.accent ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-[var(--foreground)]/30 text-[var(--foreground)] opacity-75'}`}
+                                                >
+                                                    {st.label}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
-                                <p className="text-xs text-[var(--foreground)] opacity-70 leading-relaxed md:line-clamp-3 mb-3">
+
+                                <p className="text-xs text-[var(--foreground)] opacity-70 leading-relaxed line-clamp-2 mt-2">
                                     {project.description}
                                 </p>
-                                <div className="flex flex-wrap items-center gap-3 mt-auto pt-2 border-t border-[var(--foreground)]/10">
-                                    {project.liveSiteLink && (
-                                        <a href={project.liveSiteLink} target="_blank" rel="noopener noreferrer" className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)] hover:text-[var(--accent)] flex items-center gap-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]">
-                                            <i className="fas fa-external-link-alt" aria-hidden="true" /> {t.projectsSection.live}
-                                        </a>
-                                    )}
-                                    {project.githubLink && (
-                                        <a href={project.githubLink} target="_blank" rel="noopener noreferrer" className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)] hover:text-[var(--accent)] flex items-center gap-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]">
-                                            <i className="fab fa-github" aria-hidden="true" /> {t.projectsSection.code}
-                                        </a>
-                                    )}
-                                    {project.detail && (
-                                        <button
-                                            type="button"
-                                            onClick={() => setActiveProject(project)}
-                                            aria-label={`${project.name} — ${t.projectsSection.details}`}
-                                            className="ml-auto text-xs font-bold uppercase tracking-wider text-[var(--accent)] hover:text-[var(--foreground)] flex items-center gap-1 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
-                                        >
-                                            {t.projectsSection.details} <i className="fas fa-arrow-right" aria-hidden="true" />
-                                        </button>
-                                    )}
+
+                                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-3">
+                                    <span className="text-[10px] font-mono text-[var(--foreground)] opacity-60 truncate">
+                                        {project.tags.slice(0, 3).join(' · ')}
+                                    </span>
+                                    <span className="ml-auto flex items-center gap-3">
+                                        {project.liveSiteLink && (
+                                            <a href={project.liveSiteLink} target="_blank" rel="noopener noreferrer" aria-label={`${project.name} — ${t.projectsSection.live}`} className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)] hover:text-[var(--accent)] flex items-center gap-1 transition-colors">
+                                                <i className="fas fa-external-link-alt" aria-hidden="true" /> {t.projectsSection.live}
+                                            </a>
+                                        )}
+                                        {project.githubLink && (
+                                            <a href={project.githubLink} target="_blank" rel="noopener noreferrer" aria-label={`${project.name} — ${t.projectsSection.code}`} className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)] hover:text-[var(--accent)] flex items-center gap-1 transition-colors">
+                                                <i className="fab fa-github" aria-hidden="true" /> {t.projectsSection.code}
+                                            </a>
+                                        )}
+                                    </span>
                                 </div>
-                            </div>
-                        </motion.div>
-                    ))}
+                            </motion.article>
+                        )
+                    })}
                 </div>
 
                 <motion.div

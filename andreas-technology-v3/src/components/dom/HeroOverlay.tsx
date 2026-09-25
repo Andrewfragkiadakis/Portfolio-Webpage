@@ -3,7 +3,7 @@
 import { useContent } from '@/hooks/useContent'
 import { useState, useRef, useCallback } from 'react'
 import dynamic from 'next/dynamic'
-import { motion, useSpring, useMotionTemplate } from 'framer-motion'
+import { motion, useSpring, useMotionTemplate } from 'motion/react'
 import Typewriter from 'typewriter-effect'
 import { scrollToSection as smoothScrollToSection } from '@/utils/smooth-scroll'
 import { sectionIndex, type SectionId } from '@/data/sections'
