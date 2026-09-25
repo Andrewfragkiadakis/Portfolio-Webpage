@@ -8,6 +8,7 @@ import SpotlightCard from '@/components/ui/SpotlightCard'
 import Modal from '@/components/ui/Modal'
 import LogoLoop from '@/components/ui/LogoLoop'
 import type { LogoItem } from '@/components/ui/LogoLoop'
+import { TOOLS, type Tool } from '@/data/tools'
 import SectionHeading from '@/components/ui/SectionHeading'
 
 /** Counts up once in view. Writes straight to the DOM so it never re-renders React per frame. */
@@ -74,41 +75,31 @@ function CredentialStrip({ items, label }: { items: Education[]; label: string }
     )
 }
 
-const TECH_PILL = "flex items-center gap-2 px-3 py-1.5 border border-[var(--foreground)]/20 text-sm font-mono text-[var(--foreground)] whitespace-nowrap"
+const TECH_PILL = "flex items-center gap-2 px-3 py-1 border border-[var(--foreground)]/20 text-[13px] font-mono text-[var(--foreground)] whitespace-nowrap"
 
-const TECH_STACK: LogoItem[] = [
-    { node: <span className={TECH_PILL}><i className="fab fa-apple" /> Jamf Pro</span> },
-    { node: <span className={TECH_PILL}><i className="fab fa-apple" /> macOS</span> },
-    { node: <span className={TECH_PILL}><i className="fas fa-shield-halved" /> Checkpoint Harmony</span> },
-    { node: <span className={TECH_PILL}><i className="fas fa-satellite-dish" /> Microsoft Sentinel</span> },
-    { node: <span className={TECH_PILL}><i className="fab fa-python" /> Python</span> },
-    { node: <span className={TECH_PILL}><i className="fas fa-terminal" /> Bash</span> },
-    { node: <span className={TECH_PILL}><i className="fab fa-js" /> TypeScript</span> },
-    { node: <span className={TECH_PILL}><i className="fab fa-react" /> React</span> },
-    { node: <span className={TECH_PILL}><i className="fab fa-react" /> Next.js</span> },
-    { node: <span className={TECH_PILL}><i className="fab fa-linux" /> Linux</span> },
-    { node: <span className={TECH_PILL}><i className="fas fa-network-wired" /> Cisco ISE</span> },
-    { node: <span className={TECH_PILL}><i className="fas fa-users-cog" /> Active Directory</span> },
-    { node: <span className={TECH_PILL}><i className="fas fa-server" /> VMware / ESXi</span> },
-    { node: <span className={TECH_PILL}><i className="fas fa-server" /> Proxmox</span> },
-    { node: <span className={TECH_PILL}><i className="fas fa-key" /> DUO MFA</span> },
-    { node: <span className={TECH_PILL}><i className="fas fa-lock" /> 1Password</span> },
-    { node: <span className={TECH_PILL}><i className="fab fa-docker" /> Docker</span> },
-    { node: <span className={TECH_PILL}><i className="fab fa-git-alt" /> Git</span> },
-    { node: <span className={TECH_PILL}><i className="fab fa-jira" /> Jira</span> },
-]
+const toLogos = (row: Tool['row']): LogoItem[] =>
+    TOOLS.filter((tool) => tool.row === row).map((tool) => ({
+        node: <span className={TECH_PILL}><i className={tool.icon} aria-hidden="true" /> {tool.label}</span>,
+        title: tool.label,
+    }))
+
+const OPS_TOOLS = toLogos('ops')
+const BUILD_TOOLS = toLogos('build')
 
 export default function About() {
     const t = useContent()
     const [activeSkill, setActiveSkill] = useState<Skill | null>(null)
 
+    const certifications = t.education.filter((e) => e.kind === 'certification')
+    const certBadges = certifications.map((e) => e.badge).filter(Boolean)
+
     // Order matches t.about.statsLabels:
-    // years experience · endpoints managed · faster onboarding · languages
+    // years experience · endpoints managed · faster onboarding · certifications
     const stats = [
         { value: 7, suffix: '+' },
         { value: 400, suffix: '+' },
         { value: 70, suffix: '%' },
-        { value: 3, suffix: '' },
+        { value: certifications.length, suffix: '' },
     ]
 
     return (
@@ -133,11 +124,18 @@ export default function About() {
                                     <div className="text-base font-bold text-[var(--foreground)]">{t.about.currentFocusDetail}</div>
                                 </div>
                             </div>
-                            <div className="font-mono text-sm space-y-1 text-[var(--foreground)] opacity-80 relative z-10">
-                                <p><span className="text-[var(--accent)]">const</span> developer = {'{'}</p>
-                                <p className="pl-4">name: <span className="text-[var(--accent)]">&quot;Andreas Fragkiadakis&quot;</span>,</p>
+                            <div className="font-mono text-[13px] space-y-1 text-[var(--foreground)] opacity-85 relative z-10">
+                                <p><span className="text-[var(--accent)]">const</span> engineer = {'{'}</p>
+                                <p className="pl-4">role: <span className="text-[var(--accent)]">&quot;Apple Fleet &amp; IT Automation Lead&quot;</span>,</p>
+                                <p className="pl-4">company: <span className="text-[var(--accent)]">&quot;Omilia&quot;</span>,</p>
+                                <p className="pl-4">fleet: <span className="text-[var(--accent)]">&quot;400+ macOS&quot;</span>,</p>
+                                <p className="pl-4">stack: [{['Jamf Pro', 'Python', 'Bash', 'Swift'].map((item, i, arr) => (
+                                    <span key={item}><span className="text-[var(--accent)]">&quot;{item}&quot;</span>{i < arr.length - 1 ? ', ' : ''}</span>
+                                ))}],</p>
+                                <p className="pl-4">certs: [{certBadges.map((badge, i) => (
+                                    <span key={badge}><span className="text-[var(--accent)]">&quot;{badge}&quot;</span>{i < certBadges.length - 1 ? ', ' : ''}</span>
+                                ))}],</p>
                                 <p className="pl-4">location: <span className="text-[var(--accent)]">&quot;Athens, GR&quot;</span>,</p>
-                                <p className="pl-4">passion: <span className="text-[var(--accent)]">&quot;Innovation&quot;</span></p>
                                 <p>{'};'}</p>
                             </div>
                         </SpotlightCard>
@@ -238,15 +236,10 @@ export default function About() {
                     viewport={{ once: true }}
                     transition={{ delay: 0.6 }}
                 >
-                    <LogoLoop
-                        logos={TECH_STACK}
-                        speed={80}
-                        direction="left"
-                        logoHeight={32}
-                        gap={16}
-                        fadeOut
-                        scaleOnHover
-                    />
+                    <div className="flex flex-col gap-2">
+                        <LogoLoop logos={OPS_TOOLS} speed={55} direction="left" logoHeight={28} gap={12} fadeOut scaleOnHover pauseOnHover />
+                        <LogoLoop logos={BUILD_TOOLS} speed={55} direction="right" logoHeight={28} gap={12} fadeOut scaleOnHover pauseOnHover />
+                    </div>
                 </motion.div>
             </div>
         </section>

@@ -183,7 +183,7 @@ export const content: Record<'en' | 'gr', Content> = {
             showLess: "Show less",
             currentFocus: "Current Focus",
             currentFocusDetail: "Fleet Automation & Endpoint Security",
-            statsLabels: ["Years Experience", "Endpoints Managed", "Faster Onboarding", "Languages"],
+            statsLabels: ["Years Experience", "Endpoints Managed", "Faster Onboarding", "Certifications"],
             credentialsLabel: "Credentials",
             description: [
                 "I am an IT & Computer Engineer (M.Eng.) leading Apple Fleet & IT Automation at Omilia, a global conversational-AI company, across a 400+ device environment. I own the Jamf Pro platform end-to-end and lead endpoint engineering for Checkpoint Harmony EDR, Microsoft Sentinel SIEM pipelines, and SSL certificate automation.",
@@ -229,34 +229,24 @@ export const content: Record<'en' | 'gr', Content> = {
         skillsTitle: "CORE SKILLS",
         skills: [
             {
-                icon: "fas fa-network-wired",
-                label: "Network & Systems Administration",
-                detail: "Proficient in configuring and maintaining complex network infrastructures, ensuring optimal performance and security. Experience with Cisco, Active Directory, and various monitoring tools."
+                icon: "fab fa-apple",
+                label: "Apple Fleet & MDM",
+                detail: "Jamf 200 certified. I own Jamf Pro end-to-end for a 400+ macOS fleet: zero-touch enrollment through Apple Business Manager, configuration profiles, patching, Self Service and day-to-day fleet hygiene."
             },
             {
-                icon: "fas fa-laptop-code",
-                label: "Web Development",
-                detail: "Skilled in front-end and back-end technologies including HTML, CSS, JavaScript, React, and Next.js. Passionate about creating responsive and user-friendly web applications."
+                icon: "fas fa-shield-halved",
+                label: "Endpoint Security & Identity",
+                detail: "Checkpoint Harmony EDR, CIS Benchmark hardening ahead of PCI-DSS and SOC 2 audits, Microsoft Sentinel SIEM pipelines, and identity and access with Microsoft Entra ID, DUO MFA and 1Password."
             },
             {
-                icon: "fas fa-shield-alt",
-                label: "Security Systems",
-                detail: "Knowledgeable in implementing security best practices, endpoint hardening, and managing access controls. Familiar with PCI/SOC2 compliance requirements."
+                icon: "fas fa-terminal",
+                label: "IT Automation & Scripting",
+                detail: "Python, Bash/zsh, Swift/AppleScript and TypeScript against real APIs: Jamf API tooling, SIEM log collectors, and an acme.sh / Let's Encrypt pipeline that removed manual certificate renewals across Cisco ISE, ESXi and Proxmox."
             },
             {
-                icon: "fas fa-lightbulb",
-                label: "Troubleshooting",
-                detail: "Expert at diagnosing and resolving hardware, software, and network issues efficiently, minimizing downtime and impact on users."
-            },
-            {
-                icon: "fas fa-tasks",
-                label: "Project Management",
-                detail: "Experienced in leading and coordinating IT projects, from planning and execution to monitoring and delivery, ensuring projects are completed on time and within budget."
-            },
-            {
-                icon: "fas fa-language",
-                label: "Excellent Communication",
-                detail: "Strong verbal and written communication skills in English (C2), Greek (Native), and German (B2), facilitating clear and effective collaboration with technical and non-technical stakeholders."
+                icon: "fas fa-robot",
+                label: "AI & Workflow Automation",
+                detail: "Driving enterprise AI adoption: Google Gemini org-wide, Atlassian Rovo Agents, Claude Code and MCP servers, plus an AI ticket-triage pipeline in Jira Service Management."
             }
         ],
 
@@ -681,7 +671,7 @@ export const content: Record<'en' | 'gr', Content> = {
             showLess: "Λιγότερα",
             currentFocus: "Τρεχουσα Εστιαση",
             currentFocusDetail: "Fleet Automation & Endpoint Security",
-            statsLabels: ["Χρονια Εμπειριας", "Συσκευες υπο Διαχειριση", "Ταχυτερο Onboarding", "Γλωσσες"],
+            statsLabels: ["Χρονια Εμπειριας", "Συσκευες υπο Διαχειριση", "Ταχυτερο Onboarding", "Πιστοποιησεις"],
             credentialsLabel: "Πιστοποιησεις",
             description: [
                 "Είμαι Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) και ηγούμαι του τομέα Apple Fleet & IT Automation στην Omilia, μια παγκόσμια εταιρεία conversational AI, σε περιβάλλον άνω των 400 συσκευών. Διαχειρίζομαι εξ ολοκλήρου την πλατφόρμα Jamf Pro και ηγούμαι του endpoint engineering για Checkpoint Harmony EDR, pipelines Microsoft Sentinel SIEM και αυτοματοποίηση πιστοποιητικών SSL.",
@@ -725,34 +715,24 @@ export const content: Record<'en' | 'gr', Content> = {
         skillsTitle: "ΒΑΣΙΚΕΣ ΔΕΞΙΟΤΗΤΕΣ",
         skills: [
             {
-                icon: "fas fa-network-wired",
-                label: "Δίκτυα & Διαχείριση Συστημάτων",
-                detail: "Εμπειρία στη διαμόρφωση και συντήρηση σύνθετων δικτυακών υποδομών, εξασφαλίζοντας βέλτιστη απόδοση και ασφάλεια. Γνώση σε Cisco, Active Directory και εργαλεία παρακολούθησης (monitoring)."
+                icon: "fab fa-apple",
+                label: "Apple Fleet & MDM",
+                detail: "Πιστοποίηση Jamf 200. Διαχειρίζομαι εξ ολοκλήρου το Jamf Pro για στόλο 400+ macOS: zero-touch enrollment μέσω Apple Business Manager, configuration profiles, ενημερώσεις, Self Service και καθημερινή συντήρηση του στόλου."
             },
             {
-                icon: "fas fa-laptop-code",
-                label: "Web Development",
-                detail: "Δεξιότητες σε τεχνολογίες Front-end και Back-end (HTML, CSS, JavaScript, React, Next.js). Πάθος για τη δημιουργία responsive και εύχρηστων διαδικτυακών εφαρμογών."
+                icon: "fas fa-shield-halved",
+                label: "Endpoint Security & Identity",
+                detail: "Checkpoint Harmony EDR, θωράκιση κατά CIS Benchmarks για ελέγχους PCI-DSS και SOC 2, pipelines Microsoft Sentinel SIEM, και διαχείριση ταυτότητας και πρόσβασης με Microsoft Entra ID, DUO MFA και 1Password."
             },
             {
-                icon: "fas fa-shield-alt",
-                label: "Ασφάλεια Συστημάτων",
-                detail: "Εφαρμογή βέλτιστων πρακτικών ασφαλείας, θωράκιση τερματικών (endpoint hardening) και διαχείριση ελέγχων πρόσβασης. Εξοικείωση με πρότυπα συμμόρφωσης όπως PCI και SOC2."
+                icon: "fas fa-terminal",
+                label: "IT Automation & Scripting",
+                detail: "Python, Bash/zsh, Swift/AppleScript και TypeScript πάνω σε πραγματικά APIs: εργαλεία Jamf API, log collectors για SIEM και pipeline acme.sh / Let's Encrypt που κατάργησε τις χειροκίνητες ανανεώσεις πιστοποιητικών σε Cisco ISE, ESXi και Proxmox."
             },
             {
-                icon: "fas fa-lightbulb",
-                label: "Troubleshooting",
-                detail: "Αποτελεσματική διάγνωση και επίλυση προβλημάτων υλικού, λογισμικού και δικτύων, με στόχο την ελαχιστοποίηση του χρόνου διακοπής λειτουργίας."
-            },
-            {
-                icon: "fas fa-tasks",
-                label: "Project Management",
-                detail: "Συντονισμός έργων πληροφορικής, από τον σχεδιασμό και την εκτέλεση έως την παρακολούθηση και την παράδοση, διασφαλίζοντας την τήρηση χρονοδιαγραμμάτων και προϋπολογισμού."
-            },
-            {
-                icon: "fas fa-language",
-                label: "Επικοινωνία",
-                detail: "Άριστες επικοινωνιακές δεξιότητες σε Αγγλικά (C2), Ελληνικά (Μητρική) και Γερμανικά (B2), για αποτελεσματική συνεργασία με τεχνικές και μη τεχνικές ομάδες."
+                icon: "fas fa-robot",
+                label: "AI & Workflow Automation",
+                detail: "Υιοθέτηση AI σε εταιρικό επίπεδο: Google Gemini σε όλο τον οργανισμό, Atlassian Rovo Agents, Claude Code και MCP servers, καθώς και pipeline AI ticket-triage στο Jira Service Management."
             }
         ],
 

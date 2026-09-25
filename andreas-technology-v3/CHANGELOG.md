@@ -5,6 +5,7 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 ## [Unreleased]
 
 ### Added
+- `data/tools.ts`: single source for the About tools marquee, split into two opposing rows (fleet/security/infra · code/AI/collaboration); tool list reflects tools in active use
 - Jamf Certified Tech — Jamf Pro (Jamf 200) credential (EN/GR) with Credly verification link, hero typewriter line, About summary and Apple Fleet service copy
 - `Education.kind` / `badge` / `icon` / `featured` fields: certifications and licences get their own icon, badge pill and (featured) accent treatment
 - About credential strip: Awwwards-style pill badges generated from certifications/licences; linked when verifiable
@@ -12,6 +13,7 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 - JSON-LD `hasCredential` and `knowsAbout` on the Person schema; Jamf keywords in metadata
 
 ### Changed
+- About: skill cards now reflect actual work (Apple Fleet & MDM, Endpoint Security & Identity, IT Automation & Scripting, AI & Workflow Automation) in EN/GR; code block shows real role, fleet, stack and certifications; "Languages" stat replaced by a certification count derived from content
 - Project cards redesigned gallery-style: 4:3 image-first cards, slow hover zoom, rising "Case study" caption (always visible on touch), LIVE/OSS/PAPER status pills and year superscript
 - Migrate `framer-motion` to its successor package `motion` (`motion/react`)
 - Perf: stat counters animate via `animate()` writing to the DOM instead of 60 fps React state updates; honour reduced motion and render final values server-side
