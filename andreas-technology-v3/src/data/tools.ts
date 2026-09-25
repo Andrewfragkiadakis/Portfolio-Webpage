@@ -7,46 +7,53 @@
  */
 export interface Tool {
     label: string
-    /** Font Awesome 6 free class. */
-    icon: string
+    /**
+     * File name (no extension) in public/logos. Official marks only: Simple Icons
+     * (added via `node scripts/add-logo.mjs <slug>`) or the vendor's own brand kit.
+     */
+    logo: string
+    /** Width ÷ height of the logo's viewBox; defaults to 1 (square). */
+    ratio?: number
+    /** Brand colour shown on hover. Near-black brands fall back to the theme foreground. */
+    brand: string
     row: 'ops' | 'build'
 }
 
 export const TOOLS: Tool[] = [
     // Apple fleet & endpoint
-    { label: 'Jamf Pro', icon: 'fab fa-apple', row: 'ops' },
-    { label: 'Apple Business Manager', icon: 'fab fa-apple', row: 'ops' },
-    { label: 'macOS', icon: 'fas fa-laptop', row: 'ops' },
-    { label: 'Checkpoint Harmony EDR', icon: 'fas fa-shield-halved', row: 'ops' },
-    { label: 'Microsoft Sentinel', icon: 'fas fa-satellite-dish', row: 'ops' },
+    { label: 'Jamf Pro', logo: 'jamf', ratio: 2.875, brand: '#000000', row: 'ops' },
+    { label: 'Apple Business Manager', logo: 'apple', brand: '#000000', row: 'ops' },
+    { label: 'macOS', logo: 'macos', brand: '#000000', row: 'ops' },
+    { label: 'Checkpoint Harmony EDR', logo: 'checkpoint', ratio: 1.05, brand: '#EE0C5D', row: 'ops' },
+    { label: 'Microsoft Sentinel', logo: 'microsoft-sentinel', brand: '#0078D4', row: 'ops' },
     // Identity & access
-    { label: 'Microsoft Entra ID', icon: 'fab fa-microsoft', row: 'ops' },
-    { label: 'DUO MFA', icon: 'fas fa-key', row: 'ops' },
-    { label: '1Password', icon: 'fas fa-lock', row: 'ops' },
-    { label: 'Active Directory', icon: 'fas fa-users-gear', row: 'ops' },
+    { label: 'Microsoft Entra ID', logo: 'entra-id', brand: '#0078D4', row: 'ops' },
+    { label: 'DUO MFA', logo: 'duo', ratio: 2.06, brand: '#6DC04B', row: 'ops' },
+    { label: '1Password', logo: '1password', brand: '#145FE4', row: 'ops' },
+    { label: 'Active Directory', logo: 'active-directory', brand: '#0078D4', row: 'ops' },
     // Infrastructure
-    { label: 'Cisco ISE', icon: 'fas fa-network-wired', row: 'ops' },
-    { label: 'Proxmox', icon: 'fas fa-server', row: 'ops' },
-    { label: 'VMware ESXi', icon: 'fas fa-server', row: 'ops' },
-    { label: 'Linux', icon: 'fab fa-linux', row: 'ops' },
-    { label: "acme.sh / Let's Encrypt", icon: 'fas fa-certificate', row: 'ops' },
+    { label: 'Cisco ISE', logo: 'cisco', brand: '#1BA0D7', row: 'ops' },
+    { label: 'Proxmox', logo: 'proxmox', brand: '#E57000', row: 'ops' },
+    { label: 'VMware ESXi', logo: 'vmware', brand: '#607078', row: 'ops' },
+    { label: 'Linux', logo: 'linux', brand: '#FCC624', row: 'ops' },
+    { label: "acme.sh / Let's Encrypt", logo: 'letsencrypt', brand: '#003A70', row: 'ops' },
 
     // Code
-    { label: 'Python', icon: 'fab fa-python', row: 'build' },
-    { label: 'Bash / zsh', icon: 'fas fa-terminal', row: 'build' },
-    { label: 'Swift', icon: 'fab fa-swift', row: 'build' },
-    { label: 'AppleScript', icon: 'fas fa-scroll', row: 'build' },
-    { label: 'TypeScript', icon: 'fab fa-js', row: 'build' },
-    { label: 'React / Next.js', icon: 'fab fa-react', row: 'build' },
-    { label: 'Git / GitHub', icon: 'fab fa-github', row: 'build' },
+    { label: 'Python', logo: 'python', brand: '#3776AB', row: 'build' },
+    { label: 'Bash / zsh', logo: 'gnubash', brand: '#4EAA25', row: 'build' },
+    { label: 'Swift', logo: 'swift', brand: '#F05138', row: 'build' },
+    { label: 'AppleScript', logo: 'apple', brand: '#000000', row: 'build' },
+    { label: 'TypeScript', logo: 'typescript', brand: '#3178C6', row: 'build' },
+    { label: 'React / Next.js', logo: 'react', brand: '#61DAFB', row: 'build' },
+    { label: 'Git / GitHub', logo: 'github', brand: '#181717', row: 'build' },
     // AI
-    { label: 'Claude Code', icon: 'fas fa-robot', row: 'build' },
-    { label: 'MCP Servers', icon: 'fas fa-plug', row: 'build' },
-    { label: 'Google Gemini', icon: 'fas fa-wand-magic-sparkles', row: 'build' },
-    { label: 'Atlassian Rovo', icon: 'fab fa-atlassian', row: 'build' },
+    { label: 'Claude Code', logo: 'claude', brand: '#D97757', row: 'build' },
+    { label: 'MCP Servers', logo: 'modelcontextprotocol', brand: '#000000', row: 'build' },
+    { label: 'Google Gemini', logo: 'googlegemini', brand: '#8E75B2', row: 'build' },
+    { label: 'Atlassian Rovo', logo: 'atlassian', brand: '#0052CC', row: 'build' },
     // Collaboration & ITSM
-    { label: 'Jira Service Management', icon: 'fab fa-jira', row: 'build' },
-    { label: 'Confluence', icon: 'fab fa-confluence', row: 'build' },
-    { label: 'Google Workspace', icon: 'fab fa-google', row: 'build' },
-    { label: 'Slack', icon: 'fab fa-slack', row: 'build' },
+    { label: 'Jira Service Management', logo: 'jira', brand: '#0052CC', row: 'build' },
+    { label: 'Confluence', logo: 'confluence', brand: '#172B4D', row: 'build' },
+    { label: 'Google Workspace', logo: 'google', brand: '#4285F4', row: 'build' },
+    { label: 'Slack', logo: 'slack', brand: '#E01E5A', row: 'build' },
 ]

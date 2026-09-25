@@ -178,7 +178,7 @@ export const content: Record<'en' | 'gr', Content> = {
         about: {
             title: "ABOUT ME",
             subtitle: "// ABOUT ME",
-            tagline: "Leading Apple Fleet & IT Automation across a 400+ device environment",
+            tagline: "Leading Apple Fleet & IT Automation across a 550+ device environment",
             readMore: "Read more",
             showLess: "Show less",
             currentFocus: "Current Focus",
@@ -186,7 +186,7 @@ export const content: Record<'en' | 'gr', Content> = {
             statsLabels: ["Years Experience", "Endpoints Managed", "Faster Onboarding", "Certifications"],
             credentialsLabel: "Credentials",
             description: [
-                "I am an IT & Computer Engineer (M.Eng.) leading Apple Fleet & IT Automation at Omilia, a global conversational-AI company, across a 400+ device environment. I own the Jamf Pro platform end-to-end and lead endpoint engineering for Checkpoint Harmony EDR, Microsoft Sentinel SIEM pipelines, and SSL certificate automation.",
+                "I am an IT & Computer Engineer (M.Eng.) leading Apple Fleet & IT Automation at Omilia, a global conversational-AI company, across a 550+ device environment. I own the Jamf Pro platform end-to-end and lead endpoint engineering for Checkpoint Harmony EDR, Microsoft Sentinel SIEM pipelines, and SSL certificate automation.",
                 "My work sits where security, automation and scale meet: CIS Benchmark hardening ahead of PCI-DSS and SOC 2 audits, and zero-touch macOS enrollment that cut onboarding time by 70%.",
                 "I also drive enterprise AI adoption — Google Gemini org-wide, Atlassian Rovo Agents, and an AI-powered ticket-triage pipeline that cut average triage time across 350+ tickets a year.",
                 "Jamf Certified Tech (Jamf 200) | Licensed Computer Science Engineer (TEE) | ITIL 4 certified | Based in Athens | English (C2), Greek (Native), German (B2)"
@@ -231,7 +231,7 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fab fa-apple",
                 label: "Apple Fleet & MDM",
-                detail: "Jamf 200 certified. I own Jamf Pro end-to-end for a 400+ macOS fleet: zero-touch enrollment through Apple Business Manager, configuration profiles, patching, Self Service and day-to-day fleet hygiene."
+                detail: "Jamf 200 certified. I own Jamf Pro end-to-end for a 550+ macOS fleet: zero-touch enrollment through Apple Business Manager, configuration profiles, patching, Self Service and day-to-day fleet hygiene."
             },
             {
                 icon: "fas fa-shield-halved",
@@ -294,7 +294,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 company: "OMILIA LTD, Athens, Greece",
                 duration: "April 2026 – Present",
                 tasks: [
-                    "Own the Apple Fleet & IT Automation function, the Jamf Pro platform, and AI-driven IT pipelines across 400+ macOS endpoints",
+                    "Own the Apple Fleet & IT Automation function, the Jamf Pro platform, and AI-driven IT pipelines across 550+ macOS endpoints",
                     "Lead automation engineering in Bash, Python and TypeScript — Jamf API, AI ticket-triage, MCP server prototypes and SSL renewal infrastructure",
                     "Partner with Cyber, HR, Finance and Engineering to turn business needs into faster onboarding, fewer tickets and zero certificate toil"
                 ]
@@ -666,7 +666,7 @@ export const content: Record<'en' | 'gr', Content> = {
         about: {
             title: "ΣΧΕΤΙΚΑ ΜΕ ΕΜΕΝΑ",
             subtitle: "// ΣΧΕΤΙΚΑ ΜΕ ΕΜΕΝΑ",
-            tagline: "Επικεφαλής Apple Fleet & IT Automation σε περιβάλλον 400+ συσκευών",
+            tagline: "Επικεφαλής Apple Fleet & IT Automation σε περιβάλλον 550+ συσκευών",
             readMore: "Διαβάστε περισσότερα",
             showLess: "Λιγότερα",
             currentFocus: "Τρεχουσα Εστιαση",
@@ -717,7 +717,7 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fab fa-apple",
                 label: "Apple Fleet & MDM",
-                detail: "Πιστοποίηση Jamf 200. Διαχειρίζομαι εξ ολοκλήρου το Jamf Pro για στόλο 400+ macOS: zero-touch enrollment μέσω Apple Business Manager, configuration profiles, ενημερώσεις, Self Service και καθημερινή συντήρηση του στόλου."
+                detail: "Πιστοποίηση Jamf 200. Διαχειρίζομαι εξ ολοκλήρου το Jamf Pro για στόλο 550+ macOS: zero-touch enrollment μέσω Apple Business Manager, configuration profiles, ενημερώσεις, Self Service και καθημερινή συντήρηση του στόλου."
             },
             {
                 icon: "fas fa-shield-halved",
@@ -780,7 +780,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 company: "OMILIA LTD, Αθήνα",
                 duration: "Απρίλιος 2026 – Σήμερα",
                 tasks: [
-                    "Πλήρης ευθύνη για τον τομέα Apple Fleet & IT Automation, την πλατφόρμα Jamf Pro και τα AI pipelines σε 400+ τερματικά macOS",
+                    "Πλήρης ευθύνη για τον τομέα Apple Fleet & IT Automation, την πλατφόρμα Jamf Pro και τα AI pipelines σε 550+ τερματικά macOS",
                     "Ηγεσία automation engineering σε Bash, Python και TypeScript — Jamf API, AI ticket-triage, prototypes MCP server και υποδομή ανανέωσης SSL",
                     "Συνεργασία με Cyber, HR, Finance και Engineering για ταχύτερο onboarding, λιγότερα tickets και μηδενική χειροκίνητη διαχείριση πιστοποιητικών"
                 ]

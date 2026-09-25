@@ -75,11 +75,28 @@ function CredentialStrip({ items, label }: { items: Education[]; label: string }
     )
 }
 
-const TECH_PILL = "flex items-center gap-2 px-3 py-1 border border-[var(--foreground)]/20 text-[13px] font-mono text-[var(--foreground)] whitespace-nowrap"
+/** Near-black brand colours vanish on the dark theme, so those hover to the foreground instead. */
+function hoverColour(hex: string): string {
+    const n = parseInt(hex.slice(1), 16)
+    const [r, g, b] = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((c) => {
+        const v = c / 255
+        return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4
+    })
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b < 0.06 ? 'var(--foreground)' : hex
+}
 
 const toLogos = (row: Tool['row']): LogoItem[] =>
     TOOLS.filter((tool) => tool.row === row).map((tool) => ({
-        node: <span className={TECH_PILL}><i className={tool.icon} aria-hidden="true" /> {tool.label}</span>,
+        node: (
+            <span className="tool-pill" style={{ '--brand': hoverColour(tool.brand) } as React.CSSProperties}>
+                <span
+                    className="tool-logo"
+                    aria-hidden="true"
+                    style={{ width: `${14 * (tool.ratio ?? 1)}px`, maskImage: `url(/logos/${tool.logo}.svg)`, WebkitMaskImage: `url(/logos/${tool.logo}.svg)` }}
+                />
+                {tool.label}
+            </span>
+        ),
         title: tool.label,
     }))
 
@@ -97,7 +114,7 @@ export default function About() {
     // years experience · endpoints managed · faster onboarding · certifications
     const stats = [
         { value: 7, suffix: '+' },
-        { value: 400, suffix: '+' },
+        { value: 550, suffix: '+' },
         { value: 70, suffix: '%' },
         { value: certifications.length, suffix: '' },
     ]
@@ -128,7 +145,7 @@ export default function About() {
                                 <p><span className="text-[var(--accent)]">const</span> engineer = {'{'}</p>
                                 <p className="pl-4">role: <span className="text-[var(--accent)]">&quot;Apple Fleet &amp; IT Automation Lead&quot;</span>,</p>
                                 <p className="pl-4">company: <span className="text-[var(--accent)]">&quot;Omilia&quot;</span>,</p>
-                                <p className="pl-4">fleet: <span className="text-[var(--accent)]">&quot;400+ macOS&quot;</span>,</p>
+                                <p className="pl-4">fleet: <span className="text-[var(--accent)]">&quot;550+ Macs&quot;</span>,</p>
                                 <p className="pl-4">stack: [{['Jamf Pro', 'Python', 'Bash', 'Swift'].map((item, i, arr) => (
                                     <span key={item}><span className="text-[var(--accent)]">&quot;{item}&quot;</span>{i < arr.length - 1 ? ', ' : ''}</span>
                                 ))}],</p>

@@ -231,6 +231,43 @@ a[href],
   background: linear-gradient(to left, var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%, rgba(0, 0, 0, 0) 100%);
 }
 
+/* Tool pills: official logos drawn as a mask, so they take the text colour and
+   switch to the brand colour on hover. */
+.tool-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--foreground), transparent 80%);
+  font-family: var(--font-geist-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 13px;
+  color: var(--foreground);
+  white-space: nowrap;
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.tool-logo {
+  display: inline-block;
+  height: 14px;
+  flex-shrink: 0;
+  background-color: currentColor;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  transition: background-color 0.3s ease;
+}
+
+.tool-pill:hover {
+  border-color: var(--brand);
+}
+
+.tool-pill:hover .tool-logo {
+  background-color: var(--brand);
+}
+
 /* Text knockout: reveals LetterGlitch only inside letter shapes */
 .text-knockout {
   background-color: var(--background);

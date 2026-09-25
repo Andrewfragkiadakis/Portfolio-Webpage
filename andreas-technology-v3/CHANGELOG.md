@@ -5,6 +5,7 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 ## [Unreleased]
 
 ### Added
+- Official brand logos for the tools marquee in `public/logos`: 21 from Simple Icons via `scripts/add-logo.mjs <slug>`, and Jamf, Check Point, Duo, Slack, Microsoft Sentinel, Entra ID and Active Directory (Entra Domain Services) from each vendor's own brand/press or architecture-icon kit. Drawn as CSS masks in the text colour; hover switches to the brand colour (near-black brands fall back to the foreground)
 - `data/tools.ts`: single source for the About tools marquee, split into two opposing rows (fleet/security/infra · code/AI/collaboration); tool list reflects tools in active use
 - Jamf Certified Tech — Jamf Pro (Jamf 200) credential (EN/GR) with Credly verification link, hero typewriter line, About summary and Apple Fleet service copy
 - `Education.kind` / `badge` / `icon` / `featured` fields: certifications and licences get their own icon, badge pill and (featured) accent treatment
@@ -13,6 +14,7 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 - JSON-LD `hasCredential` and `knowsAbout` on the Person schema; Jamf keywords in metadata
 
 ### Changed
+- Fleet size updated to 550+ Macs wherever it describes the current fleet (stat, tagline, About copy, skill card, current role); past-achievement bullets keep the 400+ figure from when that work shipped
 - About: skill cards now reflect actual work (Apple Fleet & MDM, Endpoint Security & Identity, IT Automation & Scripting, AI & Workflow Automation) in EN/GR; code block shows real role, fleet, stack and certifications; "Languages" stat replaced by a certification count derived from content
 - Project cards redesigned gallery-style: 4:3 image-first cards, slow hover zoom, rising "Case study" caption (always visible on touch), LIVE/OSS/PAPER status pills and year superscript
 - Migrate `framer-motion` to its successor package `motion` (`motion/react`)
