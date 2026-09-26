@@ -19,8 +19,29 @@ const CLOSED: Record<WipeFrom, string> = {
     bottom: 'inset(100% 0% 0% 0%)',
 }
 
-/** A cobalt field uncovered edge to edge by a clip-path. */
+/**
+ * Block wipes. A flat cobalt field is uncovered edge to edge by a clip-path as its panel
+ * enters. Driven by a parent's in-view state (Panel, Field), because an element clipped
+ * to nothing is not a reliable intersection target on its own.
+ */
 export const wipe = (from: WipeFrom, delay = 0): Variants => ({
     hidden: { clipPath: CLOSED[from] },
-    visible: { clipPath: 'inset(0% 0% 0% 0%)', transition: { duration: 1, ease: EASE_IN_OUT, delay } },
+    visible: { clipPath: 'inset(0% 0% 0% 0%)', transition: { duration: 1.05, ease: EASE_IN_OUT, delay } },
 })
+
+export const WIPE_FROM_LEFT = wipe('left')
+export const WIPE_FROM_RIGHT = wipe('right')
+export const WIPE_FROM_BOTTOM = wipe('bottom')
+export const WIPE_FROM_TOP = wipe('top')
+
+/** A display line rising out of its own mask, after the block behind it has landed. */
+export const RISE_LINE: Variants = {
+    hidden: { y: '108%' },
+    visible: (delay: number = 0.35) => ({ y: '0%', transition: { duration: 0.95, ease: EASE_OUT, delay } }),
+}
+
+/** Supporting copy: a short fade-and-lift once the blocks are in place. */
+export const FADE_UP: Variants = {
+    hidden: { opacity: 0, y: 14 },
+    visible: (delay: number = 0.5) => ({ opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE_OUT, delay } }),
+}

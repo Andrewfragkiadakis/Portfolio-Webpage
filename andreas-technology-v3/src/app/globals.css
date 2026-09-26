@@ -1,71 +1,82 @@
 @import "tailwindcss";
 
 /*
- * SWISS COBALT
- * Swiss Editorial's discipline, Cobalt Block's colour. Paper and ink, one grotesk,
- * 1px rules — and one ultramarine used as solid, full-bleed fields at key moments
- * (hero band, About figures, the active index row, the contact panel).
+ * SWISS COBALT (round 4)
+ * Cobalt Block's colour-blocking — flat ultramarine fields against paper (light) or ink
+ * (dark), split screens where the block changes side panel to panel — set with Swiss
+ * discipline: one grotesk (Inter Tight), meta-row headers on a strong hairline, index
+ * tables with tabular figures, and one set of margins on every panel.
  *
- * Contrast (WCAG 2.x, relative luminance):
- *   #FFFFFF on #2323FF   7.6 : 1   any text on a cobalt field (AA + AAA)
- *   #2323FF on #F2F1EC   6.7 : 1   cobalt as text on paper (AA)
- *   #8C93FF on #0E0E0E   7.1 : 1   accent text on the dark theme (cobalt itself is
- *                                  only 2.5 : 1 on ink, so there it is a field colour only)
- *   white 82% on cobalt  5.5 : 1   the lowest-contrast small text allowed on a field
- *   #5C5B56 on paper     6.0 : 1   muted text;  #9A9A94 on #0E0E0E  6.8 : 1
- *
- * --cobalt      the field colour. Identical in both themes.
- * --accent      decorative marks (the square full stop). Cobalt in both themes.
- * --accent-ink  cobalt used as text or as a meaningful thin mark (index numbers,
- *               active nav rule, progress line). Lightened to #8C93FF on dark.
- * --focus       focus ring colour. Every field redefines it to white.
+ * Contrast (WCAG 2.x):
+ *   #FFFFFF on #2323FF  7.6:1  any text on a cobalt field (AA + AAA)
+ *   #2323FF on #FFFFFF  7.6:1  cobalt as text on paper (AA)
+ *   #8C93FF on #0A0A0A  7.3:1  accent text on ink (cobalt itself is only 2.6:1 on ink,
+ *                              so on the dark theme cobalt is a field colour, never text)
+ *   white 82% on cobalt 5.5:1  the lowest-contrast small text allowed on a field
+ *   ink 70% on paper    7.6:1  muted text; paper 70% on ink 9.6:1
+ *   #FF3B30 signal             one non-text detail: the square "live clock" dot
  */
 :root {
-  --paper: #F2F1EC;
-  --ink: #111111;
-  --cobalt: #2323FF;
-  --cobalt-tint: #8C93FF;
-  --on-cobalt: #FFFFFF;
+  --paper: #ffffff;
+  --ink: #0a0a0a;
+  --cobalt: #2323ff;
+  --cobalt-tint: #8c93ff;
+  --on-cobalt: #ffffff;
+  --signal: #ff3b30;
 
   --background: var(--paper);
   --foreground: var(--ink);
-  --muted: #5C5B56;
-  --rule: rgba(17, 17, 17, 0.16);
-  --rule-strong: rgba(17, 17, 17, 0.9);
+  /* The flat block colour and the text that sits on it — identical in both themes. */
+  --block: var(--cobalt);
+  --on-block: var(--on-cobalt);
+  /* Cobalt as text or as a meaningful thin mark on the page background (passes AA on it). */
   --accent: var(--cobalt);
-  --accent-ink: var(--cobalt);
+  --accent-ink: var(--accent);
+  /* Giant display words on the page background: cobalt on paper, white on ink. */
+  --display: var(--cobalt);
+  --muted: color-mix(in srgb, var(--foreground) 70%, var(--background));
+  --line: color-mix(in srgb, var(--foreground) 16%, transparent);
+  --rule: var(--line);
+  --rule-strong: color-mix(in srgb, var(--foreground) 90%, transparent);
   --focus: var(--cobalt);
 
-  --font-display: var(--font-inter-tight), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: var(--font-inter-tight), "Inter Tight", "Helvetica Neue", Arial, sans-serif;
 
   /*
    * Height of the fixed desktop navigation. Panels reserve this at the top so
    * content never sits behind the bar.
    */
-  --nav-h: 3rem;
+  --nav-h: 3.5rem;
+
+  /* One margin for every panel and every block, so meta rows line up across the track. */
+  --gutter: 2.5rem;
 
   /* How far a highlighted index row's cobalt fill bleeds past the text column. */
   --row-bleed: 0.625rem;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .dark {
-  --background: #0E0E0E;
-  --foreground: #EDEDE8;
-  --muted: #9A9A94;
-  --rule: rgba(237, 237, 232, 0.16);
-  --rule-strong: rgba(237, 237, 232, 0.85);
-  --accent-ink: var(--cobalt-tint);
-  --focus: var(--cobalt-tint);
+  --background: var(--ink);
+  --foreground: var(--paper);
+  --accent: var(--cobalt-tint);
+  --display: var(--paper);
+  --focus: var(--paper);
 }
 
 /*
  * A cobalt field. Redefines the page tokens so anything placed on it — meta labels,
- * rules, links, focus rings — picks up white-on-blue without extra classes.
+ * rules, links, buttons, focus rings — picks up white-on-blue without extra classes.
+ * `.field` (Contact) and `.surface-block` (the split panels) are the same surface.
  */
-.field {
+.field,
+.surface-block {
   --background: var(--cobalt);
   --foreground: var(--on-cobalt);
+  --display: var(--on-cobalt);
   --muted: rgba(255, 255, 255, 0.82);
+  --line: rgba(255, 255, 255, 0.3);
   --rule: rgba(255, 255, 255, 0.3);
   --rule-strong: rgba(255, 255, 255, 0.9);
   --accent: var(--on-cobalt);
@@ -75,9 +86,9 @@
   color: var(--on-cobalt);
 }
 
-.field ::selection {
-  background: var(--on-cobalt);
-  color: var(--cobalt);
+.surface-page {
+  background-color: var(--background);
+  color: var(--foreground);
 }
 
 @theme inline {
@@ -86,9 +97,15 @@
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
   --color-cobalt: var(--cobalt);
+  --color-block: var(--block);
+  --color-on-block: var(--on-block);
   --color-muted: var(--muted);
+  --color-line: var(--line);
   --color-rule: var(--rule);
+  --color-signal: var(--signal);
+  --color-display: var(--display);
 
+  /* One family: Inter Tight carries body copy, meta labels and the heavy display cuts. */
   --font-sans: var(--font-display);
 }
 
@@ -98,27 +115,26 @@
  * device through a horizontal track is worse than letting it scroll normally.
  * Must stay in sync with DESKTOP_MEDIA_QUERY in src/hooks/useIsDesktop.ts.
  */
+/* Short desktop viewports (e.g. 1280×720): dense panels tighten up so nothing scrolls. */
+@custom-variant short (@media (min-width: 64rem) and (max-height: 50rem));
+
 @theme {
   --breakpoint-md: 64rem;
 
-  /*
-   * Small type sizes below Tailwind's text-xs (0.75rem). In rem, not px, so they
-   * follow the reader's browser font-size setting like the rest of the scale.
-   */
-  --text-micro: 0.625rem;    /* 10px — rarely; badges */
+  --text-micro: 0.625rem;    /* 10px — badges */
   --text-caption: 0.6875rem; /* 11px — meta labels */
-  --text-body-sm: 0.8125rem; /* 13px — table cells, tool pills */
+  --text-body-sm: 0.8125rem; /* 13px — table cells, tool pills, dense body */
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  font-feature-settings: "ss01" 0, "cv11" 1;
+  font-feature-settings: "cv11" 1;
+  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  min-height: 100vh;
 }
 
 /* Hairline rules — as @utility so responsive variants (md:rule-l) work. */
@@ -128,168 +144,6 @@ body {
 @utility rule-r { border-right: 1px solid var(--rule); }
 @utility rule-t-strong { border-top: 1px solid var(--rule-strong); }
 @utility rule-none { border-width: 0; }
-
-/* ---------- Editorial primitives ----------
-   In the components layer so Tailwind utilities can still override them. */
-@layer components {
-
-  /* Display type: solid, tight, mixed case. */
-  .display {
-    font-weight: 560;
-    letter-spacing: -0.045em;
-    line-height: 0.92;
-  }
-
-  /* Tiny uppercase meta label — the only place letter-spacing opens up. */
-  .meta {
-    font-size: var(--text-caption);
-    line-height: 1.35;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  /* Section index, e.g. "(02)". Tabular so every index is the same width. */
-  .index {
-    font-variant-numeric: tabular-nums;
-    font-feature-settings: "tnum" 1;
-    color: var(--accent-ink);
-  }
-
-  .tabular {
-    font-variant-numeric: tabular-nums;
-    font-feature-settings: "tnum" 1;
-  }
-
-  /* Heavy display: only for the giant words that sit on cobalt fields. */
-  .display-heavy {
-    font-weight: 850;
-    letter-spacing: -0.05em;
-    line-height: 0.84;
-  }
-
-  /*
-   * Index-table rows. Pointer hover, keyboard focus and — on desktop, where it feeds
-   * the preview column — the "active" row all invert to a cobalt field. The fill
-   * bleeds a little past the text column with a box-shadow, so the grid never shifts.
-   * Hover is limited to real pointers so a tap never leaves a row stuck in cobalt.
-   */
-  .index-row {
-    position: relative;
-    transition: background-color 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1), color 0.25s ease;
-  }
-
-  .index-row:has(:focus-visible),
-  .index-row:focus-visible {
-    --foreground: var(--on-cobalt);
-    --muted: rgba(255, 255, 255, 0.82);
-    --accent-ink: var(--on-cobalt);
-    --focus: var(--on-cobalt);
-    --rule: rgba(255, 255, 255, 0.3);
-    --rule-strong: rgba(255, 255, 255, 0.9);
-    background-color: var(--cobalt);
-    box-shadow: calc(-1 * var(--row-bleed)) 0 0 var(--cobalt), var(--row-bleed) 0 0 var(--cobalt);
-    color: var(--on-cobalt);
-  }
-
-  @media (hover: hover) {
-    .index-row:hover {
-      --foreground: var(--on-cobalt);
-      --muted: rgba(255, 255, 255, 0.82);
-      --accent-ink: var(--on-cobalt);
-      --focus: var(--on-cobalt);
-      --rule: rgba(255, 255, 255, 0.3);
-      --rule-strong: rgba(255, 255, 255, 0.9);
-      background-color: var(--cobalt);
-      box-shadow: calc(-1 * var(--row-bleed)) 0 0 var(--cobalt), var(--row-bleed) 0 0 var(--cobalt);
-      color: var(--on-cobalt);
-    }
-  }
-
-  @media (min-width: 64rem) {
-    .index-row[data-active="true"] {
-      --foreground: var(--on-cobalt);
-      --muted: rgba(255, 255, 255, 0.82);
-      --accent-ink: var(--on-cobalt);
-      --focus: var(--on-cobalt);
-      --rule: rgba(255, 255, 255, 0.3);
-      --rule-strong: rgba(255, 255, 255, 0.9);
-      background-color: var(--cobalt);
-      box-shadow: calc(-1 * var(--row-bleed)) 0 0 var(--cobalt), var(--row-bleed) 0 0 var(--cobalt);
-      color: var(--on-cobalt);
-    }
-  }
-
-  /* A focused row is itself the cobalt field, so its ring sits inside the fill. */
-  .index-row:focus-visible {
-    outline-offset: -5px;
-  }
-
-  /* Grid cells (Services) fill their own box instead of bleeding into neighbours. */
-  .index-row.cell {
-    --row-bleed: 0px;
-  }
-
-  .index-row .row-arrow {
-    display: inline-block;
-    opacity: 0;
-    transform: translateX(-0.5rem);
-    transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .index-row .row-title {
-    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .index-row:is(:hover, :focus-visible, :has(:focus-visible)) .row-arrow {
-    opacity: 1;
-    transform: translateX(0);
-  }
-
-  @media (min-width: 64rem) {
-    .index-row[data-active="true"] .row-arrow {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    .index-row:not(.cell):is(:hover, :focus-visible, :has(:focus-visible), [data-active="true"]) .row-title {
-      transform: translateX(0.5rem);
-    }
-  }
-
-  /* The square full stop: the wordmark's and the hero name's one cobalt mark. */
-  .stop {
-    display: inline-block;
-    width: 0.15em;
-    height: 0.15em;
-    margin-left: 0.05em;
-    background-color: var(--accent);
-    vertical-align: baseline;
-  }
-
-  /* A full-row hit area for a button inside a row, leaving sibling links clickable above it. */
-  .row-cover::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-  }
-
-  /* Arrow link: text + arrow that nudges on hover. */
-  .arrow-link .arrow {
-    display: inline-block;
-    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .arrow-link:is(:hover, :focus-visible) .arrow {
-    transform: translateX(0.25rem);
-  }
-
-  .arrow-link:is(:hover, :focus-visible) .arrow-ne {
-    transform: translate(0.2rem, -0.2rem);
-  }
-}
 
 html.theme-transition,
 html.theme-transition *,
@@ -320,12 +174,23 @@ html[data-entered="true"] [data-cinematic] {
   color: var(--on-cobalt);
 }
 
-/* Keyboard users must always be able to see where they are. --focus is cobalt on
-   paper (6.7:1), the light tint on ink (7.1:1) and white on every cobalt field (7.6:1). */
-:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
-  border-radius: 0;
+:is(.field, .surface-block) ::selection {
+  background: var(--on-cobalt);
+  color: var(--cobalt);
+}
+
+/*
+ * Keyboard focus: a square ring in --focus, which each surface sets to the colour that
+ * contrasts with it (cobalt on paper, white on ink and on cobalt).
+ */
+@layer base {
+  /* In the base layer so a component can pull the ring inside itself with an
+     outline-offset utility (grid cells, list rows) where an outer ring would be covered. */
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: 0;
+  }
 }
 
 button:not(:disabled),
@@ -362,6 +227,376 @@ a[href],
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+@layer components {
+  /*
+   * Heavy grotesk for the giant words fitted to a block (the name across the seam,
+   * 550+, the year, the project number). Greek glyphs come from the same family
+   * (greek subset in layout.tsx), so Greek never falls back to a thin face.
+   */
+  .font-display {
+    font-family: var(--font-display);
+    font-weight: 900;
+    letter-spacing: -0.045em;
+    /* Tight tracking closes word gaps too; give spaces back. */
+    word-spacing: 0.12em;
+    line-height: 0.86;
+  }
+
+  /* Heavy display for section titles — the same cut as "Get in touch". */
+  .display-heavy {
+    font-family: var(--font-display);
+    font-weight: 850;
+    letter-spacing: -0.05em;
+    line-height: 0.84;
+  }
+
+  /* Tiny uppercase meta label — the only place letter-spacing opens up. */
+  .meta {
+    font-size: var(--text-caption);
+    line-height: 1.35;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* The same label in the current text colour, a touch heavier (nav, buttons in bars, row numbers). */
+  .eyebrow {
+    font-size: var(--text-caption);
+    line-height: 1.35;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* Section index, e.g. "(02)". Tabular so every index is the same width. */
+  .index {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+    color: var(--accent-ink);
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  /*
+   * Hover inversion. A block of the opposite colour wipes up from the bottom edge and the
+   * content flips colour with it: cobalt cells turn to page colour, page cells turn cobalt.
+   * Keyboard focus triggers the same inversion. Instant under reduced motion.
+   */
+  .invert-block {
+    position: relative;
+    isolation: isolate;
+    background-color: var(--cell-bg);
+    color: var(--cell-fg);
+    --focus: var(--cell-fg);
+    transition: color 0.45s var(--ease-out);
+  }
+
+  .invert-block::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: var(--cell-fg);
+    transform: scaleY(0);
+    transform-origin: 50% 100%;
+    transition: transform 0.55s var(--ease-out);
+  }
+
+  .invert-block:is(:hover, :focus-visible, :has(:focus-visible)) {
+    color: var(--cell-bg);
+    --focus: var(--cell-bg);
+  }
+
+  .invert-block:is(:hover, :focus-visible, :has(:focus-visible))::before {
+    transform: scaleY(1);
+  }
+
+  .cell-page {
+    --cell-bg: var(--background);
+    --cell-fg: var(--foreground);
+  }
+
+  /* Page cells invert to cobalt (with white text), not to the foreground colour. */
+  .cell-page::before {
+    background-color: var(--block);
+  }
+
+  .cell-page:is(:hover, :focus-visible, :has(:focus-visible)) {
+    color: var(--on-block);
+    --focus: var(--on-block);
+    --muted: rgba(255, 255, 255, 0.82);
+  }
+
+  /* Services grid: a checkerboard at every column count. */
+  .svc-grid > * {
+    --cell-bg: var(--background);
+    --cell-fg: var(--foreground);
+  }
+
+  .svc-grid > *::before {
+    background-color: var(--block);
+  }
+
+  .svc-grid > *:is(:hover, :focus-visible, :has(:focus-visible)) {
+    color: var(--on-block);
+    --focus: var(--on-block);
+  }
+
+  .svc-grid > .is-block {
+    --cell-bg: var(--block);
+    --cell-fg: var(--background);
+  }
+
+  .svc-grid > .is-block:not(:is(:hover, :focus-visible, :has(:focus-visible))) {
+    color: var(--on-block);
+    --focus: var(--on-block);
+  }
+
+  .svc-grid > .is-block::before {
+    background-color: var(--background);
+  }
+
+  .svc-grid > .is-block:is(:hover, :focus-visible, :has(:focus-visible)) {
+    color: var(--foreground);
+    --focus: var(--foreground);
+  }
+
+  /*
+   * Index-table rows (Experience, Projects). Pointer hover, keyboard focus and — on
+   * desktop, where it feeds the cobalt block — the active row all turn into a cobalt
+   * bar. The fill bleeds a little past the text column with a box-shadow, so the grid
+   * never shifts. Hover is limited to real pointers so a tap never leaves a row stuck.
+   */
+  .index-row {
+    position: relative;
+    transition: background-color 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out), color 0.25s ease;
+  }
+
+  .index-row:has(:focus-visible),
+  .index-row:focus-visible,
+  .index-row[data-active="true"] {
+    --background: var(--cobalt);
+    --foreground: var(--on-cobalt);
+    --muted: rgba(255, 255, 255, 0.82);
+    --accent-ink: var(--on-cobalt);
+    --focus: var(--on-cobalt);
+    --line: transparent;
+    --rule: transparent;
+    background-color: var(--cobalt);
+    box-shadow: calc(-1 * var(--row-bleed)) 0 0 var(--cobalt), var(--row-bleed) 0 0 var(--cobalt);
+    color: var(--on-cobalt);
+  }
+
+  @media (hover: hover) {
+    .index-row:hover {
+      --background: var(--cobalt);
+      --foreground: var(--on-cobalt);
+      --muted: rgba(255, 255, 255, 0.82);
+      --accent-ink: var(--on-cobalt);
+      --focus: var(--on-cobalt);
+      --line: transparent;
+      --rule: transparent;
+      background-color: var(--cobalt);
+      box-shadow: calc(-1 * var(--row-bleed)) 0 0 var(--cobalt), var(--row-bleed) 0 0 var(--cobalt);
+      color: var(--on-cobalt);
+    }
+  }
+
+  .index-row .row-title {
+    transition: transform 0.45s var(--ease-out);
+  }
+
+  @media (min-width: 64rem) {
+    .index-row:is(:hover, :focus-visible, :has(:focus-visible), [data-active="true"]) .row-title {
+      transform: translateX(0.375rem);
+    }
+  }
+
+  /*
+   * Buttons. Square, one family, sentence case — the same buttons as the contact panel.
+   * Hover and keyboard focus wipe a second colour up from the bottom edge.
+   */
+  .btn {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-height: 3rem;
+    padding: 0 1.25rem;
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    white-space: nowrap;
+    transition: color 0.45s var(--ease-out), box-shadow 0.45s var(--ease-out);
+  }
+
+  .btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: var(--btn-wipe);
+    transform: scaleY(0);
+    transform-origin: 50% 100%;
+    transition: transform 0.55s var(--ease-out);
+  }
+
+  .btn:is(:hover, :focus-visible)::before {
+    transform: scaleY(1);
+  }
+
+  /* Solid cobalt; wipes to the foreground colour. */
+  .btn-solid {
+    background-color: var(--block);
+    color: var(--on-block);
+    --btn-wipe: var(--foreground);
+  }
+
+  .btn-solid:is(:hover, :focus-visible) {
+    color: var(--background);
+  }
+
+  /* Solid paper, for use on a cobalt block; wipes to ink. */
+  .btn-paper {
+    background-color: #ffffff;
+    color: var(--cobalt);
+    --btn-wipe: var(--ink);
+  }
+
+  .btn-paper:is(:hover, :focus-visible) {
+    color: #ffffff;
+  }
+
+  /* Outline in the current foreground; wipes to cobalt (or to paper on a cobalt block). */
+  .btn-line {
+    color: var(--foreground);
+    box-shadow: inset 0 0 0 1px currentColor;
+    --btn-wipe: var(--block);
+  }
+
+  .btn-line:is(:hover, :focus-visible) {
+    color: var(--on-block);
+    box-shadow: inset 0 0 0 1px var(--block);
+  }
+
+  :is(.field, .surface-block) .btn-line {
+    --btn-wipe: #ffffff;
+  }
+
+  :is(.field, .surface-block) .btn-line:is(:hover, :focus-visible) {
+    color: var(--cobalt);
+    box-shadow: inset 0 0 0 1px #ffffff;
+  }
+
+  /* Small bar buttons (theme, language, menu): meta type instead of the button cut. */
+  .btn-bar {
+    min-height: 0;
+    height: 2.25rem;
+    padding: 0 0.75rem;
+    font-size: var(--text-caption);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    gap: 0.5rem;
+  }
+
+  .btn-icon {
+    min-height: 0;
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    font-size: 1.125rem;
+    letter-spacing: 0;
+  }
+
+  .btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .btn:disabled::before {
+    display: none;
+  }
+
+  /* A full-row hit area for a button inside a row, leaving sibling links clickable above it. */
+  .row-cover::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  /* Arrow link: text + arrow that nudges on hover. */
+  .arrow-link .arrow {
+    display: inline-block;
+    transition: transform 0.45s var(--ease-out);
+  }
+
+  .arrow-link:is(:hover, :focus-visible) .arrow {
+    transform: translateX(0.25rem);
+  }
+
+  .arrow-link:is(:hover, :focus-visible) .arrow-ne {
+    transform: translate(0.2rem, -0.2rem);
+  }
+}
+
+/* Rolling label (RollText): the track holds the label twice and slides up one line. */
+.roll-text {
+  display: inline-block;
+  overflow: hidden;
+  height: 1.25em;
+  line-height: 1.25em;
+  vertical-align: middle;
+}
+
+.roll-text__track {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.55s var(--ease-out);
+}
+
+:is(a, button):is(:hover, :focus-visible) .roll-text__track {
+  transform: translateY(-50%);
+}
+
+/* Underline that draws in from the left on hover/focus, then retracts to the right. */
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+  background-size: 0% 1px;
+  transition: background-size 0.45s var(--ease-out);
+}
+
+.link-underline:is(:hover, :focus-visible),
+:is(a, button):is(:hover, :focus-visible) .link-underline {
+  background-position: 0% 100%;
+  background-size: 100% 1px;
+}
+
+/* Permanent hairline underline that thickens on hover — for inline text links. */
+.link-rule {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: var(--rule-strong);
+  transition: text-decoration-color 0.3s ease, color 0.3s ease;
+}
+
+.link-rule:is(:hover, :focus-visible) {
+  color: var(--accent-ink);
+  text-decoration-color: currentColor;
 }
 
 /* LogoLoop marquee */
@@ -429,58 +664,34 @@ a[href],
 
 .logoloop--fade::before {
   left: 0;
-  background: linear-gradient(to right, var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%, transparent 100%);
+  background: linear-gradient(to right, var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%, rgba(0, 0, 0, 0) 100%);
 }
 
 .logoloop--fade::after {
   right: 0;
-  background: linear-gradient(to left, var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%, transparent 100%);
+  background: linear-gradient(to left, var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%, rgba(0, 0, 0, 0) 100%);
 }
 
-/* Underline that draws in from the left on hover/focus, then retracts to the right. */
-.link-underline {
-  background-image: linear-gradient(currentColor, currentColor);
-  background-repeat: no-repeat;
-  background-position: 100% 100%;
-  background-size: 0% 1px;
-  transition: background-size 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.link-underline:is(:hover, :focus-visible),
-:is(a, button):is(:hover, :focus-visible) .link-underline {
-  background-position: 0% 100%;
-  background-size: 100% 1px;
-}
-
-/* Permanent hairline underline that thickens on hover — for inline text links. */
-.link-rule {
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.2em;
-  text-decoration-color: var(--rule-strong);
-  transition: text-decoration-color 0.3s ease, color 0.3s ease;
-}
-
-.link-rule:is(:hover, :focus-visible) {
-  color: var(--accent-ink);
-  text-decoration-color: currentColor;
-}
-
-/* Tool pills: official logos drawn as a mask, so they take the text colour and
-   switch to the brand colour on hover. */
+/* Tool pills: official logos drawn as a mask in the text colour; hover fills the pill
+   with cobalt (a small block inversion) instead of switching to brand colours. */
 .tool-pill {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.3rem 0.7rem;
-  border: 1px solid var(--rule);
-  font-family: var(--font-sans);
+  border: 1px solid var(--line);
   font-size: var(--text-body-sm);
   font-weight: 500;
   letter-spacing: -0.01em;
   color: var(--foreground);
   white-space: nowrap;
-  transition: border-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.tool-pill:hover {
+  background-color: var(--block);
+  border-color: var(--block);
+  color: var(--on-block);
 }
 
 .tool-logo {
@@ -496,18 +707,11 @@ a[href],
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
   -webkit-mask-size: contain;
-  transition: background-color 0.3s ease;
 }
 
-.tool-pill:hover {
-  border-color: var(--brand);
-}
-
-.tool-pill:hover .tool-logo {
-  background-color: var(--brand);
-}
-
-/* Tool tiles (ToolTile): one square per tool, ink mark on a hairline tile. */
+/* Tool tiles (ToolTile): one square per tool, white mark on a cobalt tile. The logo box
+   fits inside the tile by width *and* height, so wide wordmarks shrink to the same
+   footprint as square marks. */
 .tool-tile {
   --tile: 2rem;
   --mark: 1.125rem;
@@ -518,8 +722,8 @@ a[href],
   flex-shrink: 0;
   width: var(--tile);
   height: var(--tile);
-  border: 1px solid var(--rule);
-  color: var(--foreground);
+  background-color: var(--block);
+  color: var(--on-block);
 }
 
 .tool-tile__logo {

@@ -2,122 +2,106 @@
 
 **Branch:** `style/swiss-cobalt` · App: `andreas-technology-v3`
 
-## Concept
+## Round 4: back to Cobalt Block, with Swiss tweaks
 
-A hybrid of the two shortlisted directions. The discipline comes from **Swiss Editorial** and the colour comes from **Cobalt Block**. The page is set as a printed index: warm paper, near-black ink, one grotesk (Inter Tight), a strict 12-column grid and 1px rules instead of cards. There is one colour, an ultramarine `#2323FF`. It is never used as a tint or a gradient. It appears only as a solid, full-bleed **field** at five key moments:
+Round 3 merged Cobalt Block and Swiss Editorial but leaned Swiss: mostly paper, with blue only as occasional fields. Andreas preferred the earlier Cobalt Block ("I liked the previous a bit better") and loved the Swiss Cobalt contact panel. Round 4 is therefore **Cobalt Block again**, with its split-screen colour blocking, the blue block that changes side panel to panel, the name across the seam and the big fitted headlines. A few Swiss details are layered on top where they genuinely help. The contact panel is carried over **unchanged**.
 
-| Moment | Field |
-| --- | --- |
-| Hero | A vertical band on the right (25vw, full height). It holds the monogram `AF` / `ΑΦ` in 850 weight at the top and the rolling current role at the foot. |
-| About | A full-bleed figures strip: the tagline plus 7+ / 550+ / 70% / 3 in heavy tabular numerals. |
-| Index tables | The active row in Experience and Projects (the one feeding the preview column) is a cobalt bar. Hover and keyboard focus invert any row or service cell the same way. |
-| Contact | The whole panel is one cobalt field: the heavy title, the email fitted across the full measure, and the facts and actions on white hairlines. |
-| Intro | The first-visit title card is a cobalt field that wipes up to reveal the hero. |
+Both branches were screenshotted side by side (1440×900 and 390×844, light and dark) before any code changed. The table records what each panel takes from where.
 
-Everything else is paper and ink. The owner asked for clean, precise, one confident accent, and no cursor-following gimmicks. The custom cursor from Swiss Editorial has been removed.
+### Per-panel decisions
 
-## What was taken from each branch
+| Panel | From Cobalt Block | From Swiss Cobalt (round 3) | New tweak |
+| --- | --- | --- | --- |
+| **Nav** | Flat bar, active section as a sliding cobalt block (`layoutId`), square Light/Dark and GR/EN buttons, cobalt mobile sheet | Numbered index (`01 About … 05 Contact`), Home via the logo, meta type | **Memoji logo** on a cobalt square instead of `AF`. Removed the hover glyph-scramble on labels and the `01 / 06` counter (the numbered items already say where you are). The mobile sheet lists mixed-case heavy titles with `00–05` |
+| **Hero** | 40/60 split, `ANDREAS` white on cobalt and `FRAGKIADAKIS` cobalt on paper at one fitted size, `Automate. / Secure. / Scale.` crossfade, role line, square socials, CTAs, live clock with the one red dot | **Meta-row header**: a strong hairline carrying `(00) Home` on the block and a 3-column row (Based in / Local time / Current focus) on paper | Both halves' meta rows sit at the same height as every other panel's header. CTAs use the contact panel's button cut |
+| **About** | Paper 56 / cobalt 44. Giant fitted `550+`, the three minor counters, the spec sheet, credential strip, 2×2 skill blocks, both marquees | `(01) About` meta row + heavy mixed-case title, localised spec-sheet labels (`Ρόλος`, `Στόλος` …) | Content is bottom-aligned so it ends on the same line as the spec sheet opposite. On short desktops (≤800px tall) the second paragraph and second marquee drop out, so nothing is clipped |
+| **Services** | Paper 30 / checkerboard 70, six inverting blocks, dialogs with cobalt header and tool tiles | `(02) What I do` meta row + heavy title | CTA line and "Let's Talk" grouped at the foot of the column |
+| **Experience** | Cobalt 46 (left) / paper 54. Huge rolling start year, full period, tasks, white **Verify credential** button. Professional / Education tabs. Mobile accordion | **Index table**: column heads (No. / Role — Company / Year) on a strong rule, tabular row numbers, condensed year spans (`2024 – 2026`, `2026 – Now`), cobalt bar for the active row with a bleed | The CB list's big year numerals were dropped from the rows; the giant year lives only in the block, so the table reads calmly |
+| **Projects** | Paper 56 / cobalt 44 with the tilted screenshot stack, giant project number, name and role. Case-study dialog | **Index table**: No. / Title / Tags (≥1280px) / Year / Links, active row as a cobalt bar, `Live ↗` `Code ↗` text links, GitHub link in the meta row | Mobile rows keep CB's thumbnails. The active bar is desktop-only, because it is tied to the stack |
+| **Contact** | — | **Kept exactly** (full cobalt field, heavy "Get in touch", fitted email with Copy, facts row, Send message / Download resume, copyright, Back to top) | None needed: its `(05)` index already matches the new nav numbering, and the page tokens it uses (`.field`, `.meta`, `.display-heavy`, `rule-t`) are kept verbatim |
+| **Intro** | Cobalt title card with the typewriter lines and "Enter System" | — | Memoji on a paper square in the corner. Heavy lines use the title cut |
+| **Dialogs** | Square wipe-open panel with the offset cobalt shadow, white close square, cobalt headers | — | Titles in heavy mixed case, meta labels |
+| **OG image** | 40/60 split with the name across the seam | Meta rows on hairlines | Memoji embedded as a data URL on a paper square |
 
-| From Swiss Editorial | From Cobalt Block |
-| --- | --- |
-| Paper/ink palette, hairline grid, numbered spreads `(01) About` | The `#2323FF` field colour, and `#8C93FF` for accent text on dark |
-| Huge solid mixed-case name at the bottom left, hero meta row | Heavy (850) Inter Tight, reserved for giant words on blue |
-| Index tables with a preview column, 3×2 numbered services | Clip-path block wipes as panels enter |
-| Word-rise section titles, role ticker, typographic intro | Hover inversion to blue, a field that redefines its own tokens |
-| Fit-to-width name for the Greek surname | Email set as display type across the full width |
+### Global Swiss tweaks
+
+- **One family.** Inter Tight now carries everything: body, meta labels, buttons and the heavy display cuts. Inter and JetBrains Mono are gone (two fewer font downloads). The mono eyebrows became Swiss `.meta` labels (11px, uppercase, +0.06em), which are the same labels the contact panel already used.
+- **Title hierarchy.** Section titles are heavy mixed case (`.display-heavy`, 850), the same cut as "Get in touch". Uppercase 900 (`.font-display`) is reserved for the giant words fitted to a block: the name across the seam, `550+`, the year and the project number.
+- **Meta rows.** Every panel and every block opens with the same strong hairline and `(NN) Label ··· note` row at `pt-5` below the nav, so the headers line up as the track scrolls.
+- **One margin.** `--gutter: 2.5rem` is used on every panel and every block. Cobalt Block's margins used to vary between 40, 48, 56 and 64px.
+- **Buttons.** Still square, and still wiping a second colour up on hover. They now use the contact panel's cut: 14px semibold, sentence case, arrow on the right, 1px outlines.
+- **Paper stays white** (`#FFFFFF`, Cobalt Block), not round 3's warm `#F2F1EC`, because it is crisper against ultramarine.
+- **No pointer-following anything.** `CustomCursor` and `ScrambleText` are not used. The scroll-linked "breathing" scale on the track is also off.
+
+### Logo
+
+Every `AF` monogram is gone: the nav square, round 3's hero band, and the OG image. The logo is now the technologist memoji (`public/favicons/android-chrome-512x512.png`, the favicon image), rendered by `src/components/ui/Memoji.tsx` with `next/image` and alt "Andreas Fragkiadakis":
+
+- **Nav (paper or ink):** a 36px cobalt square, so the mark is itself a small colour block. The image is scaled 1.15× from the bottom edge so the face fills the square without cropping the hair.
+- **Mobile menu sheet and intro card (on cobalt):** a white square, which keeps the memoji crisp on ultramarine.
+- **OG image:** a 112px white square on the cobalt half. The PNG is read with `fs` at build time and embedded as a `data:` URL, so the card needs no fetch.
 
 ## Tokens (`src/app/globals.css`)
 
 | Token | Light | Dark | Use |
 | --- | --- | --- | --- |
-| `--background` | `#F2F1EC` paper | `#0E0E0E` | page |
-| `--foreground` | `#111111` ink | `#EDEDE8` | text, rules |
-| `--muted` | `#5C5B56` | `#9A9A94` | secondary text, meta labels |
-| `--rule` / `--rule-strong` | ink 16% / 90% | paper 16% / 85% | hairlines / section-opening rules |
-| `--cobalt` | `#2323FF` | `#2323FF` | every field; the same in both themes |
-| `--accent` | cobalt | cobalt | decorative marks only (the square full stop) |
-| `--accent-ink` | `#2323FF` | `#8C93FF` | cobalt as **text** or as a meaningful thin mark (index numbers, active nav rule, progress line) |
-| `--focus` | cobalt | `#8C93FF` | focus ring; white inside every field |
+| `--background` | `#FFFFFF` paper | `#0A0A0A` ink | page |
+| `--foreground` | `#0A0A0A` | `#FFFFFF` | text, strong rules |
+| `--cobalt` / `--block` | `#2323FF` | `#2323FF` | every field; the same in both themes |
+| `--accent` / `--accent-ink` | cobalt | `#8C93FF` | cobalt as text or a thin mark (indices, the role-line rule) |
+| `--display` | cobalt | white | the surname on the page background |
+| `--muted` | ink 70% | paper 70% | secondary text, meta labels |
+| `--line` / `--rule` | ink 16% | paper 16% | hairlines |
+| `--rule-strong` | ink 90% | paper 90% | meta-row rules, table heads |
+| `--signal` | `#FF3B30` | `#FF3B30` | the live-clock dot only (non-text) |
+| `--gutter` | 2.5rem | 2.5rem | panel and block margins |
 
-`.field` redefines `--background`, `--foreground`, `--muted` (white 82%), `--rule`, `--rule-strong`, `--accent`, `--accent-ink` and `--focus`. Anything placed on cobalt (meta labels, links, the copy button, focus rings) therefore turns white-on-blue without extra classes. Inverted index rows use the same override.
+`.surface-block` (the split panels) and `.field` (Contact) are one rule. Each redefines the page tokens, so anything placed on cobalt (meta labels, rules, links, buttons, focus rings) turns white-on-blue without extra classes. An active, hovered or focused `.index-row` does the same.
 
 ### Contrast (WCAG 2.x, computed)
 
 | Text / mark | On | Ratio | Result |
 | --- | --- | --- | --- |
-| white `#FFFFFF` | cobalt `#2323FF` | **7.62 : 1** | AA + AAA |
-| cobalt `#2323FF` | paper `#F2F1EC` | **6.74 : 1** | AA |
-| tint `#8C93FF` | dark `#0E0E0E` | **7.11 : 1** | AA |
-| white 82% (`#D7D7FF`) | cobalt | 5.46 : 1 | AA (the lowest small text on a field) |
-| muted `#5C5B56` | paper | 6.02 : 1 | AA |
-| muted `#9A9A94` | dark | 6.82 : 1 | AA |
-| ink / paper | paper / dark | 16.7 / 16.4 : 1 | AAA |
+| white | cobalt `#2323FF` | **7.62 : 1** | AA + AAA |
+| cobalt | paper `#FFFFFF` | **7.62 : 1** | AA + AAA |
+| tint `#8C93FF` | ink `#0A0A0A` | **7.3 : 1** | AA + AAA |
+| white 82% (`#D7D7FF`) | cobalt | 5.46 : 1 | AA (lowest small text on a field) |
+| muted (ink 70%) | paper | 7.6 : 1 | AA |
+| muted (paper 70%) | ink | 9.8 : 1 | AA |
 
-Cobalt on `#0E0E0E` is only 2.53 : 1. On the dark theme it is therefore used only as a field or as the decorative square, never as text; text accents switch to the tint. The Athens clock's UTC offset used to be dimmed to 60% opacity, which fell below AA on blue and on muted grey. It is now a regular-weight span at full colour.
-
-### Type
-
-- **Inter Tight**, loaded with `next/font/google` (subsets `latin` + `greek`, variable weight). It is the only family, so Greek glyphs render at exactly the same weights as Latin.
-- `.display`: weight 560, tracking −0.045em (−0.055em for the hero name). Used for the name, section titles and dialog titles on paper.
-- `.display-heavy`: weight 850, tracking −0.05em, leading 0.84. Used **only** on cobalt: the monogram, the role ticker, the figures, "Get in touch", the email and the intro lines.
-- `.meta`: 11px, uppercase, +0.06em. `.tabular` / `.index`: `tnum` for years, figures and row numbers.
-- The square full stop (`.stop`, 0.15em) replaces Swiss Editorial's orange dot after the wordmark and the hero name.
-
-### Grid
-
-12 columns with a 24px gutter on desktop and 40px margins. 4 columns with a 16px gutter on mobile. The nav bar is 48px. In the hero the text column takes 75vw and the band 25vw. The hero meta row is a 4-column grid inside the text column.
+Cobalt on ink is only 2.6 : 1, so on the dark theme cobalt is a field colour only, and text accents switch to the tint.
 
 ## Motion
 
-- **Word-rise headlines.** Section titles rise word by word from masks. They are keyed by language, so switching EN/GR replays the reveal. The masks carry 0.1em of right padding, so the heavy Greek "α" is never clipped.
-- **Field wipes.** `Field` (`src/components/ui/Field.tsx`) uncovers each cobalt field with a `clip-path` inset: the hero band from the bottom (after the intro), the About strip from the left, and Contact from the bottom. The in-view observer sits on an unclipped wrapper.
-- **Row inversion.** On hover (real pointers only, via `@media (hover: hover)`) or keyboard focus, an index row or service cell turns cobalt with white text. The fill bleeds 10px past the column with a box-shadow, so nothing shifts. Table titles nudge 8px; service cells do not.
-- **Preview column.** Experience and Projects previews follow the hovered or focused row. The Experience preview re-enters with a short rise, and the Projects image wipes in from the top.
-- **Name and monogram** rise line by line after the intro. The role ticker rolls up from the band's bottom edge.
-- **Nothing follows the cursor.** `CustomCursor` is deleted.
-- **Reduced motion.** `MotionConfig reducedMotion="user"` is kept. A CSS rule sets `clip-path: none !important` on every field, so fields are simply present with no JS race. The role ticker holds its first line, and the global rule cuts transitions to 0.01ms. This is verified: all three fields report `clip-path: none` under `prefers-reduced-motion`.
-
-## Section by section
-
-| Area | Result |
-| --- | --- |
-| **Nav** | Swiss index nav. The wordmark ends in the cobalt square. The active item has an `--accent-ink` number and a 2px rule. EN/GR and the Light/Dark toggle sit on the right. |
-| **Hero** | The text column holds the meta row (Role / Based in + live Athens time / Credentials with linked Jamf 200 and ITIL 4 / Contact with email, LinkedIn and GitHub), the tagline and two CTAs, and the name fitted bottom-left with the square stop. The cobalt band on the right holds `(00) · Jamf 200 · 550+ Macs`, the monogram fitted to the band width, and `(Now)` with the rolling role list. On mobile the band becomes a block under the bar, with the monogram beside the role. |
-| **About** | `(01) About`, then the full-bleed cobalt figures strip, then four text columns: paragraph 1, paragraph 2 + credential chips (Jamf 200 filled cobalt), four core-skill rows that open dialogs, and the profile definition list. Both tool marquees follow. |
-| **Services** | `(02) What I do` as a 3×2 numbered text grid drawn by 1px gaps. Each cell inverts to cobalt on hover or focus and opens the existing dialog (numbered highlights plus toolkit tiles). The "Let's Talk" button is cobalt. |
-| **Experience** | `(03) Career` as two stacked index tables sharing one column set (No. / Role or Credential / Company or Institution / Year). Years are condensed to `2024 – 2026` or `2026 – Now`. The preview column shows the highlighted entry: the year span in large accent numerals, the full period, title, organisation, the first three tasks or details, "Details +" (opens the dialog) and **Verify credential ↗** where there is one. |
-| **Projects** | `(04) Selected work` as the Swiss index table (No. / Title / Tags / Year / Live ↗ Code ↗) with a cobalt active row and a preview column (image, name, role, description). Mobile rows carry thumbnails. The dialog is unchanged apart from a cobalt primary button. |
-| **Contact** | `(05)` as one cobalt field. It holds the heavy "Get in touch", the email label with the **Copy** button, and the address fitted across the full width (split at `@` on phones). Below come the facts (Location / Local time / Find me on / Open to opportunities), Send message (white) and Download resume (outline), then the copyright and Back to top. |
-| **Dialogs** | Paper panel with a 6px cobalt top edge and hairline frame. Primary actions are cobalt. Focus trap, Escape and focus return are unchanged. |
-| **Intro** | A cobalt title card: three numbered status lines in heavy type, and a white "Enter System →". It exits with a clip-path wipe upward that reveals the hero band wiping in. |
-| **OG image** | Paper with the name bottom-left, the cobalt square stop and a cobalt band carrying `AF` and the role. |
-
-**Content:** every EN/GR string, link, credential and aria label is kept. The `editorial` content block from Swiss Editorial (mixed-case titles, table heads, meta labels) is reused unchanged. No new content keys were added.
+- **Block wipes** (`src/utils/motion.ts`, `Panel`, `Field`). A clip-path inset uncovers each cobalt block from its outer edge as the panel enters. The contact field wipes up from the bottom.
+- **Line rise.** Giant words rise out of their masks after the block lands. Section titles rise word by word and are keyed by language, so EN/GR replays them.
+- **Word crossfade.** `Automate. / Secure. / Scale.` crossfades letter by letter, and the role line swaps whole lines.
+- **Rows and cells.** Index rows become a cobalt bar (fill bleeds 10px, nothing shifts, title nudges 6px). Service blocks and skill cells wipe the opposite colour up. Hover inversion only applies to real pointers (`@media (hover: hover)`), so a tap never leaves a row stuck in cobalt.
+- **Nothing follows the cursor.**
+- **Reduced motion.** `MotionConfig reducedMotion="user"`, `Panel` renders its final state, `[data-field-wipe]` drops its clip in CSS, and word cycles hold their first word. Verified: 0 blocks left clipped on any panel under `prefers-reduced-motion`.
 
 ## Accessibility
 
-- The focus ring is `--focus`. It is cobalt on paper, the tint on dark, and white on every field. A focused row is itself the field, so its ring is drawn 5px inside the fill.
-- Touch devices never keep a row stuck in cobalt after a tap, because hover inversion is limited to `(hover: hover)`.
-- The active-row highlight exists only on desktop, where it is tied to the visible preview column.
-- The monogram and the split name are `aria-hidden`, with an sr-only full name. The role ticker exposes the whole list once. The Experience preview is a labelled `aside` whose links and buttons are reachable by keyboard.
+- The focus ring is `--focus`: cobalt on paper, white on ink and on every cobalt surface. A focused index row becomes the cobalt bar with its ring drawn inside the fill.
+- `h1` is sr-only with the name and title, and the split name is `aria-hidden`. Word cycles expose their full list once. The Experience block is an `aria-live` region, and its rows are `aria-controls` / `aria-expanded` for the mobile accordion.
+- Dialogs trap focus, close on Escape and return focus to the control that opened them.
 
-## Trade-offs
+## Trade-offs and open questions
 
-- **Truncated table cells on desktop.** To keep both Experience tables and the preview on one 1440×900 screen, long roles, institutions and Greek degree names are truncated with an ellipsis in the table. The full text is in the preview column, the dialog and each row's aria label.
-- **Verify links moved.** "Verify credential" is no longer inside the education row. It appears in the preview column (desktop) and in the dialog (all sizes).
-- **The hero band's middle is intentionally empty blue.** The field is the statement; anything placed there started to feel like clutter.
-- **Whitespace.** As in Swiss Editorial, section content sits at the bottom of each panel. This leaves a deliberate band under each title. On mobile the hero has a gap between the meta row and the tagline, because the name is pinned above the bottom bar.
-- **Greek content inconsistency (not changed).** The Greek About paragraph says "άνω των 400 συσκευών" while the English says 550+. Some task bullets in both languages also cite 400+ for the earlier enrollment and EDR work. This is content, so it was left for the owner to confirm.
-- **Font Awesome and `typewriter-effect`.** Both are still installed, as on the other style branches. The copy button uses an FA icon, and `typewriter-effect` is unused. The lockfile was left untouched.
-- **Local 404.** The only console error under `next start` is `/_vercel/speed-insights/script.js`. It exists only off Vercel.
+- **Mixed-case section titles.** Cobalt Block set section titles in uppercase 900. They are now heavy mixed case, to match the loved "Get in touch" and to keep Greek accents (`Σχετικά`, `Καριέρα`) that uppercase Greek drops. The name across the seam stays uppercase. If he misses the all-caps punch, this is a one-class switch.
+- **Whitespace under titles.** As on the contact panel, paper-side content is bottom-aligned, which leaves a deliberate band under each title.
+- **Truncation.** Long project titles and some long role names in the Experience table are truncated on desktop. The full text is in the block, the dialog and the aria label.
+- **OG font.** `next/og` renders with its default font, because Satori cannot read the woff2 files from `next/font`.
+- **Content left as is:** `t.cursor` strings remain in `content.ts` (now unused), and some historical task bullets still cite 400+ for earlier work. The Greek About paragraph now correctly says **άνω των 550 συσκευών**.
 
 ## Verification
 
-- `npm run build` passes. `npx eslint src` reports 0 errors (1 existing `<img>` warning in `LogoLoop`).
-- Mobile horizontal overflow at 390px is **0px** in light, dark and Greek.
-- Every desktop panel fits 1440×900 with **0px** of inner overflow, in both English and Greek (measured per panel).
-- The Greek surname fits (`--fit` 0.79 on desktop). The heavy Greek headings (`ΑΦ`, `Επικοινωνία`) render in Inter Tight's Greek subset without clipping.
-- Under reduced motion, all fields report `clip-path: none` and keyboard focus is visible.
+- `npm run lint`: 0 errors (1 existing `<img>` warning in `LogoLoop`). `npx next build`: passes, and `/opengraph-image` prerenders with the embedded memoji.
+- **Panel fit** (content bottom vs panel bottom, every panel): 0px overflow at 1440×900 EN/GR, 1280×720 EN light and GR dark, and 1024×768 GR.
+- **Mobile 390×844:** 0px horizontal overflow in EN dark and GR light.
+- **Greek** was checked on every desktop panel, on mobile and in the mobile menu. The surname fits at the shared size, and `Επιλεγμένα έργα` wraps cleanly onto two lines.
+- **Reduced motion:** no clipped blocks on any panel.
+- **Console:** only the local `/_vercel/speed-insights/script.js` 404.
 
 ## Previews
 
@@ -147,16 +131,14 @@ Cobalt on `#0E0E0E` is only 2.53 : 1. On the dark theme it is therefore used onl
 
 ### States
 
-| Projects: active row + preview | Services: cell hover (dark) |
+| | |
 | --- | --- |
-| ![](style-preview/states/projects-row-hover-light.jpg) | ![](style-preview/states/services-hover-dark.jpg) |
-| **Career: education row + verify** | **Career dialog (dark)** |
-| ![](style-preview/states/career-edu-hover-light.jpg) | ![](style-preview/states/career-dialog-dark.jpg) |
-| **Greek hero (fitted surname, ΑΦ)** | **Greek contact (dark)** |
-| ![](style-preview/states/greek-hero-light.jpg) | ![](style-preview/states/greek-contact-dark.jpg) |
-| **Greek career** | **Project dialog** |
-| ![](style-preview/states/greek-experience-light.jpg) | ![](style-preview/states/project-dialog-light.jpg) |
-| **Intro (cobalt field)** | **Intro exit wipe** |
-| ![](style-preview/states/intro-light.jpg) | ![](style-preview/states/intro-exit-light.jpg) |
-| **Keyboard focus** | **Mobile menu / Greek mobile hero** |
-| ![](style-preview/states/keyboard-focus-light.jpg) | ![](style-preview/states/mobile-menu-light.jpg) ![](style-preview/states/mobile-greek-hero-light.jpg) |
+| **Services block hover** ![](style-preview/states/state-light-services-hover.jpg) | **Projects row + stack (dark)** ![](style-preview/states/state-dark-projects-hover.jpg) |
+| **Project dialog** ![](style-preview/states/state-light-project-dialog.jpg) | **Education + verify (dark)** ![](style-preview/states/state-dark-career-education.jpg) |
+| **Keyboard focus** ![](style-preview/states/state-light-keyboard-focus.jpg) | **Intro card** ![](style-preview/states/state-intro.jpg) |
+| **Greek hero** ![](style-preview/states/gr-light-1-hero.jpg) | **Greek career** ![](style-preview/states/gr-light-4-experience.jpg) |
+| **Greek projects** ![](style-preview/states/gr-light-5-projects.jpg) | **Greek contact** ![](style-preview/states/gr-light-6-contact.jpg) |
+| **Contact close-up** ![](style-preview/states/contact-light-closeup.jpg) | **Contact close-up (dark)** ![](style-preview/states/contact-dark-closeup.jpg) |
+| **Short desktop 1280×720** ![](style-preview/states/short-en-2-about.jpg) | **Greek mobile menu** ![](style-preview/states/mobile-menu-gr-light.jpg) |
+| **Logo (light, 3×)** ![](style-preview/states/logo-light-3x.png) | **Logo (dark, 3×)** ![](style-preview/states/logo-dark-3x.png) |
+| **OG image** ![](style-preview/states/opengraph-image.png) | |

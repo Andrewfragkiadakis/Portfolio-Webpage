@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
-import { motion, AnimatePresence } from 'motion/react'
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
 
 const FOCUSABLE = 'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
 
@@ -33,6 +33,10 @@ export default function Modal({
     const closeRef = useRef<HTMLButtonElement>(null)
     const lastFocused = useRef<HTMLElement | null>(null)
     const [mounted, setMounted] = useState(false)
+    const reduce = useReducedMotion()
+    // The panel wipes open like a block. The clip is inset negatively once open so the
+    // offset cobalt shadow (the panel's "second block") is not cut off.
+    const OPEN = 'inset(-4px -16px -16px -4px)'
 
     // Portals need a DOM target, which only exists after hydration.
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -91,17 +95,17 @@ export default function Modal({
                     className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
                     onClick={onClose}
                 >
-                    <div className="absolute inset-0 bg-[#0E0E0E]/65" />
+                    <div className="absolute inset-0 bg-[#0a0a0a]/80" />
                     <motion.div
                         ref={panelRef}
                         role="dialog"
                         aria-modal="true"
                         aria-labelledby={labelledBy}
-                        initial={{ opacity: 0, y: 24 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 12 }}
-                        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                        className={`relative z-10 bg-[var(--background)] text-[var(--foreground)] border border-[var(--rule)] border-t-[6px] border-t-[var(--cobalt)] max-h-[85vh] overflow-y-auto overscroll-contain ${className}`}
+                        initial={reduce ? { opacity: 0 } : { opacity: 1, clipPath: 'inset(100% -16px -16px -4px)' }}
+                        animate={reduce ? { opacity: 1 } : { opacity: 1, clipPath: OPEN }}
+                        exit={reduce ? { opacity: 0 } : { opacity: 1, clipPath: 'inset(-4px -16px 100% -4px)' }}
+                        transition={{ duration: reduce ? 0 : 0.4, ease: [0.76, 0, 0.24, 1] }}
+                        className={`relative z-10 bg-[var(--background)] text-[var(--foreground)] shadow-[inset_0_0_0_2px_var(--foreground),12px_12px_0_0_var(--block)] max-h-[85vh] overflow-y-auto ${className}`}
                         onClick={e => e.stopPropagation()}
                     >
                         <button
@@ -109,10 +113,9 @@ export default function Modal({
                             type="button"
                             onClick={onClose}
                             aria-label={closeLabel}
-                            className="absolute top-3 right-3 z-20 h-11 px-3 inline-flex items-center gap-2 cursor-pointer bg-[var(--background)] text-caption font-medium uppercase tracking-[0.06em] hover:text-[var(--accent-ink)] transition-colors"
+                            className="absolute top-3 right-3 z-20 w-11 h-11 flex items-center justify-center cursor-pointer bg-white text-[#2323ff] shadow-[inset_0_0_0_1.5px_#0a0a0a] hover:bg-[#0a0a0a] hover:text-white transition-colors [--focus:#ffffff] focus-visible:outline-offset-[-6px] focus-visible:outline-[#2323ff]"
                         >
-                            <span>{closeLabel}</span>
-                            <span aria-hidden="true" className="text-base leading-none">×</span>
+                            <i className="fas fa-times" aria-hidden="true" />
                         </button>
                         {children}
                     </motion.div>

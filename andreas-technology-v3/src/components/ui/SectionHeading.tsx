@@ -1,6 +1,7 @@
 'use client'
 
 import { motion, type Variants } from 'motion/react'
+import type { ReactNode } from 'react'
 import { EASE_OUT } from '@/utils/motion'
 
 interface SectionHeadingProps {
@@ -18,10 +19,22 @@ interface SectionHeadingProps {
     sizeClass?: string
     /** Set the title in the heavy cut — only for headings that sit on a cobalt field. */
     heavy?: boolean
+    /**
+     * For a split panel's narrower column: the meta row is a single flex line
+     * ("(NN) Label ··· right") instead of the 12-column grid used full width.
+     */
+    compact?: boolean
+    /** Replaces the subtitle at the right end of a compact meta row (e.g. a link). */
+    right?: ReactNode
+    /** Put the id on the header (default). Split panels carry the id on the section instead. */
+    anchor?: boolean
     className?: string
 }
 
 export const WORD_STAGGER = 0.07
+
+/** Title size for the paper column of a split panel (About, Experience, Projects). */
+export const SPLIT_TITLE = 'text-[clamp(2.75rem,13vw,4.5rem)] md:text-[min(7.2vw,12.5vh)]'
 
 const container: Variants = {
     hidden: {},
@@ -48,12 +61,25 @@ export default function SectionHeading({
     subtitle,
     sizeClass = 'text-[clamp(2.75rem,14vw,4.75rem)] md:text-[min(8.4vw,14vh)]',
     heavy = false,
+    compact = false,
+    right,
+    anchor = true,
     className = '',
 }: SectionHeadingProps) {
     const words = title.split(' ')
+    const note = subtitle?.replace(/^\/\/\s*/, '')
 
     return (
-        <header id={id} className={`w-full ${className}`}>
+        <header id={anchor ? id : undefined} className={`w-full ${className}`}>
+            {compact ? (
+                <div className="rule-t-strong flex items-baseline justify-between gap-4 pt-2.5">
+                    <span className="flex items-baseline gap-4 min-w-0">
+                        <span className="meta index">{formatIndex(index)}</span>
+                        <span className="meta text-[var(--foreground)] truncate">{label}</span>
+                    </span>
+                    {right ?? (note && <span className="meta hidden sm:block text-right truncate">{note}</span>)}
+                </div>
+            ) : (
             <div className="rule-t-strong grid grid-cols-4 md:grid-cols-12 gap-x-4 md:gap-x-6 pt-2.5">
                 <span className="meta index col-span-1">{formatIndex(index)}</span>
                 <span className="meta col-span-3 md:col-span-5 text-[var(--foreground)]">{label}</span>
@@ -63,6 +89,7 @@ export default function SectionHeading({
                     </span>
                 )}
             </div>
+            )}
             {/* Keyed by title so a language switch remounts and replays the reveal
                 instead of mounting new words under an already-finished parent. */}
             <motion.h2

@@ -63,7 +63,7 @@ export const metadata: Metadata = {
         follow: true,
     },
     other: {
-        'theme-color': '#0E0E0E',
+        'theme-color': '#2323ff',
     },
 }
 
@@ -75,8 +75,8 @@ export default function RootLayout({
     return (
         <html lang="en" className={interTight.variable} suppressHydrationWarning>
             <head>
-                <meta name="theme-color" content="#0E0E0E" media="(prefers-color-scheme: dark)" />
-                <meta name="theme-color" content="#F2F1EC" media="(prefers-color-scheme: light)" />
+                <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
+                <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
                 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
                 <link

@@ -104,6 +104,8 @@ export interface Content {
     hero: {
         firstName: string
         lastName: string
+        /** One-word statements that crossfade in the hero, distilled from the roles below. */
+        words: string[]
         typewriter: string[]
         viewWork: string
         getInTouch: string
@@ -260,6 +262,7 @@ export const content: Record<'en' | 'gr', Content> = {
         hero: {
             firstName: "ANDREAS",
             lastName: "FRAGKIADAKIS",
+            words: ["Automate.", "Secure.", "Scale."],
             typewriter: [
                 "APPLE FLEET & IT AUTOMATION LEAD",
                 "M.ENG. COMPUTER ENGINEER",
@@ -824,7 +827,7 @@ export const content: Record<'en' | 'gr', Content> = {
             statsLabels: ["Χρονια Εμπειριας", "Συσκευες υπο Διαχειριση", "Ταχυτερο Onboarding", "Πιστοποιησεις"],
             credentialsLabel: "Πιστοποιησεις",
             description: [
-                "Είμαι Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) και ηγούμαι του τομέα Apple Fleet & IT Automation στην Omilia, μια παγκόσμια εταιρεία conversational AI, σε περιβάλλον άνω των 400 συσκευών. Διαχειρίζομαι εξ ολοκλήρου την πλατφόρμα Jamf Pro και ηγούμαι του endpoint engineering για Checkpoint Harmony EDR, pipelines Microsoft Sentinel SIEM και αυτοματοποίηση πιστοποιητικών SSL.",
+                "Είμαι Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) και ηγούμαι του τομέα Apple Fleet & IT Automation στην Omilia, μια παγκόσμια εταιρεία conversational AI, σε περιβάλλον άνω των 550 συσκευών. Διαχειρίζομαι εξ ολοκλήρου την πλατφόρμα Jamf Pro και ηγούμαι του endpoint engineering για Checkpoint Harmony EDR, pipelines Microsoft Sentinel SIEM και αυτοματοποίηση πιστοποιητικών SSL.",
                 "Η δουλειά μου βρίσκεται στο σημείο όπου συναντώνται η ασφάλεια, ο αυτοματισμός και η κλίμακα: θωράκιση κατά CIS Benchmarks ενόψει ελέγχων PCI-DSS και SOC 2, και zero-touch enrollment για macOS που μείωσε τον χρόνο onboarding κατά 70%.",
                 "Παράλληλα οδηγώ την υιοθέτηση AI σε εταιρικό επίπεδο — Google Gemini, Atlassian Rovo Agents και ένα AI pipeline διαλογής αιτημάτων που μείωσε τον μέσο χρόνο triage σε 350+ tickets ετησίως.",
                 "Jamf Certified Tech (Jamf 200) | Αδειούχος Μηχανικός Πληροφορικής (ΤΕΕ) | Πιστοποίηση ITIL 4 | Με έδρα την Αθήνα | Αγγλικά (C2), Ελληνικά (Μητρική), Γερμανικά (B2)"
@@ -834,6 +837,7 @@ export const content: Record<'en' | 'gr', Content> = {
         hero: {
             firstName: "ΑΝΔΡΕΑΣ",
             lastName: "ΦΡΑΓΚΙΑΔΑΚΗΣ",
+            words: ["Αυτοματισμός.", "Ασφάλεια.", "Κλίμακα."],
             typewriter: [
                 "APPLE FLEET & IT AUTOMATION LEAD",
                 "M.ENG. ΜΗΧΑΝΙΚΟΣ ΥΠΟΛΟΓΙΣΤΩΝ",

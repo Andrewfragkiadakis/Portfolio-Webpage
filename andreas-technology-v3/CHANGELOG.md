@@ -34,6 +34,8 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 - JSON-LD `hasCredential` and `knowsAbout` on the Person schema; Jamf keywords in metadata
 
 ### Changed
+- Style branch Swiss Cobalt (round 4): rebuilt on Cobalt Block's split-screen colour blocking (moving ultramarine block, name across the seam, fitted heavy words) with Swiss tweaks: one family (Inter Tight; Inter and JetBrains Mono dropped), meta-row headers on a strong hairline at one height on every panel, index tables with column heads for Experience and Projects, one `--gutter` margin, heavy mixed-case section titles. The round-3 contact panel is kept unchanged. See `STYLE.md`
+- Logo: the `AF` monogram is replaced everywhere (nav, OG image) by the technologist memoji (`Memoji` component; embedded as a data URL in the OG image)
 - What I Do cards decluttered: the logo-tile preview row is replaced by a quiet "N tools" caption beside the plus; the full toolkit lives in the dialog. Tool tiles lose their border
 - Tightened the viewBox of Simple Icons wordmarks padded inside a 24×24 canvas (macOS 4.26:1, VMware 6.32:1, Cisco 1.9:1) so they render at their real size; marquee logos cap at 3rem wide
 - Project card media 4:3 → 16:10 (closer to the 1.5–1.8 ratio of the screenshots); cover crops only for images whose subject survives (Signature Craft, Nexus, HappyFox, Raspberry Pi) and a lowered focal point for the square wheelchair render; Plano Plus, Portfolio, Thesis, Silence Hero, Schiller and LLM research now show whole
@@ -56,6 +58,7 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 - Perf: stat counters animate via `animate()` writing to the DOM instead of 60 fps React state updates; honour reduced motion and render final values server-side
 
 ### Fixed
+- Greek About text: the fleet is 550+ devices ("άνω των 550 συσκευών"), not 400
 - Project images in folders whose names contained `&`, spaces or parentheses (Raspberry Pi, LLM research, Schiller, Friendly Wheelchair) were rejected by the Next.js image optimizer with 400 "isn't a valid image"; folders renamed to kebab-case and paths updated. Email-signature and QR asset folders left untouched because they may be linked from outside the site
 - GSC: `X-Robots-Tag` and static `<meta name="robots">` for thesis presentation; `robots.txt` disallows `/opengraph-image`; sitemap lists only the homepage; root `/favicon.ico` for stable icon URL (thesis HTML restored under `public/`)
 - Mobile: fix horizontal page scroll by using `overflow-x-clip` on Experience and Projects sections instead of `overflow-x: hidden` on html/body (which killed momentum scrolling on mobile browsers)

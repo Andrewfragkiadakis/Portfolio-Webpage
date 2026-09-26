@@ -1,57 +1,54 @@
 import { ImageResponse } from 'next/og'
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 
 export const alt = 'Andreas Fragkiadakis — M.Eng. Computer Engineer, IT & Security'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
-// Swiss Cobalt palette (see globals.css).
-const PAPER = '#F2F1EC'
-const INK = '#111111'
-const MUTED = '#5C5B56'
-const COBALT = '#2323FF'
-const RULE = 'rgba(17, 17, 17, 0.9)'
+// Swiss Cobalt: the hero's 40/60 split, name broken across the seam.
+const COBALT = '#2323ff'
+const PAPER = '#ffffff'
+const INK = '#0a0a0a'
+const RULE_ON_COBALT = 'rgba(255,255,255,0.9)'
+const RULE_ON_PAPER = 'rgba(10,10,10,0.9)'
 
 const META = { fontSize: 18, letterSpacing: '0.06em', textTransform: 'uppercase' as const }
 
 export default async function Image() {
+  // The logo is the technologist memoji (the favicon), embedded so the card needs no fetch.
+  const memoji = await readFile(join(process.cwd(), 'public/favicons/android-chrome-512x512.png'))
+  const memojiSrc = `data:image/png;base64,${memoji.toString('base64')}`
+
   return new ImageResponse(
     (
-      <div style={{ width: '100%', height: '100%', background: PAPER, color: INK, display: 'flex' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, padding: '40px 40px 44px 56px' }}>
-          <div style={{ display: 'flex', borderTop: `2px solid ${RULE}`, paddingTop: 14 }}>
-            <div style={{ ...META, color: MUTED, display: 'flex', width: '50%' }}>M.Eng. Computer Engineer</div>
-            <div style={{ ...META, color: MUTED, display: 'flex', width: '50%' }}>Athens, Greece</div>
-          </div>
+      <div style={{ width: '100%', height: '100%', display: 'flex', position: 'relative', background: PAPER, color: INK }}>
+        <div style={{ position: 'absolute', left: 0, top: 0, width: 480, height: 630, background: COBALT, display: 'flex' }} />
 
-          <div style={{ display: 'flex', flex: 1 }} />
-
-          <div style={{ display: 'flex', fontSize: 28, fontWeight: 500, letterSpacing: '-0.02em', marginBottom: 20 }}>
-            Apple Fleet & IT Automation · Security Engineering
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', fontSize: 128, fontWeight: 600, letterSpacing: '-0.055em', lineHeight: 0.88 }}>
-            <div style={{ display: 'flex' }}>Andreas</div>
-            <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-              Fragkiadakis
-              <div style={{ display: 'flex', width: 22, height: 22, background: COBALT, marginLeft: 6, marginBottom: 14 }} />
-            </div>
-          </div>
+        {/* Meta rows on strong hairlines, as on every panel. */}
+        <div style={{ ...META, position: 'absolute', left: 40, right: 760, top: 40, display: 'flex', justifyContent: 'space-between', borderTop: `2px solid ${RULE_ON_COBALT}`, paddingTop: 12, color: PAPER }}>
+          <span>(00)</span>
+          <span>andreas.technology</span>
+        </div>
+        <div style={{ ...META, position: 'absolute', left: 520, right: 40, top: 40, display: 'flex', justifyContent: 'space-between', borderTop: `2px solid ${RULE_ON_PAPER}`, paddingTop: 12 }}>
+          <span>IT & Security Engineer</span>
+          <span>Athens, GR</span>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', width: 300, background: COBALT, color: '#FFFFFF', padding: '40px 32px 44px' }}>
-          <div style={{ ...META, display: 'flex', justifyContent: 'space-between', borderTop: '2px solid rgba(255,255,255,0.9)', paddingTop: 14 }}>
-            <span>(00)</span>
-            <span>Jamf 200 · ITIL 4</span>
-          </div>
-          <div style={{ display: 'flex', fontSize: 190, fontWeight: 700, letterSpacing: '-0.06em', lineHeight: 0.9, marginTop: 20 }}>AF</div>
-          <div style={{ display: 'flex', flex: 1 }} />
-          <div style={{ display: 'flex', fontSize: 30, fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1 }}>
-            Apple Fleet & IT Automation Lead
-          </div>
+        {/* The memoji on a paper square: the logo on a cobalt field. */}
+        <div style={{ position: 'absolute', left: 40, top: 100, width: 112, height: 112, background: PAPER, display: 'flex', overflow: 'hidden' }}>
+          <img src={memojiSrc} alt="Andreas Fragkiadakis" width={120} height={120} style={{ position: 'absolute', left: -4, top: -2 }} />
         </div>
+
+        {/* One line of type broken across the seam, as in the hero. */}
+        <div style={{ position: 'absolute', right: 1200 - 440, top: 262, fontSize: 84, fontWeight: 700, letterSpacing: '-0.05em', lineHeight: 1, color: PAPER }}>ANDREAS</div>
+        <div style={{ position: 'absolute', left: 520, top: 262, fontSize: 84, fontWeight: 700, letterSpacing: '-0.05em', lineHeight: 1, color: COBALT }}>FRAGKIADAKIS</div>
+        <div style={{ position: 'absolute', left: 520, top: 370, fontSize: 52, fontWeight: 700, letterSpacing: '-0.04em' }}>Automate. Secure. Scale.</div>
+
+        <div style={{ ...META, position: 'absolute', left: 40, bottom: 40, color: PAPER }}>Jamf 200 · 550+ Macs</div>
+        <div style={{ ...META, position: 'absolute', left: 520, bottom: 40 }}>Apple Fleet & IT Automation Lead · M.Eng.</div>
       </div>
     ),
-    {
-      ...size,
-    }
+    { ...size }
   )
 }

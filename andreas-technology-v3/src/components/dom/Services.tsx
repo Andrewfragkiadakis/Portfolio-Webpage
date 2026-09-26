@@ -2,130 +2,147 @@
 
 import { useContent } from '@/hooks/useContent'
 import { motion } from 'motion/react'
-import { EASE_OUT } from '@/utils/motion'
+import { FADE_UP, WIPE_FROM_BOTTOM } from '@/utils/motion'
 import { scrollToSection } from '@/utils/smooth-scroll'
 import { sectionIndex } from '@/data/sections'
 import { useState } from 'react'
 import type { Service } from '@/data/content'
 import { TOOL_BY_LABEL, type Tool } from '@/data/tools'
-import SectionHeading from '@/components/ui/SectionHeading'
+import RollText from '@/components/ui/RollText'
 import Modal from '@/components/ui/Modal'
+import Panel from '@/components/ui/Panel'
 import { ToolTile } from '@/components/ui/ToolBadge'
+import SectionHeading from '@/components/ui/SectionHeading'
 
 const toolsFor = (service: Service): Tool[] =>
     service.tools.map((label) => TOOL_BY_LABEL.get(label)).filter((tool): tool is Tool => Boolean(tool))
 
+/**
+ * Services — a narrow paper column for the heading, then the six services as a 3×2
+ * checkerboard of flat blocks. Every block is a button; hover/focus wipes the opposite
+ * colour up through it (see `.svc-grid` in globals.css).
+ */
 export default function Services() {
     const t = useContent()
     const [active, setActive] = useState<Service | null>(null)
-    const activeIndex = active ? t.services.indexOf(active) : -1
 
     return (
-        <section className="w-full md:h-full flex flex-col px-4 md:px-10 pt-16 pb-14 md:pt-5 md:pb-6">
-            <SectionHeading id="services" index={2} label={t.nav.services} title={t.editorial.sections.services} subtitle={t.servicesSubtitle} />
+        <Panel id="services" label={t.servicesTitle} className="flex flex-col md:flex-row">
+            <div className="surface-page md:w-[30%] flex flex-col justify-between gap-10 px-4 md:px-[var(--gutter)] pt-12 pb-12 md:pt-5 md:pb-10">
+                <SectionHeading
+                    id="services"
+                    anchor={false}
+                    compact
+                    heavy
+                    index={2}
+                    label={t.nav.services}
+                    title={t.editorial.sections.services}
+                    sizeClass="text-[clamp(2.75rem,13vw,4.5rem)] md:text-[min(4.6vw,10vh)]"
+                />
 
-            <div className="flex-1 min-h-8 md:min-h-4" />
+                <motion.div variants={FADE_UP} custom={0.5} className="flex flex-col gap-5">
+                    <p className="font-display font-extrabold tracking-[-0.02em] leading-[1.1] text-[clamp(1.25rem,1.8vw,1.75rem)] max-w-[16ch]">
+                        {t.servicesCta}
+                    </p>
+                    <button
+                        type="button"
+                        onClick={() => scrollToSection(sectionIndex('contact'), 'contact')}
+                        className="btn btn-solid self-start"
+                    >
+                        <RollText>{t.servicesCtaButton}</RollText>
+                        <span aria-hidden="true">→</span>
+                    </button>
+                </motion.div>
+            </div>
 
-            {/* 3 × 2 text blocks. The 1px gap over a rule-coloured ground draws the hairlines. */}
-            <ul className="-mx-4 sm:mx-0 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-px bg-[var(--rule)] border-y border-[var(--rule)]">
+            <ul className="svc-grid md:w-[70%] grid grid-cols-1 md:grid-cols-3 md:grid-rows-2">
                 {t.services.map((service: Service, index: number) => (
                     <motion.li
                         key={service.title}
-                        className="bg-[var(--background)]"
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        viewport={{ once: true, amount: 0.3 }}
-                        transition={{ duration: 0.8, ease: EASE_OUT, delay: index * 0.06 }}
+                        variants={WIPE_FROM_BOTTOM}
+                        className={`invert-block ${index % 2 === 0 ? 'is-block' : ''}`}
                     >
                         <button
                             type="button"
                             onClick={() => setActive(service)}
                             aria-label={`${service.title} — ${t.servicesLabels.details}`}
-                           
-                            className="index-row cell group w-full h-full text-left flex flex-col px-4 sm:px-5 md:px-6 py-5 md:py-5"
+                            className="w-full h-full text-left flex flex-col justify-between gap-6 short:gap-3 p-6 lg:p-7 xl:p-8 short:p-5 min-h-[18rem] md:min-h-0 focus-visible:outline-offset-[-8px]"
                         >
-                            <span className="flex items-baseline justify-between gap-3">
-                                <span className="index text-sm font-medium">{String(index + 1).padStart(2, '0')}</span>
-                                <span className="meta">{service.tools.length} {t.servicesLabels.tools}</span>
+                            <span className="flex items-start justify-between gap-4 w-full">
+                                <span className="eyebrow">{String(index + 1).padStart(2, '0')}</span>
+                                <i className={`${service.icon} text-2xl`} aria-hidden="true" />
                             </span>
-                            <span className="row-title block mt-5 md:mt-6 text-[1.375rem] md:text-[clamp(1.25rem,1.65vw,1.625rem)] font-medium leading-[1.08] tracking-[-0.03em] text-balance">
-                                {service.title}
+
+                            <span className="flex flex-col gap-3">
+                                <span className="font-display font-extrabold tracking-[-0.03em] leading-[1.02] text-[clamp(1.5rem,1.9vw,2rem)] short:text-[1.375rem]">
+                                    {service.title}
+                                </span>
+                                <span className="text-body-sm leading-relaxed opacity-85 line-clamp-6 short:line-clamp-3">
+                                    {service.description}
+                                </span>
                             </span>
-                            <span className="block mt-2.5 text-sm text-[var(--muted)] leading-snug line-clamp-3">
-                                {service.description}
-                            </span>
-                            <span className="mt-auto pt-4 flex items-center gap-2 text-caption font-medium uppercase tracking-[0.06em]">
-                                <span className="link-underline">{t.servicesLabels.details}</span>
-                                <span className="inline-block transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:rotate-90 group-focus-visible:rotate-90" aria-hidden="true">+</span>
+
+                            <span className="flex items-center justify-between gap-3 w-full">
+                                <span className="eyebrow opacity-85">
+                                    {service.tools.length} {t.servicesLabels.tools}
+                                </span>
+                                <span className="w-9 h-9 shrink-0 flex items-center justify-center shadow-[inset_0_0_0_1.5px_currentColor]" aria-hidden="true">
+                                    <i className="fas fa-plus text-sm" />
+                                </span>
                             </span>
                         </button>
                     </motion.li>
                 ))}
             </ul>
 
-            <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                className="mt-5 md:mt-4 grid grid-cols-4 md:grid-cols-12 gap-x-4 md:gap-x-6 gap-y-3 items-baseline"
-            >
-                <p className="col-span-4 md:col-span-6 text-lg md:text-xl font-medium tracking-[-0.02em]">
-                    {t.servicesCta}
-                </p>
-                <div className="col-span-4 md:col-span-6 md:text-right">
-                    <button
-                        type="button"
-                        onClick={() => scrollToSection(sectionIndex('contact'), 'contact')}
-                        className="arrow-link inline-flex items-center gap-3 bg-[var(--cobalt)] text-white px-5 py-3 text-sm font-medium hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-colors duration-300"
-                    >
-                        {t.servicesCtaButton}
-                        <span className="arrow" aria-hidden="true">→</span>
-                    </button>
-                </div>
-            </motion.div>
-
             <Modal
                 open={Boolean(active)}
                 onClose={() => setActive(null)}
                 labelledBy="service-modal-title"
                 closeLabel={t.projectsSection.close}
-                className="max-w-xl w-full p-6 md:p-8"
+                className="max-w-xl w-full"
             >
                 {active && (
                     <>
-                        <p className="meta mb-3">
-                            <span className="index">({String(activeIndex + 1).padStart(2, '0')})</span> {t.nav.services}
-                        </p>
-                        <h3 id="service-modal-title" className="display text-3xl md:text-4xl pr-16 mb-5">
-                            {active.title}
-                        </h3>
+                        <div className="surface-block px-6 sm:px-8 pt-6 sm:pt-8 pb-6 pr-16">
+                            <i className={`${active.icon} text-2xl`} aria-hidden="true" />
+                            <h3 id="service-modal-title" className="mt-4 display-heavy text-[clamp(1.75rem,4vw,2.5rem)] leading-[0.92]">
+                                {active.title}
+                            </h3>
+                        </div>
 
-                        <p className="text-sm leading-relaxed rule-t pt-4 mb-6">
-                            {active.detail}
-                        </p>
+                        <div className="p-6 sm:p-8">
+                            <p className="text-[0.9375rem] text-[var(--muted)] leading-relaxed mb-6">
+                                {active.detail}
+                            </p>
 
-                        <h4 className="meta mb-2">{t.servicesLabels.highlights}</h4>
-                        <ol className="mb-6 text-sm">
-                            {active.highlights.map((item, i) => (
-                                <li key={item} className="rule-t grid grid-cols-[2rem_1fr] py-2">
-                                    <span className="index tabular">{String(i + 1).padStart(2, '0')}</span>
-                                    <span className="leading-relaxed">{item}</span>
-                                </li>
-                            ))}
-                        </ol>
+                            <h4 className="eyebrow text-[var(--accent-ink)] mb-3">
+                                {t.servicesLabels.highlights}
+                            </h4>
+                            <ul className="border-t border-[var(--line)] mb-6">
+                                {active.highlights.map((item) => (
+                                    <li key={item} className="flex items-start gap-3 py-2.5 border-b border-[var(--line)] text-sm">
+                                        <span className="w-2 h-2 mt-1.5 bg-[var(--block)] shrink-0" aria-hidden="true" />
+                                        <span className="leading-relaxed">{item}</span>
+                                    </li>
+                                ))}
+                            </ul>
 
-                        <h4 className="meta mb-3">{t.servicesLabels.toolkit}</h4>
-                        <ul className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-3">
-                            {toolsFor(active).map((tool) => (
-                                <li key={tool.label} className="flex items-center gap-2.5 min-w-0">
-                                    <ToolTile tool={tool} />
-                                    <span className="text-body-sm leading-tight">{tool.label}</span>
-                                </li>
-                            ))}
-                        </ul>
+                            <h4 className="eyebrow text-[var(--accent-ink)] mb-3">
+                                {t.servicesLabels.toolkit}
+                            </h4>
+                            <ul className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-3">
+                                {toolsFor(active).map((tool) => (
+                                    <li key={tool.label} className="flex items-center gap-2.5 min-w-0">
+                                        <ToolTile tool={tool} />
+                                        <span className="text-body-sm leading-tight">{tool.label}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </>
                 )}
             </Modal>
-        </section>
+        </Panel>
     )
 }

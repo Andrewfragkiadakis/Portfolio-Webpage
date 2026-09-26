@@ -146,7 +146,7 @@ export default function HorizontalLayout() {
                         <div
                             key={index}
                             data-panel
-                            className={`relative w-full overflow-x-clip md:h-screen md:w-screen md:flex-shrink-0 md:flex md:overflow-hidden md:pt-[var(--nav-h)] ${index < sections.length - 1 ? 'md:rule-r' : ''}`}
+                            className={`relative w-full overflow-x-clip md:h-screen md:w-screen md:flex-shrink-0 md:flex md:overflow-hidden md:pt-[var(--nav-h)]`}
                         >
                             {section}
                         </div>
@@ -155,7 +155,7 @@ export default function HorizontalLayout() {
             </div>
 
             <motion.div
-                className="hidden md:block fixed bottom-0 left-0 h-[2px] bg-[var(--accent-ink)] z-50 origin-left w-full"
+                className="hidden md:block fixed bottom-0 left-0 h-1 bg-[var(--foreground)] z-50 origin-left w-full"
                 style={{ scaleX: scrollYProgress }}
                 aria-hidden="true"
             />

@@ -5,10 +5,7 @@ import { useContent } from '@/hooks/useContent'
 import { centreOf } from '@/utils/dom'
 import { useEffect, useState } from 'react'
 
-/**
- * Light/dark switch as a text control: a half-filled square plus the name of the
- * current theme. Lives in the top bar on every screen size.
- */
+/** Theme switch, set inline in the navigation bar (desktop and mobile). */
 export default function ThemeToggle({ className = '' }: { className?: string }) {
     const { theme, setTheme } = useTheme()
     const t = useContent()
@@ -18,7 +15,8 @@ export default function ThemeToggle({ className = '' }: { className?: string }) 
     // eslint-disable-next-line react-hooks/set-state-in-effect
     useEffect(() => setMounted(true), [])
 
-    if (!mounted) return null
+    // Same footprint as the real button, so the bar does not shift on hydration.
+    if (!mounted) return <span className={`inline-block h-11 w-11 md:h-9 sm:w-[5.5rem] ${className}`} aria-hidden="true" />
 
     const isDark = theme === 'dark'
 
@@ -27,15 +25,13 @@ export default function ThemeToggle({ className = '' }: { className?: string }) 
             type="button"
             onClick={(e) => setTheme(isDark ? 'light' : 'dark', centreOf(e.currentTarget))}
             aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-            className={`group inline-flex items-center gap-2 text-caption font-medium uppercase tracking-[0.06em] hover:text-[var(--accent-ink)] transition-colors min-h-11 md:min-h-8 ${className}`}
+            className={`btn btn-line btn-bar h-11 min-w-11 md:h-9 md:min-w-0 ${className}`}
         >
-            <span
-                className="relative block w-2.5 h-2.5 border border-current overflow-hidden transition-transform duration-500 group-hover:rotate-180"
-                aria-hidden="true"
-            >
-                <span className="absolute inset-y-0 left-0 w-1/2 bg-current" />
+            {/* Half-filled square: the two themes as two blocks. */}
+            <span className="relative w-3 h-3 shadow-[inset_0_0_0_1.5px_currentColor] overflow-hidden" aria-hidden="true">
+                <span className={`absolute inset-y-0 left-0 w-1/2 bg-current transition-transform duration-500 ${isDark ? 'translate-x-full' : ''}`} />
             </span>
-            <span suppressHydrationWarning>{isDark ? t.editorial.dark : t.editorial.light}</span>
+            <span className="hidden sm:block">{isDark ? t.editorial.dark : t.editorial.light}</span>
         </button>
     )
 }
