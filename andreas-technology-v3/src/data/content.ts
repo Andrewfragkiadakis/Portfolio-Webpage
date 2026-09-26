@@ -191,6 +191,11 @@ export interface Content {
         qrAlt: string
         mapLabel: string
         city: string
+        /** Place names drawn on the Athens map. */
+        mapPlaces: { piraeus: string; gulf: string }
+        /** Accessible names (and popover titles) of the "i" hotspots. */
+        spot: { rings: string; story: string; macs: string; map: string; toolkit: string; role: string }
+        coordinates: string
     }
 }
 
@@ -755,6 +760,16 @@ export const content: Record<'en' | 'gr', Content> = {
             qrAlt: "QR code that opens a new email to Andreas",
             mapLabel: "Map of Athens with a pin on the city centre",
             city: "Athens",
+            mapPlaces: { piraeus: "Piraeus", gulf: "Saronic Gulf" },
+            spot: {
+                rings: "What the rings show",
+                story: "More about me",
+                macs: "About this chart",
+                map: "Location details",
+                toolkit: "All tools",
+                role: "Responsibilities",
+            },
+            coordinates: "Coordinates",
         },
         copyright: "© 2026 Created By Andreas Fragkiadakis. All rights reserved."
     },
@@ -1310,6 +1325,16 @@ export const content: Record<'en' | 'gr', Content> = {
             qrAlt: "Κωδικός QR που ανοίγει νέο email προς τον Ανδρέα",
             mapLabel: "Χάρτης της Αθήνας με πινέζα στο κέντρο",
             city: "Αθήνα",
+            mapPlaces: { piraeus: "Πειραιάς", gulf: "Σαρωνικός" },
+            spot: {
+                rings: "Τι δείχνουν οι δακτύλιοι",
+                story: "Περισσότερα για μένα",
+                macs: "Σχετικά με το γράφημα",
+                map: "Στοιχεία τοποθεσίας",
+                toolkit: "Όλα τα εργαλεία",
+                role: "Αρμοδιότητες",
+            },
+            coordinates: "Συντεταγμένες",
         },
         copyright: "© 2026 Created By Ανδρέας Φραγκιαδάκης. All rights reserved."
     }

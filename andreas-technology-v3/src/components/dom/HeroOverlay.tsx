@@ -10,6 +10,7 @@ import AnalogClock from '@/components/ui/AnalogClock'
 import FleetRings from '@/components/ui/FleetRings'
 import Showcase from '@/components/ui/Showcase'
 import { Bento, GlowRing, Tile, TileButton, TileLink } from '@/components/ui/Bento'
+import InfoSpot from '@/components/ui/InfoSpot'
 import { sectionIndex, type SectionId } from '@/data/sections'
 
 const SOCIAL_ROW = 'group flex items-center gap-2.5 rounded-xl px-2 py-1.5 short:py-1 -mx-2 transition-colors duration-300 hover:bg-[var(--fill)]'
@@ -70,33 +71,30 @@ export default function HeroOverlay() {
                             <span aria-hidden="true" className="block bg-[linear-gradient(90deg,#0850c0_0%,#4a2cb4_45%,#a01f45_100%)] dark:bg-[linear-gradient(90deg,#6cb8ff_0%,#b4a6ff_50%,#ff8fb1_100%)] bg-clip-text text-transparent pb-[0.04em]">{t.hero.lastName}</span>
                         </h1>
 
-                        {/* The roles, typed out one after another. */}
-                        <div className="mt-4 md:mt-[min(2vw,2.6vh)] flex items-baseline gap-2.5 font-mono text-[0.8125rem] md:text-[min(1.05vw,1.85vh)]">
-                            <span className="text-[#1f9d55] dark:text-[#30d158] shrink-0" aria-hidden="true">➜ whoami</span>
-                            <div role="status" aria-live="polite" className="terminal-text font-semibold min-w-0 min-h-[1.3em]">
-                                <span className="sr-only">{t.hero.typewriter.join(' | ')}</span>
-                                <span aria-hidden="true">
-                                    {reduceMotion ? (
-                                        t.hero.typewriter[0]
-                                    ) : entered && (
-                                        <Typewriter
-                                            options={{
-                                                strings: t.hero.typewriter,
-                                                autoStart: true,
-                                                loop: true,
-                                                delay: 45,
-                                                deleteSpeed: 25,
-                                            }}
-                                        />
-                                    )}
-                                </span>
+                        {/* The roles, typed out one after another. The tagline that used to follow
+                            opens the About story word for word, so it lives there only. */}
+                        <div className="mt-4 md:mt-[min(2vw,2.6vh)] flex items-baseline justify-between gap-4">
+                            <div className="flex items-baseline gap-2.5 min-w-0 font-mono text-[0.8125rem] md:text-[min(1.05vw,1.85vh)]">
+                                <span className="text-[#1f9d55] dark:text-[#30d158] shrink-0" aria-hidden="true">➜ whoami</span>
+                                <div role="status" aria-live="polite" className="terminal-text font-semibold min-w-0 min-h-[1.3em]">
+                                    <span className="sr-only">{t.hero.typewriter.join(' | ')}</span>
+                                    <span aria-hidden="true">
+                                        {reduceMotion ? (
+                                            t.hero.typewriter[0]
+                                        ) : entered && (
+                                            <Typewriter
+                                                options={{
+                                                    strings: t.hero.typewriter,
+                                                    autoStart: true,
+                                                    loop: true,
+                                                    delay: 45,
+                                                    deleteSpeed: 25,
+                                                }}
+                                            />
+                                        )}
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-
-                        <div className="mt-4 md:mt-[min(1.6vw,2.2vh)] flex flex-col md:flex-row md:items-end justify-between gap-4">
-                            <p className="text-[0.95rem] md:text-[min(1.2vw,2.1vh)] leading-snug text-[var(--muted)] max-w-[30rem] font-medium">
-                                {t.about.tagline}
-                            </p>
                             <p className="hidden md:flex items-center gap-2 eyebrow shrink-0">
                                 {t.hero.scroll}
                                 <i className="fas fa-arrow-right text-[var(--accent)]" aria-hidden="true" />
@@ -115,21 +113,25 @@ export default function HeroOverlay() {
                 </Tile>
 
                 {/* Fleet at a glance — activity rings, only for figures that are real percentages. */}
-                <Tile index={2} tone="night" className="col-span-2 md:col-[8/11] md:row-[4/7] gap-3 short:gap-2 min-h-[17rem] md:min-h-0 max-md:flex-row max-md:items-center">
-                    <div className="max-md:order-2 max-md:flex-1 flex flex-col gap-3 md:contents">
+                <Tile index={2} tone="night" className="col-span-2 md:col-[8/11] md:row-[4/7] gap-3 short:gap-2 min-h-[13rem] md:min-h-0 max-md:flex-row max-md:items-start">
+                    <div className="max-md:order-2 max-md:flex-1 flex items-start justify-between gap-2">
                         <p className="eyebrow el-caps">{t.bento.fleetTitle}</p>
-                        <ul className="md:order-3 space-y-1.5 short:space-y-1 text-caption md:text-[min(0.85vw,1.5vh)]">
-                            <li className="flex items-center gap-2">
-                                <span className="w-2 h-2 rounded-full shrink-0 bg-[linear-gradient(135deg,#2bd66f,#b7f54a)]" aria-hidden="true" />
-                                <span className="font-bold tabular-nums">95%+</span>
-                                <span className="text-[var(--muted)] truncate">{t.bento.slaLabel}</span>
-                            </li>
-                            <li className="flex items-center gap-2">
-                                <span className="w-2 h-2 rounded-full shrink-0 bg-[linear-gradient(135deg,#ff375f,#ff9f0a)]" aria-hidden="true" />
-                                <span className="font-bold tabular-nums">70%</span>
-                                <span className="text-[var(--muted)] truncate el-caps">{t.about.statsLabels[2]}</span>
-                            </li>
-                        </ul>
+                        <InfoSpot label={t.bento.spot.rings} title={t.bento.fleetTitle} tone="onColor">
+                            <ul className="space-y-2">
+                                <li className="flex items-center gap-2.5">
+                                    <span className="w-2.5 h-2.5 rounded-full shrink-0 bg-[linear-gradient(135deg,#2bd66f,#b7f54a)]" aria-hidden="true" />
+                                    <span><span className="font-bold tabular-nums">95%+</span> <span className="muted">{t.bento.slaLabel}</span></span>
+                                </li>
+                                <li className="flex items-center gap-2.5">
+                                    <span className="w-2.5 h-2.5 rounded-full shrink-0 bg-[linear-gradient(135deg,#ff375f,#ff9f0a)]" aria-hidden="true" />
+                                    <span><span className="font-bold tabular-nums">70%</span> <span className="muted">{t.about.statsLabels[2]}</span></span>
+                                </li>
+                                <li className="flex items-center gap-2.5">
+                                    <span className="w-2.5 h-2.5 rounded-full shrink-0 border-2 border-current opacity-60" aria-hidden="true" />
+                                    <span><span className="font-bold tabular-nums">550+</span> <span className="muted">{t.about.statsLabels[1]}</span></span>
+                                </li>
+                            </ul>
+                        </InfoSpot>
                     </div>
                     <div className="max-md:order-1 max-md:w-[42%] md:order-2 md:flex-1 min-h-0 flex items-center justify-center md:[container-type:size]">
                         <FleetRings
@@ -151,7 +153,6 @@ export default function HeroOverlay() {
                         label={`${jamf.degree} — ${jamf.institution} (opens credential)`}
                         className="col-span-1 md:col-[11/13] md:row-[4/7] justify-between gap-3 min-h-[12rem] md:min-h-0"
                     >
-                        <i className="fab fa-apple absolute -right-[6%] -bottom-[8%] text-[9rem] md:text-[min(11vw,19vh)] opacity-[0.13] pointer-events-none" aria-hidden="true" />
                         <span className="flex items-start justify-between gap-2">
                             <span
                                 className="block h-5 md:h-[min(1.9vw,3.2vh)] aspect-[2.875] bg-white [mask:url(/logos/jamf.svg)_no-repeat_left/contain] [-webkit-mask:url(/logos/jamf.svg)_no-repeat_left/contain]"
@@ -173,12 +174,8 @@ export default function HeroOverlay() {
                 <Tile index={4} className="clock col-span-1 md:col-[1/4] md:row-[5/7] gap-3 min-h-[12rem] md:min-h-0 md:flex-row md:items-center">
                     <AnalogClock className="w-[5.5rem] md:w-auto md:h-full md:max-h-[min(11vw,19vh)] aspect-square shrink-0" />
                     <div className="min-w-0 flex flex-col justify-center gap-1">
-                        <p className="eyebrow el-caps">{t.contact.localTimeLabel}</p>
-                        <LocalTime className="numeral block text-[2rem] md:text-[min(2.6vw,4.6vh)] [&_span]:block [&_span]:mt-1 [&_span]:text-caption [&_span]:tracking-normal [&_span]:font-semibold" />
-                        <p className="mt-1 flex items-center gap-1.5 text-caption md:text-[min(0.9vw,1.6vh)] font-semibold">
-                            <i className="fas fa-location-dot text-[var(--accent)]" aria-hidden="true" />
-                            {t.location}
-                        </p>
+                        <p className="eyebrow el-caps">{t.bento.city}</p>
+                        <LocalTime className="numeral block text-[2rem] md:text-[min(2.6vw,4.6vh)] [&_span]:hidden" />
                     </div>
                 </Tile>
 
@@ -197,7 +194,6 @@ export default function HeroOverlay() {
                                         <i className={`${link.icon} text-sm`} />
                                     </span>
                                     <span className="flex-1 text-sm md:text-[min(1vw,1.75vh)] font-semibold">{link.label}</span>
-                                    <i className="fas fa-arrow-right -rotate-45 text-caption text-[var(--muted)] transition-transform duration-300 group-hover:rotate-0 group-hover:text-[var(--accent)]" aria-hidden="true" />
                                 </a>
                             </li>
                         ))}

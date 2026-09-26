@@ -109,6 +109,117 @@ New bilingual labels live in `content.bento` (EN and GR): selected work, fleet t
 - The only console error is the expected local 404 for `/_vercel/speed-insights/script.js`.
 - No new runtime dependencies. Fonts are unchanged: Inter via `next/font/google` with `latin` + `greek`.
 
+## Round 4: a calmer grid, a real Athens map, the memoji mark
+
+Andreas asked for three things: fix the location image on Contact, make the site about 25% less cluttered without losing anything, and use his memoji instead of the "AF" monogram.
+
+### Athens map tile
+
+**What was wrong.** The old map was a 400 × 260 SVG stretched with `slice` into a tile that is nearly square on desktop and wide on mobile. That meant:
+
+- it was blown up about 2×, so the 1 px street grid became thick, even graph paper;
+- the sides were cropped away, so the coast shrank to a sliver in a corner that the glass card then covered;
+- nothing on it said "Athens" (the parks were arbitrary blobs and there was no coastline shape, mountain or place name);
+- the text was repeated four times: the Location chip, the coordinates chip, the card, and the "Athens, Greece" chip on the tile above.
+
+**The fix** (`ui/AthensMap.tsx`) is a new inline SVG drawn from simplified real geography, in kilometres from Syntagma:
+
+- the Saronic Gulf coast from Piraeus round Faliro Bay to Glyfada;
+- Hymettus and Aigaleo, each with faint contour lines;
+- the Kifisou, Attiki Odos and Hymettus ring motorways;
+- the main avenues (Syngrou, Pireos, Kifisias, Mesogeion, Vouliagmenis, Poseidonos and others);
+- the National Garden, the Acropolis and Philopappos, Lycabettus, Pedion tou Areos and Ellinikon;
+- a separate street grid for each district, each at its own angle (a single grid reads as graph paper).
+
+How it is drawn:
+
+- **Fixed scale.** The map is drawn at 30 px/km and is never stretched. A larger tile simply shows more of the city, the way a real map does. Strokes stay 1 px sharp and labels stay 11 px at every size. `.map-canvas` places the canvas so that Syntagma lands on the pin at `(50% + --ox, 50% + --oy)`, with separate offsets for mobile and desktop so that the pin, the card and the coast all fit.
+- **Apple Maps palette** in `.map`, with a night palette for dark mode. There are only two labels: Piraeus and the Saronic Gulf, in both EN and GR.
+- **A "Find My" pin** made from the memoji in a white ring, on a tail, over a pulsing blue dot. The pulse pauses offscreen and is removed under reduced motion.
+- **One glass card**, "Athens, Greece · 21:34". The coordinates and the UTC offset sit behind the tile's "i".
+- There are still no tiles and no network requests.
+
+### Less on screen, one click deeper
+
+**`ui/InfoSpot.tsx`** is a quiet 28 px "i" (or "+N") hotspot:
+
+- it is a real `<button>` with `aria-expanded` and `aria-controls` and a 44 px hit area;
+- it opens a small frosted popover (`role="dialog"`) that is portalled to `<body>`, so tiles and the transformed track cannot clip it;
+- the popover is positioned against the button and follows it on scroll, and it closes when the button leaves the screen;
+- Escape (which returns focus to the button), a click or tap outside, or tabbing away all close it;
+- only one popover is open at a time;
+- it has no blinking or pulsing, and under reduced motion it opens with an opacity change only.
+
+Density at 1440 × 900 was measured with Playwright (`density.js`). The script counts words that are actually visible, taking clipping, `line-clamp`, `truncate` and `sr-only` into account, and counts visible text blocks and graphics (images, SVGs, icons and logos) per panel.
+
+| Panel | Words, EN (before → after) | Words, GR | Elements (text blocks + graphics) |
+| --- | --- | --- | --- |
+| Hero | 75 → 53 (−29%) | 77 → 56 | 46 → 35 (−24%) |
+| About | 157 → 111 (−29%) | 169 → 115 | 86 → 61 (−29%) |
+| What I do | 205 → 131 (−36%) | 206 → 127 | 80 → 57 (−29%) |
+| Career | 242 → 140 (−42%) | 222 → 129 | 89 → 63 (−29%) |
+| Projects | 137 → 81 (−41%) | 137 → 82 | 83 → 53 (−36%) |
+| Connect | 69 → 53 (−23%) | 69 → 50 | 41 → 31 (−24%) |
+| **Total** | **885 → 569 (−36%)** | **880 → 559** | **425 → 300 (−29%)** |
+
+The tile count is unchanged (65). The layouts are the same, with more air inside each tile. Career and Projects were cut further than the others because they were the densest panels.
+
+**What moved, and where it lives now:**
+
+- **Hero.**
+  - The ring legend (95%+ SLA across 350+ tickets, 70% faster onboarding and 550+ endpoints) is now behind the rings tile's "i".
+  - The tagline has gone from the name tile. It is word for word the heading of the About story.
+  - The clock tile reads "Athens 21:34". The UTC offset is in the Contact map "i".
+  - The social rows have lost their arrow glyphs, and the Jamf tile has lost its Apple watermark.
+- **About.**
+  - The story shows its first paragraph. The second paragraph and the Current Focus line are behind its "i".
+  - "Each glyph = 10 Macs" is behind the Mac grid's "i".
+  - The stat tiles have lost their icons, and the skill tiles have lost "Read more" (the "+" and the dialog remain).
+  - The logo wall shows one row of 14 headline tools. A "15 +" hotspot opens all 29 tools **with their names**, which were previously only tooltips.
+- **What I do.**
+  - The tile descriptions are now actually clamped to two lines (three on the flagship). The old `block` class had been overriding `line-clamp`.
+  - The flagship's three highlights and every "06 TOOLS" counter have been removed from the tiles.
+  - The clusters show up to four logos.
+  - The dialog now opens with the tile's summary above the detail, then the highlights and the full toolkit, so nothing clamped is lost.
+- **Career.**
+  - The current role shows its first responsibility, and the whole tile opens the full list (the same dialog as the other roles, now with a "+").
+  - The earlier roles and degrees show years only (for example "2024 – 2026"). Months and institutions are in each dialog.
+  - The credential tiles show the badge, the year and Verify. The full name and issuer are in the dialog, and the full name is also screen-reader text.
+  - The Gantt has lost its row numbers, and the role tiles have lost their 02–07 indices.
+- **Projects.**
+  - The featured project drops its highlights and tags, and its "· 01" index, and its description is clamped to two lines. All of this is in the dialog.
+  - The small tiles drop the number chips and the LIVE / OSS / PAPER words. The live and code buttons still show on the tile, and report and publication links are in the dialog.
+- **Connect.**
+  - The duplicate "Athens, Greece" chip and the paper-plane watermark have gone from the availability tile.
+  - The "Email" label and the envelope well are gone.
+  - The duplicate address under the QR code is gone.
+  - "Find me on" is gone from the GitHub and LinkedIn tiles, and the "CV" eyebrow and file icon are gone from the résumé tile.
+  - The map's chips became one card plus the "i" (see above).
+
+### Logo
+
+The "AF" monogram in the navigation is replaced by the owner's memoji (`public/favicons/android-chrome-512x512.png`):
+
+- it is rendered through `next/image` at 36 px, so 1× and 2× files are generated, and has `alt="Andreas Fragkiadakis"`;
+- it sits on a soft avatar disc: pale blue in light mode, slate in dark mode;
+- the same memoji is the map pin;
+- `opengraph-image.tsx` now reads the PNG and embeds it as a data URL in a ringed disc above the name, and falls back to the name alone if the file cannot be read;
+- there is no other "AF" mark in `src`, and the intro overlay is a terminal with no logo.
+
+### Verification (Round 4)
+
+- `npm run lint`: 0 errors and 0 warnings. `tsc --noEmit` is clean. `next build` passes, and `/opengraph-image` prerenders.
+- Hotspots were tested in Playwright (`r4extra.js`), in light and dark:
+  - a click opens a hotspot, and `aria-expanded` flips;
+  - a click outside closes it;
+  - Escape closes it and returns focus to the button;
+  - Enter opens it from the keyboard and moves focus into the popover;
+  - opening a second hotspot closes the first;
+  - on a 390 px touch device, a tap opens a hotspot and a tap outside closes it;
+  - the toolkit popover lists all 29 tools.
+- Mobile horizontal overflow is 0 px in both themes. Greek was checked on every panel and in the map popover.
+- Previews are in `scratchpad/r4/bento-grid-v2/{light,dark,extra}`, with before shots and density numbers in `before/`.
+
 ## Previews
 
 ### Light, 1440 × 900

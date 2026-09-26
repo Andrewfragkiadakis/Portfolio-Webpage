@@ -4,6 +4,13 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 
 ## [Unreleased]
 
+### Round 4 (Bento Grid v2)
+- **Contact map rebuilt**: Apple Maps-style SVG of the Athens basin, drawn from simplified real geography (the Saronic Gulf coast, Piraeus, Hymettus and Aigaleo, the motorways and main avenues, and the central parks). It is drawn at a fixed 30 px/km and never stretched, so lines stay crisp at every tile size. It has light and night palettes and a "Find My" memoji pin, and it makes no network requests.
+- **`InfoSpot`**: quiet "i" / "+N" hotspot. It is a real button with `aria-expanded`. It opens a portalled popover that Escape, a click outside or a tap outside closes, it returns focus to the button, and only one is open at a time. Details moved behind it: the hero ring legend, the second About paragraph and the current focus, the Mac glyph legend, all 29 tools with names, and the map's coordinates and time zone.
+- **About 25–40% less visible text per panel** (885 → 569 words, 425 → 300 text blocks and graphics at 1440 × 900). Nothing was removed from the site: each detail is now in a hotspot or a dialog. The service dialog now leads with the tile's summary.
+- Services: description `line-clamp` now works (a `block` class was overriding it).
+- The navigation mark and the OG image use the owner's memoji instead of the "AF" monogram.
+
 ### Added
 - `ToolTile`: uniform square tool tile (accent mark on a neutral tile); wide wordmarks fit the same footprint. Used for the structured 2–3 column toolkit grid (tile + name) in the service dialog
 - `ProjectImage`: project screenshots default to `contain` inside the frame with a blurred copy of the same image as fill (one download), so nothing is ever cut off; `Project.imageFit: 'cover'` and `imagePosition` opt specific images into an art-directed crop

@@ -18,16 +18,6 @@ const SMALL_AREAS = [
     'md:col-[5/7] md:row-[5/7]', 'md:col-[7/9] md:row-[5/7]',
 ]
 
-const pad = (n: number) => String(n).padStart(2, '0')
-
-function statusesOf(project: Project) {
-    return [
-        project.liveSiteLink && { label: 'LIVE', accent: true },
-        project.githubLink && { label: 'OSS', accent: false },
-        (project.reportLink || project.publicationLink) && { label: 'PAPER', accent: false },
-    ].filter(Boolean) as { label: string; accent: boolean }[]
-}
-
 function ProjectLinks({ project, live, code, small = false }: { project: Project; live: string; code: string; small?: boolean }) {
     const cls = small
         ? 'w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-caption hover:bg-white hover:text-[#1d1d1f] transition-colors duration-300'
@@ -87,7 +77,7 @@ export default function Projects() {
                                 <ProjectImage project={featured} sizes="(max-width: 1023px) 100vw, 34vw" />
                             </div>
                             <span className="absolute top-4 left-4 chip chip--glass">
-                                {t.projectsSection.caseStudy} · {pad(1)}
+                                {t.projectsSection.caseStudy}
                             </span>
                         </div>
                         <div className="shrink-0 p-[var(--tile-pad)] flex flex-col gap-2">
@@ -97,23 +87,8 @@ export default function Projects() {
                                 </h3>
                                 {featured.year && <span className="text-sm font-semibold tabular-nums text-[var(--muted)] pt-1">{featured.year}</span>}
                             </div>
-                            <p className="text-sm md:text-[min(0.95vw,1.7vh)] leading-snug text-[var(--muted)] line-clamp-3 short:line-clamp-2">{featured.description}</p>
-                            {featured.highlights && (
-                                <ul className="hidden md:block short:hidden space-y-1 mt-1">
-                                    {featured.highlights.slice(0, 3).map((item) => (
-                                        <li key={item} className="flex items-start gap-2 text-[min(0.9vw,1.6vh)] leading-snug">
-                                            <i className="fas fa-check text-[var(--accent)] text-[0.625rem] mt-[0.35em] shrink-0" aria-hidden="true" />
-                                            <span>{item}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
-                            <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
-                                <span className="flex flex-wrap gap-1.5">
-                                    {featured.tags.slice(0, 3).map((tag) => (
-                                        <span key={tag} className="chip normal-case tracking-normal font-medium">{tag}</span>
-                                    ))}
-                                </span>
+                            <p className="text-sm md:text-[min(0.95vw,1.7vh)] leading-snug text-[var(--muted)] line-clamp-2">{featured.description}</p>
+                            <div className="flex flex-wrap items-center justify-end gap-3 pt-1">
                                 <ProjectLinks project={featured} live={t.projectsSection.live} code={t.projectsSection.code} />
                             </div>
                         </div>
@@ -122,7 +97,6 @@ export default function Projects() {
 
                 {/* Everything else */}
                 {rest.map((project, i) => {
-                    const statuses = statusesOf(project)
                     return (
                         <Tile key={project.name} as="article" index={2 + i} interactive className={`col-span-1 ${SMALL_AREAS[i] ?? ''} !p-0 justify-end min-h-[14rem] md:min-h-0 [--caption-h:4.6rem] short:[--caption-h:4.1rem]`}>
                             {openButton(project)}
@@ -138,19 +112,13 @@ export default function Projects() {
                                     </div>
                                 )}
                             </div>
-                            <span className="absolute top-2.5 left-2.5 chip chip--glass !px-2 tabular-nums">{pad(i + 2)}</span>
                             {/* Caption bar: frosted glass over the image. */}
                             <div className="relative m-1.5 rounded-[calc(var(--radius-tile)-0.375rem)] px-3 py-2 short:py-1.5 flex flex-col gap-1 bg-[rgba(18,18,22,0.74)] text-white backdrop-blur-xl backdrop-saturate-150 ring-1 ring-white/10">
                                 <h3 className="text-[0.8125rem] md:text-[min(0.9vw,1.6vh)] font-semibold leading-tight line-clamp-2 short:line-clamp-1 el-caps">
                                     {project.name}
                                 </h3>
                                 <div className="flex items-center justify-between gap-2 min-h-8">
-                                    <span className="flex flex-wrap items-center gap-x-1 min-w-0 text-[0.625rem] font-semibold tracking-wide text-white/80 tabular-nums">
-                                        {project.year}
-                                        {statuses.map((st) => (
-                                            <span key={st.label} className={st.accent ? 'text-[#9fd0ff]' : ''}>· {st.label}</span>
-                                        ))}
-                                    </span>
+                                    <span className="min-w-0 text-[0.625rem] font-semibold tracking-wide text-white/80 tabular-nums">{project.year}</span>
                                     <ProjectLinks project={project} live={t.projectsSection.live} code={t.projectsSection.code} small />
                                 </div>
                             </div>

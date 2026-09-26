@@ -10,13 +10,22 @@ import { EASE_OUT } from '@/utils/motion'
 import { scrollToSection as smoothScrollToSection } from '@/utils/smooth-scroll'
 import { SECTION_IDS, SECTION_STEPS } from '@/data/sections'
 import ThemeToggle from '@/components/ui/ThemeToggle'
+import Image from 'next/image'
 
 const pad = (n: number) => String(n).padStart(2, '0')
 
-function Monogram() {
+/** The owner's memoji (peeking over a MacBook) as the site mark, on a soft avatar disc. */
+function Mark() {
     return (
-        <span className="w-8 h-8 rounded-[0.625rem] bg-[var(--ink)] text-[var(--on-ink)] flex items-center justify-center text-[0.8125rem] font-bold tracking-[-0.04em]" aria-hidden="true">
-            AF
+        <span className="relative block w-9 h-9 rounded-full overflow-hidden shrink-0 bg-[linear-gradient(180deg,#e6eefb_0%,#c9d8f1_100%)] dark:bg-[linear-gradient(180deg,#30354a_0%,#1d2030_100%)] ring-1 ring-black/[0.06] dark:ring-white/10">
+            <Image
+                src="/favicons/android-chrome-512x512.png"
+                alt="Andreas Fragkiadakis"
+                width={36}
+                height={36}
+                priority
+                className="w-full h-full object-cover scale-[1.14] translate-y-[7%]"
+            />
         </span>
     )
 }
@@ -83,14 +92,14 @@ export default function Navigation() {
                 containing block of the fixed mobile menu and trap it inside the bar. */}
             <div className="absolute inset-0 bg-[var(--background)]/80 backdrop-blur-xl backdrop-saturate-150 border-b border-[var(--line)]" aria-hidden="true" />
             <div className="relative h-full max-w-[112rem] mx-auto px-4 md:px-6 flex items-center justify-between gap-4">
-                {/* Monogram + section counter: the number rolls as the horizontal track moves. */}
+                {/* Memoji mark + section counter: the number rolls as the horizontal track moves. */}
                 <button
                     type="button"
                     onClick={() => scrollToSection('hero', 0)}
                     className="flex items-center gap-3 rounded-xl"
                     aria-label={`${t.name} — ${t.nav.home}`}
                 >
-                    <Monogram />
+                    <Mark />
                     <span className="md:hidden text-caption font-bold uppercase tracking-[0.04em]">{t.name}</span>
                     <span className="hidden md:flex items-center gap-2 text-caption font-semibold tabular-nums" aria-hidden="true">
                         <span className="relative inline-flex h-[1.2em] overflow-hidden text-[var(--accent)]">

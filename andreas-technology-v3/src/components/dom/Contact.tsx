@@ -5,6 +5,7 @@ import { useContent } from '@/hooks/useContent'
 import LocalTime from '@/components/ui/LocalTime'
 import CopyButton from '@/components/ui/CopyButton'
 import AthensMap from '@/components/ui/AthensMap'
+import InfoSpot from '@/components/ui/InfoSpot'
 import { Bento, SectionTile, Tile, TileLink } from '@/components/ui/Bento'
 
 const CV_LINK = 'https://drive.google.com/uc?export=download&id=1b-GiyMU1D_6yxr70bmpufj_kIqKgW38A'
@@ -14,6 +15,9 @@ const CV_LINK = 'https://drive.google.com/uc?export=download&id=1b-GiyMU1D_6yxr7
  * space, which the image optimizer rejects, so it is served as-is (it is a small PNG).
  */
 const QR_SRC = '/images/QR%20Codes/qr-code-for%20white-background.png'
+
+const MEMOJI = '/favicons/android-chrome-512x512.png'
+const COORDINATES = '37.98° N, 23.73° E'
 
 export default function Contact() {
     const t = useContent()
@@ -35,12 +39,7 @@ export default function Contact() {
                 </SectionTile>
 
                 {/* Availability */}
-                <Tile index={1} tone="security" className="col-span-2 md:col-[5/13] md:row-[1/3] justify-between gap-5">
-                    <i className="fas fa-paper-plane absolute right-[4%] top-1/2 -translate-y-1/2 text-[8rem] md:text-[min(13vw,22vh)] opacity-[0.1] dark:opacity-[0.05] pointer-events-none" aria-hidden="true" />
-                    <span className="chip self-start bg-white/15">
-                        <span className="live-dot" aria-hidden="true" />
-                        <span className="el-caps">{t.location}</span>
-                    </span>
+                <Tile index={1} tone="security" className="col-span-2 md:col-[5/13] md:row-[1/3] justify-end gap-5">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-5">
                         <div className="max-w-[40rem]">
                             <h3 className="display text-[2rem] md:text-[min(3.4vw,6vh)] el-caps">{t.contact.opportunitiesTitle}</h3>
@@ -57,39 +56,42 @@ export default function Contact() {
 
                 {/* Email */}
                 <Tile index={2} className="col-span-2 md:col-[1/5] md:row-[3/5] justify-between gap-4">
-                    <div className="flex items-center justify-between gap-3">
-                        <p className="eyebrow el-caps">{t.contact.infoTitle}</p>
-                        <span className="fam-well tile--fleet !w-9 !h-9 !rounded-xl" aria-hidden="true">
-                            <i className="fas fa-envelope text-sm" />
-                        </span>
-                    </div>
+                    <p className="eyebrow el-caps">{t.contact.infoTitle}</p>
                     <div className="flex flex-col gap-3 min-w-0">
-                        <div className="min-w-0">
-                            <p className="text-caption font-medium text-[var(--muted)] mb-1">{t.contact.emailLabel}</p>
-                            <a href={gmailComposeUrl} target="_blank" rel="noopener noreferrer" aria-label="Contact via email" className="block text-lg md:text-[min(1.45vw,2.6vh)] font-semibold tracking-[-0.02em] break-all hover:text-[var(--accent)] transition-colors">
-                                <span className="link-underline">{t.email}</span>
-                            </a>
-                        </div>
+                        <a href={gmailComposeUrl} target="_blank" rel="noopener noreferrer" aria-label={`${t.contact.emailLabel}: ${t.email}`} className="block text-lg md:text-[min(1.45vw,2.6vh)] font-semibold tracking-[-0.02em] break-all hover:text-[var(--accent)] transition-colors">
+                            <span className="link-underline">{t.email}</span>
+                        </a>
                         <CopyButton value={t.email} label={t.contact.copyEmail} copiedLabel={t.contact.copied} failedLabel={t.contact.copyFailed} />
                     </div>
                 </Tile>
 
-                {/* Athens, on a map, with the local time. */}
-                <Tile index={3} className="map col-span-2 md:col-[5/10] md:row-[3/7] !p-0 justify-between min-h-[16rem] md:min-h-0">
-                    <AthensMap label={t.bento.mapLabel} className="absolute inset-0 w-full h-full" />
-                    <div className="relative flex items-start justify-between gap-2 p-[var(--tile-pad)]">
-                        <span className="chip chip--glass">
-                            <i className="fas fa-location-dot text-[#0071e3] dark:text-[#2997ff]" aria-hidden="true" />
-                            <span className="el-caps">{t.contact.locationLabel}</span>
+                {/* Athens, on an Apple Maps-style tile: a Find My pin on Syntagma. Coordinates and time zone sit behind the "i". */}
+                <Tile index={3} className="map map-tile col-span-2 md:col-[5/10] md:row-[3/7] !p-0 min-h-[21rem] md:min-h-0">
+                    <AthensMap label={t.bento.mapLabel} places={t.bento.mapPlaces} className="map-canvas" />
+                    <span className="map-dot map-at" aria-hidden="true"><span className="map-pulse" /></span>
+                    <span className="map-pin map-at" aria-hidden="true">
+                        <span className="map-pin__face">
+                            <span>
+                                <Image src={MEMOJI} alt="" width={52} height={52} className="w-full h-full object-cover scale-[1.12] translate-y-[6%]" />
+                            </span>
                         </span>
-                        <span className="chip chip--glass tabular-nums normal-case tracking-normal">37.98° N, 23.73° E</span>
-                    </div>
-                    <div className="relative m-[var(--tile-pad)] mt-0 self-start rounded-2xl px-4 py-3 chip--glass flex items-end gap-5">
-                        <div>
-                            <p className="text-xl md:text-[min(1.7vw,3vh)] font-bold tracking-[-0.02em] leading-tight">{t.location}</p>
-                            <p className="text-caption font-medium opacity-80 el-caps">{t.contact.localTimeLabel}</p>
+                        <span className="map-pin__tail" />
+                    </span>
+                    <div className="relative z-[2] flex items-start justify-between gap-2 p-[var(--tile-pad)]">
+                        <div className="rounded-2xl px-3.5 py-2.5 chip--glass shadow-[0_1px_3px_rgba(0,0,0,0.1)] flex items-baseline gap-3">
+                            <p className="text-base md:text-[min(1.3vw,2.3vh)] font-bold tracking-[-0.02em] leading-tight">{t.location}</p>
+                            <LocalTime className="numeral text-base md:text-[min(1.3vw,2.3vh)] opacity-70 [&_span]:hidden" />
                         </div>
-                        <LocalTime className="numeral block text-[1.75rem] md:text-[min(2.3vw,4vh)] [&_span]:text-[0.4em] [&_span]:tracking-normal [&_span]:font-semibold" />
+                        <InfoSpot label={t.bento.spot.map} title={t.bento.spot.map} className="spot--glass">
+                            <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5">
+                                <dt className="muted el-caps lang-el:text-[0.75rem]">{t.contact.locationLabel}</dt>
+                                <dd className="font-semibold">{t.location}</dd>
+                                <dt className="muted el-caps lang-el:text-[0.75rem]">{t.bento.coordinates}</dt>
+                                <dd className="font-semibold tabular-nums">{COORDINATES}</dd>
+                                <dt className="muted el-caps lang-el:text-[0.75rem]">{t.contact.localTimeLabel}</dt>
+                                <dd className="font-semibold"><LocalTime className="tabular-nums" /></dd>
+                            </dl>
+                        </InfoSpot>
                     </div>
                 </Tile>
 
@@ -102,10 +104,7 @@ export default function Contact() {
                     >
                         <Image src={QR_SRC} alt={t.bento.qrAlt} width={1155} height={1155} unoptimized className="w-full h-full" />
                     </a>
-                    <div className="min-w-0">
-                        <p className="text-sm md:text-[min(1.05vw,1.85vh)] font-semibold leading-tight">{t.bento.scanToEmail}</p>
-                        <p className="mt-1 text-caption text-[var(--muted)] break-all">{t.email}</p>
-                    </div>
+                    <p className="min-w-0 text-sm md:text-[min(1.05vw,1.85vh)] font-semibold leading-tight">{t.bento.scanToEmail}</p>
                 </Tile>
 
                 {/* Socials */}
@@ -115,7 +114,6 @@ export default function Contact() {
                         <span className="tile-affordance" aria-hidden="true"><i className="fas fa-arrow-right -rotate-45" /></span>
                     </span>
                     <span className="block min-w-0">
-                        <span className="block eyebrow el-caps mb-1">{t.contact.socialTitle}</span>
                         <span className="block text-xl md:text-[min(1.6vw,2.9vh)] font-bold tracking-tight">GitHub</span>
                         <span className="block text-caption text-[var(--muted)] truncate">@{handle(t.github)}</span>
                     </span>
@@ -126,7 +124,6 @@ export default function Contact() {
                         <span className="tile-affordance" aria-hidden="true"><i className="fas fa-arrow-right -rotate-45" /></span>
                     </span>
                     <span className="block min-w-0">
-                        <span className="block eyebrow el-caps mb-1">{t.contact.socialTitle}</span>
                         <span className="block text-xl md:text-[min(1.6vw,2.9vh)] font-bold tracking-tight">LinkedIn</span>
                         <span className="block text-caption text-[var(--muted)] truncate">/in/{handle(t.linkedin)}</span>
                     </span>
@@ -134,14 +131,8 @@ export default function Contact() {
 
                 {/* Résumé */}
                 <TileLink index={7} tone="automation" href={CV_LINK} external={false} download label={t.contact.downloadResume} className="col-span-2 md:col-[10/13] md:row-[5/7] justify-between min-h-[10rem] md:min-h-0">
-                    <span className="flex items-start justify-between gap-2">
-                        <span className="tile-icon tile-mark" aria-hidden="true">
-                            <i className="fas fa-file-lines text-lg" />
-                        </span>
-                        <span className="tile-affordance" aria-hidden="true"><i className="fas fa-arrow-down" /></span>
-                    </span>
+                    <span className="tile-affordance self-end" aria-hidden="true"><i className="fas fa-arrow-down" /></span>
                     <span className="block">
-                        <span className="block eyebrow mb-1">CV</span>
                         <span className="block text-2xl md:text-[min(2vw,3.6vh)] font-bold tracking-[-0.03em] leading-tight el-caps">{t.contact.downloadResume}</span>
                     </span>
                 </TileLink>

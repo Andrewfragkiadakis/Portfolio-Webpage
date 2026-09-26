@@ -42,7 +42,7 @@
   --on-accent: #ffffff;
   --glow: rgba(0, 113, 227, 0.16);
 
-  /* Inverse chip (nav monogram) and the always-dark terminal surfaces. */
+  /* Inverse ink and the always-dark terminal surfaces. */
   --ink: #1d1d1f;
   --on-ink: #f5f5f7;
   --on-ink-muted: #a1a1a6;
@@ -922,30 +922,268 @@ a[href],
   filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.12));
 }
 
-/* Map tokens. */
+/*
+ * Map tokens: an Apple Maps palette. Warm grey land, a slightly deeper urban fill with
+ * white streets, yellow motorways, soft green parks and a clear blue sea. Dark mode
+ * follows Apple Maps' night palette (charcoal land, dim amber motorways, deep navy sea).
+ */
 .map {
-  --map-land: #eef0f3;
-  --map-street: rgba(255, 255, 255, 0.95);
+  --map-land: #f3f2ee;
+  --map-urban: #ebe9e4;
+  --map-street: #ffffff;
+  --map-street-alpha: 0.65;
   --map-road: #ffffff;
-  --map-casing: #d5d9e0;
-  --map-sea: #bcdcf5;
-  --map-shore: #a4cdef;
-  --map-park: #cfe9d2;
+  --map-casing: #d9d5cc;
+  --map-motorway: #fbd98a;
+  --map-motorway-casing: #e6b95c;
+  --map-sea: #a9d3f5;
+  --map-shore: #93c5ee;
+  --map-park: #cde8c2;
+  --map-hill: #e3e9d8;
+  --map-contour: rgba(120, 140, 100, 0.18);
+  --map-label: #6e6e73;
+  --map-halo: rgba(243, 242, 238, 0.9);
+  --map-sea-label: #3d79ad;
+  background: var(--map-land);
 }
 
 .dark .map {
-  --map-land: #15171c;
-  --map-street: rgba(255, 255, 255, 0.05);
-  --map-road: #3a3f49;
-  --map-casing: #22252c;
-  --map-sea: #0c2136;
-  --map-shore: #12304d;
-  --map-park: #132a1c;
+  --map-land: #1d1e21;
+  --map-urban: #232428;
+  --map-street: #34353a;
+  --map-street-alpha: 0.7;
+  --map-road: #45464d;
+  --map-casing: #18191b;
+  --map-motorway: #7a6535;
+  --map-motorway-casing: #2d2618;
+  --map-sea: #102a42;
+  --map-shore: #17385a;
+  --map-park: #1d3325;
+  --map-hill: #22282a;
+  --map-contour: rgba(160, 190, 150, 0.08);
+  --map-label: #98989d;
+  --map-halo: rgba(29, 30, 33, 0.85);
+  --map-sea-label: #6fa7d8;
+}
+
+.map-labels text {
+  paint-order: stroke;
+  stroke: var(--map-halo);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+
+/*
+ * The map is a fixed-scale canvas (30 px/km), never stretched. It is placed so that
+ * Syntagma (its 420/390 px point) lands on the pin at (50% + --ox, 50% + --oy) of the
+ * tile, which leaves room for the label card above and the coast below.
+ */
+.map-tile {
+  --ox: 4.5rem;
+  --oy: -2.25rem;
+}
+
+@media (min-width: 64rem) {
+  .map-tile {
+    --ox: 1.5rem;
+    --oy: 0.5rem;
+  }
+}
+
+.map-canvas {
+  position: absolute;
+  left: calc(50% + var(--ox) - 420px);
+  top: calc(50% + var(--oy) - 390px);
+  max-width: none;
+}
+
+.map-at {
+  left: calc(50% + var(--ox));
+  top: calc(50% + var(--oy));
+}
+
+.map-pin.map-at {
+  top: calc(50% + var(--oy) - 0.45rem);
+}
+
+/* The "Find My" pin: an avatar in a white ring on a short tail, over a pulsing dot. */
+.map-pin {
+  position: absolute;
+  z-index: 1;
+  translate: -50% -100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.22));
+}
+
+.map-pin__face {
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 999px;
+  padding: 3px;
+  background: #ffffff;
+}
+
+.map-pin__face > span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #d9e7fb 0%, #b7cdf0 100%);
+}
+
+.map-pin__tail {
+  width: 0.75rem;
+  height: 0.5rem;
+  margin-top: -1px;
+  background: #ffffff;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+.map-dot {
+  position: absolute;
+  z-index: 1;
+  width: 0.75rem;
+  height: 0.75rem;
+  translate: -50% -50%;
+  border-radius: 999px;
+  background: #0a84ff;
+  box-shadow: 0 0 0 2.5px #ffffff, 0 1px 4px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+.map-dot > .map-pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(10, 132, 255, 0.5);
 }
 
 .map-pulse {
   transform-box: fill-box;
   transform-origin: center;
+}
+
+/* ───────── Hotspots: a quiet "i" that opens a small popover ───────── */
+
+.spot {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  background: var(--fill);
+  color: var(--muted);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* A 44 px touch target around the small visual circle. */
+.spot::before {
+  content: "";
+  position: absolute;
+  inset: -0.5rem;
+  border-radius: inherit;
+}
+
+.spot--text {
+  width: auto;
+  padding: 0 0.625rem;
+}
+
+.spot .spot-glyph {
+  font-size: 0.625rem;
+}
+
+.spot:hover,
+.spot[aria-expanded="true"] {
+  background: var(--accent-fill);
+  color: #ffffff;
+}
+
+.spot:focus-visible {
+  outline: 2px solid var(--accent-fill);
+  outline-offset: 2px;
+}
+
+.dark .spot:focus-visible {
+  outline-color: #2997ff;
+}
+
+.spot--on-color {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+}
+
+.spot--on-color:hover,
+.spot--on-color[aria-expanded="true"] {
+  background: #ffffff;
+  color: #1d1d1f;
+}
+
+.spot--on-color:focus-visible {
+  outline-color: #ffffff;
+}
+
+/* On imagery (the map), the hotspot is frosted glass like the chips. */
+.spot--glass {
+  background: rgba(255, 255, 255, 0.82);
+  color: #1d1d1f;
+  -webkit-backdrop-filter: blur(12px) saturate(1.6);
+  backdrop-filter: blur(12px) saturate(1.6);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.dark .spot--glass {
+  background: rgba(28, 28, 32, 0.72);
+  color: #f5f5f7;
+}
+
+.spot-pop {
+  position: fixed;
+  z-index: 200;
+  max-height: min(84vh, 36rem);
+  overflow-y: auto;
+  padding: 1rem 1.125rem 1.125rem;
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--foreground);
+  border: 1px solid var(--line);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  backdrop-filter: blur(24px) saturate(1.8);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 24px 48px -16px rgba(0, 0, 0, 0.28);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  text-align: left;
+  outline: none;
+}
+
+.dark .spot-pop {
+  background: rgba(30, 30, 34, 0.9);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6), 0 24px 48px -16px rgba(0, 0, 0, 0.9);
+}
+
+.spot-title {
+  font-size: var(--text-micro);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.625rem;
+}
+
+.spot-pop .muted {
+  color: var(--muted);
 }
 
 /* Brand inks in the logo wall follow the theme. */

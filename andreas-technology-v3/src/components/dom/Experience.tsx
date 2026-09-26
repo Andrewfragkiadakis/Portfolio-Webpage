@@ -34,6 +34,12 @@ function yearSpan(duration: string): [number, number] {
     return [start, end]
 }
 
+/** "2024 – 2026" from a written duration; the dialog keeps the months. */
+function yearRange(duration: string): string {
+    const [start, end] = yearSpan(duration)
+    return start === end ? String(start) : `${start} – ${end}`
+}
+
 /** Gantt of every role, year-granular: the whole career at a glance. Decorative — the tiles carry the words. */
 function CareerChart({ roles, label }: { roles: ExperienceType[]; label: string }) {
     const spans = roles.map((r) => yearSpan(r.duration))
@@ -50,8 +56,7 @@ function CareerChart({ roles, label }: { roles: ExperienceType[]; label: string 
             </div>
             <div className="flex-1 flex flex-col justify-center gap-[min(0.55vh,0.35rem)] min-h-0 py-2" aria-hidden="true">
                 {spans.map(([s, e], i) => (
-                    <div key={i} className="flex items-center gap-2" title={`${roles[i].role} · ${roles[i].duration}`}>
-                        <span className="w-5 shrink-0 text-[0.625rem] font-semibold tabular-nums text-[var(--muted)]">{pad(i + 1)}</span>
+                    <div key={i} className="flex items-center" title={`${roles[i].role} · ${roles[i].duration}`}>
                         <div className="relative flex-1 h-[min(1.1vh,0.625rem)] min-h-1.5 rounded-full bg-[var(--fill)]">
                             <div
                                 className={`absolute inset-y-0 rounded-full ${i === 0 ? 'bg-[linear-gradient(90deg,#0a5cd6,#5835c6)] dark:bg-[linear-gradient(90deg,#2f7bff,#9d7bff)] shadow-[0_0_12px_rgba(58,68,212,0.45)]' : 'bg-[var(--foreground)] opacity-30'}`}
@@ -61,7 +66,7 @@ function CareerChart({ roles, label }: { roles: ExperienceType[]; label: string 
                     </div>
                 ))}
             </div>
-            <div className="flex pl-7 text-[0.625rem] font-semibold tabular-nums text-[var(--muted)]" aria-hidden="true">
+            <div className="flex text-[0.625rem] font-semibold tabular-nums text-[var(--muted)]" aria-hidden="true">
                 {ticks.map((year) => (
                     <span key={year} className="flex-1">{`’${String(year).slice(2)}`}</span>
                 ))}
@@ -91,29 +96,31 @@ export default function Experience() {
                     className="col-span-2 md:col-[1/5] md:row-[1/2] min-h-[8rem] md:min-h-0"
                 />
 
-                {/* The current role, in full. */}
+                {/* The current role: title and its first line; the full list opens from the tile. */}
                 {current && (
-                    <Tile as="article" index={1} tone="fleet" className="col-span-2 md:col-[1/5] md:row-[2/5] gap-3 short:gap-2">
-                        <i className="fab fa-apple absolute -right-[4%] -bottom-[10%] text-[12rem] md:text-[min(15vw,26vh)] opacity-[0.07] pointer-events-none" aria-hidden="true" />
+                    <Tile as="article" index={1} tone="fleet" interactive className="col-span-2 md:col-[1/5] md:row-[2/5] gap-3 short:gap-2">
+                        <button
+                            type="button"
+                            className="tile-stretch"
+                            onClick={() => setActive({ type: 'role', item: current, index: 1 })}
+                            aria-label={`${current.role} — ${current.company} — ${t.bento.spot.role}`}
+                        />
                         <div className="flex items-center justify-between gap-3">
                             <span className="chip bg-white/15">
                                 <span className="live-dot" aria-hidden="true" />
                                 <span className="el-caps">{current.duration}</span>
                             </span>
-                            <span className="eyebrow tabular-nums">01</span>
+                            <span className="tile-affordance" aria-hidden="true">
+                                <i className="fas fa-plus" />
+                            </span>
                         </div>
-                        <div>
+                        <div className="mt-auto">
                             <h3 className="text-xl md:text-[min(1.75vw,3.1vh)] font-bold tracking-[-0.025em] leading-tight">{current.role}</h3>
                             <p className="mt-1 text-sm font-medium text-[var(--muted)]">{current.company}</p>
+                            {current.tasks[0] && (
+                                <p className="mt-4 short:mt-2 text-[0.875rem] md:text-[min(0.95vw,1.7vh)] leading-snug line-clamp-3">{current.tasks[0]}</p>
+                            )}
                         </div>
-                        <ul className="mt-auto space-y-2 short:space-y-1">
-                            {current.tasks.map((task, i) => (
-                                <li key={i} className="flex items-start gap-2 text-[0.875rem] md:text-[min(0.9vw,1.6vh)] short:text-[1.5vh] leading-snug">
-                                    <i className="fas fa-check tile-mark text-[0.6875rem] mt-[0.3em] shrink-0" aria-hidden="true" />
-                                    <span>{task}</span>
-                                </li>
-                            ))}
-                        </ul>
                     </Tile>
                 )}
 
@@ -130,10 +137,7 @@ export default function Experience() {
                             onClick={() => setActive({ type: 'role', item: exp, index: i + 2 })}
                             aria-label={`${exp.role} — ${exp.company} — ${t.projectsSection.details}`}
                         />
-                        <div className="flex items-center justify-between gap-3 text-caption text-[var(--muted)]">
-                            <span className="font-semibold tabular-nums">{pad(i + 2)}</span>
-                            <span className="truncate el-caps">{exp.duration}</span>
-                        </div>
+                        <p className="text-caption font-semibold tabular-nums text-[var(--muted)]">{yearRange(exp.duration)}</p>
                         <div className="flex items-end justify-between gap-3">
                             <div className="min-w-0">
                                 <h3 className="text-[0.9375rem] md:text-[min(1.02vw,1.8vh)] font-semibold leading-tight tracking-[-0.01em] line-clamp-2 short:line-clamp-1" title={exp.role}>{exp.role}</h3>
@@ -160,9 +164,7 @@ export default function Experience() {
                         </span>
                         <div className="min-w-0 flex-1">
                             <h3 className="text-[0.875rem] md:text-[min(0.95vw,1.7vh)] font-semibold leading-tight line-clamp-2">{edu.degree}</h3>
-                            <p className="text-caption text-[var(--muted)] truncate mt-0.5" title={`${edu.institution} · ${edu.duration}`}>
-                                <span className="tabular-nums">{yearSpan(edu.duration).join(' – ')}</span> · {edu.institution}
-                            </p>
+                            <p className="text-caption text-[var(--muted)] tabular-nums mt-0.5">{yearRange(edu.duration)}</p>
                         </div>
                     </Tile>
                 ))}
@@ -188,14 +190,17 @@ export default function Experience() {
                                 </span>
                                 <span className="text-caption font-semibold tabular-nums text-[var(--muted)]">{edu.duration}</span>
                             </div>
-                            <div className="min-w-0">
-                                {edu.badge && <p className="text-[0.9375rem] md:text-[min(1.05vw,1.85vh)] font-bold tracking-tight tile-mark leading-tight">{edu.badge}</p>}
-                                <h3 className={`${edu.badge ? 'text-caption font-medium text-[var(--muted)] line-clamp-2' : 'text-[0.875rem] md:text-[min(0.95vw,1.7vh)] font-semibold leading-tight line-clamp-3'} mt-0.5`}>
-                                    {edu.degree}
-                                </h3>
+                            <div className="min-w-0 mt-auto">
+                                {edu.badge ? (
+                                    <h3 className="text-[0.9375rem] md:text-[min(1.05vw,1.85vh)] font-bold tracking-tight tile-mark leading-tight">
+                                        {edu.badge}<span className="sr-only"> — {edu.degree}</span>
+                                    </h3>
+                                ) : (
+                                    <h3 className="text-[0.875rem] md:text-[min(0.95vw,1.7vh)] font-semibold leading-tight line-clamp-3">{edu.degree}</h3>
+                                )}
                             </div>
-                            <div className="mt-auto tile-above self-start">
-                                {edu.link ? (
+                            {edu.link && (
+                                <div className="tile-above self-start">
                                     <a
                                         href={edu.link}
                                         target="_blank"
@@ -206,10 +211,8 @@ export default function Experience() {
                                         <i className="fas fa-certificate" aria-hidden="true" />
                                         <span className="el-caps">{t.cursor.verify}</span>
                                     </a>
-                                ) : (
-                                    <span className="text-caption text-[var(--muted)] leading-snug line-clamp-2">{edu.institution}</span>
-                                )}
-                            </div>
+                                </div>
+                            )}
                         </Tile>
                     )
                 })}

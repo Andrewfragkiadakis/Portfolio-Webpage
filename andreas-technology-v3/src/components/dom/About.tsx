@@ -9,6 +9,17 @@ import { ToolTile, brandInks } from '@/components/ui/ToolBadge'
 import AnimatedCounter from '@/components/ui/AnimatedCounter'
 import MacGrid from '@/components/ui/MacGrid'
 import { Bento, SectionTile, Tile, type Family, type Tone } from '@/components/ui/Bento'
+import InfoSpot from '@/components/ui/InfoSpot'
+
+/**
+ * The logo wall shows one row of headline tools; the rest (and every name) sit behind
+ * the "+" at the end of the row.
+ */
+const HEADLINE_TOOLS = [
+    'Jamf Pro', 'Apple Business Manager', 'Checkpoint Harmony EDR', 'Microsoft Sentinel', 'Microsoft Entra ID', '1Password', 'Cisco ISE',
+    'Proxmox', 'Python', 'Swift', 'TypeScript', 'Claude Code', 'Jira Service Management', 'Slack',
+]
+const SHOWN_TOOLS = TOOLS.filter((tool) => HEADLINE_TOOLS.includes(tool.label))
 
 /** The four core skills, each in its subject family's colours. */
 const SKILL_FAMILIES: Family[] = ['fleet', 'security', 'automation', 'ai']
@@ -21,11 +32,11 @@ export default function About() {
     const credentials = t.education.filter((e) => e.badge && e.kind && e.kind !== 'degree')
 
     // Only published figures. Labels come from content in both languages.
-    const stats: { value: number; suffix: string; pad: number; label: string; tone: Tone; icon: string }[] = [
-        { value: 7, suffix: '+', pad: 2, label: t.about.statsLabels[0], tone: 'graphite', icon: 'fas fa-calendar-days' },
-        { value: 70, suffix: '%', pad: 2, label: t.about.statsLabels[2], tone: 'automation', icon: 'fas fa-bolt' },
-        { value: certifications.length, suffix: '', pad: 2, label: t.about.statsLabels[3], tone: 'ai', icon: 'fas fa-award' },
-        { value: 95, suffix: '%+', pad: 2, label: t.bento.slaLabel, tone: 'security', icon: 'fas fa-circle-check' },
+    const stats: { value: number; suffix: string; pad: number; label: string; tone: Tone }[] = [
+        { value: 7, suffix: '+', pad: 2, label: t.about.statsLabels[0], tone: 'graphite' },
+        { value: 70, suffix: '%', pad: 2, label: t.about.statsLabels[2], tone: 'automation' },
+        { value: certifications.length, suffix: '', pad: 2, label: t.about.statsLabels[3], tone: 'ai' },
+        { value: 95, suffix: '%+', pad: 2, label: t.bento.slaLabel, tone: 'security' },
     ]
 
     return (
@@ -33,25 +44,32 @@ export default function About() {
             <Bento className="max-w-[112rem] mx-auto">
                 <SectionTile id="about" number={2} title={t.about.title} eyebrow={t.nav.about} index={0} className="col-span-2 md:col-[1/6] md:row-[1/2] min-h-[8rem] md:min-h-0" />
 
-                {/* Story, closing on the current focus. */}
-                <Tile index={1} className="col-span-2 md:col-[1/6] md:row-[2/5] gap-3 short:gap-2">
-                    <h3 className="text-[1.25rem] md:text-[min(1.55vw,2.7vh)] font-semibold leading-snug tracking-[-0.015em]">
-                        {t.about.tagline}
-                    </h3>
-                    <div className="space-y-3 short:space-y-2 text-[0.9375rem] md:text-[min(0.97vw,1.68vh)] leading-relaxed md:leading-[1.55] short:leading-snug text-[var(--muted)] md:lang-el:text-[min(0.92vw,1.58vh)]">
-                        {t.about.description.slice(0, 2).map((paragraph, index) => (
-                            <p key={index}>{paragraph}</p>
-                        ))}
+                {/* Story: the opening paragraph; the rest and the current focus sit behind the "i". */}
+                <Tile index={1} className="col-span-2 md:col-[1/6] md:row-[2/5] gap-4 short:gap-2">
+                    <div className="flex items-start justify-between gap-3">
+                        <h3 className="text-[1.25rem] md:text-[min(1.55vw,2.7vh)] font-semibold leading-snug tracking-[-0.015em]">
+                            {t.about.tagline}
+                        </h3>
+                        <InfoSpot label={t.bento.spot.story} title={t.bento.spot.story} width={24}>
+                            <div className="space-y-3">
+                                {t.about.description.slice(1, 2).map((paragraph, index) => (
+                                    <p key={index}>{paragraph}</p>
+                                ))}
+                                <p className="flex items-center gap-3 rounded-xl bg-[var(--fill)] p-2">
+                                    <span className="fam-well tile--ai !w-8 !h-8 !rounded-lg" aria-hidden="true">
+                                        <i className="fas fa-code text-xs" />
+                                    </span>
+                                    <span className="min-w-0">
+                                        <span className="block eyebrow el-caps">{t.about.currentFocus}</span>
+                                        <span className="block text-sm font-semibold">{t.about.currentFocusDetail}</span>
+                                    </span>
+                                </p>
+                            </div>
+                        </InfoSpot>
                     </div>
-                    <div className="mt-auto flex items-center gap-3 rounded-2xl bg-[var(--fill)] p-2 short:p-1.5">
-                        <span className="fam-well tile--ai !w-9 !h-9 !rounded-xl" aria-hidden="true">
-                            <i className="fas fa-code text-sm" />
-                        </span>
-                        <span className="min-w-0">
-                            <span className="block eyebrow el-caps">{t.about.currentFocus}</span>
-                            <span className="block text-sm font-semibold truncate">{t.about.currentFocusDetail}</span>
-                        </span>
-                    </div>
+                    <p className="md:mt-auto text-[0.9375rem] md:text-[min(1.2vw,2.1vh)] leading-relaxed md:leading-[1.55] short:leading-snug text-[var(--muted)] md:lang-el:text-[min(1.08vw,1.9vh)]">
+                        {t.about.description[0]}
+                    </p>
                 </Tile>
 
                 {/* 550+ Macs, drawn to scale. */}
@@ -64,14 +82,14 @@ export default function About() {
                             <div className="numeral text-[2.75rem] md:text-[min(3.6vw,6.2vh)]">
                                 <AnimatedCounter value={550} suffix="+" />
                             </div>
-                            <div className="min-w-0 pb-0.5">
-                                <p className="text-sm md:text-[min(0.95vw,1.7vh)] font-semibold leading-tight el-caps">{t.about.statsLabels[1]}</p>
-                                <p className="mt-0.5 text-caption text-[var(--muted)]">{t.bento.glyphLegend}</p>
-                            </div>
+                            <p className="min-w-0 pb-1 text-sm md:text-[min(0.95vw,1.7vh)] font-semibold leading-tight el-caps">{t.about.statsLabels[1]}</p>
                         </div>
-                        <span className="tile-icon tile-mark" aria-hidden="true">
-                            <i className="fab fa-apple text-lg" />
-                        </span>
+                        <InfoSpot label={t.bento.spot.macs} title={t.about.statsLabels[1]} tone="onColor" width={16}>
+                            <p className="flex items-center gap-2.5">
+                                <i className="fab fa-apple text-base" aria-hidden="true" />
+                                <span>{t.bento.glyphLegend}</span>
+                            </p>
+                        </InfoSpot>
                     </div>
                 </Tile>
 
@@ -117,11 +135,8 @@ export default function About() {
                 {/* Stats, 2 × 2, each in its family's colour. */}
                 <div className="col-span-2 md:col-[10/13] md:row-[1/5] grid grid-cols-2 md:grid-rows-2 gap-[var(--gap)] min-h-0">
                     {stats.map((stat, index) => (
-                        <Tile key={index} index={4 + index} tone={stat.tone} className="justify-between min-h-[9.5rem] md:min-h-0">
-                            <span className="tile-icon tile-mark !w-8 !h-8 !rounded-[0.625rem]" aria-hidden="true">
-                                <i className={`${stat.icon} text-[0.8125rem]`} />
-                            </span>
-                            <div>
+                        <Tile key={index} index={4 + index} tone={stat.tone} className="min-h-[8.5rem] md:min-h-0">
+                            <div className="mt-auto">
                                 <div className="numeral text-[2.5rem] md:text-[min(3.1vw,5.8vh)]">
                                     <AnimatedCounter value={stat.value} suffix={stat.suffix} pad={stat.pad} duration={1.5} />
                                 </div>
@@ -145,7 +160,6 @@ export default function About() {
                         </span>
                         <span className="min-w-0 flex-1">
                             <span className="block text-sm md:text-[min(1vw,1.8vh)] font-semibold leading-tight">{skill.label}</span>
-                            <span className="block text-caption text-[var(--muted)] mt-0.5">{t.about.readMore}</span>
                         </span>
                         <span className="tile-affordance" aria-hidden="true">
                             <i className="fas fa-plus" />
@@ -153,24 +167,23 @@ export default function About() {
                     </Tile>
                 ))}
 
-                {/* Toolkit — a logo wall of the real tools. Top row: fleet, security and
-                    infrastructure. Bottom row: code, AI and collaboration. */}
+                {/* Toolkit — one row of headline logos; all 29, with names, behind the "+". */}
                 <Tile index={12} className="col-span-2 md:col-[1/13] md:row-[6/7] gap-3 md:flex-row md:items-center md:gap-6 md:!py-[min(1.1rem,1.5vh)]">
-                    <div className="md:w-40 md:shrink-0">
+                    <div className="flex items-center justify-between gap-3 md:block md:w-40 md:shrink-0">
                         <p className="eyebrow el-caps">{t.servicesLabels.toolkit}</p>
-                        <p className="mt-1 text-sm md:text-[min(0.95vw,1.7vh)] font-semibold"><span className="tabular-nums">{TOOLS.length}</span> {t.bento.toolsInUse}</p>
+                        <p className="md:mt-1 text-sm md:text-[min(0.95vw,1.7vh)] font-semibold"><span className="tabular-nums">{TOOLS.length}</span> {t.bento.toolsInUse}</p>
                     </div>
                     <ul
                         aria-label={t.servicesLabels.toolkit}
-                        className="logo-wall grid grid-cols-6 min-[480px]:grid-cols-8 gap-2 md:flex-1 md:self-stretch md:min-h-0 md:grid-cols-[repeat(15,minmax(0,1fr))] md:grid-rows-2 md:gap-x-2 md:gap-y-[min(0.8vh,0.5rem)]"
+                        className="logo-wall grid grid-cols-7 gap-2 md:flex-1 md:self-stretch md:min-h-0 md:grid-cols-[repeat(14,minmax(0,1fr))] md:gap-x-3"
                     >
-                        {TOOLS.map((tool) => {
+                        {SHOWN_TOOLS.map((tool) => {
                             const inks = brandInks(tool)
                             return (
-                                <li key={tool.label} className={`flex items-center justify-center min-h-0 ${tool.row === 'ops' ? 'md:row-start-1' : 'md:row-start-2'}`}>
+                                <li key={tool.label} className="flex items-center justify-center min-h-0">
                                     <ToolTile
                                         tool={tool}
-                                        className="w-full md:!w-auto md:!h-full"
+                                        className="w-full md:!w-auto md:!h-full md:max-h-[3.25rem]"
                                         style={{ '--ink-l': inks.light, '--ink-d': inks.dark } as CSSProperties}
                                     />
                                     <span className="sr-only">{tool.label}</span>
@@ -178,6 +191,26 @@ export default function About() {
                             )
                         })}
                     </ul>
+                    <InfoSpot
+                        label={`${t.bento.spot.toolkit} (${TOOLS.length})`}
+                        title={`${TOOLS.length} ${t.bento.toolsInUse}`}
+                        icon="plus"
+                        text={`${TOOLS.length - SHOWN_TOOLS.length}`}
+                        width={30}
+                        className="max-md:self-end"
+                    >
+                        <ul className="logo-wall grid grid-cols-1 min-[420px]:grid-cols-2 gap-x-4 gap-y-1">
+                            {TOOLS.map((tool) => {
+                                const inks = brandInks(tool)
+                                return (
+                                    <li key={tool.label} className="flex items-center gap-2.5 min-w-0">
+                                        <ToolTile tool={tool} className="!w-6 !h-6 !rounded-md shrink-0" style={{ '--ink-l': inks.light, '--ink-d': inks.dark } as CSSProperties} />
+                                        <span className="text-[0.8125rem] font-medium leading-tight truncate">{tool.label}</span>
+                                    </li>
+                                )
+                            })}
+                        </ul>
+                    </InfoSpot>
                 </Tile>
             </Bento>
 

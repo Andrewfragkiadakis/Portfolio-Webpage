@@ -10,6 +10,9 @@ import Modal from '@/components/ui/Modal'
 import { LogoCluster, ToolTile, brandInks } from '@/components/ui/ToolBadge'
 import { Bento, SectionTile, TileButton, type Tone } from '@/components/ui/Bento'
 
+/** Logos previewed on a tile; the dialog lists the whole toolkit by name. */
+const CLUSTER_MAX = 4
+
 const toolsFor = (service: Service): Tool[] =>
     service.tools.map((label) => TOOL_BY_LABEL.get(label)).filter((tool): tool is Tool => Boolean(tool))
 
@@ -26,12 +29,11 @@ const LAYOUT: { area: string; tone: Tone; size: 'lg' | 'md' | 'sm' }[] = [
     { area: 'md:col-[4/9] md:row-[5/7]', tone: 'graphite', size: 'md' },
 ]
 
-function ServiceTile({ service, index, onOpen, detailsLabel, toolsLabel }: {
+function ServiceTile({ service, index, onOpen, detailsLabel }: {
     service: Service
     index: number
     onOpen: () => void
     detailsLabel: string
-    toolsLabel: string
 }) {
     const { area, tone, size } = LAYOUT[index] ?? LAYOUT[0]
     const tools = toolsFor(service)
@@ -62,28 +64,12 @@ function ServiceTile({ service, index, onOpen, detailsLabel, toolsLabel }: {
                 <span className={`block font-semibold tracking-[-0.02em] leading-tight el-caps ${large ? 'text-xl sm:text-2xl md:text-[min(2.3vw,4.1vh)] break-words' : 'text-lg md:text-[min(1.3vw,2.3vh)]'}`}>
                     {service.title}
                 </span>
-                <span className={`block mt-1.5 short:mt-1 text-sm md:text-[min(0.95vw,1.65vh)] leading-snug text-[var(--muted)] ${large ? 'md:line-clamp-4' : 'line-clamp-2'}`}>
+                <span className={`mt-1.5 short:mt-1 text-sm md:text-[min(0.95vw,1.65vh)] leading-snug text-[var(--muted)] ${large ? 'line-clamp-3' : 'line-clamp-2'}`}>
                     {service.description}
                 </span>
             </span>
 
-            {large && (
-                <span className="hidden md:block space-y-1.5">
-                    {service.highlights.map((item) => (
-                        <span key={item} className="flex items-start gap-2 text-[min(0.95vw,1.65vh)] leading-snug">
-                            <i className="fas fa-check tile-mark text-caption mt-[0.2em] shrink-0" aria-hidden="true" />
-                            <span>{item}</span>
-                        </span>
-                    ))}
-                </span>
-            )}
-
-            <span className="flex items-center justify-between gap-3 pt-1 short:pt-0">
-                <LogoCluster tools={tools} className="min-w-0" />
-                <span className="shrink-0 eyebrow el-caps tabular-nums">
-                    {String(service.tools.length).padStart(2, '0')} {toolsLabel}
-                </span>
-            </span>
+            <LogoCluster tools={tools.slice(0, CLUSTER_MAX)} className="pt-1 short:pt-0" />
         </TileButton>
     )
 }
@@ -112,7 +98,6 @@ export default function Services() {
                         index={index}
                         onOpen={() => setActive(service)}
                         detailsLabel={t.servicesLabels.details}
-                        toolsLabel={t.servicesLabels.tools}
                     />
                 ))}
 
@@ -158,6 +143,9 @@ export default function Services() {
                             </h3>
                         </div>
 
+                        <p className="text-[0.95rem] font-medium leading-relaxed mb-3">
+                            {active.description}
+                        </p>
                         <p className="text-[0.95rem] text-[var(--muted)] leading-relaxed mb-6">
                             {active.detail}
                         </p>
