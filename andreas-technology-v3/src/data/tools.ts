@@ -12,7 +12,7 @@ export interface Tool {
      * (added via `node scripts/add-logo.mjs <slug>`) or the vendor's own brand kit.
      */
     logo: string
-    /** Width ÷ height of the logo's viewBox; defaults to 1 (square). */
+    /** Width ÷ height of the logo's viewBox, used as its CSS aspect-ratio; defaults to 1 (square). */
     ratio?: number
     /** Brand colour shown on hover. Near-black brands fall back to the theme foreground. */
     brand: string

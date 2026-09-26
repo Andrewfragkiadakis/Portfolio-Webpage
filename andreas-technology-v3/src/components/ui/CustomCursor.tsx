@@ -95,11 +95,11 @@ export default function CustomCursor() {
                     }`}
                 />
                 <motion.div
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200%] h-[1px] bg-[var(--accent)]"
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200%] h-px bg-[var(--accent)]"
                     animate={{ rotate: isIdle ? 0 : 45, opacity: isIdle ? 1 : 0 }}
                 />
                 <motion.div
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[200%] w-[1px] bg-[var(--accent)]"
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[200%] w-px bg-[var(--accent)]"
                     animate={{ rotate: isIdle ? 0 : 45, opacity: isIdle ? 1 : 0 }}
                 />
             </motion.div>
@@ -109,7 +109,7 @@ export default function CustomCursor() {
                 {mode === 'label' && (
                     <motion.span
                         key={label}
-                        className="absolute -translate-x-1/2 -translate-y-1/2 text-[10px] font-mono font-bold uppercase tracking-[0.15em] text-[var(--background)] whitespace-nowrap"
+                        className="absolute -translate-x-1/2 -translate-y-1/2 text-micro font-mono font-bold uppercase tracking-[0.15em] text-[var(--background)] whitespace-nowrap"
                         initial={{ opacity: 0, y: 6 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, transition: { duration: 0.12 } }}

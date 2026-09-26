@@ -34,7 +34,7 @@ export default function Contact() {
                                     <i className="fas fa-envelope text-xl" aria-hidden="true" />
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <div className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase">{t.contact.emailLabel}</div>
+                                    <div className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase">{t.contact.emailLabel}</div>
                                     <div className="text-sm sm:text-lg font-bold text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors break-all"><span className="link-underline">{t.email}</span></div>
                                 </div>
                             </a>
@@ -46,7 +46,7 @@ export default function Contact() {
                                 <i className="fas fa-map-marker-alt text-xl" aria-hidden="true" />
                             </div>
                             <div>
-                                <div className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase">{t.contact.locationLabel}</div>
+                                <div className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase">{t.contact.locationLabel}</div>
                                 <div className="text-sm sm:text-lg font-bold text-[var(--foreground)]">{t.location}</div>
                             </div>
                         </div>
@@ -56,13 +56,13 @@ export default function Contact() {
                                 <i className="fas fa-clock text-xl" aria-hidden="true" />
                             </div>
                             <div>
-                                <div className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase">{t.contact.localTimeLabel}</div>
+                                <div className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase">{t.contact.localTimeLabel}</div>
                                 <LocalTime className="text-sm sm:text-lg font-bold text-[var(--foreground)] tabular-nums" />
                             </div>
                         </div>
 
                         <div className="pt-4">
-                            <div className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase mb-4">{t.contact.socialTitle}</div>
+                            <div className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase mb-4">{t.contact.socialTitle}</div>
                             <div className="flex gap-3">
                                 <a
                                     href={t.github}

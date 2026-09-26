@@ -1,9 +1,21 @@
 import { SECTION_STEPS } from '@/data/sections'
-import { DESKTOP_BREAKPOINT_PX } from '@/hooks/useIsDesktop'
+import { isDesktopViewport } from '@/hooks/useIsDesktop'
 
 const SECTION_SCROLL_DURATION_MS = 1200
-/** Mirrors `--nav-h: 3.9rem` in globals.css (at the default 16px root size). */
-const FIXED_NAV_OFFSET_PX = 62.4
+
+/**
+ * Height of the fixed nav, read from `--nav-h` in globals.css at call time so it stays
+ * correct when the CSS changes or the reader's root font size is not 16px.
+ */
+function fixedNavOffsetPx(): number {
+    const root = document.documentElement
+    const probe = document.createElement('div')
+    probe.style.cssText = 'position:absolute;visibility:hidden;height:var(--nav-h)'
+    root.appendChild(probe)
+    const height = probe.getBoundingClientRect().height
+    probe.remove()
+    return height
+}
 
 function easeOutCubic(t: number): number {
     return 1 - Math.pow(1 - t, 3)
@@ -41,9 +53,10 @@ export function smoothScrollTo(targetY: number, durationMs: number = SECTION_SCR
 export function smoothScrollToElement(
     element: HTMLElement,
     durationMs: number = SECTION_SCROLL_DURATION_MS,
-    offsetTop: number = FIXED_NAV_OFFSET_PX
+    offsetTop?: number
 ): void {
     if (typeof window === 'undefined') return
+    offsetTop ??= fixedNavOffsetPx()
     const targetY = element.getBoundingClientRect().top + window.scrollY - offsetTop
     smoothScrollTo(targetY, durationMs)
 }
@@ -62,7 +75,7 @@ export function scrollToSection(
 ): void {
     if (typeof window === 'undefined') return
 
-    if (window.innerWidth >= DESKTOP_BREAKPOINT_PX) {
+    if (isDesktopViewport()) {
         const maxScroll = document.documentElement.scrollHeight - window.innerHeight
         smoothScrollTo((sectionIndex / SECTION_STEPS) * maxScroll, durationMs)
         return

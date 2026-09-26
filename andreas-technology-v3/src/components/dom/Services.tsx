@@ -47,7 +47,7 @@ export default function Services() {
                                     </div>
 
                                     <div className="hidden md:block">
-                                        <p className="text-[var(--foreground)] opacity-80 leading-relaxed text-[13px]">
+                                        <p className="text-[var(--foreground)] opacity-80 leading-relaxed text-body-sm">
                                             {service.description}
                                         </p>
                                     </div>

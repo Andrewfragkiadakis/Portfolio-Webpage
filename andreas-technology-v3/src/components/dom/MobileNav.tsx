@@ -81,13 +81,13 @@ export default function MobileNav() {
                             key={item.id}
                             onClick={() => scrollToSection(item.id)}
                             aria-current={isActive ? 'true' : undefined}
-                            className={`relative flex flex-1 cursor-pointer flex-col items-center justify-center gap-1.5 min-h-[52px] min-w-0 py-2 px-2 rounded-xl transition-colors duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] ${isActive
+                            className={`relative flex flex-1 cursor-pointer flex-col items-center justify-center gap-1.5 min-h-13 min-w-0 py-2 px-2 rounded-xl transition-colors duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] ${isActive
                                 ? 'text-[var(--accent)] bg-[var(--foreground)]/10'
                                 : 'text-[var(--foreground)] opacity-85 hover:opacity-100 hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10'
                                 }`}
                         >
                             <i className={`${item.icon} text-lg`} aria-hidden="true" />
-                            <span className="text-[10px] font-semibold uppercase tracking-widest truncate w-full text-center">
+                            <span className="text-micro font-semibold uppercase tracking-widest truncate w-full text-center">
                                 {item.label}
                             </span>
                             {isActive && (

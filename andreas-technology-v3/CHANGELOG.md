@@ -5,6 +5,8 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 ## [Unreleased]
 
 ### Added
+- Type tokens `text-micro` (0.625rem), `text-caption` (0.6875rem), `text-body-sm` (0.8125rem) in `@theme`, replacing 37 px font sizes so small text follows the reader's font-size setting
+- `isDesktopViewport()` / `DESKTOP_MEDIA_QUERY` as the single JS source for the desktop breakpoint
 - `RollText`: button labels roll up on hover/focus with a copy rolling in (CSS only; duplicate hidden from assistive tech) — hero, Services, Projects, Experience and Contact CTAs
 - `ScrambleText`: desktop nav labels decode from random glyphs on hover/focus; real text keeps its layout slot and is what screen readers read; skipped under reduced motion
 - Project images wipe in from the bottom as each card enters view (driven by the card, since a fully clipped element never registers as intersecting); stagger capped to the first screenful
@@ -27,6 +29,12 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 - JSON-LD `hasCredential` and `knowsAbout` on the Person schema; Jamf keywords in metadata
 
 ### Changed
+- Sizing audit: px layout values converted to Tailwind's rem spacing scale (cards, images, touch targets, containers); breakpoint `--breakpoint-md` is now `64rem`; LogoLoop takes CSS lengths; tool logos size by `aspect-ratio`. Hairlines, borders, focus rings, blur, pointer and scroll thresholds intentionally stay px
+- Removed duplicated magic numbers: nav offset read from `--nav-h`, breakpoint via media query (not `innerWidth`), mobile card step uses measured card width + computed gap
+- Collapsed `md:`/`lg:` class pairs made dead by `md` == `lg` (1024px); corrected project image `sizes` to the real card widths
+- 9px badge text raised to the 10px `text-micro` minimum
+- Mobile/tablet Experience & Education cards: 85vw wide (max 23.75rem), content-height with equal-height rows, real scroll-snap (`snap-start` + `scroll-px-4`); previously a fixed 280px square that clipped four of six education cards
+- Desktop cards: square is now a minimum (aspect-ratio with `min-h-auto`, no inner scroll box) and the card row no longer shrinks — the "Information Technology Engineer" card had 151px of bullets hidden in an inner scroll area
 - Removed the magnetic pointer-follow effect from buttons
 - CustomCursor attaches its listeners once instead of on every hover change
 - Services cards use the shared rise-and-ease reveal instead of scaling from 90%

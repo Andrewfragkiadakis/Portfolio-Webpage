@@ -68,9 +68,9 @@ export default function Navigation() {
 
     return (
         <nav className="fixed top-0 left-0 right-0 z-50 bg-[var(--background)] border-b border-[var(--foreground)]/20 transition-all duration-300" aria-label="Main navigation">
-            <div className="max-w-7xl mx-auto px-4 sm:px-8 py-4 sm:py-4 min-h-[56px] flex justify-center items-center relative">
+            <div className="max-w-7xl mx-auto px-4 sm:px-8 py-4 sm:py-4 min-h-14 flex justify-center items-center relative">
                 {/* Section counter: the number rolls as the horizontal track moves. */}
-                <div className="hidden md:flex absolute left-8 top-1/2 -translate-y-1/2 items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--foreground)]" aria-hidden="true">
+                <div className="hidden md:flex absolute left-8 top-1/2 -translate-y-1/2 items-center gap-3 font-mono text-caption uppercase tracking-[0.2em] text-[var(--foreground)]" aria-hidden="true">
                     <span className="relative inline-flex h-[1.2em] overflow-hidden text-[var(--accent)] font-bold">
                         {/* Invisible sizer: the box always fits two digits at this letter-spacing. */}
                         <span className="invisible">00</span>
@@ -128,7 +128,7 @@ export default function Navigation() {
 
                 <button
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                    className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 text-[var(--foreground)] p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-[var(--foreground)]/10 active:bg-[var(--foreground)]/15 transition-colors duration-300 ease-out"
+                    className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 text-[var(--foreground)] p-3 min-w-11 min-h-11 flex items-center justify-center rounded-lg hover:bg-[var(--foreground)]/10 active:bg-[var(--foreground)]/15 transition-colors duration-300 ease-out"
                     aria-label="Toggle menu"
                     aria-expanded={mobileMenuOpen}
                 >
@@ -207,12 +207,12 @@ export default function Navigation() {
                                 variants={{ open: { opacity: 1, x: 0 }, closed: { opacity: 0, x: -12 } }}
                                 transition={{ duration: 0.2, ease: 'easeOut' }}
                             >
-                                <span className="text-[10px] font-mono text-[var(--foreground)] opacity-75 uppercase tracking-[0.2em]">
+                                <span className="text-micro font-mono text-[var(--foreground)] opacity-75 uppercase tracking-[0.2em]">
                                     {(idx + 1).toString().padStart(2, '0')}
                                 </span>
                                 <button
                                     onClick={() => scrollToSection(item.section, item.i)}
-                                    className="flex-1 text-left py-2 px-2 min-h-[48px] flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-300 ease-out text-xl sm:text-2xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
+                                    className="flex-1 text-left py-2 px-2 min-h-12 flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-300 ease-out text-xl sm:text-2xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
                                 >
                                     {item.label}
                                 </button>

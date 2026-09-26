@@ -33,7 +33,7 @@ export default function Projects() {
 
     return (
         <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-4 md:py-0 overflow-x-clip overflow-y-visible md:overflow-x-hidden md:overflow-y-auto no-scrollbar">
-            <div className="max-w-[1920px] mx-auto w-full max-h-[calc(100vh-8rem)] md:max-h-none overflow-y-auto md:overflow-visible">
+            <div className="max-w-480 mx-auto w-full max-h-[calc(100vh-8rem)] md:max-h-none overflow-y-auto md:overflow-visible">
                 <SectionHeading id="projects" title={t.projectsSection.title} subtitle={t.projectsSection.subtitle} align="end" className="mb-6 sm:mb-8" />
 
                 <div className="flex justify-end gap-2 mb-4">
@@ -57,7 +57,7 @@ export default function Projects() {
 
                 <div
                     ref={scrollContainerRef}
-                    className="flex gap-4 md:gap-6 overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 md:-mx-0 md:px-0 scroll-smooth items-stretch"
+                    className="flex gap-4 md:gap-6 overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 scroll-px-4 md:-mx-0 md:px-0 md:scroll-px-0 scroll-smooth items-stretch"
                     style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
                 >
                     {t.projects.map((project: Project, index: number) => {
@@ -83,18 +83,18 @@ export default function Projects() {
                                             src={project.image}
                                             alt={project.name}
                                             fill
-                                            sizes="(max-width: 640px) 300px, (max-width: 1024px) 360px, 440px"
+                                            sizes="(max-width: 639px) 300px, (max-width: 1023px) 340px, 440px"
                                             className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
                                         />
                                     </motion.span>
                                 )}
-                                <span className="absolute top-3 left-3 z-10 font-mono text-[11px] font-bold px-2 py-1 bg-[var(--background)]/85 backdrop-blur text-[var(--foreground)] border border-[var(--foreground)]/15">
+                                <span className="absolute top-3 left-3 z-10 font-mono text-caption font-bold px-2 py-1 bg-[var(--background)]/85 backdrop-blur text-[var(--foreground)] border border-[var(--foreground)]/15">
                                     {(index + 1).toString().padStart(2, '0')}
                                 </span>
                                 {/* Hover caption, Awwwards-style: rises from the bottom edge. Always shown on touch. */}
                                 <span className="absolute inset-x-0 bottom-0 z-10 flex items-end justify-between gap-3 p-4 pt-16 bg-gradient-to-t from-black/85 via-black/40 to-transparent text-white transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] translate-y-0 opacity-100 md:translate-y-4 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 md:group-focus-within:translate-y-0 md:group-focus-within:opacity-100">
                                     <span className="min-w-0 text-left">
-                                        <span className="block text-[10px] font-mono uppercase tracking-[0.2em] opacity-75">{t.projectsSection.caseStudy}</span>
+                                        <span className="block text-micro font-mono uppercase tracking-[0.2em] opacity-75">{t.projectsSection.caseStudy}</span>
                                         <span className="block text-sm font-semibold truncate">{project.name}</span>
                                     </span>
                                     <i className="fas fa-arrow-right text-sm shrink-0 -rotate-45 transition-transform duration-500 group-hover:rotate-0" aria-hidden="true" />
@@ -111,7 +111,7 @@ export default function Projects() {
                                 viewport={{ once: true, amount: 0.3 }}
                                 variants={CARD_RISE}
                                 custom={index}
-                                className="w-[300px] sm:w-[340px] md:w-[400px] lg:w-[440px] flex-shrink-0 group flex flex-col scroll-snap-align-start"
+                                className="w-75 sm:w-85 md:w-110 flex-shrink-0 group flex flex-col snap-start"
                             >
                                 {openDetail ? (
                                     <button
@@ -133,7 +133,7 @@ export default function Projects() {
                                     <h3 className="text-base md:text-lg font-bold text-[var(--foreground)] leading-tight line-clamp-2 group-hover:text-[var(--accent)] transition-colors">
                                         {project.name}
                                         {project.year && (
-                                            <sup className="ml-1 text-[9px] font-mono font-bold tracking-wider opacity-60 align-super">{project.year}</sup>
+                                            <sup className="ml-1 text-micro font-mono font-bold tracking-wider opacity-60 align-super">{project.year}</sup>
                                         )}
                                     </h3>
                                     {statuses.length > 0 && (
@@ -141,7 +141,7 @@ export default function Projects() {
                                             {statuses.map((st) => (
                                                 <span
                                                     key={st.label}
-                                                    className={`text-[9px] font-mono font-bold tracking-wider px-1.5 py-0.5 border ${st.accent ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-[var(--foreground)]/30 text-[var(--foreground)] opacity-75'}`}
+                                                    className={`text-micro font-mono font-bold tracking-wider px-1.5 py-0.5 border ${st.accent ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-[var(--foreground)]/30 text-[var(--foreground)] opacity-75'}`}
                                                 >
                                                     {st.label}
                                                 </span>
@@ -155,7 +155,7 @@ export default function Projects() {
                                 </p>
 
                                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-3">
-                                    <span className="text-[10px] font-mono text-[var(--foreground)] opacity-60 truncate">
+                                    <span className="text-micro font-mono text-[var(--foreground)] opacity-60 truncate">
                                         {project.tags.slice(0, 3).join(' · ')}
                                     </span>
                                     <span className="ml-auto flex items-center gap-3">
@@ -206,7 +206,7 @@ export default function Projects() {
                 {activeProject && (
                     <>
                         {activeProject.image && (
-                            <div className="relative h-[200px] sm:h-[240px] w-full overflow-hidden bg-[var(--background)]">
+                            <div className="relative h-50 sm:h-60 w-full overflow-hidden bg-[var(--background)]">
                                 <Image
                                     src={activeProject.image}
                                     alt=""
@@ -237,7 +237,7 @@ export default function Projects() {
 
                             <div className="flex flex-wrap gap-1.5 mb-5">
                                 {activeProject.tags.map((tag, i) => (
-                                    <span key={i} className="text-[10px] font-mono border border-[var(--foreground)]/40 px-2 py-0.5 text-[var(--foreground)]">
+                                    <span key={i} className="text-micro font-mono border border-[var(--foreground)]/40 px-2 py-0.5 text-[var(--foreground)]">
                                         {tag}
                                     </span>
                                 ))}
@@ -255,7 +255,7 @@ export default function Projects() {
                                     <ul className="space-y-2">
                                         {activeProject.highlights.map((item, i) => (
                                             <li key={i} className="flex items-start gap-2.5 text-sm text-[var(--foreground)] opacity-85">
-                                                <i className="fas fa-check text-[var(--accent)] text-[11px] mt-1 shrink-0" aria-hidden="true" />
+                                                <i className="fas fa-check text-[var(--accent)] text-caption mt-1 shrink-0" aria-hidden="true" />
                                                 <span className="leading-relaxed">{item}</span>
                                             </li>
                                         ))}

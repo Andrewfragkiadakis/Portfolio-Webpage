@@ -8,8 +8,10 @@ interface LogoLoopProps {
     logos: LogoItem[]
     speed?: number
     direction?: 'left' | 'right'
-    logoHeight?: number
-    gap?: number
+    /** CSS length, e.g. "1.75rem". Relative units keep the marquee in step with the type scale. */
+    logoHeight?: string
+    /** CSS length between items, e.g. "2rem". */
+    gap?: string
     pauseOnHover?: boolean
     fadeOut?: boolean
     fadeOutColor?: string
@@ -25,8 +27,8 @@ export default function LogoLoop({
     logos,
     speed = 120,
     direction = 'left',
-    logoHeight = 28,
-    gap = 32,
+    logoHeight = '1.75rem',
+    gap = '2rem',
     pauseOnHover = false,
     fadeOut = true,
     fadeOutColor,
@@ -159,7 +161,7 @@ export default function LogoLoop({
         <div
             ref={containerRef}
             className={rootClassName}
-            style={{ '--logoloop-gap': `${gap}px`, '--logoloop-logoHeight': `${logoHeight}px`, ...(fadeOutColor && { '--logoloop-fadeColor': fadeOutColor }) } as React.CSSProperties}
+            style={{ '--logoloop-gap': gap, '--logoloop-logoHeight': logoHeight, ...(fadeOutColor && { '--logoloop-fadeColor': fadeOutColor }) } as React.CSSProperties}
             role="marquee"
             aria-label="Tech stack"
             onMouseEnter={() => setIsHovered(true)}

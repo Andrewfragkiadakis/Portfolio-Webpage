@@ -46,7 +46,7 @@ function CredentialStrip({ items, label, cursorLabel }: { items: Education[]; la
             transition={{ delay: 0.2, duration: 0.6 }}
             className="flex flex-wrap items-center gap-2 mb-4"
         >
-            <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[var(--foreground)] opacity-70 mr-1">
+            <span className="text-micro font-mono uppercase tracking-[0.2em] text-[var(--foreground)] opacity-70 mr-1">
                 {label}
             </span>
             {items.map((item) => {
@@ -55,12 +55,12 @@ function CredentialStrip({ items, label, cursorLabel }: { items: Education[]; la
                     : 'border-[var(--foreground)]/35 text-[var(--foreground)] hover:border-[var(--foreground)]'
                 const body = (
                     <>
-                        {item.icon && <i className={`${item.icon} text-[11px]`} aria-hidden="true" />}
+                        {item.icon && <i className={`${item.icon} text-caption`} aria-hidden="true" />}
                         {item.badge}
-                        {item.link && <i className="fas fa-arrow-up-right-from-square text-[8px] opacity-70" aria-hidden="true" />}
+                        {item.link && <i className="fas fa-arrow-up-right-from-square text-[0.5rem] opacity-70" aria-hidden="true" />}
                     </>
                 )
-                const cls = `inline-flex items-center gap-1.5 px-2.5 py-1 border text-[11px] font-mono font-bold uppercase tracking-wider transition-colors duration-300 ${pill}`
+                const cls = `inline-flex items-center gap-1.5 px-2.5 py-1 border text-caption font-mono font-bold uppercase tracking-wider transition-colors duration-300 ${pill}`
                 return item.link ? (
                     <a key={item.badge} href={item.link} target="_blank" rel="noopener noreferrer" data-cursor={cursorLabel} className={cls} aria-label={`${item.degree} — ${item.institution} (opens credential)`}>
                         {body}
@@ -92,7 +92,7 @@ const toLogos = (row: Tool['row']): LogoItem[] =>
                 <span
                     className="tool-logo"
                     aria-hidden="true"
-                    style={{ width: `${14 * (tool.ratio ?? 1)}px`, maskImage: `url(/logos/${tool.logo}.svg)`, WebkitMaskImage: `url(/logos/${tool.logo}.svg)` }}
+                    style={{ aspectRatio: tool.ratio ?? 1, maskImage: `url(/logos/${tool.logo}.svg)`, WebkitMaskImage: `url(/logos/${tool.logo}.svg)` }}
                 />
                 {tool.label}
             </span>
@@ -137,11 +137,11 @@ export default function About() {
                                     <i className="fas fa-code text-lg" aria-hidden="true" />
                                 </div>
                                 <div>
-                                    <div className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase">{t.about.currentFocus}</div>
+                                    <div className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase">{t.about.currentFocus}</div>
                                     <div className="text-base font-bold text-[var(--foreground)]">{t.about.currentFocusDetail}</div>
                                 </div>
                             </div>
-                            <div className="font-mono text-[13px] space-y-1 text-[var(--foreground)] opacity-85 relative z-10">
+                            <div className="font-mono text-body-sm space-y-1 text-[var(--foreground)] opacity-85 relative z-10">
                                 <p><span className="text-[var(--accent)]">const</span> engineer = {'{'}</p>
                                 <p className="pl-4">role: <span className="text-[var(--accent)]">&quot;Apple Fleet &amp; IT Automation Lead&quot;</span>,</p>
                                 <p className="pl-4">company: <span className="text-[var(--accent)]">&quot;Omilia&quot;</span>,</p>
@@ -190,7 +190,7 @@ export default function About() {
                                     <div className="text-xl md:text-2xl font-black gradient-text">
                                         <AnimatedCounter value={stat.value} suffix={stat.suffix} duration={1.5} />
                                     </div>
-                                    <div className="text-[11px] font-mono text-[var(--foreground)] opacity-80 uppercase leading-tight">
+                                    <div className="text-caption font-mono text-[var(--foreground)] opacity-80 uppercase leading-tight">
                                         {t.about.statsLabels[index]}
                                     </div>
                                 </motion.div>
@@ -219,11 +219,11 @@ export default function About() {
                                         <i className={`${skill.icon} text-base`} aria-hidden="true" />
                                     </div>
                                     <h4 className="font-bold text-sm text-[var(--foreground)] mb-1">{skill.label}</h4>
-                                    <p className="text-[10px] text-[var(--foreground)] opacity-80 leading-relaxed line-clamp-2">
+                                    <p className="text-micro text-[var(--foreground)] opacity-80 leading-relaxed line-clamp-2">
                                         {skill.detail || 'Building innovative solutions'}
                                     </p>
                                     {/* Always visible: touch devices have no hover to reveal this. */}
-                                    <span className="text-[9px] font-mono text-[var(--accent)] opacity-60 md:opacity-40 md:group-hover:opacity-80 transition-opacity mt-1 block">
+                                    <span className="text-micro font-mono text-[var(--accent)] opacity-60 md:opacity-40 md:group-hover:opacity-80 transition-opacity mt-1 block">
                                         {t.about.readMore} ↗
                                     </span>
                                 </div>
@@ -256,8 +256,8 @@ export default function About() {
                     transition={{ delay: 0.6 }}
                 >
                     <div className="flex flex-col gap-2">
-                        <LogoLoop logos={OPS_TOOLS} speed={55} direction="left" logoHeight={28} gap={12} fadeOut scaleOnHover pauseOnHover />
-                        <LogoLoop logos={BUILD_TOOLS} speed={55} direction="right" logoHeight={28} gap={12} fadeOut scaleOnHover pauseOnHover />
+                        <LogoLoop logos={OPS_TOOLS} speed={55} direction="left" logoHeight="1.75rem" gap="0.75rem" fadeOut scaleOnHover pauseOnHover />
+                        <LogoLoop logos={BUILD_TOOLS} speed={55} direction="right" logoHeight="1.75rem" gap="0.75rem" fadeOut scaleOnHover pauseOnHover />
                     </div>
                 </motion.div>
             </div>

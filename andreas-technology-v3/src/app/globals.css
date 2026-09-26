@@ -33,12 +33,21 @@
 
 /*
  * The layout switches from the vertical stack to the horizontal journey at `md`.
- * Raising it to 1024px keeps tablets on the vertical layout — scroll-jacking a touch
+ * Raising it to 64rem (1024px) keeps tablets on the vertical layout — scroll-jacking a touch
  * device through a horizontal track is worse than letting it scroll normally.
- * Must stay in sync with DESKTOP_BREAKPOINT_PX in src/hooks/useIsDesktop.ts.
+ * Must stay in sync with DESKTOP_MEDIA_QUERY in src/hooks/useIsDesktop.ts.
  */
 @theme {
-  --breakpoint-md: 1024px;
+  --breakpoint-md: 64rem;
+
+  /*
+   * Small type sizes below Tailwind's text-xs (0.75rem). In rem, not px, so they
+   * follow the reader's browser font-size setting like the rest of the scale.
+   * No line-height is set: these inherit it, as the px values they replace did.
+   */
+  --text-micro: 0.625rem;    /* 10px at default size — meta labels, badges */
+  --text-caption: 0.6875rem; /* 11px — mono captions, corner meta */
+  --text-body-sm: 0.8125rem; /* 13px — code block, tool pills */
 }
 
 body {
@@ -173,8 +182,8 @@ a[href],
 .logoloop {
   position: relative;
   overflow-x: hidden;
-  --logoloop-gap: 32px;
-  --logoloop-logoHeight: 28px;
+  --logoloop-gap: 2rem;
+  --logoloop-logoHeight: 1.75rem;
   --logoloop-fadeColorAuto: var(--background);
 }
 
@@ -228,7 +237,7 @@ a[href],
   position: absolute;
   top: 0;
   bottom: 0;
-  width: clamp(24px, 8%, 120px);
+  width: clamp(1.5rem, 8%, 7.5rem);
   pointer-events: none;
   z-index: 10;
 }
@@ -286,15 +295,18 @@ a[href],
   padding: 0.25rem 0.75rem;
   border: 1px solid color-mix(in srgb, var(--foreground), transparent 80%);
   font-family: var(--font-geist-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
-  font-size: 13px;
+  font-size: var(--text-body-sm);
   color: var(--foreground);
   white-space: nowrap;
   transition: border-color 0.3s ease, color 0.3s ease;
 }
 
+/* Height follows the type scale; width comes from each logo's aspect ratio
+   (set inline as `aspect-ratio`), so wide wordmarks need no pixel maths. */
 .tool-logo {
   display: inline-block;
-  height: 14px;
+  height: 0.875rem;
+  aspect-ratio: 1;
   flex-shrink: 0;
   background-color: currentColor;
   mask-repeat: no-repeat;

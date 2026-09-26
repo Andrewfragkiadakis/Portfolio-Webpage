@@ -205,7 +205,7 @@ export default function HeroOverlay() {
                     <button key={id} onClick={() => scrollToSection(id)} className={CTA_BTN}>
                         <span className="relative z-10 flex items-center justify-center gap-2 font-bold uppercase tracking-widest text-xs text-foreground group-hover:text-background transition-colors duration-300 ease-out whitespace-nowrap">
                             <RollText>{label}</RollText>
-                            <i className="fas fa-arrow-right text-[10px] transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
+                            <i className="fas fa-arrow-right text-micro transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
                         </span>
                         <span className="absolute inset-0 bg-foreground scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] origin-left" aria-hidden="true" />
                         <span className="absolute inset-0 border border-foreground" aria-hidden="true" />
@@ -216,7 +216,7 @@ export default function HeroOverlay() {
             {/* Corner meta, desktop only: where and when, plus a one-time scroll cue. */}
             <motion.div
                 {...rise(1.5)}
-                className="hidden md:flex absolute bottom-10 left-12 flex-col gap-1 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--foreground)]"
+                className="hidden md:flex absolute bottom-10 left-12 flex-col gap-1 font-mono text-caption uppercase tracking-[0.2em] text-[var(--foreground)]"
             >
                 <span className="opacity-60">{t.location}</span>
                 <LocalTime />
@@ -224,7 +224,7 @@ export default function HeroOverlay() {
 
             <motion.div
                 {...rise(1.5)}
-                className="hidden md:flex absolute bottom-10 left-1/2 -translate-x-1/2 items-center gap-4 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--accent)]"
+                className="hidden md:flex absolute bottom-10 left-1/2 -translate-x-1/2 items-center gap-4 font-mono text-caption uppercase tracking-[0.2em] text-[var(--accent)]"
             >
                 {t.hero.scroll}
                 <span className="relative block w-16 h-px bg-[var(--accent)]/25 overflow-hidden" aria-hidden="true">

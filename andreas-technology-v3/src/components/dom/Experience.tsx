@@ -15,7 +15,6 @@ const KIND_ICON: Record<EducationKind, string> = {
 }
 import SectionHeading from '@/components/ui/SectionHeading'
 
-const ONE_CARD_SCROLL_MOBILE = 296
 
 function ScrollButton({ onClick, direction, label, disabled = false }: { onClick: () => void; direction: 'left' | 'right'; label: string; disabled?: boolean }) {
     return (
@@ -38,7 +37,7 @@ function ExperienceCard({ exp, index }: { exp: ExperienceType; index: number }) 
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.1 }}
-            className="min-w-[280px] w-[280px] sm:min-w-[320px] sm:w-[320px] md:min-w-[380px] md:w-[380px] lg:min-w-[400px] lg:w-[400px] aspect-square bg-[var(--background)] border border-[var(--foreground)]/40 flex-shrink-0 p-4 sm:p-5 md:p-6 lg:p-8 flex flex-col justify-between hover:border-[var(--accent)] transition-all duration-300 md:hover:shadow-[0_0_20px_var(--accent)] group scroll-snap-align-start relative"
+            className="w-[85vw] max-w-95 min-h-85 sm:w-90 md:max-w-none md:min-h-auto md:min-w-100 md:w-100 md:aspect-square bg-[var(--background)] border border-[var(--foreground)]/40 flex-shrink-0 p-4 sm:p-5 md:p-8 flex flex-col justify-between hover:border-[var(--accent)] transition-all duration-300 md:hover:shadow-[0_0_20px_var(--accent)] group snap-start md:snap-align-none relative"
         >
             <div className="absolute top-0 right-0 p-4 opacity-10 text-4xl font-black text-[var(--foreground)] z-0">
                 {(index + 1).toString().padStart(2, '0')}
@@ -48,7 +47,7 @@ function ExperienceCard({ exp, index }: { exp: ExperienceType; index: number }) 
                     <span className="w-12 h-12 flex items-center justify-center border border-[var(--accent)]/30 text-[var(--accent)] rounded-lg md:group-hover:bg-[var(--accent)] md:group-hover:text-[var(--background)] transition-colors">
                         <i className="fas fa-briefcase text-lg" aria-hidden="true" />
                     </span>
-                    <span className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest">
+                    <span className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest">
                         {exp.duration}
                     </span>
                 </div>
@@ -58,10 +57,10 @@ function ExperienceCard({ exp, index }: { exp: ExperienceType; index: number }) 
                 <p className="text-xs font-mono text-[var(--foreground)] opacity-85 mb-4">
                     @ {exp.company}
                 </p>
-                <ul className="space-y-2 flex-1 overflow-y-auto">
+                <ul className="space-y-2 flex-1">
                     {exp.tasks.map((task, ti) => (
                         <li key={ti} className="text-xs text-[var(--foreground)] opacity-80 flex items-start gap-2">
-                            <span className="text-[var(--accent)] mt-1 text-[6px] shrink-0">
+                            <span className="text-[var(--accent)] mt-1 text-[0.375rem] shrink-0">
                                 <i className="fas fa-square" aria-hidden="true" />
                             </span>
                             <span className="leading-tight">{task}</span>
@@ -83,7 +82,7 @@ function EducationCard({ edu, index, verifyLabel, verifyCursor }: { edu: Educati
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.1 }}
-            className={`min-w-[280px] w-[280px] sm:min-w-[320px] sm:w-[320px] md:min-w-[380px] md:w-[380px] lg:min-w-[400px] lg:w-[400px] aspect-square bg-[var(--background)] border flex-shrink-0 p-4 sm:p-5 md:p-6 lg:p-8 flex flex-col justify-between hover:border-[var(--accent)] transition-all duration-300 group scroll-snap-align-start relative overflow-hidden ${featured ? 'border-[var(--accent)]/70 shadow-[0_0_0_1px_var(--glow),0_0_40px_var(--glow)]' : 'border-[var(--foreground)]/20'}`}
+            className={`w-[85vw] max-w-95 min-h-85 sm:w-90 md:max-w-none md:min-h-auto md:min-w-100 md:w-100 md:aspect-square bg-[var(--background)] border flex-shrink-0 p-4 sm:p-5 md:p-8 flex flex-col justify-between hover:border-[var(--accent)] transition-all duration-300 group snap-start md:snap-align-none relative overflow-hidden ${featured ? 'border-[var(--accent)]/70 shadow-[0_0_0_1px_var(--glow),0_0_40px_var(--glow)]' : 'border-[var(--foreground)]/20'}`}
         >
             {featured && (
                 <div
@@ -98,11 +97,11 @@ function EducationCard({ edu, index, verifyLabel, verifyCursor }: { edu: Educati
                     </span>
                     <div className="flex items-center gap-2 min-w-0">
                         {edu.badge && (
-                            <span className={`text-[9px] font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 border whitespace-nowrap ${featured ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-[var(--foreground)]/40 text-[var(--foreground)] opacity-80'}`}>
+                            <span className={`text-micro font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 border whitespace-nowrap ${featured ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-[var(--foreground)]/40 text-[var(--foreground)] opacity-80'}`}>
                                 {edu.badge}
                             </span>
                         )}
-                        <span className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest whitespace-nowrap">
+                        <span className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest whitespace-nowrap">
                             {edu.duration}
                         </span>
                     </div>
@@ -114,10 +113,10 @@ function EducationCard({ edu, index, verifyLabel, verifyCursor }: { edu: Educati
                     {edu.institution}
                 </p>
                 {edu.details && (
-                    <div className="space-y-2 mb-4 flex-1 overflow-y-auto">
+                    <div className="space-y-2 mb-4 flex-1">
                         {edu.details.map((detail, i) => (
                             <div key={i} className="flex items-start gap-2 text-xs text-[var(--foreground)] opacity-80">
-                                <i className="fas fa-check text-[var(--accent)] text-[10px] mt-0.5" aria-hidden="true" />
+                                <i className="fas fa-check text-[var(--accent)] text-micro mt-0.5" aria-hidden="true" />
                                 <span>{detail}</span>
                             </div>
                         ))}
@@ -153,13 +152,16 @@ export default function Experience() {
         if (maxScroll <= 0) return
         if (direction === 'right' && el.scrollLeft >= maxScroll - 1) return
         if (direction === 'left' && el.scrollLeft <= 1) return
-        const amount = direction === 'right' ? ONE_CARD_SCROLL_MOBILE : -ONE_CARD_SCROLL_MOBILE
+        const card = el.querySelector<HTMLElement>('[data-card="true"]')
+        const gap = parseFloat(getComputedStyle(el).columnGap) || 0
+        const step = (card?.offsetWidth ?? el.clientWidth) + gap
+        const amount = direction === 'right' ? step : -step
         el.scrollTo({ left: Math.max(0, Math.min(el.scrollLeft + amount, maxScroll)), behavior: 'smooth' })
     }
 
     return (
-        <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-6 md:px-12 lg:px-24 py-4 md:py-0 overflow-x-clip overflow-y-visible md:overflow-x-hidden md:overflow-y-auto no-scrollbar relative">
-            <div className="max-w-[1920px] mx-auto w-full h-full flex flex-col justify-center">
+        <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-6 md:px-24 py-4 md:py-0 overflow-x-clip overflow-y-visible md:overflow-x-hidden md:overflow-y-auto no-scrollbar relative">
+            <div className="max-w-480 mx-auto w-full h-full flex flex-col justify-center">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 sm:mb-8 md:mb-12 gap-4 md:gap-6">
                     <SectionHeading id="experience" title={t.experienceSection.title} subtitle={t.experienceSection.subtitle} sizeClass="text-[12vw] md:text-[min(6vw,8vh)]" />
                     <div className="hidden md:flex gap-2">
@@ -171,7 +173,7 @@ export default function Experience() {
                 <div className="flex flex-col gap-8 md:hidden">
                     <div>
                         <div className="flex items-center justify-between gap-2 mb-3 pl-1">
-                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest">
+                            <span className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest">
                                 {t.experienceSection.professional}
                             </span>
                             <div className="flex gap-2">
@@ -181,7 +183,7 @@ export default function Experience() {
                         </div>
                         <div
                             ref={expMobileRef}
-                            className="flex gap-4 overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 scroll-smooth items-stretch"
+                            className="flex gap-4 overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 scroll-px-4 scroll-smooth items-stretch"
                             style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
                         >
                             {t.experience.map((exp, idx) => (
@@ -192,7 +194,7 @@ export default function Experience() {
                     </div>
                     <div>
                         <div className="flex items-center justify-between gap-2 mb-3 pl-1">
-                            <span className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest">
+                            <span className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest">
                                 {t.experienceSection.education}
                             </span>
                             <div className="flex gap-2">
@@ -202,7 +204,7 @@ export default function Experience() {
                         </div>
                         <div
                             ref={eduMobileRef}
-                            className="flex gap-4 overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 scroll-smooth items-stretch"
+                            className="flex gap-4 overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 scroll-px-4 scroll-smooth items-stretch"
                             style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
                         >
                             {t.education.map((edu, idx) => (
@@ -215,11 +217,11 @@ export default function Experience() {
 
                 <div
                     ref={scrollContainerRef}
-                    className="hidden md:flex gap-4 md:gap-6 overflow-x-auto no-scrollbar pb-4 md:pb-8 -mx-4 px-4 scroll-smooth items-stretch"
+                    className="hidden md:flex shrink-0 gap-4 md:gap-6 overflow-x-auto no-scrollbar pb-4 md:pb-8 -mx-4 px-4 scroll-smooth items-stretch"
                     style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
                     onScroll={(e) => e.stopPropagation()}
                 >
-                    <div className="hidden md:flex flex-shrink-0 items-center justify-center w-[50px] border-r border-[var(--foreground)]/10 mr-2 md:mr-4">
+                    <div className="hidden md:flex flex-shrink-0 items-center justify-center w-12.5 border-r border-[var(--foreground)]/10 mr-2 md:mr-4">
                         <span className="text-[var(--foreground)] opacity-50 [writing-mode:vertical-rl] rotate-180 uppercase tracking-[0.3em] font-black text-xs md:text-sm">
                             {t.experienceSection.professional}
                         </span>
@@ -227,8 +229,8 @@ export default function Experience() {
                     {t.experience.map((exp, idx) => (
                         <ExperienceCard key={`exp-${idx}`} exp={exp} index={idx} />
                     ))}
-                    <div className="hidden md:block w-[1px] bg-[var(--foreground)]/20 mx-2 md:mx-4 flex-shrink-0" />
-                    <div className="hidden md:flex flex-shrink-0 items-center justify-center w-[50px] border-r border-[var(--foreground)]/10 mr-2 md:mr-4">
+                    <div className="hidden md:block w-px bg-[var(--foreground)]/20 mx-2 md:mx-4 flex-shrink-0" />
+                    <div className="hidden md:flex flex-shrink-0 items-center justify-center w-12.5 border-r border-[var(--foreground)]/10 mr-2 md:mr-4">
                         <span className="text-[var(--foreground)] opacity-50 [writing-mode:vertical-rl] rotate-180 uppercase tracking-[0.3em] font-black text-xs md:text-sm">
                             {t.experienceSection.education}
                         </span>
