@@ -5,7 +5,8 @@ import { useState } from 'react'
 import type { Project } from '@/data/content'
 import Modal from '@/components/ui/Modal'
 import ProjectImage from '@/components/ui/ProjectImage'
-import { Bento, SectionTile, Tile, TileLink } from '@/components/ui/Bento'
+import { Bento, GlowRing, SectionTile, Tile, TileLink } from '@/components/ui/Bento'
+import type { CSSProperties } from 'react'
 
 /**
  * The other ten projects: a 4 × 3 block of 2 × 2 tiles on the right two-thirds of the
@@ -29,7 +30,7 @@ function statusesOf(project: Project) {
 
 function ProjectLinks({ project, live, code, small = false }: { project: Project; live: string; code: string; small?: boolean }) {
     const cls = small
-        ? 'w-8 h-8 rounded-full bg-[var(--fill)] flex items-center justify-center text-caption hover:bg-[var(--accent-fill)] hover:text-white transition-colors duration-300'
+        ? 'w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-caption hover:bg-white hover:text-[#1d1d1f] transition-colors duration-300'
         : 'pill pill--quiet !min-h-9 !text-body-sm'
     return (
         <span className="tile-above flex items-center gap-1.5">
@@ -80,17 +81,16 @@ export default function Projects() {
                 {featured && (
                     <Tile as="article" index={1} interactive className="col-span-2 md:col-[1/5] md:row-[2/7] !p-0">
                         {openButton(featured)}
-                        <div className="relative w-full aspect-[16/10] shrink-0 overflow-hidden bg-[var(--surface-2)]">
-                            <ProjectImage
-                                project={featured}
-                                sizes="(max-width: 1023px) 100vw, 34vw"
-                                className="transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]"
-                            />
-                            <span className="absolute top-4 left-4 chip bg-[var(--surface)]/85 backdrop-blur">
+                        <GlowRing />
+                        <div className="relative w-full aspect-[16/10] md:aspect-auto md:flex-1 md:min-h-[14rem] shrink-0 overflow-hidden bg-[var(--surface-2)]">
+                            <div className="kb absolute inset-0">
+                                <ProjectImage project={featured} sizes="(max-width: 1023px) 100vw, 34vw" />
+                            </div>
+                            <span className="absolute top-4 left-4 chip chip--glass">
                                 {t.projectsSection.caseStudy} · {pad(1)}
                             </span>
                         </div>
-                        <div className="flex-1 min-h-0 p-[var(--tile-pad)] flex flex-col gap-2">
+                        <div className="shrink-0 p-[var(--tile-pad)] flex flex-col gap-2">
                             <div className="flex items-start justify-between gap-4">
                                 <h3 className="text-xl md:text-[min(1.75vw,3.1vh)] font-bold tracking-[-0.025em] leading-tight el-caps">
                                     {featured.name}
@@ -108,7 +108,7 @@ export default function Projects() {
                                     ))}
                                 </ul>
                             )}
-                            <div className="flex flex-wrap items-center justify-between gap-3 mt-auto pt-1">
+                            <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
                                 <span className="flex flex-wrap gap-1.5">
                                     {featured.tags.slice(0, 3).map((tag) => (
                                         <span key={tag} className="chip normal-case tracking-normal font-medium">{tag}</span>
@@ -124,27 +124,31 @@ export default function Projects() {
                 {rest.map((project, i) => {
                     const statuses = statusesOf(project)
                     return (
-                        <Tile key={project.name} as="article" index={2 + i} interactive className={`col-span-1 ${SMALL_AREAS[i] ?? ''} !p-0`}>
+                        <Tile key={project.name} as="article" index={2 + i} interactive className={`col-span-1 ${SMALL_AREAS[i] ?? ''} !p-0 justify-end min-h-[14rem] md:min-h-0 [--caption-h:4.6rem] short:[--caption-h:4.1rem]`}>
                             {openButton(project)}
-                            <div className="relative w-full aspect-[16/10] md:aspect-auto md:flex-1 min-h-0 overflow-hidden bg-[var(--surface-2)]">
+                            {/* Image first: the screenshot fills the tile and drifts slowly (Ken Burns). */}
+                            <div className="absolute inset-0 overflow-hidden bg-[var(--surface-2)]">
                                 {project.image && (
-                                    <ProjectImage
-                                        project={project}
-                                        sizes="(max-width: 1023px) 50vw, 240px"
-                                        className="transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
-                                    />
+                                    <div className="kb absolute inset-0" style={{ '--kb-delay': `${-i * 2.7}s`, '--kb-origin': i % 2 ? '30% 40%' : '70% 60%' } as CSSProperties}>
+                                        <ProjectImage
+                                            project={project}
+                                            sizes="(max-width: 1023px) 50vw, 240px"
+                                            containBox="inset-x-2 top-2 bottom-[var(--caption-h)]"
+                                        />
+                                    </div>
                                 )}
-                                <span className="absolute top-2.5 left-2.5 chip !px-2 bg-[var(--surface)]/85 backdrop-blur tabular-nums">{pad(i + 2)}</span>
                             </div>
-                            <div className="px-3.5 pt-2.5 pb-3 flex flex-col gap-1.5">
-                                <h3 className="text-[0.8125rem] md:text-[min(0.9vw,1.6vh)] font-semibold leading-tight line-clamp-2 el-caps min-h-[2.5em]">
+                            <span className="absolute top-2.5 left-2.5 chip chip--glass !px-2 tabular-nums">{pad(i + 2)}</span>
+                            {/* Caption bar: frosted glass over the image. */}
+                            <div className="relative m-1.5 rounded-[calc(var(--radius-tile)-0.375rem)] px-3 py-2 short:py-1.5 flex flex-col gap-1 bg-[rgba(18,18,22,0.74)] text-white backdrop-blur-xl backdrop-saturate-150 ring-1 ring-white/10">
+                                <h3 className="text-[0.8125rem] md:text-[min(0.9vw,1.6vh)] font-semibold leading-tight line-clamp-2 short:line-clamp-1 el-caps">
                                     {project.name}
                                 </h3>
                                 <div className="flex items-center justify-between gap-2 min-h-8">
-                                    <span className="flex flex-wrap items-center gap-x-1 min-w-0 text-[0.625rem] font-semibold tracking-wide text-[var(--muted)] tabular-nums">
+                                    <span className="flex flex-wrap items-center gap-x-1 min-w-0 text-[0.625rem] font-semibold tracking-wide text-white/80 tabular-nums">
                                         {project.year}
                                         {statuses.map((st) => (
-                                            <span key={st.label} className={st.accent ? 'text-[var(--accent)]' : ''}>· {st.label}</span>
+                                            <span key={st.label} className={st.accent ? 'text-[#9fd0ff]' : ''}>· {st.label}</span>
                                         ))}
                                     </span>
                                     <ProjectLinks project={project} live={t.projectsSection.live} code={t.projectsSection.code} small />
@@ -155,11 +159,12 @@ export default function Projects() {
                 })}
                 <TileLink
                     index={3 + rest.length}
-                    tone="ink"
+                    tone="graphite"
                     href="https://github.com/Andrewfragkiadakis"
                     label={`${t.projectsSection.githubCta} (GitHub profile)`}
                     className="col-span-2 md:col-[9/13] md:row-[5/7] justify-between gap-4 min-h-[9rem] md:min-h-0"
                 >
+                    <i className="fab fa-github absolute -right-[3%] -bottom-[22%] text-[11rem] md:text-[min(15vw,26vh)] opacity-[0.07] pointer-events-none" aria-hidden="true" />
                     <span className="flex items-start justify-between gap-3">
                         <i className="fab fa-github text-4xl md:text-[min(3.2vw,5.6vh)]" aria-hidden="true" />
                         <span className="tile-affordance" aria-hidden="true"><i className="fas fa-arrow-right -rotate-45" /></span>

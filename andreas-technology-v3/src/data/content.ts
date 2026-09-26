@@ -179,6 +179,19 @@ export interface Content {
     }
     contactTitle: string
     copyright: string
+    /** Labels for the v2 bento widgets (fleet rings, Mac grid, showcase, QR, map). */
+    bento: {
+        selectedWork: string
+        fleetTitle: string
+        macs: string
+        slaLabel: string
+        glyphLegend: string
+        toolsInUse: string
+        scanToEmail: string
+        qrAlt: string
+        mapLabel: string
+        city: string
+    }
 }
 
 export const SOCIAL_URLS = {
@@ -731,6 +744,18 @@ export const content: Record<'en' | 'gr', Content> = {
         ],
 
         contactTitle: "GET IN TOUCH",
+        bento: {
+            selectedWork: "Selected work",
+            fleetTitle: "Fleet at a glance",
+            macs: "Macs",
+            slaLabel: "SLA across 350+ tickets",
+            glyphLegend: "Each glyph = 10 Macs",
+            toolsInUse: "in daily use",
+            scanToEmail: "Scan to email me",
+            qrAlt: "QR code that opens a new email to Andreas",
+            mapLabel: "Map of Athens with a pin on the city centre",
+            city: "Athens",
+        },
         copyright: "© 2026 Created By Andreas Fragkiadakis. All rights reserved."
     },
 
@@ -1274,6 +1299,18 @@ export const content: Record<'en' | 'gr', Content> = {
         ],
 
         contactTitle: "ΕΠΙΚΟΙΝΩΝΙΑ",
+        bento: {
+            selectedWork: "Επιλεγμενα Εργα",
+            fleetTitle: "Ο στολος με μια ματια",
+            macs: "Mac",
+            slaLabel: "SLA σε 350+ tickets",
+            glyphLegend: "Κάθε εικονίδιο = 10 Mac",
+            toolsInUse: "σε καθημερινή χρήση",
+            scanToEmail: "Σκανάρετε για email",
+            qrAlt: "Κωδικός QR που ανοίγει νέο email προς τον Ανδρέα",
+            mapLabel: "Χάρτης της Αθήνας με πινέζα στο κέντρο",
+            city: "Αθήνα",
+        },
         copyright: "© 2026 Created By Ανδρέας Φραγκιαδάκης. All rights reserved."
     }
 }

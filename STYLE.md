@@ -1,117 +1,113 @@
-# Bento Grid
+# Bento Grid v2
 
-**Branch:** `style/bento-grid`
+**Branch:** `style/bento-grid-v2`, built on the v1 Bento Grid (`style/bento-grid`).
 
-## Concept
+## Brief
 
-The site takes the clarity of an Apple product page. Every section is one **bento**: a 12 × 6 grid of rounded tiles that exactly fills a 1440 × 900 panel, with no inner scrolling. Each tile holds one idea: a name, a number, a credential, a role, a link. The page is light grey with white tiles, one blue accent, and four soft tints (mint, lavender, peach, sky) that pick out a few tiles per panel. Every section opens with an Indisea-style numbered tile ("04 / Timeline: work & education"). Stats are big zero-padded numerals that count up, Kardev-style. The name tile reuses the pastel gradient from the README's bento infographic (`docs/bento-infographic.svg`), so the site and the README read as one system.
+Andreas shortlisted Bento Grid and asked for three things: **more imagery in the tiles, better colouring, and more wow factor**. His taste is Apple-native and polished. He does not want clutter or pointer-following effects. v2 keeps the v1 structure: a 12 × 6 bento per panel, the horizontal journey on desktop and a 2-column stack on mobile. What changes is what the tiles show, how they are coloured and how they move.
 
-The horizontal journey on desktop and the vertical stack on mobile are unchanged. Only what is inside each panel changed.
+## What changed vs v1
 
-## Inspirations
+| Area | v1 | v2 |
+| --- | --- | --- |
+| Colour | White tiles, one blue accent, four pastel tints | **Keynote palette**: five subject families, each a rich gradient with AA white text, plus white and graphite neutrals for rhythm. The dark theme uses near-black tiles lit by each family's glow, not flat grey. |
+| Imagery | Project screenshots only in Projects | Screenshots in the hero (a laptop showcase), image-first project tiles, official tool logos in clusters and in a logo wall, the owner's QR code, a drawn Athens map, a Mac-glyph fleet chart and an analog clock |
+| Hero | Pastel name tile, terminal, stat tiles, digital time | Aurora name tile with a **travelling conic border light**, the typewriter inline under the name, a **laptop cross-fading 7 project screenshots**, **activity rings**, a Jamf tile, an **analog Athens clock**, a socials list and two CTAs |
+| About | Code-object "current focus", 2 × 2 stats, text marquee of tools | **550+ Macs drawn as 55 laptop glyphs** that light up in a wave, coloured stat tiles (07+ / 70% / 03 / 95%+), and a **logo wall** of all 29 tools. The current focus becomes a line in the story tile. |
+| Services | White tiles with small accent logo squares | Each service in its family gradient, with its toolkit shown as an **overlapping cluster of brand-coloured logo discs** |
+| Career | Sky current-role tile, grey Gantt | Current role in the fleet gradient. The Gantt's current bar glows. Jamf 200 is a fleet tile carrying the Jamf mark and a white Verify pill. |
+| Projects | Image above a white caption | **Image-first**: the screenshot fills the tile and drifts slowly (Ken Burns), with a frosted caption bar. The featured case study also gets the conic border light. |
+| Connect | Mint availability tile, plain location and time tiles | Emerald availability tile, **Athens map tile** (pure SVG) with a pulsing pin and the live time, **QR tile**, and GitHub, LinkedIn and résumé in graphite, fleet and automation colours |
+| Motion | Fade, scale and rise with a 55 ms stagger | **Spring** entrance (stiffness 150, damping 19) with a 50 ms stagger. Ambient loops run only while their panel is on screen. |
 
-| Site | What was taken |
-| --- | --- |
-| [Indisea](https://www.awwwards.com/sites/indisea) | Numbered section labels ("02 / About"). Zero-padded stat tiles ("07+", "03"). A category-tagged logo marquee, which became the toolkit tile. Confident, heavy sans headings with tight tracking. |
-| [Kardev Feed Machinery](https://www.awwwards.com/sites/kardev-feed-machinery) | Stat numbers that count up the first time they scroll into view (550+, 70%, 07+, 03). |
-| [Clico AI Studio](https://www.awwwards.com/sites/clico-ai-studio) | A mosaic of pastel, rounded tiles on a pale field. A real artefact instead of a decorative graphic: a terminal tile types out the roles, and the "current focus" is shown as a code object. A floating, pill-shaped segmented nav. |
-| Apple keynote / product-page bento (and the repo's own `docs/bento-infographic.svg`) | Tiles of 1×1, 2×1, 2×2 and 4×4. `#F5F5F7` page, white tiles, 1px hairline plus a soft shadow. An inverse "AF" tile. The pastel flagship gradient. A dark terminal tile. |
+Everything from v1 is still there: all EN and GR copy, every link, credentials and Verify links, the project, service, skill, role and degree dialogs, copy-email, the typewriter, counters, the Gantt, the theme toggle and circle reveal, the GR/EN switch, focus styles and reduced motion.
 
-## Tokens
+## Palette
 
-### Palette
+Families are set in `globals.css` as `.tile--fam.tile--{family}`. Each defines three light gradient stops (`--c1…--c3`) and two dark glow colours (`--g1`, `--g2`).
 
-| Token | Light | Dark | Use |
+| Family | Used for | Light gradient (135°) | Dark glow |
 | --- | --- | --- | --- |
-| `--background` | `#F5F5F7` | `#000000` | page |
-| `--surface` | `#FFFFFF` | `#1C1C1E` | tiles, dialogs |
-| `--surface-2` | `#F5F5F7` | `#2C2C2E` | chips inside tiles, tool pills |
-| `--foreground` | `#1D1D1F` | `#F5F5F7` | text |
-| `--muted` | `#6E6E73` | `#A1A1A6` | secondary text, eyebrows |
-| `--line` | black 8% | white 8% | tile hairline |
-| `--fill` | black 4.5% | white 8% | icon wells, quiet pills |
-| `--accent` | `#0071E3` | `#2997FF` | accent **text** and marks |
-| `--accent-fill` | `#0071E3` | `#0071E3` | filled buttons and tiles, always with white text |
-| `--ink` / `--on-ink` | `#1D1D1F` / `#F5F5F7` | `#F5F5F7` / `#1D1D1F` | inverse tile ("Get in touch", GitHub). It flips with the theme. |
-| `--terminal` | `#1D1D1F` | `#0B0B0C` + 14% white border | always-dark terminal tiles |
-| mint | `#E3F6E9` / ink `#0F7A3A` | `#0F2A1A` / ink `#5BD98A` | 70% stat, availability |
-| lavender | `#EEEAFD` / ink `#5B3FD1` | `#221C3A` / ink `#B4A6FF` | Jamf 200, AI service |
-| peach | `#FDEEE2` / ink `#A8480A` | `#33200F` / ink `#FFB27A` | résumé |
-| sky | `#E3F0FD` / ink `#0062C4` | `#0C2340` / ink `#6CB8FF` | 550+ stat, current role, LinkedIn |
+| **fleet** | Apple fleet, Jamf 200, Mac grid, current role, LinkedIn | `#0A5CD6 → #3A44D4 → #5835C6` (blue → indigo) | `#2F6BFF`, `#7A4DFF` |
+| **security** | Endpoint security, 95%+ SLA, availability | `#0A7A57 → #07644A → #054E3C` (emerald) | `#13C486`, `#0A8F7A` |
+| **automation** | Scripting, 70% onboarding, résumé | `#C03E0A → #BF2748 → #AD175C` (orange → pink) | `#FF6A2B`, `#FF2F7A` |
+| **ai** | AI operations, certifications | `#7236E3 → #5A27C6 → #44209C` (violet) | `#9D5CFF`, `#5F3DFF` |
+| **itsm** | IT service management | `#0A7280 → #085D6B → #064858` (teal) | `#19B8C9`, `#1F7FD6` |
 
-Inside a tinted tile, `--muted` is swapped for `--tint-muted` (`#56565B` light, `#B4B4B9` dark). Plain `#6E6E73` on mint is only 4.47:1.
+Neutrals:
 
-**Contrast (WCAG 2.x, normal text):**
+- **plain**: white on `#F5F5F7` in light. In dark, `#17171B → #0F0F12` with an inner top highlight and a 7.5% hairline.
+- **graphite**: `#2C2C30 → #1D1D1F` in both themes.
+- **night**: an always-black watch face, used for the rings.
+- **aurora**: the name tile.
+- **studio**: a silver product-shot sweep, or a lit void in dark, used for the showcase.
+
+**Accent:** `#0071E3` (light) and `#2997FF` (dark), used for links, CTAs and focus rings only. On coloured tiles the CTA is a white pill (`.pill--white`).
+
+**Contrast (WCAG 2.x, normal text).** The ratios were checked with `.research/contrast.py`.
 
 | Pair | Ratio |
 | --- | --- |
-| `#1D1D1F` on `#FFFFFF` / `#F5F5F7` | 16.8 / 15.4 : 1 |
-| `#6E6E73` on white / on `#F5F5F7` | 5.0 / 4.7 : 1 |
-| `#0071E3` on white | 4.7 : 1 |
-| white on `#0071E3` (filled tiles and buttons, both themes) | 4.7 : 1 |
-| `#F5F5F7` on `#1C1C1E` | 15.9 : 1 |
-| `#A1A1A6` on `#1C1C1E` / on `#000` | 6.6 / 8.0 : 1 |
-| `#2997FF` on `#1C1C1E` | 5.6 : 1 |
-| tint inks on their tints (light) | mint 4.8, lavender 5.8, peach 5.2, sky 5.1 : 1 |
-| tint inks on their tints (dark) | all ≥ 8 : 1 |
+| White on the lightest stop of each family (fleet / security / automation / ai / itsm) | 5.97 / 5.34 / 5.34 / 6.26 / 5.63 : 1 |
+| Family `--muted` (white at 90%) on the lightest stop | ≥ 4.62 : 1 |
+| Dark family tiles | white on near-black lit at ≤ 46% colour, ≥ 8 : 1 |
+| Project caption glass (`rgba(18,18,22,.74)`) over a pure-white screenshot | white 7.8, white/80 5.7, status `#9FD0FF` 4.8 : 1 |
+| `#1D1D1F` / muted `#3A3A3F` on the aurora, even where all three pastel fields (≤ 40% alpha) overlap at full strength | ≥ 9 : 1 / ≥ 5.5 : 1 |
+| Accent `#0071E3` on white, `#2997FF` on near-black | 4.7 / 6.5 : 1 |
 
-In dark mode `#2997FF` fails as a background for white text (3.0 : 1). Filled controls therefore stay `#0071E3` in both themes, and `#2997FF` is used only for text and marks.
+The gradient surname (`#0850C0 → #4A2CB4 → #A01F45` in light, `#6CB8FF → #FF8FB1` in dark) is display type at more than 60 px. Every stop is at least 3.4 : 1 even over the darkest aurora overlap.
 
-### Type
+## Tiles and imagery
 
-- **Inter** via `next/font/google`, variable weight, subsets **`latin` + `greek`**, exposed as `--font-inter`. Before this change Greek fell back to a system face. Now "ΑΝΔΡΕΑΣ ΦΡΑΓΚΙΑΔΑΚΗΣ" and every Greek heading render in Inter 700, matching the Latin.
-- `.display`: weight 700, tracking −0.04em, line-height 0.92. Solid and never outlined.
-- `.numeral`: weight 700, tracking −0.045em, tabular figures, so counters don't jitter.
-- `.eyebrow`: 11px, weight 600, uppercase, +0.08em, muted.
-- Code and terminal: `ui-monospace` (SF Mono on Apple devices). No web mono font is loaded.
-- **Greek capitals:** many Greek labels in `content.ts` are written without tonos because they were designed to be shown in capitals ("Τρεχουσα Εστιαση"). `.el-caps` sets them in capitals **only** under `:lang(el)`, so English keeps its natural case ("Open to Opportunities") and Greek reads correctly ("ΔΙΑΘΕΣΙΜΟΣ ΓΙΑ ΝΕΕΣ ΠΡΟΚΛΗΣΕΙΣ").
-- Sizes are fluid, as `min(vw, vh)`, so each bento scales with both viewport dimensions. Examples: the hero name is `min(6.3vw, 11vh)`, section titles are `min(3.6vw, 6vh)` and hero stats are `min(5.4vw, 9.5vh)`.
+- **Showcase** (`ui/Showcase.tsx`): a CSS laptop (bezel, 16:10 display, a base with a thumb notch and a glass reflection) sized with container-query units, so it always fits its tile. It cross-fades 7 web screenshots every 4.2 s through the existing `ProjectImage`. Contain-fit shots keep their blurred fill, so nothing is badly cropped. Only the current and next shots are mounted. The first loads eagerly and the rest lazily. A caption bar rolls the project name and shows dots. The tile opens Projects.
+- **Activity rings** (`ui/FleetRings.tsx`): two rings with **real figures only**: 95% (SLA over 350+ tickets, emerald) and 70% (faster onboarding, orange → pink). **550+ Macs** sits in the centre as a count, not a ring. There is no published enrolment or compliance percentage, so no ring was invented for either.
+- **Mac grid** (`ui/MacGrid.tsx`): 55 SVG laptop glyphs, each worth 10 Macs. They light up in a diagonal wave the first time they are seen. The legend is in both languages.
+- **Logo wall** (About): all 29 tools in `data/tools.ts` as brand-coloured marks on quiet squares. The top row is ops (fleet, security, identity, infrastructure) and the bottom row is build (code, AI, collaboration). Pale brands are deepened on white and navy brands lifted on black (`brandInks`). Names stay available as `title` and screen-reader text.
+- **Logo clusters** (Services): overlapping white discs carrying each service's toolkit in brand colours. The dialog still lists the tool names.
+- **Analog clock** (`ui/AnalogClock.tsx`): Apple-style ticks and an orange second hand that ticks with a slight overshoot. It uses the Athens time zone and ticks only while on screen. Under reduced motion there is no second hand and it updates every 15 s.
+- **Athens map** (`ui/AthensMap.tsx`): a pure SVG of the Saronic Gulf, a rotated street grid, the main avenues, the National Garden and Lycabettus, with a pulsing pin. There are no map tiles and no external requests. It has a light and a dark palette and carries a glass card with the city and live time.
+- **QR** (Contact): the owner's `QR Codes/qr-code-for white-background.png`. Decoding it gives `mailto:andrewfragkiadakis@gmail.com`, so the label reads "Scan to email me". It sits on a white card so it scans in either theme. It is served unoptimised because the folder name has a space, which the optimiser rejects.
+- **Project tiles**: image-first with a frosted caption bar. Contain screenshots sit above the bar (`ProjectImage` `containBox`), so the bar only covers the blurred fill.
 
-### Grid and geometry
+New bilingual labels live in `content.bento` (EN and GR): selected work, fleet title, Macs, SLA label, glyph legend, "in daily use", scan to email, QR alt text, map label and city.
 
-- `.bento` is a 2-column grid on mobile and tablet. From `md` (64rem) it becomes 12 columns × 6 rows, `height: 100%` of the panel. Tiles are placed with `md:col-[a/b] md:row-[c/d]`.
-- Tile radius: 1.75rem desktop, 1.5rem mobile. Gap: 14px desktop, 12px mobile. Padding: `clamp(1rem, 2.4vh, 1.5rem)`.
-- A `short:` custom variant (desktop and `max-height: 820px`) tightens gap, padding, icon wells and a few line clamps, so 1280 × 720 and 1024 × 768 also fit without clipping.
-- Component CSS (`.tile`, `.pill`, `.chip`…) lives in `@layer components`, so Tailwind utilities can override it per tile.
+## Motion
 
-### Motion
-
-- Each bento reveals once, the first time it enters the viewport. Tiles fade in and scale from 0.955 while rising 14px, with a 55ms stagger (`components/ui/Bento.tsx`). The hero waits for the intro overlay.
-- Interactive tiles lift 4px and deepen their shadow on hover. This happens only with `(hover: hover)` and no reduced-motion preference. The corner "+" affordance turns blue, and on service tiles it rotates.
-- Counters: `components/ui/AnimatedCounter.tsx`, extracted from the old About counter, with zero-padding added. SSR and reduced motion show the final value.
-- Toolkit marquees, the live dot pulse and the terminal typewriter all respect reduced motion. Under reduced motion the typewriter shows the first role statically and tiles have no entrance.
-- The theme circle-reveal, the section-counter roll in the nav and the idle section snapping are all kept.
-
-## Per-section changes
-
-| # | Section | Bento |
+| Effect | How | Cost |
 | --- | --- | --- |
-| 01 | **Hero** | Name tile (7×4, pastel gradient, live dot + title, tagline, scroll hint). Terminal tile typing the roles (`➜ whoami`). **550+** endpoints (sky). **Jamf 200** tile linking to Credly (lavender). **70%** faster onboarding (mint). Athens local time + location. Socials (LinkedIn, GitHub, email). Two CTA tiles: *View my work* (blue) and *Get in touch* (inverse). |
-| 02 | **About** | Title tile. Story tile (tagline + two paragraphs, as before). "Current focus" as a terminal code object. Credentials list (Jamf 200, ITIL 4, TEE), with verify links where they exist. A 2 × 2 of counting stats (07+, 550+, 70%, 03). Four skill tiles that open the existing dialog. A full-width toolkit tile holding both logo marquees. |
-| 03 | **What I do** | Title tile. Six service tiles in four sizes: Apple Fleet as the 4×4 hero tile with highlights, the others 4×2, 3×2 and 5×2. Each tile has an icon, title, a clamped one-line-ish description, a row of its tool logos and "06 tools". Each opens the existing dialog, restyled. The "Let's talk" CTA is a blue tile. |
-| 04 | **Career** | Title tile. The current role as a large sky tile with all its tasks. A **Gantt tile** of all seven roles, 2020 → 2026, derived from the duration strings. The six earlier roles as compact tiles that open a dialog with their full task lists. Two degree tiles, each opening a dialog with details. Four certificate/licence tiles with **Verify** links (Jamf 200 highlighted). |
-| 05 | **Projects** | Title tile. The featured project (Plano Plus) as a tall tile: an uncropped 16:10 `ProjectImage`, title, description, top highlights, tags and a Live link. Ten projects as 2×2 image tiles with number, name, year, LIVE/OSS/PAPER status and icon links. A "View full portfolio on GitHub" tile. Every tile opens the existing project dialog. |
-| 06 | **Connect** | Title tile with copyright. Availability tile (mint, *Open to opportunities*, Send message). Email tile with copy button. Location. Local time. GitHub (inverse) and LinkedIn (sky) tiles. Download-résumé tile (peach). |
-| — | **Chrome** | Frosted nav bar: "AF" monogram + rolling "04 / 06" counter, a segmented-control section switcher, and GR/EN plus theme buttons on the right. The theme toggle is in the bar on desktop and is a floating round button on mobile. The mobile menu is a small bento of section tiles. The mobile tab bar is a rounded frosted pill. Dialogs are rounded white/graphite sheets. The intro overlay is a terminal tile with a blue *Enter* pill. |
+| Tile entrance | `motion` spring (y and scale) with an opacity tween, staggered 50 ms | Once per panel |
+| Conic border light (hero name, featured project) | A square conic-gradient **rotates** (`transform`) inside a static ring mask, 7 s per turn | Compositor only |
+| Aurora | Four radial fields drift with `transform` (24–34 s, alternate) | Compositor only |
+| Ken Burns | Scale 1 → 1.05 with a small translate over 22 s, alternate, with staggered delays and origins per tile | Compositor only |
+| Counters | `AnimatedCounter` (v1), 07+ / 70% / 03 / 95%+ / 550+ | Once |
+| Rings | `pathLength` fills over 1.6 s, then stop | Once |
+| Mac glyphs | Opacity wave with a per-glyph `transition-delay` | Once |
+| Showcase | Opacity cross-fade over 1.2 s every 4.2 s, paused on hover | While on screen |
+| Clock | 1 s tick with a spring-like cubic-bezier | While on screen |
+| Map pin | Pulse | While on screen |
 
-Every piece of copy (EN and GR), link, credential and dialog from `main` is still present. Nothing was added to `content.ts`. All new UI labels reuse existing keys, for example `skillsTitle`, `servicesLabels.toolkit` and `cursor.verify`.
+- **Pausing offscreen**: `Bento` sets `data-live` from `useInView` (35%). CSS loops are `animation-play-state: paused` unless an ancestor has `[data-live="true"]`. JS loops (showcase, clock) check their own `useInView`. On load only the hero reports `live=true`.
+- **Reduced motion**: every loop is declared inside `@media (prefers-reduced-motion: no-preference)`, so under `reduce` it does not exist. This was verified: the glow and aurora `animation-name` are `none` and all tiles are at opacity 1. Tiles appear without an entrance, rings and glyphs render filled, the showcase rests on its first screenshot, the typewriter shows the first role and the clock drops its second hand.
+- **No pointer-following effects.** Hover does only what v1 did: a 4 px lift and the affordance turning blue, or white on coloured tiles.
 
 ## Trade-offs
 
-- **All in one panel.** The fit-the-viewport rule meant replacing the horizontally scrolling Experience and Projects carousels with fixed grids. Older roles and the degrees now show a summary and open a dialog for their full text. The eleven projects are small tiles, not large cards.
-- **Removed decoration.** The outlined type, letter-glitch canvas, noise overlay, spotlight cards, scramble/roll text and the custom crosshair cursor were all removed. They clash with the Apple-clean direction. Their components were deleted (`LetterGlitch`, `SpotlightCard`, `ScrambleText`, `RollText`, `ScrollRail`, `SectionHeading`, `CustomCursor`, `NoiseOverlay`, `useCardScroll`). The native cursor is used.
-- **Greek in capitals.** Because the Greek labels are written without accents, Greek service titles, project names and buttons are set in capitals, including English words inside them ("SIGNATURE CRAFT").
-- **Fluid type.** Sizes depend on the viewport, so very wide but short screens get relatively small text. It fits and stays legible, but it is denser.
-- **Inverse tiles flip.** The inverse tiles (Get in touch, GitHub) turn white in dark mode. This is deliberate: a white tile on black. It is the one place the dark theme is not "graphite on black".
-- **Keyboard travel.** Focusing a tile on another panel now scrolls the track to that panel. The browser's attempt to scroll the clipped viewport sideways is undone.
-- **Very small desktops.** At 1024 × 768 small project tiles wrap their status line, and the featured tile's Live link drops to its own row.
+- **The tool names are no longer visible in About.** The logo wall replaces the v1 text marquee to satisfy "more images, less clutter". Names are still in tooltips, in screen-reader text and in every service dialog.
+- **Current focus is shorter.** The v1 code object became one line (label and detail) at the foot of the story tile. The same content, without the stack and certs code lines.
+- **The Ken Burns drift crops up to about 2.5% per edge** at its widest. Contain screenshots stay whole inside their frame, apart from that drift.
+- **Greek fitting.** Greek copy is longer, so two places tighten under `:lang(el)` through a `lang-el:` variant: the About story paragraphs (about 0.92vw) and the two hero CTAs.
+- **The featured project hides its highlight bullets** on short desktops (`short:`), as in v1.
+- **The QR image is not optimised** (a 1155 px PNG), to avoid renaming the owner's externally referenced asset folder.
+- **`LogoLoop.tsx` was removed**, because the marquee was replaced. This also clears v1's only lint warning.
 
 ## Verification
 
-- `npm run build` passes. `npx eslint src` reports 0 errors and 1 pre-existing warning (`<img>` in `LogoLoop`).
-- Mobile (390 × 844) horizontal overflow is **0 px** in light, dark and Greek.
-- The only console error is the expected local 404 for `/_vercel/speed-insights`.
-- An automated check found no tile with clipped content at 1440 × 900, 1280 × 720, 1024 × 768 or 1920 × 1080, in English or Greek. This check is not part of the repo.
+- `npm run build` passes. `npx eslint src` reports **0 errors and 0 warnings**. `tsc --noEmit` is clean.
+- Mobile (390 × 844) horizontal overflow is **0 px** in EN and GR, light and dark.
+- A fit check (`.research/check.js`) walks every in-flow element of every tile on every panel. It found **no clipped content** at 1440 × 900, 1280 × 720 or 1024 × 768, in English or Greek.
+- An interaction check (`.research/interact.js`) confirmed that the project, service and skill dialogs open, that Escape closes them, that reduced motion is honoured and that only the visible bento is live.
+- The only console error is the expected local 404 for `/_vercel/speed-insights/script.js`.
+- No new runtime dependencies. Fonts are unchanged: Inter via `next/font/google` with `latin` + `greek`.
 
 ## Previews
 
@@ -133,11 +129,14 @@ Every piece of copy (EN and GR), link, credential and dialog from `main` is stil
 ![Projects](style-preview/dark/desktop-5-projects.jpg)
 ![Connect](style-preview/dark/desktop-6-contact.jpg)
 
-### Greek
+### Greek, 1440 × 900
 
 ![Hero GR](style-preview/greek/gr-1440x900-1.jpg)
+![About GR](style-preview/greek/gr-1440x900-2.jpg)
 ![What I do GR](style-preview/greek/gr-1440x900-3.jpg)
 ![Career GR](style-preview/greek/gr-1440x900-4.jpg)
+![Projects GR](style-preview/greek/gr-1440x900-5.jpg)
+![Connect GR](style-preview/greek/gr-1440x900-6.jpg)
 
 ### Mobile (390 × 844)
 
@@ -145,11 +144,15 @@ Every piece of copy (EN and GR), link, credential and dialog from `main` is stil
 | --- | --- |
 | ![](style-preview/light/mobile-1.jpg) | ![](style-preview/dark/mobile-1.jpg) |
 | ![](style-preview/light/mobile-3.jpg) | ![](style-preview/dark/mobile-3.jpg) |
+| ![](style-preview/light/mobile-5.jpg) | ![](style-preview/dark/mobile-5.jpg) |
 
 Mobile menu (Greek): ![](style-preview/light/mobile-menu-gr.jpg)
 
-### Dialogs and compact viewport
+### Dialogs, compact viewport and reduced motion
 
 ![Project dialog](style-preview/light/dialog-project.jpg)
+![Service dialog](style-preview/light/dialog-service.jpg)
 ![Skill dialog, dark, Greek](style-preview/dark/dialog-skill-gr.jpg)
+![Hero at 1280 × 720](style-preview/light/compact-1280x720-hero.jpg)
 ![Career at 1280 × 720](style-preview/light/compact-1280x720-experience.jpg)
+![Hero with reduced motion](style-preview/light/reduced-motion-hero.jpg)

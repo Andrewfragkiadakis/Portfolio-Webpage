@@ -54,7 +54,7 @@ function CareerChart({ roles, label }: { roles: ExperienceType[]; label: string 
                         <span className="w-5 shrink-0 text-[0.625rem] font-semibold tabular-nums text-[var(--muted)]">{pad(i + 1)}</span>
                         <div className="relative flex-1 h-[min(1.1vh,0.625rem)] min-h-1.5 rounded-full bg-[var(--fill)]">
                             <div
-                                className={`absolute inset-y-0 rounded-full ${i === 0 ? 'bg-[var(--accent-fill)]' : 'bg-[var(--foreground)] opacity-30'}`}
+                                className={`absolute inset-y-0 rounded-full ${i === 0 ? 'bg-[linear-gradient(90deg,#0a5cd6,#5835c6)] dark:bg-[linear-gradient(90deg,#2f7bff,#9d7bff)] shadow-[0_0_12px_rgba(58,68,212,0.45)]' : 'bg-[var(--foreground)] opacity-30'}`}
                                 style={{ left: `${((s - first) / range) * 100}%`, width: `${((e + 1 - s) / range) * 100}%` }}
                             />
                         </div>
@@ -93,9 +93,10 @@ export default function Experience() {
 
                 {/* The current role, in full. */}
                 {current && (
-                    <Tile as="article" index={1} tone="sky" className="col-span-2 md:col-[1/5] md:row-[2/5] gap-3 short:gap-2">
+                    <Tile as="article" index={1} tone="fleet" className="col-span-2 md:col-[1/5] md:row-[2/5] gap-3 short:gap-2">
+                        <i className="fab fa-apple absolute -right-[4%] -bottom-[10%] text-[12rem] md:text-[min(15vw,26vh)] opacity-[0.07] pointer-events-none" aria-hidden="true" />
                         <div className="flex items-center justify-between gap-3">
-                            <span className="chip bg-[var(--surface)]/70 dark:bg-black/25">
+                            <span className="chip bg-white/15">
                                 <span className="live-dot" aria-hidden="true" />
                                 <span className="el-caps">{current.duration}</span>
                             </span>
@@ -168,7 +169,7 @@ export default function Experience() {
 
                 {/* Certifications and licence */}
                 {credentials.map((edu, i) => {
-                    const tone: Tone = edu.featured ? 'lavender' : 'plain'
+                    const tone: Tone = edu.featured ? 'fleet' : 'plain'
                     return (
                         <Tile key={edu.degree} as="article" index={11 + i} tone={tone} interactive className={`col-span-1 ${CERT_AREAS[i] ?? ''} gap-2 min-h-[12rem] md:min-h-0`}>
                             <button
@@ -179,7 +180,11 @@ export default function Experience() {
                             />
                             <div className="flex items-center justify-between gap-2">
                                 <span className="tile-icon tile-mark !w-9 !h-9 !rounded-xl" aria-hidden="true">
-                                    <i className={`${iconFor(edu)} text-sm`} />
+                                    {edu.featured ? (
+                                        <span className="block w-6 aspect-[2.875] bg-current [mask:url(/logos/jamf.svg)_no-repeat_center/contain] [-webkit-mask:url(/logos/jamf.svg)_no-repeat_center/contain]" />
+                                    ) : (
+                                        <i className={`${iconFor(edu)} text-sm`} />
+                                    )}
                                 </span>
                                 <span className="text-caption font-semibold tabular-nums text-[var(--muted)]">{edu.duration}</span>
                             </div>
@@ -196,7 +201,7 @@ export default function Experience() {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         aria-label={`${t.experienceSection.verify}: ${edu.degree} (opens credential)`}
-                                        className={`pill !min-h-8 !px-3 !text-caption ${edu.featured ? 'pill--accent' : 'pill--quiet'}`}
+                                        className={`pill !min-h-8 !px-3 !text-caption ${edu.featured ? 'pill--white' : 'pill--quiet'}`}
                                     >
                                         <i className="fas fa-certificate" aria-hidden="true" />
                                         <span className="el-caps">{t.cursor.verify}</span>

@@ -3,6 +3,9 @@
 /* Theme is a class on <html> (set before paint by the inline script), not the media query. */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Greek copy runs longer than English; a few dense tiles tighten their type for it. */
+@custom-variant lang-el (&:lang(el));
+
 /* Desktop viewports shorter than a 1440×900 laptop: tiles tighten so every panel still fits. */
 @custom-variant short {
   @media (min-width: 64rem) and (max-height: 820px) {
@@ -11,9 +14,15 @@
 }
 
 /*
- * BENTO GRID — Apple product-page clarity.
- * A light grey page, white tiles, one blue accent and four soft tints used sparingly.
- * Every section is one bento: a 12 × 6 grid of rounded tiles that fills the viewport.
+ * BENTO GRID v2 — an Apple keynote in tiles.
+ * Neutral white / graphite tiles for rhythm, and one rich gradient per subject family:
+ *   fleet       deep blue → indigo      (Apple fleet, Jamf)
+ *   security    emerald                 (endpoint security, SLA)
+ *   automation  orange → pink           (scripting, onboarding speed)
+ *   ai          violet                  (AI operations)
+ *   itsm        teal                    (service management)
+ * Light mode paints the gradient; dark mode keeps tiles near-black and lets the family
+ * colour glow from the corners. One blue accent stays reserved for links and CTAs.
  */
 :root {
   /* Surfaces */
@@ -21,7 +30,7 @@
   --surface: #ffffff;
   --surface-2: #f5f5f7;
   --fill: rgba(0, 0, 0, 0.045);
-  --line: rgba(0, 0, 0, 0.08);
+  --line: rgba(0, 0, 0, 0.07);
 
   /* Text */
   --foreground: #1d1d1f;
@@ -33,26 +42,19 @@
   --on-accent: #ffffff;
   --glow: rgba(0, 113, 227, 0.16);
 
-  /* Inverse tile (ink on light, paper on dark) and the always-dark terminal tile. */
+  /* Inverse chip (nav monogram) and the always-dark terminal surfaces. */
   --ink: #1d1d1f;
   --on-ink: #f5f5f7;
   --on-ink-muted: #a1a1a6;
   --terminal: #1d1d1f;
   --terminal-line: transparent;
 
-  /* Soft tints — backgrounds plus an "ink" that passes AA on its own tint. */
-  --mint: #e3f6e9;
-  --mint-ink: #0f7a3a;
-  --lavender: #eeeafd;
-  --lavender-ink: #5b3fd1;
-  --peach: #fdeee2;
-  --peach-ink: #a8480a;
-  --sky: #e3f0fd;
-  --sky-ink: #0062c4;
-  --tint-muted: #56565b;
+  /* Plain tile paint (a flat colour in light, a lit near-black in dark). */
+  --tile-bg: #ffffff;
+  --tile-highlight: none;
 
-  --tile-shadow: 0 1px 1px rgba(0, 0, 0, 0.02), 0 8px 24px -12px rgba(0, 0, 0, 0.1);
-  --tile-shadow-hover: 0 2px 4px rgba(0, 0, 0, 0.04), 0 24px 48px -16px rgba(0, 0, 0, 0.2);
+  --tile-shadow: 0 1px 1px rgba(0, 0, 0, 0.02), 0 10px 30px -14px rgba(0, 0, 0, 0.14);
+  --tile-shadow-hover: 0 2px 4px rgba(0, 0, 0, 0.04), 0 28px 56px -18px rgba(0, 0, 0, 0.26);
 
   /* Geometry */
   --radius-tile: 1.5rem;
@@ -71,10 +73,10 @@
 
 .dark {
   --background: #000000;
-  --surface: #1c1c1e;
-  --surface-2: #2c2c2e;
+  --surface: #141417;
+  --surface-2: #232327;
   --fill: rgba(255, 255, 255, 0.08);
-  --line: rgba(255, 255, 255, 0.08);
+  --line: rgba(255, 255, 255, 0.075);
 
   --foreground: #f5f5f7;
   --muted: #a1a1a6;
@@ -90,18 +92,12 @@
   --terminal: #0b0b0c;
   --terminal-line: rgba(255, 255, 255, 0.14);
 
-  --mint: #0f2a1a;
-  --mint-ink: #5bd98a;
-  --lavender: #221c3a;
-  --lavender-ink: #b4a6ff;
-  --peach: #33200f;
-  --peach-ink: #ffb27a;
-  --sky: #0c2340;
-  --sky-ink: #6cb8ff;
-  --tint-muted: #b4b4b9;
+  /* Near-black with a faint top light and an inner hairline, never flat grey. */
+  --tile-bg: linear-gradient(180deg, #17171b 0%, #0f0f12 100%);
+  --tile-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.07);
 
   --tile-shadow: none;
-  --tile-shadow-hover: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 24px 48px -16px rgba(0, 0, 0, 0.9);
+  --tile-shadow-hover: 0 0 0 1px rgba(255, 255, 255, 0.12), 0 28px 56px -18px rgba(0, 0, 0, 0.9);
 }
 
 @media (min-width: 64rem) {
@@ -292,27 +288,91 @@ a[href],
   min-height: 0;
   padding: var(--tile-pad);
   border-radius: var(--radius-tile);
-  background: var(--surface);
+  background: var(--tile-bg);
   color: var(--foreground);
   border: 1px solid var(--line);
-  box-shadow: var(--tile-shadow);
+  box-shadow: var(--tile-shadow), var(--tile-highlight);
   overflow: hidden;
   isolation: isolate;
   text-align: left;
 }
 
-.tile--mint { background: var(--mint); --muted: var(--tint-muted); --tint: var(--mint-ink); }
-.tile--lavender { background: var(--lavender); --muted: var(--tint-muted); --tint: var(--lavender-ink); }
-.tile--peach { background: var(--peach); --muted: var(--tint-muted); --tint: var(--peach-ink); }
-.tile--sky { background: var(--sky); --muted: var(--tint-muted); --tint: var(--sky-ink); }
-.tile--mint, .tile--lavender, .tile--peach, .tile--sky { border-color: transparent; }
-
-.tile--ink {
-  background: var(--ink);
-  color: var(--on-ink);
+/* Graphite: the dark neutral that gives light pages rhythm; a lit charcoal in dark mode. */
+.tile--graphite {
+  background: linear-gradient(160deg, #2c2c30 0%, #1d1d1f 100%);
+  color: #f5f5f7;
   border-color: transparent;
-  --muted: var(--on-ink-muted);
-  --fill: color-mix(in srgb, var(--on-ink), transparent 88%);
+  --muted: #a1a1a6;
+  --fill: rgba(255, 255, 255, 0.1);
+  --tint: #f5f5f7;
+  --accent: #6cb8ff;
+}
+
+.dark .tile--graphite {
+  background: linear-gradient(160deg, #26262b 0%, #151518 100%);
+  border-color: rgba(255, 255, 255, 0.09);
+}
+
+/* Night: always black, like a watch face. */
+.tile--night {
+  background: radial-gradient(120% 80% at 50% 0%, #1b1b22 0%, #050507 70%);
+  color: #f5f5f7;
+  border-color: transparent;
+  --muted: #a1a1a6;
+  --fill: rgba(255, 255, 255, 0.1);
+}
+
+.dark .tile--night {
+  border-color: rgba(255, 255, 255, 0.09);
+}
+
+/*
+ * Family tiles. Each family sets three light-mode gradient stops (every stop ≥ 5.3 : 1
+ * against white text) and two dark-mode glow colours.
+ */
+.tile--fleet { --c1: #0a5cd6; --c2: #3a44d4; --c3: #5835c6; --g1: #2f6bff; --g2: #7a4dff; }
+.tile--security { --c1: #0a7a57; --c2: #07644a; --c3: #054e3c; --g1: #13c486; --g2: #0a8f7a; }
+.tile--automation { --c1: #c03e0a; --c2: #bf2748; --c3: #ad175c; --g1: #ff6a2b; --g2: #ff2f7a; }
+.tile--ai { --c1: #7236e3; --c2: #5a27c6; --c3: #44209c; --g1: #9d5cff; --g2: #5f3dff; }
+.tile--itsm { --c1: #0a7280; --c2: #085d6b; --c3: #064858; --g1: #19b8c9; --g2: #1f7fd6; }
+
+.tile--fam {
+  background: linear-gradient(135deg, var(--c1) 0%, var(--c2) 55%, var(--c3) 100%);
+  color: #ffffff;
+  border-color: transparent;
+  --muted: rgba(255, 255, 255, 0.9);
+  --fill: rgba(255, 255, 255, 0.16);
+  --tint: #ffffff;
+  --accent: #ffffff;
+}
+
+.dark .tile--fam {
+  background:
+    radial-gradient(120% 95% at 0% 0%, color-mix(in srgb, var(--g1) 46%, transparent) 0%, transparent 62%),
+    radial-gradient(90% 90% at 100% 100%, color-mix(in srgb, var(--g2) 30%, transparent) 0%, transparent 62%),
+    linear-gradient(180deg, #121218 0%, #09090c 100%);
+  border-color: color-mix(in srgb, var(--g1) 32%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Glass reflection: a soft specular wash across the top of coloured tiles. */
+.tile--fam::after,
+.tile--graphite::after,
+.tile--night::after,
+.tile--accent::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 26%, rgba(255, 255, 255, 0) 44%);
+}
+
+.dark .tile--fam::after,
+.dark .tile--graphite::after,
+.dark .tile--night::after {
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0) 36%);
 }
 
 .tile--terminal {
@@ -324,22 +384,90 @@ a[href],
 }
 
 .tile--accent {
-  background: var(--accent-fill);
+  background: linear-gradient(145deg, #0a7cf0 0%, #0071e3 45%, #0061c9 100%);
   color: var(--on-accent);
   border-color: transparent;
   --muted: #ffffff;
   --fill: rgba(255, 255, 255, 0.18);
 }
 
-/* Colour of a tile's key mark (icon, numeral): the tint's ink, else the accent. */
+/* Colour of a tile's key mark (icon, numeral): the family's white, else the accent. */
 .tile-mark {
   color: var(--tint, var(--accent));
 }
 
-.tile--ink .tile-mark,
 .tile--terminal .tile-mark,
 .tile--accent .tile-mark {
   color: inherit;
+}
+
+/*
+ * Aurora: the hero name tile. Soft colour fields drift slowly behind the name. The
+ * fields are transformed (never repainted), and only while the panel is on screen.
+ */
+.tile--aurora {
+  background: #fbfbfd;
+  border-color: transparent;
+  --muted: #3a3a3f;
+}
+
+.dark .tile--aurora {
+  background: #07070a;
+  border-color: rgba(255, 255, 255, 0.08);
+  --muted: #b4b4b9;
+}
+
+.aurora {
+  position: absolute;
+  inset: -25%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.aurora > span {
+  position: absolute;
+  width: 70%;
+  height: 70%;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.aurora > span:nth-child(1) { left: 2%; top: 4%; background: radial-gradient(closest-side, rgba(90, 170, 255, 0.4), rgba(90, 170, 255, 0)); }
+.aurora > span:nth-child(2) { right: 0; top: 10%; background: radial-gradient(closest-side, rgba(160, 120, 255, 0.36), rgba(160, 120, 255, 0)); }
+.aurora > span:nth-child(3) { left: 28%; bottom: 0; background: radial-gradient(closest-side, rgba(255, 130, 190, 0.32), rgba(255, 130, 190, 0)); }
+.aurora > span:nth-child(4) { right: 6%; bottom: 8%; width: 50%; height: 50%; background: radial-gradient(closest-side, rgba(255, 180, 110, 0.3), rgba(255, 180, 110, 0)); }
+
+.dark .aurora > span:nth-child(1) { background: radial-gradient(closest-side, rgba(40, 110, 255, 0.5), rgba(40, 110, 255, 0)); }
+.dark .aurora > span:nth-child(2) { background: radial-gradient(closest-side, rgba(130, 70, 255, 0.45), rgba(130, 70, 255, 0)); }
+.dark .aurora > span:nth-child(3) { background: radial-gradient(closest-side, rgba(255, 60, 140, 0.32), rgba(255, 60, 140, 0)); }
+.dark .aurora > span:nth-child(4) { background: radial-gradient(closest-side, rgba(255, 140, 60, 0.22), rgba(255, 140, 60, 0)); }
+
+/*
+ * Featured border: a conic light that travels round the tile edge. The gradient square
+ * rotates (a compositor transform); the ring mask stays still.
+ */
+.glow-ring {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  padding: 1.5px;
+  pointer-events: none;
+  overflow: hidden;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+
+.glow-ring > span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 260%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  background: conic-gradient(from 0deg, transparent 0deg, transparent 200deg, #5ac8fa 250deg, #5e5ce6 290deg, #ff375f 330deg, transparent 360deg);
+  will-change: transform;
 }
 
 /* Interactive tiles lift slightly on hover — only with a real pointer and motion allowed. */
@@ -357,9 +485,14 @@ a[href],
 
 .tile--interactive:focus-visible,
 .tile--interactive:has(.tile-stretch:focus-visible) {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--accent-fill);
   outline-offset: 3px;
   border-radius: var(--radius-tile);
+}
+
+.dark .tile--interactive:focus-visible,
+.dark .tile--interactive:has(.tile-stretch:focus-visible) {
+  outline-color: #2997ff;
 }
 
 /* A button covering the whole tile, so secondary links can sit above it (not inside it). */
@@ -399,6 +532,20 @@ a[href],
   }
 }
 
+/* Small gradient well for an icon on a neutral tile, in its family's colours. */
+.fam-well {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.875rem;
+  color: #fff;
+  background: linear-gradient(135deg, var(--c1), var(--c3));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
 /* The "open" affordance: a small circle with a plus / arrow in the tile corner. */
 .tile-affordance {
   display: inline-flex;
@@ -420,9 +567,12 @@ a[href],
   color: #fff;
 }
 
+.tile--fam.tile--interactive:hover .tile-affordance,
 .tile--accent.tile--interactive:hover .tile-affordance,
-.tile--ink.tile--interactive:hover .tile-affordance {
-  background: currentColor;
+.tile--graphite.tile--interactive:hover .tile-affordance,
+.tile--fam.tile--interactive:has(.tile-stretch:hover) .tile-affordance {
+  background: #ffffff;
+  color: #1d1d1f;
 }
 
 /* Pills: filled, fully rounded controls (Apple-style). */
@@ -446,6 +596,9 @@ a[href],
 .pill--quiet { background: var(--fill); color: inherit; }
 .pill--quiet:hover { background: color-mix(in srgb, currentColor, transparent 84%); }
 .pill--ink { background: var(--ink); color: var(--on-ink); }
+/* On a coloured tile the call to action is a white pill, like a keynote button. */
+.pill--white { background: #ffffff; color: #1d1d1f; }
+.pill--white:hover { background: rgba(255, 255, 255, 0.86); }
 
 .chip {
   display: inline-flex;
@@ -459,6 +612,19 @@ a[href],
   letter-spacing: 0.04em;
   text-transform: uppercase;
   white-space: nowrap;
+}
+
+/* Frosted chip laid over imagery. */
+.chip--glass {
+  background: rgba(255, 255, 255, 0.78);
+  color: #1d1d1f;
+  -webkit-backdrop-filter: blur(12px) saturate(1.6);
+  backdrop-filter: blur(12px) saturate(1.6);
+}
+
+.dark .chip--glass {
+  background: rgba(20, 20, 24, 0.66);
+  color: #f5f5f7;
 }
 
 /* Live status dot. */
@@ -485,81 +651,6 @@ a[href],
   75%, 100% { transform: scale(2.6); opacity: 0; }
 }
 
-/* ───────────────────────── Marquee ───────────────────────── */
-
-.logoloop {
-  position: relative;
-  overflow-x: hidden;
-  --logoloop-gap: 2rem;
-  --logoloop-logoHeight: 1.75rem;
-  --logoloop-fadeColorAuto: var(--surface);
-}
-
-.logoloop__track {
-  display: flex;
-  width: max-content;
-  will-change: transform;
-  user-select: none;
-  position: relative;
-  z-index: 0;
-}
-
-.logoloop__list {
-  display: flex;
-  align-items: center;
-}
-
-.logoloop__item {
-  flex: 0 0 auto;
-  margin-right: var(--logoloop-gap);
-  font-size: var(--logoloop-logoHeight);
-  line-height: 1;
-}
-
-.logoloop__item:last-child {
-  margin-right: var(--logoloop-gap);
-}
-
-.logoloop__node {
-  display: inline-flex;
-  align-items: center;
-}
-
-.logoloop__item img {
-  height: var(--logoloop-logoHeight);
-  width: auto;
-  display: block;
-  object-fit: contain;
-  pointer-events: none;
-}
-
-/* scale-on-hover transform is applied via React inline style; transition defined here */
-.logoloop--scale-hover .logoloop__item {
-  transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
-  transform-origin: center center;
-}
-
-.logoloop--fade::before,
-.logoloop--fade::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: clamp(1.5rem, 8%, 7.5rem);
-  pointer-events: none;
-  z-index: 10;
-}
-
-.logoloop--fade::before {
-  left: 0;
-  background: linear-gradient(to right, var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%, transparent 100%);
-}
-
-.logoloop--fade::after {
-  right: 0;
-  background: linear-gradient(to left, var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%, transparent 100%);
-}
-
 /* Underline that draws in from the left on hover/focus, then retracts to the right. */
 .link-underline {
   background-image: linear-gradient(currentColor, currentColor);
@@ -575,8 +666,7 @@ a[href],
   background-size: 100% 1px;
 }
 
-/* Tool pills: official logos drawn as a mask, so they take the text colour and
-   switch to the brand colour on hover. Filled and fully rounded, like Apple chips. */
+/* Tool pills: official logos drawn as a mask, so they take the text colour. */
 .tool-pill {
   display: flex;
   align-items: center;
@@ -610,13 +700,9 @@ a[href],
   transition: background-color 0.3s ease;
 }
 
-.tool-pill:hover .tool-logo {
-  background-color: var(--brand);
-}
-
-/* Tool tiles (ToolTile): one rounded square per tool, accent mark on a neutral tile. The
-   logo box fits inside the tile by width *and* height, so wide wordmarks (Jamf, Duo)
-   shrink to the same footprint as square marks. */
+/* Tool tiles (ToolTile): one rounded square per tool. The logo box fits inside the tile
+   by width *and* height, so wide wordmarks (Jamf, Duo) shrink to the same footprint as
+   square marks. `--mark-colour` paints it; brand colour in the logo wall and clusters. */
 .tool-tile {
   --tile: 2rem;
   --mark: 1.125rem;
@@ -629,7 +715,7 @@ a[href],
   height: var(--tile);
   border-radius: 0.625rem;
   background-color: var(--fill);
-  color: var(--tint, var(--accent));
+  color: var(--mark-colour, var(--tint, var(--accent)));
 }
 
 .tool-tile--sm {
@@ -654,20 +740,215 @@ a[href],
   -webkit-mask-size: contain;
 }
 
+/* Logo cluster: overlapping white discs, like a stack of app icons. */
+.logo-cluster {
+  display: flex;
+  align-items: center;
 }
 
-/* Typewriter caret in the terminal tile. */
+.logo-cluster .tool-tile {
+  --tile: 2.25rem;
+  --mark: 1.125rem;
+  --mark-wide: 1.5rem;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 0 0 2px var(--cluster-ring, rgba(255, 255, 255, 0.35)), 0 6px 14px -6px rgba(0, 0, 0, 0.35);
+}
+
+.logo-cluster .tool-tile + .tool-tile {
+  margin-left: -0.5rem;
+}
+
+@media (min-width: 64rem) and (max-height: 820px) {
+  .logo-cluster .tool-tile {
+    --tile: 1.875rem;
+    --mark: 0.9375rem;
+    --mark-wide: 1.25rem;
+  }
+}
+
+/* Logo wall: brand marks on quiet squares in a tidy mosaic. */
+.logo-wall .tool-tile {
+  --tile: 100%;
+  --mark: 46%;
+  --mark-wide: 70%;
+  aspect-ratio: 1;
+  height: auto;
+  border-radius: 28%;
+  background: var(--surface-2);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.dark .logo-wall .tool-tile {
+  background: #1d1d21;
+}
+
+}
+
+/* ───────────────────────── Motion ───────────────────────── */
+
+/*
+ * Ambient loops run only while their bento is on screen (Bento sets data-live) and only
+ * when the reader allows motion. Otherwise they sit still at their first frame.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .kb {
+    animation: ken-burns 22s ease-in-out infinite alternate;
+    animation-delay: var(--kb-delay, 0s);
+    transform-origin: var(--kb-origin, 50% 50%);
+  }
+
+  .aurora > span:nth-child(1) { animation: drift-a 26s ease-in-out infinite alternate; }
+  .aurora > span:nth-child(2) { animation: drift-b 30s ease-in-out infinite alternate; }
+  .aurora > span:nth-child(3) { animation: drift-c 24s ease-in-out infinite alternate; }
+  .aurora > span:nth-child(4) { animation: drift-a 34s ease-in-out infinite alternate-reverse; }
+
+  .glow-ring > span {
+    animation: glow-spin 7s linear infinite;
+  }
+
+  .map-pulse {
+    animation: map-pulse 2.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  /* Declared after the shorthands above, which would otherwise reset it to running. */
+  .kb,
+  .aurora > span,
+  .glow-ring > span,
+  .map-pulse {
+    animation-play-state: paused;
+  }
+
+  [data-live="true"] .kb,
+  [data-live="true"] .aurora > span,
+  [data-live="true"] .glow-ring > span,
+  [data-live="true"] .map-pulse {
+    animation-play-state: running;
+  }
+}
+
+@keyframes ken-burns {
+  from { transform: scale(1) translate3d(0, 0, 0); }
+  to { transform: scale(1.05) translate3d(-1.2%, -0.8%, 0); }
+}
+
+@keyframes drift-a {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(12%, 10%, 0) scale(1.12); }
+}
+
+@keyframes drift-b {
+  from { transform: translate3d(0, 0, 0) scale(1.05); }
+  to { transform: translate3d(-14%, 12%, 0) scale(0.92); }
+}
+
+@keyframes drift-c {
+  from { transform: translate3d(0, 0, 0) scale(0.95); }
+  to { transform: translate3d(10%, -14%, 0) scale(1.1); }
+}
+
+@keyframes glow-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes map-pulse {
+  0% { transform: scale(0.4); opacity: 0.7; }
+  80%, 100% { transform: scale(2.4); opacity: 0; }
+}
+
+/* Mac glyph grid: each glyph lights up in turn the first time the tile is seen. */
+.mac-glyph {
+  opacity: 0.28;
+  transition: opacity 0.5s ease;
+  transition-delay: var(--d, 0s);
+}
+
+[data-lit="true"] .mac-glyph {
+  opacity: 1;
+}
+
+/* Typewriter caret in the hero. */
 .terminal-text .Typewriter__cursor {
-  color: var(--accent);
+  color: var(--accent-fill);
   font-weight: 400;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .logoloop__track {
-    transform: translate3d(0, 0, 0) !important;
-  }
+.dark .terminal-text .Typewriter__cursor {
+  color: #2997ff;
+}
 
+@media (prefers-reduced-motion: reduce) {
   .live-dot::after {
     display: none;
   }
+
+  .mac-glyph {
+    opacity: 1;
+    transition: none;
+  }
 }
+
+/* ───────────────────────── Widgets ───────────────────────── */
+
+/* Studio: a product-shot sweep for the hero showcase (silver in light, a lit void in dark). */
+.tile--studio {
+  background:
+    radial-gradient(70% 55% at 50% 62%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 70%),
+    linear-gradient(180deg, #e9eef6 0%, #d3dbe8 100%);
+  border-color: rgba(0, 0, 0, 0.04);
+}
+
+.dark .tile--studio {
+  background: radial-gradient(90% 70% at 50% 100%, #14182a 0%, #07070a 70%);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Clock face tokens: white face on light tiles, a black face with white hands in dark. */
+.clock {
+  --clock-face: #ffffff;
+  --clock-rim: rgba(0, 0, 0, 0.08);
+  --clock-ink: #1d1d1f;
+  --clock-tick: #aeaeb2;
+}
+
+.dark .clock {
+  --clock-face: #050507;
+  --clock-rim: rgba(255, 255, 255, 0.12);
+  --clock-ink: #f5f5f7;
+  --clock-tick: #636366;
+}
+
+.clock svg {
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.12));
+}
+
+/* Map tokens. */
+.map {
+  --map-land: #eef0f3;
+  --map-street: rgba(255, 255, 255, 0.95);
+  --map-road: #ffffff;
+  --map-casing: #d5d9e0;
+  --map-sea: #bcdcf5;
+  --map-shore: #a4cdef;
+  --map-park: #cfe9d2;
+}
+
+.dark .map {
+  --map-land: #15171c;
+  --map-street: rgba(255, 255, 255, 0.05);
+  --map-road: #3a3f49;
+  --map-casing: #22252c;
+  --map-sea: #0c2136;
+  --map-shore: #12304d;
+  --map-park: #132a1c;
+}
+
+.map-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* Brand inks in the logo wall follow the theme. */
+.logo-wall .tool-tile { color: var(--ink-l); }
+.dark .logo-wall .tool-tile { color: var(--ink-d); }
+.logo-cluster .tool-tile { position: relative; }

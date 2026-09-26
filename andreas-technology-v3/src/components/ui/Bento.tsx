@@ -1,21 +1,29 @@
 'use client'
 
-import { motion, useReducedMotion, type Variants } from 'motion/react'
-import type { ReactNode, MouseEventHandler } from 'react'
+import { motion, useInView, useReducedMotion, type Variants } from 'motion/react'
+import { useRef, type ReactNode, type MouseEventHandler } from 'react'
 import { EASE_OUT } from '@/utils/motion'
 
-export type Tone = 'plain' | 'mint' | 'lavender' | 'peach' | 'sky' | 'ink' | 'terminal' | 'accent'
+/** Subject families (rich gradients) plus the neutrals that give each bento its rhythm. */
+export type Family = 'fleet' | 'security' | 'automation' | 'ai' | 'itsm'
+export type Tone = 'plain' | 'graphite' | 'night' | 'aurora' | 'studio' | 'terminal' | 'accent' | Family
+
+const FAMILIES: readonly string[] = ['fleet', 'security', 'automation', 'ai', 'itsm']
 
 /** Delay between neighbouring tiles as a bento reveals. */
-const TILE_STAGGER = 0.055
+const TILE_STAGGER = 0.05
 
+/** Tiles rise on a soft spring (a touch of overshoot, no wobble); opacity eases separately. */
 const TILE_IN: Variants = {
-    hidden: { opacity: 0, scale: 0.955, y: 14 },
+    hidden: { opacity: 0, scale: 0.94, y: 22 },
     visible: (index: number = 0) => ({
         opacity: 1,
         scale: 1,
         y: 0,
-        transition: { duration: 0.7, ease: EASE_OUT, delay: index * TILE_STAGGER },
+        transition: {
+            default: { type: 'spring', stiffness: 150, damping: 19, mass: 0.9, delay: index * TILE_STAGGER },
+            opacity: { duration: 0.5, ease: EASE_OUT, delay: index * TILE_STAGGER },
+        },
     }),
 }
 
@@ -25,7 +33,8 @@ const TILE_STILL: Variants = {
     visible: { opacity: 1 },
 }
 
-const toneClass = (tone: Tone) => (tone === 'plain' ? '' : `tile--${tone}`)
+export const toneClass = (tone: Tone) =>
+    tone === 'plain' ? '' : FAMILIES.includes(tone) ? `tile--fam tile--${tone}` : `tile--${tone}`
 
 interface BentoProps {
     children: ReactNode
@@ -42,14 +51,26 @@ interface BentoProps {
  * staggers across the grid, and inherits the hidden → visible state from here.
  */
 export function Bento({ children, className = '', play }: BentoProps) {
+    const ref = useRef<HTMLDivElement>(null)
+    // Ambient loops (Ken Burns, aurora, glow border) run only while this bento is on screen.
+    const live = useInView(ref, { amount: 0.35 })
     const trigger = play === undefined
         ? { initial: 'hidden', whileInView: 'visible', viewport: { once: true, amount: 0.15 } }
         : { initial: 'hidden', animate: play ? 'visible' : 'hidden' }
 
     return (
-        <motion.div className={`bento ${className}`} {...trigger}>
+        <motion.div ref={ref} data-live={live && play !== false} className={`bento ${className}`} {...trigger}>
             {children}
         </motion.div>
+    )
+}
+
+/** The travelling conic light for a featured tile's border. Decorative. */
+export function GlowRing() {
+    return (
+        <span className="glow-ring" aria-hidden="true">
+            <span />
+        </span>
     )
 }
 
