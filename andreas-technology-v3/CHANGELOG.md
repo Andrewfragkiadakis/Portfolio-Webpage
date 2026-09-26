@@ -5,6 +5,8 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 ## [Unreleased]
 
 ### Added
+- Greek type: TikTok Sans Greek (OFL, variable opsz/wght, self-hosted via `next/font/local`) is a Greek-only `unicode-range` face placed ahead of Inter Tight, so Greek letters use a straight neo-grotesk that matches Inter Tight's colour and x-height while all Latin, digits and punctuation stay in Inter Tight. It fixes the hooked Inter Greek iota that collided at display tracking (κια, τικ)
+- Nav wordmark leads with the memoji technologist as a 28px byline mark
 - `ToolTile`: uniform square tool tile (accent mark on a neutral tile); wide wordmarks fit the same footprint. Used for the structured 2–3 column toolkit grid (tile + name) in the service dialog
 - `ProjectImage`: project screenshots default to `contain` inside the frame with a blurred copy of the same image as fill (one download), so nothing is ever cut off; `Project.imageFit: 'cover'` and `imagePosition` opt specific images into an art-directed crop
 - What I Do: every card opens a detail dialog (whole card + always-visible plus control that rotates on hover) with a short explanation, three factual "In practice" points and a curated toolkit of official logos; cards preview their toolkit logos in the footer row. EN/GR
@@ -56,6 +58,9 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 - Perf: stat counters animate via `animate()` writing to the DOM instead of 60 fps React state updates; honour reduced motion and render final values server-side
 
 ### Fixed
+- Greek copy: restored the missing accents on 40+ mixed-case strings written for the old all-caps display (CTAs, contact labels, service and project titles, dialog labels); uppercase labels still drop them via `lang="el"`
+- Greek About paragraph: "άνω των 550 συσκευών" (was 400)
+- Inter Tight now preloads only its `latin` subset; its Greek file is no longer downloaded
 - Project images in folders whose names contained `&`, spaces or parentheses (Raspberry Pi, LLM research, Schiller, Friendly Wheelchair) were rejected by the Next.js image optimizer with 400 "isn't a valid image"; folders renamed to kebab-case and paths updated. Email-signature and QR asset folders left untouched because they may be linked from outside the site
 - GSC: `X-Robots-Tag` and static `<meta name="robots">` for thesis presentation; `robots.txt` disallows `/opengraph-image`; sitemap lists only the homepage; root `/favicon.ico` for stable icon URL (thesis HTML restored under `public/`)
 - Mobile: fix horizontal page scroll by using `overflow-x-clip` on Experience and Projects sections instead of `overflow-x: hidden` on html/body (which killed momentum scrolling on mobile browsers)

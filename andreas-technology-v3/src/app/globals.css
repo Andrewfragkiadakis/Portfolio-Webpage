@@ -22,7 +22,9 @@
   --accent-ink: #C23A00;
   --row-hover: rgba(17, 17, 17, 0.045);
 
-  --font-display: var(--font-inter-tight), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* Greek-only face first (unicode-range), so Greek letters take TikTok Sans and
+     everything else falls through to Inter Tight. See layout.tsx. */
+  --font-display: var(--font-greek), var(--font-inter-tight), "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   /*
    * Height of the fixed desktop navigation. Panels reserve this at the top so

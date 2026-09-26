@@ -4,7 +4,7 @@
 
 ## Concept
 
-The portfolio is set like a printed index. It uses warm paper and near-black ink, one grotesk (Inter Tight), a strict 12-column grid, and 1px rules in place of cards. The name is set very large at the bottom left of the hero. Every other section is a numbered spread: "(01) About", "(02) What I do", and so on. Experience and projects read as index tables. International orange is the only colour, used for index numbers, active states and the full stop after the name.
+The portfolio is set like a printed index. It uses warm paper and near-black ink, one grotesk (Inter Tight, with TikTok Sans for Greek letters only), a strict 12-column grid, and 1px rules in place of cards. The name is set very large at the bottom left of the hero. Every other section is a numbered spread: "(01) About", "(02) What I do", and so on. Experience and projects read as index tables. International orange is the only colour, used for index numbers, active states and the full stop after the name.
 
 ## Inspirations
 
@@ -46,7 +46,11 @@ Pure `#FF4F00` on paper is only about 2.9 : 1, which fails even the large-text t
 
 ### Type
 
-- **Family:** Inter Tight (loaded with `next/font/google`, subsets `latin` and `greek`, variable weight), exposed as `--font-inter-tight` and set as Tailwind's `font-sans`. There is no monospace anywhere; every former `font-mono` label is now a sans meta label.
+- **Family:** Inter Tight for Latin (loaded with `next/font/google`, subset `latin`, variable weight), exposed as `--font-inter-tight`. There is no monospace anywhere; every former `font-mono` label is now a sans meta label.
+- **Greek:** TikTok Sans Greek (OFL; variable `opsz` 12–36 and `wght` 300–900; 18 KB). It is self-hosted as `src/app/fonts/TikTokSans-Greek.woff2` through `next/font/local`, with its licence alongside, and exposed as `--font-greek`. The face declares a Greek-only `unicode-range` (U+0370–03FF) and sits first in the stack: `--font-display: var(--font-greek), var(--font-inter-tight), …`. Greek letters therefore come from TikTok Sans, while every Latin letter, digit and punctuation mark (including the orange full stop) still comes from Inter Tight. `adjustFontFallback: false` is deliberate: a size-adjusted local fallback for the Greek face would sit in front of Inter Tight and catch the Latin. Optical size is automatic, so the name and titles use the display cut (opsz 36) and body text the text cut.
+  - *Why:* Inter Tight's own Greek has a hooked iota. At display tracking (−0.045 to −0.055em) it collides with the next letter ("κια" in Φραγκιαδάκης, "τικ" in Σχετικά), and its lowercase reads softer and lighter than the Latin. TikTok Sans Greek is a straight neo-grotesk: a plain-stem iota, Helvetica-like α/ρ/ς, a steep tonos, and colour and x-height that match Inter Tight at the same weight. Mixed lines such as "Επικεφαλής Apple Fleet & IT Automation" read as one voice.
+  - *Compared* (`style-preview/states/greek-font-finalists.jpg`): Inter Tight Greek (current), Inter Display, Roboto Flex, Noto Sans Display, Commissioner, Geologica, Manrope, Sofia Sans, IBM Plex Sans, TikTok Sans, Google Sans, Ubuntu Sans, Open Sans, Roboto, Arimo, GFS Neohellenic and Advent Pro. Wix Madefor has no Greek subset on Google Fonts. The runners-up were IBM Plex Sans (crisp, but its spurred α and angled κ are more "technical" than Swiss) and Roboto (neutral, but narrower and more mechanical). Humanist faces (Open Sans, Ubuntu, Noto, Commissioner, Google Sans, GFS Neohellenic) broke the neo-grotesk voice.
+  - *Uppercase:* `.meta` labels and the nav use `text-transform: uppercase`. `LanguageContext` sets `<html lang="el">` in Greek, so the browser drops the tonos (ΣΧΕΤΙΚΑ, not ΣΧΕΤΙΚΆ). This was verified with the EN/GR toggle in both directions.
 - **Display** (`.display`): weight 560, tracking −0.045em (−0.055em on the hero name), line-height 0.86–0.92. Always solid and mixed case. The outlined headings are gone.
 - **Meta** (`.meta`): 11px, uppercase, +0.06em, weight 500, muted colour.
 - **Numerals:** `.tabular` / `.index` switch on `tnum`, so index numbers, dates and years line up down the columns.
@@ -100,6 +104,12 @@ Pure `#FF4F00` on paper is only about 2.9 : 1, which fails even the large-text t
 - short meta labels (Role / Based in / …)
 - Light/Dark labels
 
+## Round 4 — Greek type and the memoji mark
+
+- **Greek font:** Greek now uses TikTok Sans through a Greek-only face in front of Inter Tight (see *Type*). Diagnosis: Chrome's `CSS.getPlatformFontsForNode` showed that Greek already came from the Inter Tight web font, not a system fallback, so the mismatch was the design itself. The hooked iota collided at display tracking, and the lowercase read softer than the Latin. After the change, every Greek glyph reports the TikTok Sans face, Latin, digits and punctuation report Inter Tight, and Inter Tight's Greek file is no longer downloaded. The English rendering is unchanged.
+- **Greek copy:** 40+ mixed-case Greek strings had lost their accents, because the originals were written for all-caps display (for example "Δειτε τη Δουλεια μου", "Αποστολη Μηνυματος", "Δικτυα & Υποδομες", and the project titles). They now carry proper tonos, and phrases use Greek sentence case. Uppercase labels still drop the accents through `lang="el"`. The About paragraph now says "άνω των 550 συσκευών" (it said 400).
+- **Mark:** No "AF" monogram existed in this branch. The nav wordmark now opens with the memoji technologist (`/favicons/android-chrome-512x512.png`, via `next/image`), cropped to a 28px byline portrait with the laptop resting on the square's bottom edge. It reads like an author photo on a masthead and leaves the name and the orange full stop as the main mark. The OG image is type-only and is unchanged.
+
 ## Trade-offs
 
 - **Tables vs. rich cards:** Experience rows no longer show tasks inline. They open in a dialog instead, which keeps both tables on one 1440×900 screen. Education periods are shortened to numeric dates in the table; the full wording is still in the dialog and in the aria label.
@@ -148,7 +158,7 @@ Pure `#FF4F00` on paper is only about 2.9 : 1, which fails even the large-text t
 | Projects row hover + preview | Career dialog (dark) |
 | --- | --- |
 | ![](style-preview/states/projects-row-hover-light.jpg) | ![](style-preview/states/career-dialog-dark.jpg) |
-| **Greek hero (fitted surname)** | **Keyboard focus** |
+| **Greek hero (TikTok Sans Greek, fitted surname)** | **Keyboard focus** |
 | ![](style-preview/states/greek-hero-dark.jpg) | ![](style-preview/states/keyboard-focus-light.jpg) |
 | **First-visit intro** | **OG image** |
 | ![](style-preview/states/intro-light.jpg) | ![](style-preview/states/og-image.png) |
@@ -156,3 +166,7 @@ Pure `#FF4F00` on paper is only about 2.9 : 1, which fails even the large-text t
 | Mobile menu | Greek mobile hero |
 | --- | --- |
 | ![](style-preview/states/mobile-menu-light.jpg) | ![](style-preview/states/greek-mobile-hero-dark.jpg) |
+
+| Greek font finalists (Inter Tight Latin with each Greek candidate) |
+| --- |
+| ![](style-preview/states/greek-font-finalists.jpg) |

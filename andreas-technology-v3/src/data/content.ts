@@ -819,12 +819,12 @@ export const content: Record<'en' | 'gr', Content> = {
             tagline: "Επικεφαλής Apple Fleet & IT Automation σε περιβάλλον 550+ συσκευών",
             readMore: "Διαβάστε περισσότερα",
             showLess: "Λιγότερα",
-            currentFocus: "Τρεχουσα Εστιαση",
+            currentFocus: "Τρέχουσα εστίαση",
             currentFocusDetail: "Fleet Automation & Endpoint Security",
-            statsLabels: ["Χρονια Εμπειριας", "Συσκευες υπο Διαχειριση", "Ταχυτερο Onboarding", "Πιστοποιησεις"],
-            credentialsLabel: "Πιστοποιησεις",
+            statsLabels: ["Χρόνια εμπειρίας", "Συσκευές υπό διαχείριση", "Ταχύτερο onboarding", "Πιστοποιήσεις"],
+            credentialsLabel: "Πιστοποιήσεις",
             description: [
-                "Είμαι Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) και ηγούμαι του τομέα Apple Fleet & IT Automation στην Omilia, μια παγκόσμια εταιρεία conversational AI, σε περιβάλλον άνω των 400 συσκευών. Διαχειρίζομαι εξ ολοκλήρου την πλατφόρμα Jamf Pro και ηγούμαι του endpoint engineering για Checkpoint Harmony EDR, pipelines Microsoft Sentinel SIEM και αυτοματοποίηση πιστοποιητικών SSL.",
+                "Είμαι Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) και ηγούμαι του τομέα Apple Fleet & IT Automation στην Omilia, μια παγκόσμια εταιρεία conversational AI, σε περιβάλλον άνω των 550 συσκευών. Διαχειρίζομαι εξ ολοκλήρου την πλατφόρμα Jamf Pro και ηγούμαι του endpoint engineering για Checkpoint Harmony EDR, pipelines Microsoft Sentinel SIEM και αυτοματοποίηση πιστοποιητικών SSL.",
                 "Η δουλειά μου βρίσκεται στο σημείο όπου συναντώνται η ασφάλεια, ο αυτοματισμός και η κλίμακα: θωράκιση κατά CIS Benchmarks ενόψει ελέγχων PCI-DSS και SOC 2, και zero-touch enrollment για macOS που μείωσε τον χρόνο onboarding κατά 70%.",
                 "Παράλληλα οδηγώ την υιοθέτηση AI σε εταιρικό επίπεδο — Google Gemini, Atlassian Rovo Agents και ένα AI pipeline διαλογής αιτημάτων που μείωσε τον μέσο χρόνο triage σε 350+ tickets ετησίως.",
                 "Jamf Certified Tech (Jamf 200) | Αδειούχος Μηχανικός Πληροφορικής (ΤΕΕ) | Πιστοποίηση ITIL 4 | Με έδρα την Αθήνα | Αγγλικά (C2), Ελληνικά (Μητρική), Γερμανικά (B2)"
@@ -844,32 +844,32 @@ export const content: Record<'en' | 'gr', Content> = {
                 "INFRASTRUCTURE AUTOMATION ENGINEER",
                 "AI AUTOMATION SPECIALIST"
             ],
-            viewWork: "Δειτε τη Δουλεια μου",
-            getInTouch: "Επικοινωνηστε μαζι μου",
+            viewWork: "Δείτε τη δουλειά μου",
+            getInTouch: "Επικοινωνήστε μαζί μου",
             scroll: "ΣΚΡΟΛΑΡΕΤΕ ΓΙΑ ΠΛΟΗΓΗΣΗ"
         },
 
         contact: {
             title: "ΕΠΙΚΟΙΝΩΝΙΑ",
             subtitle: "ΕΛΑΤΕ ΣΕ ΕΠΑΦΗ ΜΑΖΙ ΜΟΥ",
-            infoTitle: "Στοιχεια Επικοινωνιας",
-            socialTitle: "Βρειτε με στα social",
-            opportunitiesTitle: "Διαθεσιμος για νεες προκλησεις",
+            infoTitle: "Στοιχεία επικοινωνίας",
+            socialTitle: "Βρείτε με στα social",
+            opportunitiesTitle: "Διαθέσιμος για νέες προκλήσεις",
             opportunitiesDescription: "Freelance projects ή ενδιαφέρουσες συνεργασίες. Ας δημιουργήσουμε κάτι μοναδικό μαζί.",
-            sendMessage: "Αποστολη Μηνυματος",
-            downloadResume: "Ληψη Βιογραφικου",
+            sendMessage: "Αποστολή μηνύματος",
+            downloadResume: "Λήψη βιογραφικού",
             emailLabel: "Email",
-            locationLabel: "Τοποθεσια",
-            localTimeLabel: "Τοπικη ωρα",
-            copyEmail: "Αντιγραφη",
-            copied: "Αντιγραφηκε",
-            copyFailed: "Αποτυχια"
+            locationLabel: "Τοποθεσία",
+            localTimeLabel: "Τοπική ώρα",
+            copyEmail: "Αντιγραφή",
+            copied: "Αντιγράφηκε",
+            copyFailed: "Αποτυχία"
         },
 
         cursor: {
-            view: "Δειτε",
-            verify: "Ελεγχος",
-            open: "Ανοιγμα"
+            view: "Δείτε",
+            verify: "Έλεγχος",
+            open: "Άνοιγμα"
         },
 
         skillsTitle: "ΒΑΣΙΚΕΣ ΔΕΞΙΟΤΗΤΕΣ",
@@ -898,13 +898,13 @@ export const content: Record<'en' | 'gr', Content> = {
 
         servicesTitle: "ΥΠΗΡΕΣΙΕΣ",
         servicesSubtitle: "// ΕΞΕΙΔΙΚΕΥΣΗ & ΔΕΞΙΟΤΗΤΕΣ",
-        servicesCta: "Εχετε ενα συγκεκριμενο project στο μυαλο σας;",
-        servicesCtaButton: "Ας Μιλησουμε",
-        servicesLabels: { highlights: "Στην πραξη", toolkit: "Εργαλεια", details: "Λεπτομερειες", tools: "εργαλεια" },
+        servicesCta: "Έχετε ένα συγκεκριμένο project στο μυαλό σας;",
+        servicesCtaButton: "Ας μιλήσουμε",
+        servicesLabels: { highlights: "Στην πράξη", toolkit: "Εργαλεία", details: "Λεπτομέρειες", tools: "εργαλεία" },
         services: [
             {
                 icon: "fas fa-shield-halved",
-                title: "Ασφαλεια Τερματικων & Συμμορφωση",
+                title: "Ασφάλεια τερματικών & συμμόρφωση",
                 description: "Θωράκιση στόλου συσκευών απέναντι σε πραγματικές απειλές: εφαρμογή CIS Benchmarks, ανάπτυξη και μετάβαση EDR, διαχείριση κρυπτογράφησης δίσκων και ετοιμότητα για ελέγχους PCI-DSS και SOC 2.",
                 detail: "Ασφάλεια που αντέχει τόσο σε έλεγχο όσο και στην παραγωγή. Εφάρμοσα θωράκιση κατά CIS Benchmarks σε όλο τον στόλο πριν από ελέγχους PCI-DSS και SOC 2, ηγήθηκα της μετάβασης σε Checkpoint Harmony EDR και τροφοδοτώ το Microsoft Sentinel με telemetry τερματικών ώστε η ανίχνευση να έχει πραγματικό πλαίσιο.",
                 highlights: [
@@ -928,7 +928,7 @@ export const content: Record<'en' | 'gr', Content> = {
             },
             {
                 icon: "fas fa-gears",
-                title: "Αυτοματισμος IT & Scripting",
+                title: "Αυτοματισμός IT & Scripting",
                 description: "Μετατροπή χειροκίνητων εργασιών IT σε επαναλήψιμα συστήματα. Bash, Python και TypeScript πάνω σε πραγματικά APIs, με pipelines πιστοποιητικών και provisioning που εξαλείφουν την επαναλαμβανόμενη εργασία.",
                 detail: "Ό,τι γίνεται δύο φορές, γίνεται script. Γράφω Bash, Python, Swift και TypeScript πάνω σε πραγματικά APIs, από εργαλεία Jamf έως ένα κεντρικό pipeline που ανανεώνει πιστοποιητικά SSL για Cisco ISE, ESXi, Proxmox και HPE iLO χωρίς χειροκίνητα βήματα.",
                 highlights: [
@@ -964,7 +964,7 @@ export const content: Record<'en' | 'gr', Content> = {
             },
             {
                 icon: "fas fa-network-wired",
-                title: "Δικτυα & Υποδομες",
+                title: "Δίκτυα & υποδομές",
                 description: "Το επίπεδο πάνω στο οποίο στηρίζονται όλα — Cisco ISE, Active Directory, MFA και virtualization σε ESXi και Proxmox, με monitoring που εντοπίζει προβλήματα πριν τα αναφέρουν οι χρήστες.",
                 detail: "Η βάση πάνω στην οποία στηρίζονται όλα: έλεγχος πρόσβασης δικτύου με Cisco ISE, ταυτότητα σε Active Directory και Entra ID, και virtualization σε VMware ESXi και Proxmox — με MFA, πιστοποιητικά και monitoring σε τάξη γύρω τους.",
                 highlights: [
@@ -1126,28 +1126,28 @@ export const content: Record<'en' | 'gr', Content> = {
             subtitle: "ΕΠΙΛΕΓΜΕΝΑ ΕΡΓΑ",
             live: "Live",
             code: "Code",
-            githubCta: "Δειτε το πληρες Portfolio στο GitHub",
-            details: "Λεπτομερειες",
-            caseStudy: "Μελετη περιπτωσης",
-            roleLabel: "Ρολος",
-            highlightsLabel: "Βασικα Σημεια",
-            report: "Αναφορα",
-            publication: "Δημοσιευση",
-            close: "Κλεισιμο"
+            githubCta: "Δείτε το πλήρες portfolio στο GitHub",
+            details: "Λεπτομέρειες",
+            caseStudy: "Μελέτη περίπτωσης",
+            roleLabel: "Ρόλος",
+            highlightsLabel: "Βασικά σημεία",
+            report: "Αναφορά",
+            publication: "Δημοσίευση",
+            close: "Κλείσιμο"
         },
 
         cinematicEntry: {
             initializing: "> ΕΚΚΙΝΗΣΗ ΣΥΣΤΗΜΑΤΟΣ...",
             loading: "> ΦΟΡΤΩΣΗ ΑΡΧΕΙΩΝ...",
             ready: "> ΕΤΟΙΜΟ.",
-            enterSystem: "Εισοδος στο Συστημα",
-            skip: "Παραλειψη"
+            enterSystem: "Είσοδος στο σύστημα",
+            skip: "Παράλειψη"
         },
 
         projectsTitle: "PROJECTS",
         projects: [
             {
-                name: "Plano Plus - Επιγραφες & Οπτικη Ταυτοτητα",
+                name: "Plano Plus - Επιγραφές & Οπτική Ταυτότητα",
                 year: 2026,
                 tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion", "Resend"],
                 description: "Ιστοσελίδα στούντιο επιγραφών και οπτικής επικοινωνίας με Next.js App Router. Χαρακτηριστικά: light/dark theme, parallax effects, smooth scrolling, φόρμα επικοινωνίας με email integration, και σύγχρονο UI/UX. Εξυπηρετεί πελάτες σε όλη την Κρήτη με επαγγελματικές λύσεις επιγραφών και branding.",
@@ -1180,7 +1180,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 imageFit: "cover"
             },
             {
-                name: "Προσωπικη Ιστοσελιδα Portfolio",
+                name: "Προσωπική Ιστοσελίδα Portfolio",
                 year: 2026,
                 tags: ["Next.js", "React", "TypeScript", "Framer Motion", "Canvas"],
                 description: "Σχεδίαση και υλοποίηση modern portfolio με horizontal scroll εμπειρία, διαδραστικό Canvas glitch effect, animations και υποστήριξη Dark/Light mode σε δύο γλώσσες.",
@@ -1247,7 +1247,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 imageFit: "cover"
             },
             {
-                name: "HappyFox 🦊 - Εφαρμογη Ψυχικης Υγειας",
+                name: "HappyFox 🦊 - Εφαρμογή Ψυχικής Υγείας",
                 year: 2023,
                 tags: ["UI/UX Design", "Figma", "Team Project", "SRH Heidelberg"],
                 description: "Σχεδιασμός UI/UX για εφαρμογή ψυχικής υγείας με στόχο την προώθηση της συναισθηματικής ευεξίας. Υλοποιήθηκε στα πλαίσια μεταπτυχιακού μαθήματος.",
@@ -1264,7 +1264,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 imageFit: "cover"
             },
             {
-                name: "Ιστοσελιδα Κεντρων Ξενων Γλωσσων Schiller",
+                name: "Ιστοσελίδα Κέντρων Ξένων Γλωσσών Schiller",
                 year: 2026,
                 tags: ["Wix", "Wix Studio", "Web Development", "Educational"],
                 description: "Ανάπτυξη ιστοσελίδας για τα εκπαιδευτικά κέντρα Schiller στο Ρέθυμνο. Παρουσίαση προγραμμάτων σπουδών Αγγλικών, Γερμανικών και Εκπαιδευτικής Ρομποτικής.",
@@ -1296,7 +1296,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 imageFit: "cover"
             },
             {
-                name: "Ερευνα: LLMs & Ανθρωπινη Γνωση",
+                name: "Έρευνα: LLMs & Ανθρώπινη Γνώση",
                 year: 2024,
                 tags: ["Research", "Cognitive Science", "LLMs", "GPT-3", "Python"],
                 description: "Συγκριτική μελέτη απόδοσης GPT-3 και ανθρώπων στο 'False Belief Task'. Η έρευνα δημοσιεύθηκε στο περιοδικό Cognitive Science.",

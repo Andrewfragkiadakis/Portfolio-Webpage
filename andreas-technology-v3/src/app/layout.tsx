@@ -1,6 +1,7 @@
 
 import type { Metadata } from 'next'
 import { Inter_Tight } from 'next/font/google'
+import localFont from 'next/font/local'
 import { MotionConfig } from 'motion/react'
 import './globals.css'
 import { LanguageProvider } from '@/contexts/LanguageContext'
@@ -11,9 +12,31 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import { SOCIAL_URLS, content } from '@/data/content'
 
 const interTight = Inter_Tight({
-    subsets: ['latin', 'greek'],
+    subsets: ['latin'],
     display: 'swap',
     variable: '--font-inter-tight',
+})
+
+/*
+ * Greek companion to Inter Tight. Inter Tight's own Greek has a hooked iota that
+ * collides with its neighbours at display tracking (κια, τικ) and reads softer than
+ * the Latin. TikTok Sans Greek (OFL, variable opsz 12–36 · wght 300–900) is a straight
+ * neo-grotesk that matches Inter Tight's colour and x-height, so this face covers
+ * only the Greek block and every Latin glyph, digit and punctuation mark still comes
+ * from Inter Tight. No size-adjusted fallback: a local fallback declared here would
+ * sit in front of Inter Tight in the stack and catch the Latin.
+ */
+const tiktokGreek = localFont({
+    src: './fonts/TikTokSans-Greek.woff2',
+    weight: '300 900',
+    style: 'normal',
+    display: 'swap',
+    variable: '--font-greek',
+    adjustFontFallback: false,
+    fallback: [],
+    declarations: [
+        { prop: 'unicode-range', value: 'U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF' },
+    ],
 })
 
 const SITE_URL = 'https://andreas.technology'
@@ -74,7 +97,7 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
-        <html lang="en" className={interTight.variable} suppressHydrationWarning>
+        <html lang="en" className={`${interTight.variable} ${tiktokGreek.variable}`} suppressHydrationWarning>
             <head>
                 <meta name="theme-color" content="#0E0E0E" media="(prefers-color-scheme: dark)" />
                 <meta name="theme-color" content="#F2F1EC" media="(prefers-color-scheme: light)" />

@@ -4,6 +4,7 @@ import { useLanguage } from '@/contexts/LanguageContext'
 import { useContent } from '@/hooks/useContent'
 import { useState, useEffect } from 'react'
 import { motion } from 'motion/react'
+import Image from 'next/image'
 import { scrollToSection as smoothScrollToSection } from '@/utils/smooth-scroll'
 import { SECTION_IDS, SECTION_STEPS } from '@/data/sections'
 import ThemeToggle from '@/components/ui/ThemeToggle'
@@ -86,10 +87,22 @@ export default function Navigation() {
                     type="button"
                     onClick={() => scrollToSection('hero', 0)}
                     aria-label={`${t.editorial.firstName} ${t.editorial.lastName} — ${t.nav.home}`}
-                    className="md:col-span-3 justify-self-start text-sm font-semibold tracking-[-0.01em] hover:text-[var(--accent-ink)] transition-colors"
+                    className="md:col-span-3 justify-self-start inline-flex items-center gap-2 text-sm font-semibold tracking-[-0.01em] hover:text-[var(--accent-ink)] transition-colors"
                 >
-                    {t.editorial.firstName} {t.editorial.lastName}
+                    {/* The memoji is the mark: cropped to the head and laptop, like a byline portrait. */}
+                    <span className="relative block size-7 shrink-0 overflow-hidden" aria-hidden="true">
+                        <Image
+                            src="/favicons/android-chrome-512x512.png"
+                            alt="Andreas Fragkiadakis"
+                            width={64}
+                            height={64}
+                            className="absolute inset-0 size-full object-cover object-bottom scale-[1.15] origin-bottom"
+                        />
+                    </span>
+                    <span>
+                        {t.editorial.firstName} {t.editorial.lastName}
                     <span className="text-[var(--accent)]" aria-hidden="true">.</span>
+                    </span>
                 </button>
 
                 {/* Desktop index */}
