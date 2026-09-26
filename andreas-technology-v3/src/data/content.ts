@@ -140,6 +140,7 @@ export interface Content {
         highlights: string
         toolkit: string
         details: string
+        tools: string
     }
     services: Service[]
     experienceTitle: string
@@ -295,7 +296,7 @@ export const content: Record<'en' | 'gr', Content> = {
         servicesSubtitle: "// SERVICES & EXPERTISE",
         servicesCta: "Have a unique project in mind?",
         servicesCtaButton: "Let's Talk",
-        servicesLabels: { highlights: "In practice", toolkit: "Toolkit", details: "Details" },
+        servicesLabels: { highlights: "In practice", toolkit: "Toolkit", details: "Details", tools: "tools" },
         services: [
             {
                 icon: "fas fa-shield-halved",
@@ -840,7 +841,7 @@ export const content: Record<'en' | 'gr', Content> = {
         servicesSubtitle: "// ΕΞΕΙΔΙΚΕΥΣΗ & ΔΕΞΙΟΤΗΤΕΣ",
         servicesCta: "Εχετε ενα συγκεκριμενο project στο μυαλο σας;",
         servicesCtaButton: "Ας Μιλησουμε",
-        servicesLabels: { highlights: "Στην πραξη", toolkit: "Εργαλεια", details: "Λεπτομερειες" },
+        servicesLabels: { highlights: "Στην πραξη", toolkit: "Εργαλεια", details: "Λεπτομερειες", tools: "εργαλεια" },
         services: [
             {
                 icon: "fas fa-shield-halved",

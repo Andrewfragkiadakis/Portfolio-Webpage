@@ -5,7 +5,7 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 ## [Unreleased]
 
 ### Added
-- `ToolTile`: uniform square tool tile (accent mark on a neutral tile); wide wordmarks fit the same footprint. Used for the What I Do card previews (5 tiles + "+N" count) and a structured 2–3 column toolkit grid (tile + name) in the service dialog
+- `ToolTile`: uniform square tool tile (accent mark on a neutral tile); wide wordmarks fit the same footprint. Used for the structured 2–3 column toolkit grid (tile + name) in the service dialog
 - `ProjectImage`: project screenshots default to `contain` inside the frame with a blurred copy of the same image as fill (one download), so nothing is ever cut off; `Project.imageFit: 'cover'` and `imagePosition` opt specific images into an art-directed crop
 - What I Do: every card opens a detail dialog (whole card + always-visible plus control that rotates on hover) with a short explanation, three factual "In practice" points and a curated toolkit of official logos; cards preview their toolkit logos in the footer row. EN/GR
 - `Service.detail`, `highlights` and `tools` (typed `ToolLabel[]`, checked against `data/tools.ts` at compile time)
@@ -34,6 +34,7 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 - JSON-LD `hasCredential` and `knowsAbout` on the Person schema; Jamf keywords in metadata
 
 ### Changed
+- What I Do cards decluttered: the logo-tile preview row is replaced by a quiet "N tools" caption beside the plus; the full toolkit lives in the dialog. Tool tiles lose their border
 - Tightened the viewBox of Simple Icons wordmarks padded inside a 24×24 canvas (macOS 4.26:1, VMware 6.32:1, Cisco 1.9:1) so they render at their real size; marquee logos cap at 3rem wide
 - Project card media 4:3 → 16:10 (closer to the 1.5–1.8 ratio of the screenshots); cover crops only for images whose subject survives (Signature Craft, Nexus, HappyFox, Raspberry Pi) and a lowered focal point for the square wheelchair render; Plano Plus, Portfolio, Thesis, Silence Hero, Schiller and LLM research now show whole
 - Project dialog image: 16:10, capped at 45vh, same no-crop treatment (was a 2.8:1 strip)
