@@ -675,7 +675,7 @@ export const content: Record<'en' | 'gr', Content> = {
                     "Live and in active use by the school"
                 ],
                 liveSiteLink: "https://www.schiller.edu.gr/",
-                image: "/images/Schiller Project/schiller.png"
+                image: "/images/schiller-project/schiller.png"
             },
             {
                 name: "Raspberry Pi Adblocker & Streamer",
@@ -690,7 +690,7 @@ export const content: Record<'en' | 'gr', Content> = {
                     "Runs unattended on low-power hardware",
                     "Hands-on Linux service management and networking"
                 ],
-                image: "/images/Raspberry Pi Adblocker & Streamer/raspberry-pi.png",
+                image: "/images/raspberry-pi-adblocker-streamer/raspberry-pi.png",
                 imageFit: "cover"
             },
             {
@@ -708,7 +708,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 ],
                 reportLink: "https://drive.google.com/uc?export=download&id=1w_3VG01O34Q9lNhrvKmhXno2OfptYJYi",
                 publicationLink: "https://onlinelibrary.wiley.com/doi/10.1111/cogs.13309",
-                image: "/images/Research LLMs & Human Knowledge/llm-research.png"
+                image: "/images/research-llms-human-knowledge/llm-research.png"
             },
             {
                 name: "The Friendly Wheelchair (Concept)",
@@ -724,7 +724,7 @@ export const content: Record<'en' | 'gr', Content> = {
                     "Scoped against healthcare IT constraints"
                 ],
                 reportLink: "https://drive.google.com/uc?export=download&id=18gqsCB6UYA1wMTBFjkw2jBoYMqK_HsZT",
-                image: "/images/The Friendly Wheelchair (Concept)/friendly-wheelchair.png",
+                image: "/images/friendly-wheelchair-concept/friendly-wheelchair.png",
                 imageFit: "cover",
                 imagePosition: "50% 62%"
             }
@@ -1218,7 +1218,7 @@ export const content: Record<'en' | 'gr', Content> = {
                     "Σε πλήρη λειτουργία από τη σχολή"
                 ],
                 liveSiteLink: "https://www.schiller.edu.gr/",
-                image: "/images/Schiller Project/schiller.png"
+                image: "/images/schiller-project/schiller.png"
             },
             {
                 name: "Raspberry Pi Adblocker & Streamer",
@@ -1233,7 +1233,7 @@ export const content: Record<'en' | 'gr', Content> = {
                     "Λειτουργεί αδιάλειπτα σε υλικό χαμηλής κατανάλωσης",
                     "Πρακτική εμπειρία σε διαχείριση υπηρεσιών Linux και δικτύων"
                 ],
-                image: "/images/Raspberry Pi Adblocker & Streamer/raspberry-pi.png",
+                image: "/images/raspberry-pi-adblocker-streamer/raspberry-pi.png",
                 imageFit: "cover"
             },
             {
@@ -1251,7 +1251,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 ],
                 reportLink: "https://drive.google.com/uc?export=download&id=1w_3VG01O34Q9lNhrvKmhXno2OfptYJYi",
                 publicationLink: "https://onlinelibrary.wiley.com/doi/10.1111/cogs.13309",
-                image: "/images/Research LLMs & Human Knowledge/llm-research.png"
+                image: "/images/research-llms-human-knowledge/llm-research.png"
             },
             {
                 name: "The Friendly Wheelchair (Concept)",
@@ -1267,7 +1267,7 @@ export const content: Record<'en' | 'gr', Content> = {
                     "Σχεδιασμός εντός περιορισμών healthcare IT"
                 ],
                 reportLink: "https://drive.google.com/uc?export=download&id=18gqsCB6UYA1wMTBFjkw2jBoYMqK_HsZT",
-                image: "/images/The Friendly Wheelchair (Concept)/friendly-wheelchair.png",
+                image: "/images/friendly-wheelchair-concept/friendly-wheelchair.png",
                 imageFit: "cover",
                 imagePosition: "50% 62%"
             }
