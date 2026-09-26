@@ -58,7 +58,7 @@ export default function CinematicEntry() {
                     data-cinematic="true"
                     initial={{ opacity: 1 }}
                     exit={{ opacity: 0, scale: 1.04, transition: { duration: 0.6, ease: [0.76, 0, 0.24, 1] } }}
-                    className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[#0B0B0F] text-[#F5F5F7] px-6"
+                    className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-black text-[#F5F5F7] px-6"
                 >
                     <button
                         onClick={handleEnter}
@@ -67,15 +67,12 @@ export default function CinematicEntry() {
                         {t.cinematicEntry.skip} →
                     </button>
 
-                    <span
-                        className="app-tile w-20 h-20 text-3xl font-black tracking-tight mb-10"
-                        style={{ background: 'linear-gradient(160deg, #5BC0FF 0%, #0A66FF 100%)' }}
-                        aria-hidden="true"
-                    >
+                    {/* The boot mark: the owner's monogram, never a vendor logo. */}
+                    <span className="text-[4.5rem] leading-none font-extrabold tracking-[-0.06em] text-white mb-12 select-none" aria-hidden="true">
                         AF
                     </span>
 
-                    <div className="w-56 h-1 rounded-full bg-white/15 overflow-hidden mb-8" aria-hidden="true">
+                    <div className="w-48 h-[5px] rounded-full bg-white/20 overflow-hidden mb-10" aria-hidden="true">
                         <motion.div
                             className="h-full bg-white rounded-full origin-left"
                             initial={{ scaleX: 0 }}
@@ -84,7 +81,7 @@ export default function CinematicEntry() {
                         />
                     </div>
 
-                    <div className="font-mono text-sm md:text-base tracking-wide text-[#C7C7CC] min-h-[5.5em] text-left mb-8">
+                    <div className="font-mono text-xs md:text-[0.8125rem] text-[#8E8E93] min-h-[5.5em] text-left mb-8">
                         <Typewriter
                             onInit={(typewriter) => {
                                 typewriter
@@ -109,7 +106,7 @@ export default function CinematicEntry() {
                                 initial={{ opacity: 0, y: 8 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 onClick={handleEnter}
-                                className="h-11 px-7 rounded-full bg-white text-[#0B0B0F] text-sm font-semibold hover:bg-[#E5E5EA] transition-colors caps-gr"
+                                className="h-10 px-7 rounded-full bg-white text-[#0B0B0F] text-sm font-medium hover:bg-[#E5E5EA] transition-colors caps-gr"
                             >
                                 {t.cinematicEntry.enterSystem}
                             </motion.button>

@@ -3,106 +3,134 @@
 /* Theme is a class on <html> (set before paint), not the media query. */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Short desktop viewports (below ~830px tall): tighten vertical rhythm so no window scrolls. */
+@custom-variant short (@media (min-width: 64rem) and (max-height: 52rem));
+
 /*
- * DESKTOP OS — the portfolio as a computer desktop.
- * Light: frosted white glass windows on a warm-to-cool gradient wallpaper.
- * Dark: graphite glass on a deep wallpaper.
- * Every text colour below is checked for WCAG AA against the surface it sits on
- * (see STYLE.md for the ratios).
+ * DESKTOP OS v2 — the portfolio as a macOS desktop.
+ * Opaque windows with vibrancy sidebars, a translucent menu bar and Dock, an original
+ * layered-wave wallpaper. Both themes are designed separately; every text colour is
+ * checked for WCAG AA against the surface it sits on (ratios in STYLE.md).
  */
 :root {
-  --background: #E9ECF6;          /* page fallback under the wallpaper */
-  --foreground: #1D1D1F;          /* ink */
-  --muted: #55555C;               /* secondary text: 7:1 on window glass */
-  --accent-brand: #0A66FF;        /* system blue — marks, rings, focus, rails */
-  --accent: #0057D9;              /* blue as TEXT: ≥4.6:1 on glass, chips, controls */
-  --accent-fill: #0A66FF;         /* filled buttons (white text 4.8:1) */
+  color-scheme: light;
+  --background: #E9E6F2;          /* page fallback under the wallpaper */
+  --foreground: #1D1D1F;          /* label */
+  --muted: #5C5C62;               /* secondary label: 6.7:1 on white, 5.4:1 on the sidebar */
+  --accent-brand: #007AFF;        /* system blue as a mark: rings, rails, bullets */
+  --accent: #0058D6;              /* blue as TEXT: 6.2:1 on white, 5.3:1 on a tinted chip */
+  --accent-fill: #0762DD;         /* filled controls; white text 5.1:1 */
+  --accent-top: #106EF2;          /* push-button gradient, white text ≥ 4.6:1 at the lightest point */
+  --accent-bottom: #0060D8;
   --on-accent: #FFFFFF;
-  --accent-soft: rgba(10, 102, 255, 0.12);
-  --glow: rgba(10, 102, 255, 0.22);
-  --success: #1E8E3E;
+  --accent-soft: rgba(0, 122, 255, 0.12);
+  --success: #1E9E3E;
+  --focus-ring: #3B8CFF;          /* 3.3:1 against white, 5:1 against dark windows */
 
-  --window: rgba(255, 255, 255, 0.74);
-  --window-solid: #FBFBFD;
-  --titlebar: rgba(250, 250, 252, 0.72);
-  --sidebar: rgba(238, 240, 246, 0.72);
-  --card: rgba(255, 255, 255, 0.7);
-  --hairline: rgba(29, 29, 31, 0.1);
-  --hairline-strong: rgba(29, 29, 31, 0.18);
-  --control: rgba(29, 29, 31, 0.06);
-  --control-hover: rgba(29, 29, 31, 0.11);
-  --menubar: rgba(255, 255, 255, 0.6);
-  --dock: rgba(255, 255, 255, 0.42);
-  --label-bg: rgba(255, 255, 255, 0.78);
-  --window-shadow:
-    0 0 0 0.5px rgba(0, 0, 0, 0.14),
-    0 24px 70px -18px rgba(40, 46, 90, 0.38),
-    0 10px 24px -10px rgba(40, 46, 90, 0.2);
+  --window-bg: #FFFFFF;
+  --window-chrome: #F6F6F7;       /* unified title bar / toolbar */
+  --statusbar: #F6F6F7;
+  --window-solid: #FFFFFF;
+  --sidebar: rgba(236, 234, 242, 0.74);
+  --card: #F5F5F7;
+  --control: rgba(0, 0, 0, 0.05);
+  --control-hover: rgba(0, 0, 0, 0.085);
+  --control-active: rgba(0, 0, 0, 0.13);
+  --selection: rgba(0, 0, 0, 0.08);
+  --hairline: rgba(0, 0, 0, 0.1);
+  --hairline-strong: rgba(0, 0, 0, 0.16);
+  --window-rim: rgba(0, 0, 0, 0);
+  --segment-on: #FFFFFF;
+  --button-bg: #FFFFFF;
+  --button-hover: #F7F7F8;
 
-  /* Wallpaper: warm (top left) to cool (bottom right). */
-  --wp-base-1: #FCE3D3;
-  --wp-base-2: #EADFF6;
-  --wp-base-3: #D5E3FB;
-  --wp-base-4: #CBE9EE;
-  --wp-a: #FFC4A3;
-  --wp-b: #F7B3D2;
-  --wp-c: #AFC2FF;
-  --wp-d: #9FDCE3;
-  --wp-ribbon: rgba(255, 255, 255, 0.55);
+  --menubar: rgba(246, 246, 250, 0.62);
+  --menu-bg: rgba(240, 240, 244, 0.82);
+  --menu-rim: rgba(255, 255, 255, 0.5);
+  --dock-bg: rgba(255, 255, 255, 0.3);
+  --dock-rim: rgba(255, 255, 255, 0.5);
+  --hud: rgba(252, 252, 254, 0.78);
+  --desk-ink: #1D1D1F;
+  --desk-shadow: 0 1px 2px rgba(255, 255, 255, 0.55);
 
-  --font-display: var(--font-inter), "Inter", system-ui, sans-serif;
-  --font-code: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --light-inactive: #D6D6DA;
+  --light-inactive-ring: rgba(0, 0, 0, 0.1);
 
-  /* Top chrome (mobile status bar / desktop menu bar) and the desktop dock. */
+  --shadow-key:
+    0 0 0 0.5px rgba(0, 0, 0, 0.22),
+    0 26px 64px 0 rgba(20, 22, 60, 0.3),
+    0 8px 18px 0 rgba(20, 22, 60, 0.14);
+  --shadow-inactive:
+    0 0 0 0.5px rgba(0, 0, 0, 0.16),
+    0 12px 32px 0 rgba(20, 22, 60, 0.15),
+    0 3px 8px 0 rgba(20, 22, 60, 0.07);
+
+  --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", var(--font-inter), "Inter", sans-serif;
+  --font-mono-stack: ui-monospace, "SF Mono", SFMono-Regular, Menlo, var(--font-jetbrains), monospace;
+
+  /* Top chrome (phone status bar / desktop menu bar) and the desktop Dock. */
   --nav-h: 3.25rem;
   --dock-h: 0rem;
 }
 
 @media (min-width: 64rem) {
   :root {
-    --nav-h: 2rem;
-    --dock-h: 6rem;
+    --nav-h: 1.5rem;              /* the 24px menu bar */
+    --dock-h: 5.25rem;
   }
 }
 
 .dark {
-  --background: #0C1020;
+  color-scheme: dark;
+  --background: #0B0E1E;
   --foreground: #F5F5F7;
-  --muted: #A6A6AD;
-  --accent-brand: #4C8DFF;
-  --accent: #7FAEFF;              /* blue as TEXT: ≥4.5:1 on graphite glass and controls */
-  --accent-fill: #2563EB;
+  --muted: #A1A1A8;               /* 6.3:1 on the window, 5.5:1 on the sidebar */
+  --accent-brand: #0A84FF;
+  --accent: #58A6FF;              /* blue as TEXT: 6.4:1 on the window, 5.2:1 on a tinted chip */
+  --accent-fill: #1168D7;
+  --accent-top: #1873E6;
+  --accent-bottom: #0A5CC8;
   --on-accent: #FFFFFF;
-  --accent-soft: rgba(76, 141, 255, 0.16);
-  --glow: rgba(76, 141, 255, 0.28);
-  --success: #3FCF6B;
+  --accent-soft: rgba(10, 132, 255, 0.18);
+  --success: #32D74B;
+  --focus-ring: #3E8EFF;
 
-  --window: rgba(34, 34, 40, 0.74);
-  --window-solid: #232329;
-  --titlebar: rgba(52, 52, 60, 0.6);
-  --sidebar: rgba(26, 26, 32, 0.6);
+  --window-bg: #1F1F22;
+  --window-chrome: #2A2A2E;
+  --statusbar: #252528;
+  --window-solid: #26262A;
+  --sidebar: rgba(46, 44, 54, 0.62);
   --card: rgba(255, 255, 255, 0.05);
-  --hairline: rgba(255, 255, 255, 0.09);
-  --hairline-strong: rgba(255, 255, 255, 0.17);
   --control: rgba(255, 255, 255, 0.08);
-  --control-hover: rgba(255, 255, 255, 0.14);
-  --menubar: rgba(20, 20, 26, 0.55);
-  --dock: rgba(44, 44, 52, 0.42);
-  --label-bg: rgba(20, 20, 26, 0.72);
-  --window-shadow:
-    0 0 0 0.5px rgba(255, 255, 255, 0.12),
-    0 28px 80px -16px rgba(0, 0, 0, 0.7),
-    0 10px 24px -10px rgba(0, 0, 0, 0.5);
+  --control-hover: rgba(255, 255, 255, 0.13);
+  --control-active: rgba(255, 255, 255, 0.18);
+  --selection: rgba(255, 255, 255, 0.1);
+  --hairline: rgba(255, 255, 255, 0.09);
+  --hairline-strong: rgba(255, 255, 255, 0.15);
+  --window-rim: rgba(255, 255, 255, 0.14);
+  --segment-on: rgba(255, 255, 255, 0.2);
+  --button-bg: rgba(255, 255, 255, 0.12);
+  --button-hover: rgba(255, 255, 255, 0.17);
 
-  --wp-base-1: #1B1236;
-  --wp-base-2: #151A3E;
-  --wp-base-3: #0F1D38;
-  --wp-base-4: #0A1A26;
-  --wp-a: #5B2A8C;
-  --wp-b: #7A2A5E;
-  --wp-c: #1F4FB0;
-  --wp-d: #0E5A68;
-  --wp-ribbon: rgba(140, 160, 255, 0.16);
+  --menubar: rgba(20, 20, 26, 0.5);
+  --menu-bg: rgba(38, 38, 44, 0.8);
+  --menu-rim: rgba(255, 255, 255, 0.14);
+  --dock-bg: rgba(36, 36, 44, 0.38);
+  --dock-rim: rgba(255, 255, 255, 0.16);
+  --hud: rgba(34, 34, 40, 0.78);
+  --desk-ink: #FFFFFF;
+  --desk-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
+
+  --light-inactive: #4C4C52;
+  --light-inactive-ring: rgba(0, 0, 0, 0.3);
+
+  --shadow-key:
+    0 0 0 0.5px rgba(0, 0, 0, 0.85),
+    0 30px 72px 0 rgba(0, 0, 0, 0.6),
+    0 10px 22px 0 rgba(0, 0, 0, 0.35);
+  --shadow-inactive:
+    0 0 0 0.5px rgba(0, 0, 0, 0.7),
+    0 14px 36px 0 rgba(0, 0, 0, 0.4);
 }
 
 @theme inline {
@@ -111,32 +139,31 @@
   --color-accent: var(--accent);
   --color-muted: var(--muted);
 
-  --font-sans: var(--font-display);
-  --font-mono: var(--font-code);
+  --font-sans: var(--font-system);
+  --font-mono: var(--font-mono-stack);
 }
 
 /*
  * The layout switches from the vertical stack to the horizontal journey at `md`.
- * Raising it to 64rem (1024px) keeps tablets on the vertical layout — scroll-jacking a touch
- * device through a horizontal track is worse than letting it scroll normally.
  * Must stay in sync with DESKTOP_MEDIA_QUERY in src/hooks/useIsDesktop.ts.
  */
 @theme {
   --breakpoint-md: 64rem;
 
   --text-micro: 0.625rem;    /* 10px */
-  --text-caption: 0.6875rem; /* 11px */
-  --text-body-sm: 0.8125rem; /* 13px */
+  --text-caption: 0.6875rem; /* 11px — macOS labels */
+  --text-body-sm: 0.8125rem; /* 13px — macOS UI text */
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  font-size: 0.8125rem;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: "cv11", "ss01";
+  text-rendering: optimizeLegibility;
 }
 
 /* ─── Wallpaper ─────────────────────────────────────────────────────────── */
@@ -147,33 +174,26 @@ body {
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
-  background:
-    radial-gradient(55% 60% at 8% 12%, var(--wp-a) 0%, transparent 62%),
-    radial-gradient(45% 55% at 38% 96%, var(--wp-b) 0%, transparent 60%),
-    radial-gradient(50% 60% at 92% 18%, var(--wp-c) 0%, transparent 62%),
-    radial-gradient(55% 55% at 88% 92%, var(--wp-d) 0%, transparent 60%),
-    linear-gradient(150deg, var(--wp-base-1) 0%, var(--wp-base-2) 36%, var(--wp-base-3) 68%, var(--wp-base-4) 100%);
+  background: var(--background);
 }
 
-/* A soft light ribbon sweeping across — the only "shape" in the wallpaper. */
-.wallpaper::before {
-  content: "";
+.wallpaper svg {
   position: absolute;
-  left: -20%;
-  right: -20%;
-  top: 38%;
-  height: 46%;
-  background: radial-gradient(50% 50% at 50% 50%, var(--wp-ribbon) 0%, transparent 70%);
-  transform: rotate(-11deg);
-  filter: blur(18px);
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
-/* Fine grain so the gradient never bands. */
+.wallpaper__dark { display: none; }
+.dark .wallpaper__light { display: none; }
+.dark .wallpaper__dark { display: block; }
+
+/* Fine grain so the gradients never band. */
 .wallpaper::after {
   content: "";
   position: absolute;
   inset: 0;
-  opacity: 0.07;
+  opacity: 0.05;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   mix-blend-mode: overlay;
 }
@@ -181,335 +201,653 @@ body {
 /* Component classes live in the components layer so Tailwind utilities on the
    same element (h-10, px-3, text-xs …) can still override them. */
 @layer components {
-/* ─── Windows ───────────────────────────────────────────────────────────── */
 
-.os-glass {
-  background: var(--window);
-  -webkit-backdrop-filter: blur(30px) saturate(170%);
-  backdrop-filter: blur(30px) saturate(170%);
+/* ─── Icons ─────────────────────────────────────────────────────────────── */
+
+.sym { display: inline-block; vertical-align: -0.125em; }
+
+.app-icon {
+  filter: drop-shadow(0 0.5px 0.5px rgba(0, 0, 0, 0.12)) drop-shadow(0 3px 6px rgba(0, 0, 0, 0.16));
+  overflow: visible;
 }
+
+.app-icon--doc { filter: none; }
+
+/* ─── Windows ───────────────────────────────────────────────────────────── */
 
 .os-window {
   position: relative;
   display: flex;
   flex-direction: column;
-  border-radius: 0.875rem;
-  box-shadow: var(--window-shadow);
+  border-radius: 0.75rem;
+  background: var(--window-bg);
+  box-shadow: var(--shadow-inactive);
   overflow: hidden;
   color: var(--foreground);
+  transition: box-shadow 0.28s ease;
 }
 
+.os-window.is-key { box-shadow: var(--shadow-key); }
+
+/* The light inner rim dark-mode windows have, drawn above the content. */
+.os-window::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 0.5px var(--window-rim);
+  z-index: 5;
+}
+
+/* Title bar: a 52px unified toolbar (title left, controls right) or a 28px compact bar. */
 .os-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   flex-shrink: 0;
-  min-height: 2.5rem;
-  padding: 0.5rem 0.875rem;
-  background: var(--titlebar);
-  border-bottom: 1px solid var(--hairline);
+  min-height: 2.75rem;
+  padding: 0.375rem 0.875rem;
+  background: var(--window-chrome);
+  border-bottom: 0.5px solid var(--hairline-strong);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+@media (min-width: 64rem) {
+  .os-titlebar {
+    min-height: 3.25rem;
+    padding: 0.5rem 0.875rem 0.5rem 1.125rem;
+    gap: 1.25rem;
+  }
+
+  .os-titlebar--compact {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    min-height: 1.75rem;
+    padding: 0 0.625rem;
+    gap: 0.5rem;
+  }
+
+  /* Beside a full-height sidebar the title bar sits on the content column. */
+  .os-titlebar--beside { padding-left: 1.25rem; }
 }
 
 .os-title {
   font-size: 0.8125rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.005em;
+  line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: color 0.2s ease;
 }
+
+@media (min-width: 64rem) {
+  .os-title { font-size: 0.9375rem; letter-spacing: -0.012em; }
+  .os-title--compact { font-size: 0.8125rem; letter-spacing: -0.005em; text-align: center; }
+}
+
+.os-subtitle {
+  font-size: 0.6875rem;
+  line-height: 1.2;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.os-window.is-inactive .os-title { color: var(--muted); }
+
+/* Split window: full-height sidebar on desktop, stacked on phones. */
+.os-split {
+  display: grid;
+  grid-template-areas: "title" "side" "body" "foot";
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+}
+
+.os-split { position: relative; }
+.os-split__title { grid-area: title; min-width: 0; }
+
+/* Traffic lights of a split window: first in the DOM, drawn on the sidebar's top strip. */
+.os-lights--split {
+  position: absolute;
+  z-index: 2;
+  top: 1rem;
+  left: 0.875rem;
+}
+.os-split__side { grid-area: side; min-width: 0; }
+.os-split__body { grid-area: body; min-width: 0; }
+.os-split__foot { grid-area: foot; min-width: 0; }
+
+@media (min-width: 64rem) {
+  .os-split {
+    grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas: "side title" "side body" "side foot";
+  }
+}
+
+/* Vibrancy: the wallpaper glows through the sidebar, as on macOS. */
+.os-sidebar {
+  background: var(--sidebar);
+  -webkit-backdrop-filter: blur(40px) saturate(190%);
+  backdrop-filter: blur(40px) saturate(190%);
+  border-bottom: 0.5px solid var(--hairline);
+}
+
+@media (min-width: 64rem) {
+  .os-sidebar {
+    border-bottom: 0;
+    border-right: 0.5px solid var(--hairline-strong);
+  }
+}
+
+.os-sidebar__top {
+  align-items: center;
+  height: 3.25rem;
+  padding-left: 1.125rem;
+  flex-shrink: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.os-statusbar {
+  flex-shrink: 0;
+  border-top: 0.5px solid var(--hairline-strong);
+  background: var(--statusbar);
+}
+
+/* Source list (Finder sidebar) */
+.os-source-heading {
+  padding: 0 0.625rem 0.25rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.os-source-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  height: 1.75rem;
+  padding: 0 0.625rem;
+  border-radius: 0.375rem;
+  font-size: 0.8125rem;
+  text-align: left;
+  color: var(--foreground);
+  transition: background-color 0.15s ease;
+}
+
+.os-source-item .sym { color: var(--accent-brand); font-size: 1rem; }
+.os-source-item:hover { background: var(--control); }
+.os-source-item[aria-current="page"] { background: var(--selection); font-weight: 600; }
+
+/* ─── Traffic lights ─────────────────────────────────────────────────── */
 
 .os-lights {
   display: flex;
-  gap: 0.5rem;
   align-items: center;
+  flex-shrink: 0;
+  margin-left: -0.25rem;
 }
 
+.os-light-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+}
+
+.os-light-btn:focus-visible { outline: none; }
+
 .os-light {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 0.75rem;
   height: 0.75rem;
   border-radius: 9999px;
-  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.18);
-  flex-shrink: 0;
+  background: var(--light);
+  box-shadow: inset 0 0 0 0.5px var(--light-ring);
+  color: var(--light-ink);
+  transition: background-color 0.15s ease, filter 0.1s ease;
 }
 
-.os-light--close { background: #FF5F57; }
-.os-light--min { background: #FEBC2E; }
-.os-light--max { background: #28C840; }
+.os-light--close { --light: #FF5F57; --light-ring: #E0443E; --light-ink: #6E0A04; }
+.os-light--min { --light: #FEBC2E; --light-ring: #DFA123; --light-ink: #8A4B00; }
+.os-light--max { --light: #28C840; --light-ring: #1AAB29; --light-ink: #0A5A12; }
 
-/* Window footer / status bar */
-.os-statusbar {
-  flex-shrink: 0;
-  border-top: 1px solid var(--hairline);
-  background: var(--titlebar);
+.os-light__glyph {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.1s ease;
 }
 
-/* Inner cards, sidebar panes */
-.os-sidebar {
-  background: var(--sidebar);
+.os-lights:hover .os-light__glyph,
+.os-light-btn:focus-visible .os-light__glyph { opacity: 1; }
+
+.os-light-btn:active .os-light { filter: brightness(0.82); }
+
+.os-light-btn:focus-visible .os-light {
+  box-shadow: 0 0 0 2px var(--window-chrome), 0 0 0 4px var(--focus-ring);
 }
+
+/* Inactive windows grey their lights until the pointer reaches them, like macOS. */
+.os-window.is-inactive .os-lights:not(:hover):not(:focus-within) .os-light {
+  background: var(--light-inactive);
+  box-shadow: inset 0 0 0 0.5px var(--light-inactive-ring);
+}
+
+/* ─── Content surfaces ───────────────────────────────────────────────── */
 
 .os-card {
   background: var(--card);
-  border: 1px solid var(--hairline);
-  border-radius: 0.75rem;
+  border: 0.5px solid var(--hairline-strong);
+  border-radius: 0.625rem;
 }
 
-/* Section heading inside a window: the h2 is a small, quiet label, like a
-   pane title; the visual weight lives in the content below it. */
+/* Section heading inside a window: a quiet 11px label, as in System Settings. */
 .os-eyebrow {
   font-size: 0.6875rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--muted);
+}
+
+.os-large-title {
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  line-height: 1.12;
 }
 
 /* Greek UI labels in the content file are written without accents because they
-   were always displayed in capitals. Keep them in capitals in Greek only;
-   English labels stay in natural case. */
+   were always displayed in capitals. Keep them in capitals in Greek only. */
 html[lang="el"] .caps-gr {
   text-transform: uppercase;
   letter-spacing: 0.02em;
 }
 
-/* App tile: gradient square with a white glyph. */
-.app-tile {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  color: #FFFFFF;
-  border-radius: 22.5%;
-  box-shadow:
-    inset 0 0 0 0.5px rgba(255, 255, 255, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.35),
-    0 1px 2px rgba(0, 0, 0, 0.18),
-    0 4px 10px -4px rgba(0, 0, 0, 0.3);
-}
+/* ─── Controls ──────────────────────────────────────────────────────── */
 
-/* Buttons */
 .os-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  height: 2.25rem;
-  padding: 0 1rem;
-  border-radius: 0.5rem;
+  gap: 0.375rem;
+  height: 1.75rem;
+  padding: 0 0.875rem;
+  border-radius: 9999px;
   font-size: 0.8125rem;
-  font-weight: 600;
+  font-weight: 500;
+  line-height: 1;
   white-space: nowrap;
-  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  transition: background-color 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
 }
 
 .os-btn--primary {
-  background: var(--accent-fill);
+  background: linear-gradient(180deg, var(--accent-top), var(--accent-bottom));
   color: var(--on-accent);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  box-shadow:
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.3),
+    0 0 0 0.5px rgba(0, 0, 0, 0.14),
+    0 1px 2px rgba(0, 0, 0, 0.18);
 }
 
-.os-btn--primary:hover {
-  box-shadow: 0 6px 18px -6px var(--glow), 0 1px 2px rgba(0, 0, 0, 0.18);
-  filter: brightness(1.06);
-}
+.os-btn--primary:hover { filter: brightness(1.07); }
+.os-btn--primary:active { filter: brightness(0.9); }
 
 .os-btn--secondary {
-  background: var(--control);
+  background: var(--button-bg);
   color: var(--foreground);
-  box-shadow: inset 0 0 0 1px var(--hairline);
+  box-shadow:
+    0 0 0 0.5px var(--hairline-strong),
+    0 0.5px 1.5px rgba(0, 0, 0, 0.1);
 }
 
-.os-btn--secondary:hover {
-  background: var(--control-hover);
+.os-btn--secondary:hover { background: var(--button-hover); }
+.os-btn--secondary:active { background: var(--control-active); }
+
+/* Borderless toolbar button: shows a plate on hover, like a unified toolbar item. */
+.os-tool {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  min-width: 1.75rem;
+  height: 1.75rem;
+  padding: 0 0.375rem;
+  border-radius: 0.375rem;
+  color: var(--muted);
+  font-size: 1rem;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
+.os-tool:hover:not(:disabled) { background: var(--control); color: var(--foreground); }
+.os-tool:active:not(:disabled) { background: var(--control-active); }
+.os-tool:disabled { opacity: 0.35; cursor: default; }
+
+/* Round icon buttons (social links). */
 .os-icon-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 2.25rem;
   height: 2.25rem;
-  border-radius: 0.5rem;
+  border-radius: 9999px;
+  font-size: 1rem;
   color: var(--foreground);
-  background: var(--control);
-  box-shadow: inset 0 0 0 1px var(--hairline);
-  transition: background-color 0.2s ease, color 0.2s ease;
+  background: var(--button-bg);
+  box-shadow: 0 0 0 0.5px var(--hairline-strong), 0 0.5px 1.5px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.os-icon-btn:hover:not(:disabled) {
-  background: var(--control-hover);
-  color: var(--accent);
-}
+.os-icon-btn:hover { background: var(--button-hover); color: var(--accent); }
 
-.os-icon-btn:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
-
-/* Segmented control (view switchers) */
+/* Segmented control */
 .os-segmented {
   display: inline-flex;
+  align-items: center;
+  gap: 1px;
   padding: 2px;
   border-radius: 0.5rem;
   background: var(--control);
-  box-shadow: inset 0 0 0 1px var(--hairline);
+  box-shadow: inset 0 0 0 0.5px var(--hairline);
 }
 
 .os-segmented button {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
-  height: 1.75rem;
+  height: 1.375rem;
   padding: 0 0.625rem;
   border-radius: 0.375rem;
   font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--muted);
-  transition: background-color 0.2s ease, color 0.2s ease;
+  font-weight: 500;
+  color: var(--foreground);
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.os-segmented button:hover {
-  color: var(--foreground);
-}
+.os-segmented button .sym { font-size: 0.875rem; color: var(--muted); }
+.os-segmented button:hover:not([aria-pressed="true"]) { background: var(--control); }
 
 .os-segmented button[aria-pressed="true"] {
-  background: var(--window-solid);
-  color: var(--foreground);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 0 0 0.5px var(--hairline-strong);
+  background: var(--segment-on);
+  box-shadow: 0 0.5px 2px rgba(0, 0, 0, 0.16), 0 0 0 0.5px var(--hairline-strong);
 }
 
-/* Chips (credentials, tags) */
+.os-segmented button[aria-pressed="true"] .sym { color: var(--foreground); }
+
+/* Tokens: credentials and tags. */
 .os-chip {
   display: inline-flex;
   align-items: center;
-  gap: 0.375rem;
-  height: 1.625rem;
+  gap: 0.3125rem;
+  height: 1.5rem;
   padding: 0 0.625rem;
   border-radius: 9999px;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 500;
   background: var(--control);
   color: var(--foreground);
-  box-shadow: inset 0 0 0 1px var(--hairline);
+  box-shadow: inset 0 0 0 0.5px var(--hairline);
   white-space: nowrap;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-a.os-chip:hover {
-  background: var(--control-hover);
-  color: var(--accent);
-}
+a.os-chip:hover { background: var(--control-hover); color: var(--accent); }
 
 .os-chip--accent {
   background: var(--accent-soft);
   color: var(--accent);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent), transparent 70%);
+  box-shadow: inset 0 0 0 0.5px color-mix(in srgb, var(--accent-brand), transparent 70%);
 }
 
-a.os-chip--accent:hover {
-  background: var(--accent-fill);
-  color: var(--on-accent);
-}
+a.os-chip--accent:hover { background: var(--accent-fill); color: var(--on-accent); }
 
-/* Rotated "sticker" pills on the desktop. */
-.os-sticker {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  border-radius: 9999px;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  background: var(--window-solid);
+/* HUD card, used where a window was closed or minimised. */
+.os-hud {
+  border-radius: 1rem;
+  background: var(--hud);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  backdrop-filter: blur(30px) saturate(180%);
+  box-shadow: 0 0 0 0.5px var(--hairline-strong), 0 18px 40px -12px rgba(0, 0, 0, 0.35);
   color: var(--foreground);
-  box-shadow: 0 0 0 1px var(--hairline-strong), 0 10px 24px -12px rgba(0, 0, 0, 0.35);
-  white-space: nowrap;
 }
 
-.os-sticker--accent {
-  background: var(--accent-fill);
-  color: var(--on-accent);
-  box-shadow: 0 10px 24px -12px var(--glow);
+/* Widget (the "Now" card): a Sonoma-style desktop widget. */
+.os-widget {
+  border-radius: 1.375rem;
+  background: var(--hud);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  backdrop-filter: blur(30px) saturate(180%);
+  box-shadow: 0 0 0 0.5px var(--hairline-strong), 0 14px 36px -10px rgba(20, 22, 60, 0.3);
+  color: var(--foreground);
 }
 
-/* Desktop icon label: macOS-style label pill so it reads on any wallpaper. */
-.os-icon-label {
+/* Desktop icon label: plain text over the wallpaper; selected/focused turns into the blue pill. */
+.os-desk-label {
   display: inline-block;
   max-width: 100%;
-  padding: 0.125rem 0.4rem;
-  border-radius: 0.3rem;
+  padding: 0.0625rem 0.375rem;
+  border-radius: 0.25rem;
   font-size: 0.75rem;
-  font-weight: 600;
-  line-height: 1.25;
-  background: var(--label-bg);
-  color: var(--foreground);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--desk-ink);
+  text-shadow: var(--desk-shadow);
+}
+
+.os-desk-icon:focus-visible { outline: none; }
+.os-desk-icon:focus-visible .os-desk-label,
+.os-desk-icon:active .os-desk-label {
+  background: var(--accent-fill);
+  color: #FFFFFF;
+  text-shadow: none;
+}
+.os-desk-icon:focus-visible .os-desk-tile,
+.os-desk-icon:hover .os-desk-tile { background: rgba(0, 0, 0, 0.1); }
+.dark .os-desk-icon:focus-visible .os-desk-tile,
+.dark .os-desk-icon:hover .os-desk-tile { background: rgba(255, 255, 255, 0.14); }
+
+.os-desk-tile {
+  display: inline-flex;
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.15s ease;
 }
 
 /* The About code pane is a garnish: shown only when the desktop window has the
    height for it, so the panel never needs an inner scroll. */
 .about-code { display: none; }
 
-@media (min-width: 64rem) and (min-height: 52rem) {
+@media (min-width: 64rem) and (min-height: 53rem) {
   .about-code { display: block; }
 }
 
-/* Terminal window: dark in both themes, like a real terminal profile. */
-.os-terminal {
-  --term-bg: rgba(22, 22, 27, 0.9);
-  background: var(--term-bg);
+/* Terminal: the dark "Pro" profile in both themes, slightly translucent. */
+.os-window--terminal {
+  background: rgba(26, 26, 30, 0.9);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(24px) saturate(160%);
   color: #E6E6EA;
+  --window-rim: rgba(255, 255, 255, 0.12);
+  --light-inactive: #4C4C52;
+  --light-inactive-ring: rgba(0, 0, 0, 0.3);
+  --muted: #A1A1A8;
 }
 
-.os-terminal .os-titlebar {
-  background: rgba(46, 46, 54, 0.9);
-  border-bottom-color: rgba(255, 255, 255, 0.08);
-  color: #D6D6DC;
+.os-window--terminal .os-titlebar {
+  background: rgba(56, 56, 62, 0.92);
+  border-bottom-color: rgba(0, 0, 0, 0.5);
+  color: #DCDCE0;
 }
 
-/* Dock */
-.os-dock {
-  background: var(--dock);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  backdrop-filter: blur(24px) saturate(180%);
-  box-shadow: 0 0 0 0.5px var(--hairline-strong), inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 18px 40px -16px rgba(0, 0, 0, 0.35);
+.os-window--terminal .os-light-btn:focus-visible .os-light {
+  box-shadow: 0 0 0 2px #38383E, 0 0 0 4px var(--focus-ring);
 }
 
-.os-menubar {
+/* ─── Menu bar and menus ─────────────────────────────────────────────── */
+
+/* The blur lives on a pseudo-element: a backdrop-filter on the bar itself would become
+   the backdrop root of its dropdown menus, and they could no longer blur the page. */
+.os-menubar { isolation: isolate; }
+
+.os-menubar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background: var(--menubar);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  backdrop-filter: blur(40px) saturate(180%);
   box-shadow: 0 0.5px 0 var(--hairline-strong);
 }
 
-/* Tooltip shown above dock icons. */
-.os-tooltip {
+.os-menubar__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  height: 1.375rem;
+  padding: 0 0.625rem;
+  border-radius: 0.3125rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--foreground);
+  transition: background-color 0.08s ease;
+}
+
+.os-menubar__item:hover,
+.os-menubar__item[aria-expanded="true"] { background: var(--control-hover); }
+
+.os-menubar__item:focus-visible { outline-offset: -1px; }
+
+.os-menu {
+  position: absolute;
+  top: calc(100% + 1px);
+  left: 0;
+  min-width: 14rem;
+  padding: 0.3125rem;
+  border-radius: 0.5625rem;
+  background: var(--menu-bg);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  backdrop-filter: blur(40px) saturate(180%);
+  box-shadow:
+    0 0 0 0.5px var(--hairline-strong),
+    inset 0 0 0 0.5px var(--menu-rim),
+    0 14px 36px -6px rgba(0, 0, 0, 0.3),
+    0 4px 10px -2px rgba(0, 0, 0, 0.12);
+  color: var(--foreground);
+  transform-origin: top left;
+}
+
+.os-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  width: 100%;
+  height: 1.5rem;
+  padding: 0 0.75rem 0 0.375rem;
+  border-radius: 0.3125rem;
+  font-size: 0.8125rem;
+  text-align: left;
+  white-space: nowrap;
+  color: var(--foreground);
+  outline: none;
+}
+
+.os-menu-item__check {
+  display: inline-flex;
+  width: 1rem;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.75rem;
+}
+
+.os-menu-item__icon { font-size: 0.9375rem; color: var(--muted); margin-right: 0.25rem; }
+.os-menu-item__meta { margin-left: auto; padding-left: 1.5rem; color: var(--muted); font-size: 0.75rem; }
+
+.os-menu-item:not([aria-disabled="true"]):hover,
+.os-menu-item:not([aria-disabled="true"]):focus-visible {
+  background: var(--accent-fill);
+  color: #FFFFFF;
+}
+
+.os-menu-item:not([aria-disabled="true"]):hover :is(.os-menu-item__icon, .os-menu-item__meta),
+.os-menu-item:not([aria-disabled="true"]):focus-visible :is(.os-menu-item__icon, .os-menu-item__meta) {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.os-menu-item[aria-disabled="true"] { opacity: 0.4; cursor: default; }
+
+.os-menu-sep {
+  height: 1px;
+  margin: 0.3125rem 0.625rem;
+  background: var(--hairline-strong);
+}
+
+/* ─── Dock ───────────────────────────────────────────────────────────── */
+
+/* Same trick as the menu bar, so the Dock's labels keep their own blur. */
+.os-dock {
+  position: relative;
+  isolation: isolate;
+}
+
+.os-dock::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--dock-bg);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  backdrop-filter: blur(30px) saturate(180%);
+  box-shadow:
+    inset 0 0 0 0.5px var(--dock-rim),
+    0 0 0 0.5px rgba(0, 0, 0, 0.12),
+    0 12px 32px -10px rgba(0, 0, 0, 0.3);
+}
+
+.os-dock-label {
   position: absolute;
   left: 50%;
-  bottom: calc(100% + 0.75rem);
-  transform: translateX(-50%) translateY(4px);
-  padding: 0.25rem 0.625rem;
+  bottom: calc(100% + 0.625rem);
+  transform: translateX(-50%);
+  padding: 0.1875rem 0.625rem;
   border-radius: 0.375rem;
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: 0.8125rem;
+  font-weight: 500;
   white-space: nowrap;
-  background: var(--window-solid);
+  background: var(--menu-bg);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  backdrop-filter: blur(30px) saturate(180%);
   color: var(--foreground);
   box-shadow: 0 0 0 0.5px var(--hairline-strong), 0 6px 16px -6px rgba(0, 0, 0, 0.35);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.15s ease, transform 0.15s ease;
+  transition: opacity 0.12s ease;
 }
 
-.group:hover > .os-tooltip,
-.group:focus-visible > .os-tooltip {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
+.os-dock-item:hover .os-dock-label,
+.os-dock-item:focus-visible .os-dock-label { opacity: 1; }
+
+.os-dock-item:focus-visible { outline: none; }
+.os-dock-item:focus-visible .os-dock-icon {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 24%;
 }
 
 }
 
-/* ─── Theme transition ──────────────────────────────────────────────────── */
+/* ─── Theme transition ──────────────────────────────────────────────── */
 
 html.theme-transition,
 html.theme-transition *,
@@ -536,21 +874,26 @@ html[data-entered="true"] [data-cinematic] {
 }
 
 ::selection {
-  background: var(--accent-fill);
-  color: #fff;
+  background: color-mix(in srgb, var(--accent-brand), transparent 70%);
 }
 
-/* Keyboard users must always be able to see where they are. */
+/* macOS focus ring: a 3px system-blue halo that follows the control's shape. */
 :focus-visible {
-  outline: 2px solid var(--accent-brand);
-  outline-offset: 2px;
-  border-radius: 4px;
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 1px;
 }
 
 button:not(:disabled),
 a[href],
 [role="button"] {
   cursor: pointer;
+}
+
+/* While a window is dragged nothing may start a text selection. */
+html.is-dragging-window,
+html.is-dragging-window * {
+  user-select: none !important;
+  -webkit-user-select: none !important;
 }
 
 /* Honour the OS "reduce motion" setting without ever hiding content. */

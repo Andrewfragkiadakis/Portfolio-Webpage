@@ -7,6 +7,20 @@ import { isDesktopViewport } from '@/hooks/useIsDesktop'
  * horizontal track; on the vertical stack it is whichever section owns the middle of
  * the viewport.
  */
+export function readActiveSection(fallback: SectionId = SECTION_IDS[0]): SectionId {
+    if (isDesktopViewport()) {
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight
+        const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0
+        return SECTION_IDS[Math.min(SECTION_STEPS, Math.max(0, Math.round(progress * SECTION_STEPS)))]
+    }
+    const midpoint = window.innerHeight / 2
+    for (const id of SECTION_IDS) {
+        const rect = document.getElementById(id)?.getBoundingClientRect()
+        if (rect && rect.top <= midpoint && rect.bottom > midpoint) return id
+    }
+    return fallback
+}
+
 export function useActiveSection(): SectionId {
     const [active, setActive] = useState<SectionId>(SECTION_IDS[0])
 
@@ -15,20 +29,7 @@ export function useActiveSection(): SectionId {
 
         const update = () => {
             ticking = false
-            if (isDesktopViewport()) {
-                const maxScroll = document.documentElement.scrollHeight - window.innerHeight
-                const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0
-                setActive(SECTION_IDS[Math.min(SECTION_STEPS, Math.max(0, Math.round(progress * SECTION_STEPS)))])
-                return
-            }
-            const midpoint = window.innerHeight / 2
-            for (const id of SECTION_IDS) {
-                const rect = document.getElementById(id)?.getBoundingClientRect()
-                if (rect && rect.top <= midpoint && rect.bottom > midpoint) {
-                    setActive(id)
-                    return
-                }
-            }
+            setActive((current) => readActiveSection(current))
         }
 
         const onScroll = () => {

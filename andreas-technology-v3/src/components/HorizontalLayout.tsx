@@ -5,7 +5,10 @@ import HeroOverlay from '@/components/dom/HeroOverlay'
 import About from '@/components/dom/About'
 import Services from '@/components/dom/Services'
 import { useIsDesktop } from '@/hooks/useIsDesktop'
-import { SECTION_STEPS, TRACK_HEIGHT_VH, TRACK_TRAVEL_VW } from '@/data/sections'
+import { SECTION_IDS, SECTION_STEPS, TRACK_HEIGHT_VH, TRACK_TRAVEL_VW } from '@/data/sections'
+import { useDesktop } from '@/contexts/DesktopContext'
+import { readActiveSection } from '@/hooks/useActiveSection'
+import { scrollToSection } from '@/utils/smooth-scroll'
 
 const Experience = dynamic(() => import('@/components/dom/Experience'), { ssr: false })
 const Projects = dynamic(() => import('@/components/dom/Projects'), { ssr: false })
@@ -24,7 +27,9 @@ const SNAP_IDLE_MS = 140
 
 export default function HorizontalLayout() {
     const targetRef = useRef<HTMLDivElement>(null)
+    const viewportRef = useRef<HTMLDivElement>(null)
     const isDesktop = useIsDesktop()
+    const { focus } = useDesktop()
     const prefersReducedMotion = useReducedMotion()
 
     const { scrollYProgress } = useScroll({ target: targetRef })
@@ -115,6 +120,22 @@ export default function HorizontalLayout() {
         }
     }, [isDesktop, scrollYProgress])
 
+    // Keyboard travel: tabbing into a window on another space brings that space to the
+    // front, instead of letting the browser scroll the clipped track sideways.
+    useEffect(() => {
+        const viewport = viewportRef.current
+        if (!viewport || !isDesktop) return
+        const onFocusIn = (e: FocusEvent) => {
+            viewport.scrollLeft = 0
+            const panel = (e.target as HTMLElement).closest<HTMLElement>('[data-panel]')
+            const index = panel ? Number(panel.dataset.panel) : -1
+            if (index < 0 || SECTION_IDS[index] === readActiveSection()) return
+            scrollToSection(index, SECTION_IDS[index], 500)
+        }
+        viewport.addEventListener('focusin', onFocusIn)
+        return () => viewport.removeEventListener('focusin', onFocusIn)
+    }, [isDesktop])
+
     // Sections are declared once. The wrapper's CSS — not a second copy of the tree —
     // is what differs between the vertical stack and the horizontal journey.
     const sections = [
@@ -137,7 +158,7 @@ export default function HorizontalLayout() {
               between desktop spaces. Mobile: a stack of app cards, clear of the status
               bar at the top and the dock at the bottom.
             */}
-            <div className="md:sticky md:top-0 md:left-0 md:flex md:h-screen md:w-full md:items-center md:overflow-hidden">
+            <div ref={viewportRef} className="md:sticky md:top-0 md:left-0 md:flex md:h-screen md:w-full md:items-center md:overflow-hidden">
                 <motion.div
                     style={{ x }}
                     className="flex flex-col gap-5 px-3 sm:px-6 pt-[calc(var(--nav-h)+0.75rem)] pb-32 md:p-0 md:flex-row md:gap-0 md:h-screen md:items-center md:will-change-transform"
@@ -150,7 +171,10 @@ export default function HorizontalLayout() {
                     {sections.map((section, index) => (
                         <div
                             key={index}
-                            className="relative w-full max-w-2xl mx-auto overflow-x-clip md:max-w-none md:mx-0 md:h-screen md:w-screen md:flex-shrink-0 md:flex md:items-center md:justify-center md:overflow-hidden md:pt-[calc(var(--nav-h)+1rem)] md:pb-[var(--dock-h)] md:px-10 lg:px-14"
+                            data-panel={index}
+                            // Clicking the bare desktop leaves no window key, like clicking the macOS desktop.
+                            onPointerDown={(e) => { if (e.target === e.currentTarget) focus(null) }}
+                            className="relative w-full max-w-2xl mx-auto overflow-x-clip md:max-w-none md:mx-0 md:h-screen md:w-screen md:flex-shrink-0 md:flex md:items-center md:justify-center md:overflow-hidden md:pt-[calc(var(--nav-h)+1rem)] md:pb-[calc(var(--dock-h)+0.25rem)] md:px-10 lg:px-14"
                         >
                             {section}
                         </div>

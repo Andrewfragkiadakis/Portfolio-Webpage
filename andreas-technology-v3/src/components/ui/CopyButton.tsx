@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { EASE_OUT } from '@/utils/motion'
+import Icon from '@/components/ui/Icon'
 
 type CopyState = 'idle' | 'copied' | 'failed'
 
@@ -58,7 +59,7 @@ export default function CopyButton({ value, label, copiedLabel, failedLabel }: C
         setState(ok ? 'copied' : 'failed')
     }
 
-    const icon = state === 'copied' ? 'fa-check text-[var(--accent)]' : state === 'failed' ? 'fa-xmark' : 'fa-copy'
+    const icon = state === 'copied' ? 'checkmark' : state === 'failed' ? 'xmark' : 'doc.on.doc'
     const text = state === 'copied' ? copiedLabel : state === 'failed' ? failedLabel : label
 
     return (
@@ -66,9 +67,9 @@ export default function CopyButton({ value, label, copiedLabel, failedLabel }: C
             type="button"
             onClick={copy}
             aria-label={`${label}: ${value}`}
-            className="os-btn os-btn--secondary relative shrink-0 h-8 px-3 text-xs"
+            className="os-btn os-btn--secondary relative shrink-0 h-7 px-3 text-xs"
         >
-            <i className={`fas ${icon}`} aria-hidden="true" />
+            <Icon name={icon} className={`text-[0.8125rem] ${state === 'copied' ? 'text-[var(--accent)]' : ''}`} />
             <span aria-live="polite" className="relative inline-flex overflow-hidden h-[1.2em] caps-gr">
                 <AnimatePresence mode="popLayout" initial={false}>
                     <motion.span

@@ -6,13 +6,16 @@ import './globals.css'
 import { LanguageProvider } from '@/contexts/LanguageContext'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import CinematicEntry from '@/components/dom/CinematicEntry'
+import Wallpaper from '@/components/ui/Wallpaper'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { SOCIAL_URLS, content } from '@/data/content'
 
-// Both families ship Greek glyphs, so Greek headings and labels never fall back
-// to a system font.
-const inter = Inter({ subsets: ['latin', 'greek'], display: 'swap', variable: '--font-inter' })
-const jetbrains = JetBrains_Mono({ subsets: ['latin', 'greek'], display: 'swap', variable: '--font-jetbrains' })
+// The interface asks for the system font first (-apple-system → SF Pro on Apple
+// devices, which covers Greek). Inter and JetBrains Mono are the fallbacks everywhere
+// else; both ship Greek glyphs, so Greek never drops to an unrelated font. Neither is
+// preloaded: on Apple devices they are never used.
+const inter = Inter({ subsets: ['latin', 'greek'], display: 'swap', variable: '--font-inter', preload: false })
+const jetbrains = JetBrains_Mono({ subsets: ['latin', 'greek'], display: 'swap', variable: '--font-jetbrains', preload: false })
 
 const SITE_URL = 'https://andreas.technology'
 
@@ -62,7 +65,7 @@ export const metadata: Metadata = {
         follow: true,
     },
     other: {
-        'theme-color': '#0C1020',
+        'theme-color': '#0B0E1E',
     },
 }
 
@@ -74,28 +77,8 @@ export default function RootLayout({
     return (
         <html lang="en" className={`${inter.variable} ${jetbrains.variable}`} suppressHydrationWarning>
             <head>
-                <meta name="theme-color" content="#0C1020" media="(prefers-color-scheme: dark)" />
-                <meta name="theme-color" content="#E9ECF6" media="(prefers-color-scheme: light)" />
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-                <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
-                <link
-                    rel="preload"
-                    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-                    as="style"
-                    crossOrigin="anonymous"
-                />
-                <script
-                    dangerouslySetInnerHTML={{
-                        __html: `(function(){var l=document.createElement('link');l.rel='stylesheet';l.href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';l.crossOrigin='anonymous';l.referrerPolicy='no-referrer';document.head.appendChild(l);})();`,
-                    }}
-                />
-                <noscript>
-                    <link
-                        rel="stylesheet"
-                        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-                        crossOrigin="anonymous"
-                    />
-                </noscript>
+                <meta name="theme-color" content="#0B0E1E" media="(prefers-color-scheme: dark)" />
+                <meta name="theme-color" content="#E9E6F2" media="(prefers-color-scheme: light)" />
                 <script
                     dangerouslySetInnerHTML={{
                         __html: `(function(){try{var t=localStorage.getItem('theme');if(!t){var mq=window.matchMedia('(prefers-color-scheme:dark)');var ml=window.matchMedia('(prefers-color-scheme:light)');if(mq.matches||ml.matches){t=mq.matches?'dark':'light';}else{var h=new Date().getHours();t=(h>=7&&h<20)?'light':'dark';}}document.documentElement.classList.add(t);}catch(e){}})();`,
@@ -161,7 +144,7 @@ export default function RootLayout({
                 />
             </head>
             <body className="font-sans">
-                <div className="wallpaper" aria-hidden="true" />
+                <Wallpaper />
                 <a
                     href="#main-content"
                     className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100001] focus:px-4 focus:py-2 focus:bg-[var(--accent-fill)] focus:text-white focus:rounded-lg focus:outline-none"

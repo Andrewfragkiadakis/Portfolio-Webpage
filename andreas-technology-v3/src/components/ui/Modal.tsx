@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
-import { motion, AnimatePresence } from 'motion/react'
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
+import { TrafficLights } from '@/components/ui/Window'
+import { WINDOW_SPRING } from '@/utils/motion'
 
 const FOCUSABLE = 'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
 
@@ -39,6 +41,7 @@ export default function Modal({
     const closeRef = useRef<HTMLButtonElement>(null)
     const lastFocused = useRef<HTMLElement | null>(null)
     const [mounted, setMounted] = useState(false)
+    const reduceMotion = useReducedMotion()
 
     // Portals need a DOM target, which only exists after hydration.
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -93,40 +96,26 @@ export default function Modal({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.18 }}
+                    transition={{ duration: reduceMotion ? 0 : 0.18 }}
                     className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
                     onClick={onClose}
                 >
-                    <div className="absolute inset-0 bg-black/45 backdrop-blur-[6px]" />
+                    <div className="absolute inset-0 bg-black/40 backdrop-blur-[3px]" />
                     <motion.div
                         ref={panelRef}
                         role="dialog"
                         aria-modal="true"
                         aria-labelledby={labelledBy}
-                        initial={{ opacity: 0, scale: 0.9, y: 24 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.94, y: 12 }}
-                        transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-                        className={`os-window relative z-10 bg-[var(--window-solid)] max-h-[88vh] ${className}`}
+                        initial={reduceMotion ? false : { opacity: 0, scale: 0.92 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={reduceMotion ? { opacity: 0, transition: { duration: 0 } } : { opacity: 0, scale: 0.96, transition: { duration: 0.16, ease: 'easeOut' } }}
+                        transition={reduceMotion ? { duration: 0 } : WINDOW_SPRING}
+                        className={`os-window is-key relative z-10 max-h-[88vh] ${className}`}
                         onClick={e => e.stopPropagation()}
                     >
-                        <div className="os-titlebar grid grid-cols-[1fr_auto_1fr] items-center gap-3">
-                            <span className="os-lights">
-                                <button
-                                    ref={closeRef}
-                                    type="button"
-                                    onClick={onClose}
-                                    aria-label={closeLabel}
-                                    className="group relative -m-1.5 p-1.5 rounded-full focus-visible:outline-offset-0"
-                                >
-                                    <span className="os-light os-light--close flex items-center justify-center text-[0.5rem] text-black/60">
-                                        <i className="fas fa-xmark opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100" aria-hidden="true" />
-                                    </span>
-                                </button>
-                                <span className="os-light os-light--min" aria-hidden="true" />
-                                <span className="os-light os-light--max" aria-hidden="true" />
-                            </span>
-                            <span className="os-title text-center">{title}</span>
+                        <div className="os-titlebar os-titlebar--compact !grid grid-cols-[1fr_auto_1fr] items-center !min-h-11 md:!min-h-7">
+                            <TrafficLights labels={{ close: closeLabel, minimize: '', zoom: '' }} onClose={onClose} closeRef={closeRef} />
+                            <span className="os-title os-title--compact text-center">{title}</span>
                             <button
                                 type="button"
                                 onClick={onClose}

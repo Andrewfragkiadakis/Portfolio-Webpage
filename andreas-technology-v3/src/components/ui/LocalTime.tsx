@@ -4,16 +4,28 @@ import { useEffect, useState } from 'react'
 
 const TIME_ZONE = 'Europe/Athens'
 
-function format(date: Date): { time: string; offset: string } {
+function format(date: Date, locale: string): { time: string; offset: string; day: string } {
     const time = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: TIME_ZONE }).format(date)
     const offset = new Intl.DateTimeFormat('en-GB', { timeZone: TIME_ZONE, timeZoneName: 'shortOffset' })
         .formatToParts(date)
         .find((part) => part.type === 'timeZoneName')?.value.replace('GMT', 'UTC') ?? ''
-    return { time, offset }
+    // The menu-bar clock reads like macOS: "Fri 26 Sep" (en-US gives the three-letter month).
+    const parts = new Intl.DateTimeFormat(locale.startsWith('en') ? 'en-US' : locale, { weekday: 'short', day: 'numeric', month: 'short', timeZone: TIME_ZONE }).formatToParts(date)
+    const pick = (type: Intl.DateTimeFormatPartTypes) => parts.find((p) => p.type === type)?.value ?? ''
+    const day = `${pick('weekday')} ${pick('day')} ${pick('month')}`.replace(/\./g, '')
+    return { time, offset, day }
+}
+
+interface LocalTimeProps {
+    className?: string
+    showOffset?: boolean
+    /** Prefix the weekday and date, as the macOS menu-bar clock does. */
+    withDate?: boolean
+    locale?: string
 }
 
 /** Live Athens clock. Renders nothing until mounted so server and client never disagree. */
-export default function LocalTime({ className = '', showOffset = true }: { className?: string; showOffset?: boolean }) {
+export default function LocalTime({ className = '', showOffset = true, withDate = false, locale = 'en-GB' }: LocalTimeProps) {
     const [now, setNow] = useState<Date | null>(null)
 
     useEffect(() => {
@@ -33,10 +45,12 @@ export default function LocalTime({ className = '', showOffset = true }: { class
 
     if (!now) return <span className={className} aria-hidden="true">--:--</span>
 
-    const { time, offset } = format(now)
+    const { time, offset, day } = format(now, locale)
     return (
         <time className={className} dateTime={now.toISOString()}>
-            {time}{showOffset && <> <span className="text-[var(--muted)]">{offset}</span></>}
+            {withDate && <>{day}&nbsp;&nbsp;</>}
+            {time}
+            {showOffset && <> <span className="text-[var(--muted)]">{offset}</span></>}
         </time>
     )
 }

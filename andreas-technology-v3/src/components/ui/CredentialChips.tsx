@@ -1,5 +1,5 @@
 import type { Education } from '@/data/content'
-import { uiIcon } from '@/data/apps'
+import Icon, { symbolFor } from '@/components/ui/Icon'
 
 interface CredentialChipsProps {
     items: Education[]
@@ -9,19 +9,21 @@ interface CredentialChipsProps {
     className?: string
 }
 
-/** Certifications and licences as pills; the ones with a public record link to it. */
+/** Certifications and licences as tokens; the ones with a public record link to it. */
 export default function CredentialChips({ items, label, newTabLabel, className = '' }: CredentialChipsProps) {
     if (items.length === 0) return null
     return (
         <div className={`flex flex-wrap items-center gap-1.5 ${className}`}>
-            {label && <span className="text-caption font-semibold uppercase tracking-[0.08em] text-[var(--muted)] mr-1">{label}</span>}
+            {label && <span className="os-eyebrow mr-1">{label}</span>}
             {items.map((item) => {
                 const cls = `os-chip ${item.featured ? 'os-chip--accent' : ''}`
+                // The content file uses a laptop glyph for Jamf; a credential reads better as a seal.
+                const symbol = item.featured ? 'checkmark.seal' : symbolFor(item.icon, item.kind === 'license' ? 'person.text.rectangle' : 'rosette')
                 const body = (
                     <>
-                        <i className={`${uiIcon(item.icon ?? (item.kind === 'license' ? 'fas fa-id-card' : 'fas fa-award'))} text-[0.7rem]`} aria-hidden="true" />
+                        <Icon name={symbol} className="text-[0.875rem]" />
                         {item.badge}
-                        {item.link && <i className="fas fa-arrow-up-right-from-square text-[0.55rem] opacity-80" aria-hidden="true" />}
+                        {item.link && <Icon name="arrow.up.right" className="text-[0.6875rem] opacity-80" />}
                     </>
                 )
                 return item.link ? (

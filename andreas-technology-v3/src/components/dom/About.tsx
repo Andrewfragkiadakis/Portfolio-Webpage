@@ -11,7 +11,9 @@ import { TOOLS, type Tool } from '@/data/tools'
 import ToolBadge from '@/components/ui/ToolBadge'
 import Window from '@/components/ui/Window'
 import CredentialChips from '@/components/ui/CredentialChips'
-import { SECTION_APPS, SERVICE_TILES, uiIcon } from '@/data/apps'
+import { MonogramIcon, GlyphTile } from '@/components/ui/AppIcon'
+import Icon, { symbolFor } from '@/components/ui/Icon'
+import { SERVICE_TINTS } from '@/data/apps'
 
 /** Counts up once in view. Writes straight to the DOM so it never re-renders React per frame. */
 function AnimatedCounter({ value, suffix = '', duration = 2 }: { value: number; suffix?: string; duration?: number }) {
@@ -67,73 +69,75 @@ export default function About() {
         { value: certifications.length, suffix: '' },
     ]
 
+    const sidebar = (
+        <div className="px-4 pt-4 md:pt-1 pb-4 md:pb-5 flex flex-col gap-4 md:h-[calc(100%-3.25rem)]">
+            <div className="flex items-center gap-3">
+                <MonogramIcon size={52} />
+                <div className="min-w-0">
+                    <p className="text-[0.9375rem] font-bold tracking-[-0.01em] leading-tight">{t.os.displayName}</p>
+                    <p className="text-caption text-[var(--muted)] leading-snug mt-0.5">{t.title}</p>
+                </div>
+            </div>
+
+            <div>
+                <p className="os-source-heading px-0 caps-gr">{t.about.currentFocus}</p>
+                <p className="text-body-sm font-semibold leading-snug">{t.about.currentFocusDetail}</p>
+            </div>
+
+            {/* "Get Info"-style key/value rows. */}
+            <dl className="grid grid-cols-2 md:grid-cols-1 gap-x-4 rounded-[0.625rem] bg-[var(--window-bg)]/60 dark:bg-white/5 px-3 py-1 shadow-[inset_0_0_0_0.5px_var(--hairline-strong)]">
+                {stats.map((stat, index) => (
+                    <div key={index} className="flex items-baseline justify-between gap-3 py-[0.4375rem] md:border-b-[0.5px] md:border-[var(--hairline-strong)] md:last:border-b-0">
+                        <dt className="text-body-sm text-[var(--muted)] leading-tight caps-gr">{t.about.statsLabels[index]}</dt>
+                        <dd className="text-body-sm font-semibold tabular-nums">
+                            <AnimatedCounter value={stat.value} suffix={stat.suffix} duration={1.5} />
+                        </dd>
+                    </div>
+                ))}
+            </dl>
+
+            <pre className="about-code shrink-0 rounded-[0.625rem] bg-[var(--window-bg)]/60 dark:bg-black/25 shadow-[inset_0_0_0_0.5px_var(--hairline-strong)] px-3 py-2.5 font-mono text-[0.6875rem] leading-[1.6] text-[var(--foreground)] overflow-hidden whitespace-pre-wrap">
+                <span className={KEY}>const</span> engineer = {'{'}{'\n'}
+                {'  '}role: <span className={STR}>&quot;Apple Fleet &amp; IT Automation Lead&quot;</span>,{'\n'}
+                {'  '}company: <span className={STR}>&quot;Omilia&quot;</span>,{'\n'}
+                {'  '}fleet: <span className={STR}>&quot;550+ Macs&quot;</span>,{'\n'}
+                {'  '}stack: [{['Jamf Pro', 'Python', 'Bash', 'Swift'].map((item, i, arr) => (
+                    <span key={item}><span className={STR}>&quot;{item}&quot;</span>{i < arr.length - 1 ? ', ' : ''}</span>
+                ))}],{'\n'}
+                {'  '}certs: [{certBadges.map((badge, i) => (
+                    <span key={badge}><span className={STR}>&quot;{badge}&quot;</span>{i < certBadges.length - 1 ? ', ' : ''}</span>
+                ))}],{'\n'}
+                {'  '}location: <span className={STR}>&quot;Athens, GR&quot;</span>,{'\n'}
+                {'};'}
+            </pre>
+        </div>
+    )
+
     return (
         <Window
+            wid="about"
+            app="about"
             as="section"
-            id="about"
+            anchor="about"
             labelledBy="about-title"
             title={t.os.windows.about}
-            app={SECTION_APPS.about}
+            sidebar={sidebar}
+            sidebarWidth="17.5rem"
             className="w-full md:max-w-[76rem] md:max-h-full"
-            bodyClassName="flex flex-col md:flex-row"
+            bodyClassName="flex flex-col"
             footer={
-                <div className="flex flex-col gap-1.5 py-2.5">
+                <div className="flex flex-col gap-1.5 py-2">
                     <LogoLoop logos={OPS_TOOLS} speed={40} direction="left" logoHeight="1.75rem" gap="0.5rem" fadeOut pauseOnHover />
                     <LogoLoop logos={BUILD_TOOLS} speed={40} direction="right" logoHeight="1.75rem" gap="0.5rem" fadeOut pauseOnHover />
                 </div>
             }
         >
-            {/* Sidebar: identity card, specs, and a small code pane. */}
-            <aside className="os-sidebar md:w-[18.5rem] shrink-0 border-b md:border-b-0 md:border-r border-[var(--hairline)] p-5 md:p-6 flex flex-col gap-4">
-                <div className="flex items-center gap-3.5">
-                    <span className="app-tile w-14 h-14 text-xl font-black tracking-tight" style={{ background: SECTION_APPS.about.tile }} aria-hidden="true">
-                        AF
-                    </span>
-                    <div className="min-w-0">
-                        <p className="text-base md:text-lg font-bold tracking-tight leading-tight">{t.os.displayName}</p>
-                        <p className="text-body-sm text-[var(--muted)] leading-snug">{t.title}</p>
-                    </div>
-                </div>
-
-                <div className="border-t border-[var(--hairline)] pt-3.5">
-                    <p className="text-caption font-semibold text-[var(--muted)] caps-gr">{t.about.currentFocus}</p>
-                    <p className="text-sm font-semibold leading-snug">{t.about.currentFocusDetail}</p>
-                </div>
-
-                <dl className="border-t border-[var(--hairline)] pt-2 grid grid-cols-2 md:grid-cols-1 gap-x-4">
-                    {stats.map((stat, index) => (
-                        <div key={index} className="flex items-baseline justify-between gap-3 py-1.5 md:border-b md:border-[var(--hairline)] md:last:border-b-0">
-                            <dt className="text-body-sm text-[var(--muted)] leading-tight caps-gr">{t.about.statsLabels[index]}</dt>
-                            <dd className="text-sm font-bold tabular-nums">
-                                <AnimatedCounter value={stat.value} suffix={stat.suffix} duration={1.5} />
-                            </dd>
-                        </div>
-                    ))}
-                </dl>
-
-                <pre className="about-code shrink-0 os-card px-3.5 py-3 font-mono text-[0.6875rem] leading-[1.65] text-[var(--foreground)] overflow-hidden whitespace-pre-wrap">
-                    <span className={KEY}>const</span> engineer = {'{'}{'\n'}
-                    {'  '}role: <span className={STR}>&quot;Apple Fleet &amp; IT Automation Lead&quot;</span>,{'\n'}
-                    {'  '}company: <span className={STR}>&quot;Omilia&quot;</span>,{'\n'}
-                    {'  '}fleet: <span className={STR}>&quot;550+ Macs&quot;</span>,{'\n'}
-                    {'  '}stack: [{['Jamf Pro', 'Python', 'Bash', 'Swift'].map((item, i, arr) => (
-                        <span key={item}><span className={STR}>&quot;{item}&quot;</span>{i < arr.length - 1 ? ', ' : ''}</span>
-                    ))}],{'\n'}
-                    {'  '}certs: [{certBadges.map((badge, i) => (
-                        <span key={badge}><span className={STR}>&quot;{badge}&quot;</span>{i < certBadges.length - 1 ? ', ' : ''}</span>
-                    ))}],{'\n'}
-                    {'  '}location: <span className={STR}>&quot;Athens, GR&quot;</span>,{'\n'}
-                    {'};'}
-                </pre>
-            </aside>
-
-            {/* Main pane */}
-            <div className="flex-1 min-w-0 p-5 md:p-7 lg:p-8 flex flex-col">
-                <h2 id="about-title" className="os-eyebrow">{t.about.title}</h2>
-                <p className="mt-2 text-[1.375rem] md:text-[1.75rem] font-bold tracking-[-0.02em] leading-[1.15] max-w-[40rem]">
+            <div className="flex-1 min-w-0 px-5 py-5 md:px-8 md:py-6 short:py-4 flex flex-col">
+                <h2 id="about-title" className="os-eyebrow caps-gr">{t.about.title}</h2>
+                <p className="os-large-title mt-1.5 text-[1.5rem] md:text-[1.75rem] max-w-[40rem]">
                     {t.about.tagline}
                 </p>
-                <div className="mt-3.5 space-y-2.5 text-sm text-[var(--muted)] leading-relaxed max-w-[46rem]">
+                <div className="mt-3 space-y-2.5 text-sm text-[var(--muted)] leading-relaxed max-w-[46rem]">
                     {t.about.description.slice(0, 2).map((paragraph, index) => (
                         <p key={index}>{paragraph}</p>
                     ))}
@@ -153,14 +157,15 @@ export default function About() {
                             type="button"
                             onClick={() => setActiveSkill(skill)}
                             aria-label={`${skill.label} — ${t.about.readMore}`}
-                            className="group os-card text-left p-3 flex flex-col gap-2 transition-[background-color,box-shadow] duration-200 hover:bg-[var(--accent-soft)] hover:shadow-[0_0_0_1px_var(--accent-brand)]"
+                            className="group os-card text-left p-3 flex flex-col gap-2 transition-[background-color,box-shadow] duration-200 hover:bg-[var(--control-hover)]"
                         >
-                            <span className="app-tile w-8 h-8 text-sm" style={{ background: SERVICE_TILES[index] }} aria-hidden="true">
-                                <i className={uiIcon(skill.icon)} />
-                            </span>
+                            <GlyphTile symbol={symbolFor(skill.icon)} tint={SERVICE_TINTS[index]} size={30} />
                             <span className="text-body-sm font-semibold leading-tight">{skill.label}</span>
-                            <span className="hidden md:block text-caption text-[var(--muted)] leading-snug line-clamp-2">{skill.detail}</span>
-                            <span className="mt-auto text-caption font-semibold text-[var(--accent)]">{t.about.readMore} ↗</span>
+                            <span className="hidden md:line-clamp-3 short:line-clamp-2 text-caption text-[var(--muted)] leading-snug">{skill.detail}</span>
+                            <span className="mt-auto inline-flex items-center gap-1 text-caption font-medium text-[var(--accent)]">
+                                {t.about.readMore}
+                                <Icon name="chevron.right" className="text-[0.625rem] transition-transform motion-safe:group-hover:translate-x-0.5" />
+                            </span>
                         </button>
                     ))}
                 </div>
@@ -176,10 +181,8 @@ export default function About() {
             >
                 {activeSkill && (
                     <div className="p-6">
-                        <span className="app-tile w-12 h-12 text-xl mb-4" style={{ background: SERVICE_TILES[Math.max(0, t.skills.indexOf(activeSkill))] }} aria-hidden="true">
-                            <i className={uiIcon(activeSkill.icon)} />
-                        </span>
-                        <h3 id="skill-modal-title" className="text-lg font-bold tracking-tight mb-2">{activeSkill.label}</h3>
+                        <GlyphTile symbol={symbolFor(activeSkill.icon)} tint={SERVICE_TINTS[Math.max(0, t.skills.indexOf(activeSkill)) % SERVICE_TINTS.length]} size={48} className="mb-4" />
+                        <h3 id="skill-modal-title" className="text-lg font-bold tracking-[-0.01em] mb-2">{activeSkill.label}</h3>
                         <p className="text-sm text-[var(--muted)] leading-relaxed">{activeSkill.detail}</p>
                     </div>
                 )}

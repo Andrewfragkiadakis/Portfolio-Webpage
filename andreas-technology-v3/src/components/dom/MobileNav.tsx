@@ -1,12 +1,11 @@
 'use client'
 
 import { useContent } from '@/hooks/useContent'
-import { useActiveSection } from '@/hooks/useActiveSection'
+import { useDesktop } from '@/contexts/DesktopContext'
 import { useState, useEffect, useRef } from 'react'
 import { smoothScrollToElement } from '@/utils/smooth-scroll'
-import { SECTION_APPS } from '@/data/apps'
 import type { SectionId } from '@/data/sections'
-import { AppTile } from '@/components/ui/Window'
+import AppIcon from '@/components/ui/AppIcon'
 
 /** Hide the dock only after a deliberate downward scroll, not on jitter. */
 const HIDE_AFTER_SCROLL_PX = 50
@@ -16,7 +15,7 @@ const DOCK_APPS: SectionId[] = ['hero', 'about', 'projects', 'contact']
 /** Phone-style dock: four apps in a frosted tray that tucks away while reading. */
 export default function MobileNav() {
     const t = useContent()
-    const active = useActiveSection()
+    const { active } = useDesktop()
     const [isVisible, setIsVisible] = useState(true)
     const lastScrollY = useRef(0)
 
@@ -47,7 +46,7 @@ export default function MobileNav() {
         <div
             className={`md:hidden fixed inset-x-3 z-50 transition-all duration-300 ease-out ${isVisible ? 'bottom-3 opacity-100 translate-y-0' : 'bottom-0 opacity-0 translate-y-4 pointer-events-none'}`}
         >
-            <nav className="os-dock bg-[var(--window)] mx-auto max-w-sm rounded-[1.75rem] px-3 py-2.5" aria-label="Mobile navigation">
+            <nav className="os-dock [--dock-bg:var(--hud)] mx-auto max-w-sm rounded-[1.75rem] px-3 py-2.5" aria-label="Mobile navigation">
                 <ul className="grid grid-cols-4 gap-1">
                     {DOCK_APPS.map((id) => {
                         const isActive = active === id
@@ -60,8 +59,8 @@ export default function MobileNav() {
                                     tabIndex={isVisible ? 0 : -1}
                                     className="w-full flex flex-col items-center gap-0.5 rounded-xl pt-0.5 min-h-11"
                                 >
-                                    <AppTile app={SECTION_APPS[id]} size="md" />
-                                    <span className="text-micro font-semibold truncate max-w-full text-[var(--foreground)]">
+                                    <AppIcon app={id} size={44} />
+                                    <span className="text-micro font-medium truncate max-w-full text-[var(--foreground)]">
                                         {t.os.menus[id]}
                                     </span>
                                     <span className={`w-1 h-1 rounded-full bg-[var(--foreground)] ${isActive ? 'opacity-80' : 'opacity-0'}`} aria-hidden="true" />

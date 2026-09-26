@@ -1,48 +1,41 @@
 import type { SectionId } from '@/data/sections'
 
 /**
- * Each section is presented as an "app" on the desktop. These are original,
- * generic app tiles (a gradient square with a Font Awesome glyph), not any
- * vendor's icon artwork.
+ * The desktop's "apps". Every section is a window owned by an app with an original
+ * Big Sur-style icon (see components/ui/AppIcon.tsx); the Terminal lives on the
+ * Desktop space next to the Welcome window. Shortcut apps link out.
  */
-export interface AppTile {
-    /** Font Awesome class for the white glyph. */
-    icon: string
-    /** CSS background for the tile. */
-    tile: string
+export type WindowId = SectionId | 'terminal'
+export type AppId = WindowId | 'github' | 'linkedin' | 'resume' | 'credential'
+
+/** Windows in DOM (and keyboard) order. */
+export const WINDOW_IDS: WindowId[] = ['hero', 'terminal', 'about', 'services', 'experience', 'projects', 'contact']
+
+/** The space (section) each window lives on. */
+export function sectionOf(id: WindowId): SectionId {
+    return id === 'terminal' ? 'hero' : id
 }
 
-export const SECTION_APPS: Record<SectionId, AppTile> = {
-    hero: { icon: 'fas fa-house', tile: 'linear-gradient(160deg, #5BC0FF 0%, #0A66FF 100%)' },
-    about: { icon: 'fas fa-user', tile: 'linear-gradient(160deg, #B79CFF 0%, #6A3DF0 100%)' },
-    services: { icon: 'fas fa-toolbox', tile: 'linear-gradient(160deg, #4FE0B0 0%, #0E9F76 100%)' },
-    experience: { icon: 'fas fa-timeline', tile: 'linear-gradient(160deg, #FFC857 0%, #F2711C 100%)' },
-    projects: { icon: 'fas fa-folder-open', tile: 'linear-gradient(160deg, #7FD3FF 0%, #2F7DF6 100%)' },
-    contact: { icon: 'fas fa-paper-plane', tile: 'linear-gradient(160deg, #FF8FB8 0%, #E0306E 100%)' },
-}
+/** Service and skill tiles, in the order of `content.services` / `content.skills`: system-colour gradients. */
+export const SERVICE_TINTS = [
+    ['#FF8A80', '#E0303F'],
+    ['#9DA7BA', '#4D5669'],
+    ['#4FE3AE', '#0A9A6C'],
+    ['#C79BFF', '#7437E6'],
+    ['#FFC173', '#F0650F'],
+    ['#7CC8FF', '#1F6BF0'],
+] as const
 
-/** Tiles for the shortcut apps in the dock and on the desktop. */
-export const LINK_APPS = {
-    github: { icon: 'fab fa-github', tile: 'linear-gradient(160deg, #3A3F47 0%, #16181C 100%)' },
-    linkedin: { icon: 'fab fa-linkedin-in', tile: 'linear-gradient(160deg, #2B8CE0 0%, #0A5AB0 100%)' },
-    resume: { icon: 'fas fa-file-lines', tile: 'linear-gradient(160deg, #FF7A6B 0%, #D93A2B 100%)' },
-    credential: { icon: 'fas fa-award', tile: 'linear-gradient(160deg, #6FA8FF 0%, #1F4FD8 100%)' },
-} satisfies Record<string, AppTile>
+/** Title-bar text of each window, from the content file's `os.windows`. */
+export function windowTitle(windows: { welcome: string; terminal: string; about: string; services: string; experience: string; projects: string; contact: string }, id: WindowId): string {
+    return id === 'hero' ? windows.welcome : windows[id]
+}
 
 /**
- * Glyphs from the content file, made safe for the OS chrome: the interface is
- * macOS-*inspired*, so it never draws the Apple logo itself — a laptop stands in.
+ * The app that owns a window, as the menu bar names it: "Services — Finder" → "Finder",
+ * "About.app" → "About", the Terminal → "Terminal".
  */
-export function uiIcon(icon: string): string {
-    return icon === 'fab fa-apple' ? 'fas fa-laptop' : icon
+export function appNameOf(title: string, id: WindowId, terminalName: string): string {
+    if (id === 'terminal') return terminalName
+    return title.includes(' — ') ? (title.split(' — ').pop() as string) : title.replace(/\.app$/, '')
 }
-
-/** Service cards get their own tile colours, in the order of `content.services`. */
-export const SERVICE_TILES = [
-    'linear-gradient(160deg, #FF8A7A 0%, #D83A4A 100%)',
-    'linear-gradient(160deg, #9AA3B5 0%, #4A5263 100%)',
-    'linear-gradient(160deg, #4FE0B0 0%, #0E9F76 100%)',
-    'linear-gradient(160deg, #B79CFF 0%, #6A3DF0 100%)',
-    'linear-gradient(160deg, #FFC857 0%, #F2711C 100%)',
-    'linear-gradient(160deg, #7FD3FF 0%, #2F7DF6 100%)',
-] as const

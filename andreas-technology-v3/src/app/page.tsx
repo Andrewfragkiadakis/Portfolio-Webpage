@@ -3,6 +3,7 @@ import Navigation from '@/components/dom/Navigation'
 import MobileNav from '@/components/dom/MobileNav'
 import Dock from '@/components/dom/Dock'
 import MainContent from '@/components/MainContent'
+import { DesktopProvider } from '@/contexts/DesktopContext'
 
 function MainFallback() {
     return <div className="relative z-10 w-full min-h-screen" aria-hidden />
@@ -10,7 +11,7 @@ function MainFallback() {
 
 export default function Home() {
     return (
-        <>
+        <DesktopProvider>
             <Navigation />
             <MobileNav />
             <Dock />
@@ -19,6 +20,6 @@ export default function Home() {
                     <MainContent />
                 </Suspense>
             </main>
-        </>
+        </DesktopProvider>
     )
 }

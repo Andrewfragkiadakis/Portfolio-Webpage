@@ -204,6 +204,35 @@ export interface Content {
         favorites: string
         mail: { to: string; subject: string }
         theme: { light: string; dark: string }
+        /** Menu bar menus. `{app}` is replaced with the front app's name. */
+        menu: {
+            logo: string
+            aboutMe: string
+            resume: string
+            aboutPortfolio: string
+            hide: string
+            quit: string
+            file: string
+            newMessage: string
+            closeWindow: string
+            view: string
+            asIcons: string
+            asList: string
+            toggleAppearance: string
+            switchLanguage: string
+            go: string
+            window: string
+            minimize: string
+            zoom: string
+            restoreAll: string
+            bar: string
+        }
+        /** Traffic-light button names; the window title is appended. */
+        windowActions: { close: string; minimize: string; zoom: string }
+        /** Shown where a minimised or closed window was. `{app}` is the window title. */
+        hidden: { minimized: string; closed: string; reopen: string }
+        apps: { terminal: string; finder: string }
+        clock: string
     }
 }
 
@@ -797,7 +826,33 @@ export const content: Record<'en' | 'gr', Content> = {
             items: "items",
             favorites: "Favorites",
             mail: { to: "To", subject: "Subject" },
-            theme: { light: "Light", dark: "Dark" }
+            theme: { light: "Light", dark: "Dark" },
+            menu: {
+                logo: "Andreas",
+                aboutMe: "About Andreas",
+                resume: "Download Résumé…",
+                aboutPortfolio: "About This Portfolio",
+                hide: "Hide {app}",
+                quit: "Quit {app}",
+                file: "File",
+                newMessage: "New Message…",
+                closeWindow: "Close Window",
+                view: "View",
+                asIcons: "as Icons",
+                asList: "as List",
+                toggleAppearance: "Toggle Appearance",
+                switchLanguage: "Switch to Greek",
+                go: "Go",
+                window: "Window",
+                minimize: "Minimize",
+                zoom: "Zoom",
+                restoreAll: "Restore All",
+                bar: "Menu bar"
+            },
+            windowActions: { close: "Close", minimize: "Minimize", zoom: "Zoom" },
+            hidden: { minimized: "{app} is minimized in the Dock", closed: "{app} is closed", reopen: "Reopen" },
+            apps: { terminal: "Terminal", finder: "Finder" },
+            clock: "Time in Athens"
         }
     },
 
@@ -1375,7 +1430,33 @@ export const content: Record<'en' | 'gr', Content> = {
             items: "στοιχεία",
             favorites: "Αγαπημένα",
             mail: { to: "Προς", subject: "Θέμα" },
-            theme: { light: "Φωτεινό", dark: "Σκοτεινό" }
+            theme: { light: "Φωτεινό", dark: "Σκοτεινό" },
+            menu: {
+                logo: "Ανδρέας",
+                aboutMe: "Σχετικά με τον Ανδρέα",
+                resume: "Λήψη βιογραφικού…",
+                aboutPortfolio: "Σχετικά με το portfolio",
+                hide: "Απόκρυψη: {app}",
+                quit: "Έξοδος από {app}",
+                file: "Αρχείο",
+                newMessage: "Νέο μήνυμα…",
+                closeWindow: "Κλείσιμο παραθύρου",
+                view: "Προβολή",
+                asIcons: "ως Εικονίδια",
+                asList: "ως Λίστα",
+                toggleAppearance: "Εναλλαγή εμφάνισης",
+                switchLanguage: "Switch to English",
+                go: "Μετάβαση",
+                window: "Παράθυρο",
+                minimize: "Ελαχιστοποίηση",
+                zoom: "Ζουμ",
+                restoreAll: "Επαναφορά όλων",
+                bar: "Γραμμή μενού"
+            },
+            windowActions: { close: "Κλείσιμο", minimize: "Ελαχιστοποίηση", zoom: "Ζουμ" },
+            hidden: { minimized: "Το {app} είναι ελαχιστοποιημένο στο Dock", closed: "Το {app} είναι κλειστό", reopen: "Άνοιγμα ξανά" },
+            apps: { terminal: "Terminal", finder: "Finder" },
+            clock: "Ώρα Αθήνας"
         }
     }
 }

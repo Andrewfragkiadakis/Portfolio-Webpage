@@ -1,20 +1,30 @@
-# Desktop OS
+# Desktop OS v2
 
-**Branch:** `style/desktop-os`
+**Branch:** `style/desktop-os-v2` (builds on `style/desktop-os`)
 
 ## Concept
 
-The portfolio is a computer desktop. That suits someone who manages 550+ Macs for a living. A frosted menu bar runs across the top. Each section is an app window with traffic-light controls and a title bar. A dock at the bottom opens the windows. On desktop the wallpaper stays fixed while the windows slide past on the existing horizontal track, which feels like swiping between desktop spaces. On phones the same windows become a stack of full-width app cards, with a status bar, a four-app dock and a home-screen app grid as the menu.
+The portfolio is a Mac. It suits someone who runs a fleet of 550+ Macs. v1 was macOS-*inspired*. v2 aims to feel native.
 
-The look is macOS-*inspired*, not a copy. There is no Apple logo, no Apple wordmark, and no claim to be Apple software. App tiles are original gradient squares with Font Awesome glyphs. Where the content file asks for the `fab fa-apple` glyph, the interface shows a laptop instead (`uiIcon()` in `src/data/apps.ts`). Tool logos in the toolkit marquee, such as Apple Business Manager, are left alone because they name tools, as before.
+- There is a real menu bar with real menus.
+- Windows can be dragged, raised, zoomed, minimised into the Dock and closed.
+- The Dock magnifies under the pointer and bounces when you launch an app.
+- The icons, type, focus rings and motion follow the platform.
 
-## Inspirations
+The horizontal journey is kept: each section is a desktop space. Phones still get a vertical stack of sheets.
 
-| Site | What was taken |
+Nothing is Apple artwork. There is no Apple logo, and no Apple app icon is copied. All app icons, glyphs and the wallpaper are drawn from scratch in this repo. Tool logos in the toolkit marquee are left alone, because they name tools.
+
+## Owner feedback → what changed
+
+| Asked for | v2 |
 | --- | --- |
-| [Mimosa Agency](https://www.awwwards.com/sites/mimosa-agency) | The homepage as a scattered desktop collage of small OS-style widgets. This became the hero: a Welcome window, a Terminal, a "Now" widget and desktop icons, overlapping slightly on the wallpaper. |
-| [Digital Meadow](https://www.awwwards.com/sites/digital-meadow-1) | The whole site framed as a developer tool, with navigation named like files. This became the Terminal widget (`whoami`, `fleet --summary`, `cat credentials.txt`), file-like icon labels (`Resume.pdf`) and the `engineer.ts` code pane in About. |
-| [Tokonoma Studio](https://www.awwwards.com/sites/tokonoma-studio) | Rotated sticker pills stuck to the canvas. This became the three stickers on the hero desktop ("JAMF 200", "550+ Macs", "bash · python · swift"). They spring into place, slightly askew. |
+| "Look more like Apple macOS" | **Opaque windows** with **vibrancy sidebars** (the wallpaper glows through them) replace v1's all-glass windows. Other changes: a **unified 52px toolbar** with a bold left-aligned title and a subtitle ("6 items"); **0.5px separators**; a **key window** with a deeper shadow; **inactive windows** that grey their traffic lights and dim their title; Finder source lists and path bars; a Mail compose layout; Quick Look dialogs. |
+| "Similar icons" | **Original Big Sur-style app icons** (`AppIcon.tsx`). Each is a superellipse squircle (n = 5) with a two-stop gradient, a soft top highlight, a hairline rim, a drop shadow and one simple glyph. The set covers: a display with a tiny wallpaper (Desktop/Welcome), a contact card (About), sliders (What I Do), a briefcase (Experience), a system-blue folder (Projects), a paper plane (Mail/Contact) and a `>_` prompt (Terminal). There are also GitHub and LinkedIn tiles, a **PDF document** icon (Résumé) and a **certificate with a ribbon seal** (Jamf 200). |
+| "Integrate a moving-windows feature" | A small **window manager** (`DesktopContext.tsx`). It covers dragging by the title bar, z-order, the key window, zoom, genie-style minimise, close to the Dock, Restore All, and resets on resize. See *Interactions*. |
+| "New fonts and icons" | **System font first**, so Apple devices render **SF Pro** (text and display optical sizes, with Greek). Inter (latin + greek) is the fallback everywhere else. Mono is `ui-monospace` / SF Mono / Menlo, with JetBrains Mono as the fallback. **Font Awesome is gone** (one fewer third-party CSS request). The UI uses ~30 original **SF-Symbols-like line icons** (`Icon.tsx`: 24-unit grid, one 1.5 stroke, round caps). |
+| "Animations more polished and macOS" | Every motion value is new: spring window opening, a genie-ish minimise into the Dock icon and back out, pointer-driven Dock magnification (inside the Dock only), a launch bounce, 120ms menu fades, a spring zoom and a spring for Quick Look. Everything is instant under `prefers-reduced-motion`. |
+| Taste: clean, no gimmicks | v1's **rotated stickers are removed**, and the Terminal is no longer tilted: macOS never rotates a window. No pointer-following effect exists outside the Dock, where magnification is platform behaviour. The wallpaper is static. |
 
 ## Tokens
 
@@ -22,83 +32,171 @@ The look is macOS-*inspired*, not a copy. There is no Apple logo, no Apple wordm
 
 | Token | Light | Dark | Use |
 | --- | --- | --- | --- |
-| `--foreground` | `#1D1D1F` | `#F5F5F7` | ink |
-| `--muted` | `#55555C` | `#A6A6AD` | secondary text, labels |
-| `--accent-brand` | `#0A66FF` | `#4C8DFF` | system blue as a **mark**: focus ring, rails, bullets, hover rings |
-| `--accent` | `#0057D9` | `#7FAEFF` | system blue as **text**: eyebrows, links, chip text |
-| `--accent-fill` | `#0A66FF` | `#2563EB` | filled buttons, active menu item, sticker (white text) |
-| `--window` | white @ 74% + `blur(30px) saturate(170%)` | `#222228` @ 74% + blur | window glass |
-| `--window-solid` | `#FBFBFD` | `#232329` | dialogs, segmented "on" state |
-| `--titlebar` / `--sidebar` | white @ 72% / `#EEF0F6` @ 72% | `#34343C` @ 60% / `#1A1A20` @ 60% | window chrome |
-| `--hairline` | ink @ 10% | white @ 9% | 1px rules |
-| `--menubar` / `--dock` | white @ 60% / 42% + blur | `#14141A` @ 55% / `#2C2C34` @ 42% + blur | menu bar, dock |
-| Wallpaper | peach `#FFC4A3` → pink `#F7B3D2` → periwinkle `#AFC2FF` → aqua `#9FDCE3` over `#FCE3D3 → #CBE9EE` | violet `#5B2A8C` → plum `#7A2A5E` → blue `#1F4FB0` → teal `#0E5A68` over `#1B1236 → #0A1A26` | fixed layer with a soft light ribbon and fine grain; no photos |
-| Terminal | always dark: `#16161B` @ 90% | same | the Terminal widget, like a real terminal profile |
+| `--foreground` | `#1D1D1F` | `#F5F5F7` | label |
+| `--muted` | `#5C5C62` | `#A1A1A8` | secondary label |
+| `--accent-brand` | `#007AFF` | `#0A84FF` | system blue as a **mark** (bullets, rails, source-list glyphs, timeline dot) |
+| `--accent` | `#0058D6` | `#58A6FF` | blue as **text** (links, chip text, eyebrow accents) |
+| `--accent-top` → `--accent-bottom` | `#106EF2 → #0060D8` | `#1873E6 → #0A5CC8` | push-button gradient (white text) |
+| `--accent-fill` | `#0762DD` | `#1168D7` | menu highlight, selection pill |
+| `--focus-ring` | `#3B8CFF` | `#3E8EFF` | 3px macOS focus halo |
+| `--window-bg` | `#FFFFFF` | `#1F1F22` | window content (opaque) |
+| `--window-chrome` / `--statusbar` | `#F6F6F7` | `#2A2A2E` / `#252528` | unified toolbar, status and path bars |
+| `--sidebar` | `rgba(236,234,242,.74)` + `blur(40px) saturate(190%)` | `rgba(46,44,54,.62)` + same | vibrancy sidebars |
+| `--card` | `#F5F5F7` | white @ 5% | inset cards |
+| `--hairline` / `--hairline-strong` | black @ 10% / 16% | white @ 9% / 15% | 0.5px separators |
+| `--menubar` | `rgba(246,246,250,.62)` + blur 40 | `rgba(20,20,26,.5)` + blur 40 | 24px menu bar |
+| `--menu-bg` | `rgba(240,240,244,.82)` + blur 40 | `rgba(38,38,44,.8)` + blur 40 | dropdown menus, Dock labels |
+| `--dock-bg` | white @ 30% + blur 30 | `rgba(36,36,44,.38)` + blur 30 | Dock |
+| `--hud` | `rgba(252,252,254,.78)` | `rgba(34,34,40,.78)` | Now widget, window hints, phone launcher |
+| Traffic lights | close `#FF5F57`, minimise `#FEBC2E`, zoom `#28C840`; inactive `#D6D6DA` | inactive `#4C4C52` | with ×, − and + glyphs in darker inks |
+| `--shadow-key` / `--shadow-inactive` | 0.5px rim + 26/64 + 8/18 blur / 0.5px rim + 12/32 + 3/8 | deeper, plus a 0.5px light inner rim | the key window casts the deeper shadow |
+| Wallpaper | peach, pink, lilac, periwinkle and sky folds on `#F9E4DA → #E6DDF6 → #CFE2F6` | plum, violet, indigo and teal folds on `#120D2E → #161A48 → #0A1B33` | original SVG (`Wallpaper.tsx`), four folded bands with soft shadows and an edge sheen; no image download |
 
-The brief's system blues (`#0A66FF` and `#4C8DFF`) sit just below 4.5:1 when used as small text on frosted glass or on a tinted chip. Pure `#0A66FF` measured 4.46:1. So they are kept for marks and fills, and a slightly deeper or lighter blue carries text. Both themes are designed separately, not inverted.
-
-**Contrast (WCAG 2.x, measured against the glass as it composites over the wallpaper):**
+**Contrast (WCAG 2.x).** These values are measured, not computed from tokens. `.research/contrast.js` hides each text and screenshots the real rendered background, including vibrancy over the wallpaper and translucent chips. `.research/contrast.py` then composites the text colour over every sampled pixel. Each value is the 5th-percentile ratio.
 
 | Text | On | Light | Dark |
 | --- | --- | --- | --- |
-| ink | window glass | 15.6 : 1 | 14.4 : 1 |
-| muted | window glass (warm and cool corners) | 6.8 : 1 | 6.2–6.5 : 1 |
-| `--accent` text | window glass | 5.7 : 1 | 7.0 : 1 |
-| `--accent` text | accent-tinted chip | 4.9 : 1 | 5.6 : 1 |
-| `--accent` text | control (hover) | 4.6 : 1 | 4.5 : 1 |
-| white | `--accent-fill` button | 4.8 : 1 | 5.2 : 1 |
-| muted | menu bar | 6.6 : 1 | 6.7 : 1 |
-| desktop icon label | label pill over wallpaper | 15.2 : 1 | 13.9 : 1 |
-| terminal text / dim / green / yellow / blue | `#16161B` | 14.5 / 5.4 / 11.7 / 12.8 / 9.3 : 1 | same |
-| code pane keyword / string | card | 5.5 / 6.4 : 1 | 7.2 / 7.9 : 1 |
-| focus ring `--accent-brand` | glass (non-text, ≥ 3 : 1) | 4.4 : 1 | 4.9 : 1 |
+| ink | window | 16.8 | 15.1 |
+| muted | window / status bar / card | 6.6 / 6.2 / 6.1 | 6.4 / 6.0 / 5.6 |
+| muted | vibrancy sidebar | 6.3 | 5.0 |
+| ink | vibrancy sidebar | 14.8 | 13.5 |
+| subtitle ("6 items") | toolbar | 6.2 | 5.6 |
+| accent text | window / card | 5.7 | 5.7 |
+| accent chip (Jamf 200) | tinted chip | 5.3 | 5.3 |
+| white | push button (gradient) | 4.9 | 4.9 |
+| menu bar items / clock | translucent bar | 13.0 / 13.3 | 13.0 / 12.4 |
+| menu item | open menu | 13.6 | 13.2 |
+| desktop icon labels | wallpaper | 10.6–12.4 | 10.5–15.6 |
+| Now widget label / accent | HUD glass | 5.5 / 5.8 | 4.9 / 6.2 |
+| terminal dim / inactive title | terminal | 5.3 / 4.6 | 6.3 / 4.7 |
+| LIVE / OSS tags | tinted tags | 5.3 / 5.9 | 5.3 / 5.1 |
+| focus ring (non-text, ≥ 3) | white / toolbar | 3.3 / 3.0 | 5.0 |
 
 ### Type
 
-- **Inter** is loaded with `next/font/google`, using subsets `latin` and `greek` and variable weight. It is exposed as `--font-inter` → `--font-sans`. UI sizes are tight: the title bar is 13px/600, body text is 13–14px, and eyebrows are 11px/600 with +0.08em tracking. Headings are solid and mixed case: the hero name is 48–72px/700 with −0.035em tracking, and window headlines are 22–28px/700. There is no outlined type anywhere.
-- **JetBrains Mono** is loaded with `next/font/google`, using subsets `latin` and `greek`. It is exposed as `--font-jetbrains` → `--font-mono`. It is used for the Terminal, the `engineer.ts` pane, the boot log and the mail signature line.
-- **Greek:** both families include Greek glyphs, so Greek headings render in Inter Bold, not a fallback. The Greek hero name uses a new, fully accented `os.displayName` (`Ανδρέας Φραγκιαδάκης`). Many Greek UI labels in `content.ts` are written without tonos because they were always shown in capitals. A `.caps-gr` class keeps exactly those labels uppercase **only** when `<html lang="el">`, so English labels can be in natural case while Greek never shows unaccented lowercase.
+- **UI stack:** `-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", <Inter>, sans-serif`. On Apple devices this is SF Pro with automatic Text/Display optical sizes. Elsewhere it is Inter from `next/font/google` with `subsets: ['latin', 'greek']`. Inter is **not preloaded** (`preload: false`), because Apple devices never request it.
+- **Mono stack:** `ui-monospace, "SF Mono", SFMono-Regular, Menlo, <JetBrains Mono>, monospace`. JetBrains Mono also comes from `next/font` with latin and greek.
+- **Sizes and weights, following macOS:**
+  - 13px UI text (the body default), 11px labels (source-list headings, status and path bars, subtitles).
+  - Window titles are bold: 15px in unified toolbars and 13px in compact bars (Welcome, Terminal, Quick Look).
+  - Large titles are 700 with −0.022em tracking: 24–28px in About, 26–32px in Mail, and 46–68px for the hero name.
+  - Menu bar: 13px/500, with the front app's name in bold.
+- **Greek was verified** with Chrome DevTools `CSS.getPlatformFontsForNode` on macOS. The Greek h1 (700), window titles (700), bold menu-bar app name (700) and chips (500) all render in **`.SF NS`**, the system SF Pro, at the requested weight. Terminal mono renders in Menlo. The unaccented Greek labels from the content file stay uppercase in Greek only (`.caps-gr`), as in v1.
 
-### Shape and motion
+### Shape
 
-- Windows have a 14px radius, a layered soft shadow and a 0.5px hairline. App tiles are rounded squares at a 22.5% radius. Chips and stickers are pills.
-- **Window open:** each window scales from 0.9 and rises 56px with a fade, from its bottom edge. That is the direction of the dock. It plays when the window scrolls into view (the hero waits for the boot screen). The ease is `EASE_OUT` over 0.7s.
-- **Dock:** icons magnify by 1.18 and lift 6px on hover. A tooltip appears above, and a dot marks the front app.
-- **Stickers:** they spring in with a slight rotation overshoot.
-- **Reduced motion:** windows, widgets, stickers and Finder icons render in place with `initial={false}`. Dock magnify, the status-light ping and the cursor pulse sit behind `motion-safe:`. `MotionConfig reducedMotion="user"` and the global reduced-motion CSS still apply.
+- Windows have a 12px radius and a 0.5px rim. Dark windows also get a light inner rim, drawn above the content. App icons are superellipse squircles, and document and certificate icons are paper shapes.
+- Buttons are capsules: push buttons are 28px, and CTAs are 36–40px. Segmented controls are 8px with a raised white segment. Toolbar buttons are borderless 28px plates that show on hover. Chips are capsule "tokens".
+- Menus are 9px with 5px items. Items are 24px tall, and the highlight fills in system blue with white text. Separators are 1px hairlines.
 
-## Per-section changes
+## Interactions (window manager)
 
-| Section | Before | Desktop OS |
-| --- | --- | --- |
-| Chrome | Top text nav with a section counter; a floating theme pill; a custom cursor; a noise overlay; a bottom progress bar | **Menu bar:** "AF" monogram, then the front app's name in bold ("Finder", "Mail", "Timeline"…), then one menu per section with the active one filled blue, then status items (EN/ΕΛ, theme toggle, "Athens 15:53" from `LocalTime`). **Dock:** six section apps (using `scrollToSection`), a divider, then GitHub, LinkedIn and Resume. The native cursor is back. |
-| Boot | Typewriter "INITIALIZING SYSTEM" overlay | A boot screen: AF tile, progress bar, the same typed log in JetBrains Mono, and a white "Enter System" pill. Same copy, same skip. |
-| Hero | Outlined name with a glitch-canvas cursor | A **desktop**. The Welcome window has the AF tile, an "Open to Opportunities" status, the name (solid), the role line, the tagline, credential chips (Jamf 200 → Credly, ITIL 4 → PDF, TEE) and CTAs (View My Work, Get In Touch, LinkedIn/GitHub/email). Its footer shows location, the live clock and "Scroll to navigate". A **Terminal** widget cycles the role typewriter and prints fleet facts. A **Now** widget shows current focus and three stats. There are three rotated stickers. **Desktop icons** (Resume.pdf, Jamf 200, GitHub, LinkedIn) are real links. |
-| About | Outlined heading, code card, marquee | **About.app.** The sidebar has an identity card, current focus, a spec list with count-up stats, and an `engineer.ts` pane (shown only when the viewport is tall enough). The main pane has the tagline, two paragraphs, credential chips and four skill cards that open the skill dialog. The tool marquee is a two-row status strip. |
-| What I Do | Spotlight cards grid | **Services — Finder.** A Favorites sidebar links to every window, with this one selected. There are six colour-tiled service cards, each opening the service dialog with its highlights and toolkit. A path bar shows "andreas › What I Do · 6 items" plus the "Have a unique project in mind? → Let's Talk" CTA. |
-| Experience | Square cards carousel | **Experience — Timeline.** A timeline rail with a dot and date chip per stop. The current role is blue. Work and education cards share one scroller. A title-bar segmented control jumps between Professional and Education, next to prev/next arrows. A progress rail runs underneath. Verify Credential links are kept. |
-| Projects | Image carousel with hover captions | **Projects — Finder** with an **Icons / List** segmented control. Icons view is a Finder grid with thumbnails, name, year and LIVE/OSS/PAPER tags. List view is a table with Name, Kind, Year, and every Live/Code/Report/Publication link. Clicking opens **Quick Look**, which is the project dialog. The path bar shows the item count and "View Full Portfolio on GitHub". |
-| Contact | Two bordered boxes | **Contact — Mail.** It is a compose window: *To:* the address as a chip plus Copy, and *Subject:* the pre-filled subject. The body has the availability headline, the description and a mono signature, then Send Message and Download Resume. A Send button sits in the title bar. The side panel is a contact card with email, location, local time, GitHub and LinkedIn. The copyright is in the status bar. |
-| Dialogs | Bordered modal with a × | A window with traffic lights. **The red light is the real close button** (a 24px target). On phones a "Close" text button is added. Focus trap, Escape and focus return are unchanged. |
-| Mobile | Vertical sections, bottom tab bar, full-screen menu | A status bar (AF + clock, EN/ΕΛ, theme, app-grid button). Windows are full-width app cards with an app tile beside the title. A four-app frosted dock hides while scrolling down. The launcher is a home-screen **app grid** of all six sections, with a theme and language row. There is no horizontal page overflow at 390px. |
+State lives in `DesktopContext` (`stack`, `keyId`, `status`, `zoomed`, `layoutEpoch`, `bounce`, `projectsView`). Each `Window` registers `minimize / close / restore / toggleZoom` handlers. That way the traffic lights, menu items, Dock and hints all run the same animated code.
+
+- **Drag** works on desktop only (≥ 64rem with a `(pointer: fine)` mouse or pen; touch is ignored).
+  - Press on the title bar, or the sidebar's top strip, and drag. It uses pointer events with `setPointerCapture`.
+  - The window is clamped so the whole window stays on the visible desktop of its space: inside its panel, below the menu bar and above the Dock.
+  - Buttons, links and segmented controls inside the title bar never start a drag (`data-no-drag`).
+  - While dragging, `html.is-dragging-window` blocks text selection. Content text stays selectable.
+  - Wheel and trackpad scrolling of the horizontal journey is untouched.
+- **Z-order and key window:** pressing or focusing anything in a window raises it (`zIndex = 10 + stack index`) and makes it **key**. The menu bar's bold item names the key window's app ("Terminal", "Finder", "Mail", "Timeline"…).
+  - Inactive windows grey their lights (they colour again on hover) and cast the lighter shadow.
+  - Travelling to another space makes that space's window key. Clicking bare desktop leaves no window key, and the menu bar then says "Finder".
+- **Zoom:** the green light, a double-click on the title bar, or *Window ▸ Zoom*. The window springs (`visualDuration .34`) to fill the desktop between the menu bar and the Dock. It steers the frame's layout position frame by frame, so zoom works in flex and grid parents alike. Zooming again returns the window to its previous spot.
+- **Minimise:** the yellow light, *Window ▸ Minimize*, or *App ▸ Hide*. It is a **genie-ish** 0.52s keyframe path into the app's Dock icon:
+  1. The width pinches toward the icon first.
+  2. Then the window pours down, scaling to the icon's size and fading at the very end.
+  3. Restoring plays the reverse path from wherever the icon is now.
+- **Close:** the red light, *File ▸ Close Window*, or *App ▸ Quit*. The window fades and scales out in 0.16s. The Dock's running dot for that app disappears.
+- **Nothing is lost.**
+  - A hidden window leaves a small HUD in its place ("About.app is closed · Reopen"). Keyboard focus moves onto its *Reopen* button, and reopening focuses the window.
+  - The app's **Dock icon** restores the window (with a launch bounce). If the window is on another space, it travels there first.
+  - ***Window ▸ Restore All*** reopens every hidden window. The Window menu also lists every window: ✓ marks the key window and ◆ a minimised one.
+  - Hidden windows are `inert` and `visibility: hidden`. They stay in the DOM (and in SSR HTML), so their state is kept.
+  - Resizing the viewport resets positions and zoom (`layoutEpoch`). Leaving the desktop layout reopens everything, because phones have no Dock.
+- **Menus.** The menu bar has these menus:
+  - **AF:** About Andreas, Download Résumé…, LinkedIn ↗, GitHub ↗
+  - **App (bold):** About This Portfolio, Hide *App*, Quit *App*
+  - **File:** New Message…, Download Résumé…, Close Window
+  - **View:** as Icons / as List (drives the Projects view), Toggle Appearance, Switch to Greek or English
+  - **Go:** the six spaces, with ✓ on the current one
+  - **Window:** Minimize, Zoom, Restore All, and the window list
+
+  A menu opens on click. While one is open, hovering another title switches to it, as on macOS. Keyboard support follows the ARIA menubar pattern: ↓ / Enter / Space open a menu and focus its first item, ↑ ↓ Home End move within it, ← → move between menus, and Esc closes the menu and returns focus to its title. Menu items are 24px tall.
+- **Status items:** an input-source badge (EN/ΕΛ), an appearance toggle (sun/moon), and the clock in macOS format ("Sat 26 Sep 18:45", Athens time, localised in Greek).
+- **Keyboard.** Windows are reached in DOM order. In split windows the traffic lights come first in the DOM but are drawn on the sidebar. The order is lights → title → toolbar → sidebar → content.
+  - Tabbing into a window on another space brings that space to the front. It never scrolls the clipped track sideways.
+  - Traffic lights are real `<button>`s named "Close — About.app", "Minimize — Welcome", and so on. Each light's focus ring hugs its circle.
+  - The dialog's red light is its close button, as in v1.
+
+## Motion
+
+| What | How |
+| --- | --- |
+| Window open | `opacity 0 → 1`, `scale 0.92 → 1`, spring `{ visualDuration: 0.35, bounce: 0.14 }`. It plays on reveal: the hero after the boot screen, the other windows when their space comes into view. |
+| Minimise / restore | 0.52s keyframes, `cubic-bezier(.5,0,.25,1)`. The width pinches first, then the window moves down into the icon. Restore plays the reverse path (0.5s). |
+| Close / reopen | 0.16s fade and scale to 0.96. Reopening uses the window-open spring. |
+| Zoom | a size and position spring, `visualDuration .34`, `bounce .06` |
+| Dock | Icons go from 48px to 66px based on pointer distance (reach 140px), through a spring (`mass .1, stiffness 180, damping 15`). This happens **only while the pointer is in the Dock**. The launch bounce is `y: 0 → −20 → 0 → −9 → 0` over 0.9s with ease-out on the way up and ease-in on the way down. |
+| Menus | 120ms fade with a 4px slide on open, 100ms fade on close |
+| Dialogs (Quick Look) | the window-open spring, with a 0.16s close |
+| Wallpaper | static (subtle by design; see trade-offs) |
+| Reduced motion | Every variant switches to `duration: 0`: windows, genie, close, zoom, menus and dialogs. Dock magnification and bounce are off. Motion still honours `MotionConfig reducedMotion="user"` and the global reduced-motion CSS. It was verified by script: minimise hides the window instantly. |
+
+## Per-section changes (v1 → v2)
+
+| Section | v2 |
+| --- | --- |
+| Chrome | 24px translucent **menu bar** with real menus, replacing v1's list of section buttons. Status items as above. **Dock:** 7 apps (the six spaces plus Terminal), a divider, then GitHub, LinkedIn and a PDF document for the Résumé. It has running dots, labels, magnification and bounce. The blur on the menu bar and the Dock sits on a `::before`, so their menus and labels can blur the page themselves. Nested `backdrop-filter`s otherwise lose their blur. |
+| Boot | A black startup screen with a large white **AF** monogram, a thin progress bar, the same typed log (small, grey, mono) and a white "Enter System" capsule. |
+| Hero | The Welcome window (compact title bar) has the AF avatar squircle, the status token, the name as a large title, the role, the tagline, credential tokens, capsule CTAs and round social buttons. The **Terminal** is a dark "Pro"-profile window, now draggable and not rotated. The **Now** widget is a Sonoma-style HUD. **Desktop icons** are a PDF document, a certificate and two app tiles, with labels that turn into the blue selection pill on focus. The **stickers are removed**. |
+| About | A split window. The vibrancy sidebar holds the identity, the current focus, "Get Info" key/value rows and the `engineer.ts` pane (tall viewports only). The main pane has the large-title tagline, paragraphs, credential tokens and four skill cards with squircle glyph tiles. Skill detail is now actually clamped: v1's `md:block` overrode the clamp. The status strip keeps the tools marquee. |
+| What I Do | A Finder window with a Favorites source list (blue line glyphs), unified title "Services — Finder / 6 items", six service cards with squircle tiles, and a path bar with the "Let's Talk" CTA. |
+| Experience | A Timeline window. The toolbar has a segmented control (Professional / Education) and borderless ‹ › buttons. The rail, dots, date tokens and Verify Credential buttons are kept. |
+| Projects | A Finder window with a source list. The toolbar has an Icons / List segmented control, which is also driven by *View ▸ as Icons / as List*. The icon view is a thumbnail grid with selection-pill labels. The list view has a header row, zebra rows and borderless link buttons. Quick Look is the dialog. The path bar includes "View Full Portfolio on GitHub". |
+| Contact | A Mail compose window with a Send capsule in the toolbar, right-aligned *To:* and *Subject:* labels, 0.5px field separators, a large-title status line, a mono signature, Send and Download capsules, and an inspector-style contact card. |
+| Mobile | This is the stacked sheets from v1, with the new chrome. The status bar shows the Desktop icon, clock, EN/ΕΛ, appearance and a launcher. Windows show their app icon beside the title; there are no traffic lights and no dragging. The phone dock and the home-screen launcher use the new icons. There is no horizontal overflow at 390px. |
 
 ## Files
 
-- New: `src/components/ui/Window.tsx` (window, `AppTile`, `TrafficLights`), `src/components/dom/Dock.tsx`, `src/components/ui/CredentialChips.tsx`, `src/data/apps.ts` (app tiles, `uiIcon`), `src/hooks/useActiveSection.ts`, `src/utils/links.ts`.
-- Rewritten: `globals.css` (tokens, wallpaper, window/dock/menu-bar component classes in `@layer components`, and a class-based `dark:` variant), `Navigation.tsx` (menu bar, status bar, launcher), `MobileNav.tsx`, `HeroOverlay.tsx`, `About.tsx`, `Services.tsx`, `Experience.tsx`, `Projects.tsx`, `Contact.tsx`, `CinematicEntry.tsx`, `ThemeToggle.tsx` (now a status item), and `Modal.tsx` (now a window).
-- Adjusted: `layout.tsx` (Inter and JetBrains Mono with Greek, wallpaper layer, theme-color), `HorizontalLayout.tsx` (transparent track, panel padding for the menu bar and dock, card stack on mobile), `LocalTime.tsx`, `CopyButton.tsx`, `useCardScroll.ts` (generic element type), `ScrollRail.tsx`.
-- Content: `content.ts` gains an `os` block in **both languages**: window titles, menu names, dock and icon labels, view and table labels, aria strings, and the accented display name. It also gains `RESUME_URL` and `MAIL_SUBJECT` constants. No existing copy was removed.
-- Removed, because nothing uses them in this style: `LetterGlitch`, `ScrambleText`, `CustomCursor`, `NoiseOverlay`, `SpotlightCard`, `SectionHeading`, `RollText`.
+- **New:**
+  - `src/contexts/DesktopContext.tsx` (window manager)
+  - `src/components/ui/AppIcon.tsx` (squircle app icons, `GlyphTile`, `MonogramIcon`, PDF and certificate art)
+  - `src/components/ui/Icon.tsx` (line-icon set, plus `symbolFor()` mapping the content file's legacy glyph names)
+  - `src/components/ui/Finder.tsx` (source list, path bar)
+  - `src/components/ui/Wallpaper.tsx`
+- **Rewritten:**
+  - `src/components/ui/Window.tsx` (drag, z-order, key state, zoom, genie, close, hints, split layout, real traffic lights)
+  - `src/components/dom/Navigation.tsx` (menu bar with menus; phone status bar and launcher)
+  - `src/components/dom/Dock.tsx`
+  - `src/app/globals.css` (v2 tokens and components; the marquee and tool-tile rules are kept)
+  - `src/data/apps.ts` (window and app ids, tints, title helpers)
+- **Adjusted:**
+  - `layout.tsx` (system font stack, no Font Awesome, wallpaper component, theme colours)
+  - `page.tsx` (`DesktopProvider`)
+  - `HorizontalLayout.tsx` (`data-panel`, a desktop click deactivates windows, focus travel between spaces)
+  - `useActiveSection.ts` (`readActiveSection`)
+  - `HeroOverlay`, `About`, `Services`, `Experience`, `Projects`, `Contact`, `Modal`, `CinematicEntry`, `CredentialChips`, `CopyButton`, `LocalTime` (menu-bar date format), `ThemeToggle` (`useToggleAppearance`), `MobileNav`, `utils/motion.ts` (`WINDOW_SPRING`, `MENU_TRANSITION`)
+- **Content:** `content.ts` gains `os.menu`, `os.windowActions`, `os.hidden`, `os.apps` and `os.clock` **in both languages**. No existing copy was removed.
+- **Scripts** (untracked, in `.research/`):
+  - `interact.js`: drag, constraint, z-order, zoom, genie, Restore All, resize reset, menus, keyboard, reduced motion, Greek fonts, mobile. It also writes `style-preview/extra/`.
+  - `keyboard.js`: tab travel across spaces.
+  - `contrast.js` and `contrast.py`: measured contrast.
+  - `quick.js`: fit per panel.
 
 ## Trade-offs
 
-- **Glass costs GPU.** Every window, the menu bar and the dock use `backdrop-filter`. It is fine on modern hardware, but it is the heaviest part of this style. The wallpaper is pure CSS gradients, so there is no image to download.
-- **Windows are not draggable.** They look draggable but they are not. Real dragging would fight the horizontal scroll journey and hurt keyboard and touch use. The traffic lights on section windows are decorative (`aria-hidden`). Only a dialog's red light does something: it closes the dialog.
-- **Some copy stays in English in both languages.** Terminal output and app names ("Finder", "Mail", "About.app") read as software names rather than prose. Everything a visitor needs to read is translated.
-- **The Experience cards share one height** so the timeline reads as a row. Short roles leave empty space at the bottom of their card.
-- **Service descriptions are clamped** to four lines on the card. The full text is one click away in the dialog.
-- **The `engineer.ts` pane in About hides on short desktop viewports** (below 52rem, about 832px, tall) so the About window never needs an inner scroll.
-- **Fit at 1440×900 was checked by script.** No panel scrolls internally. The only clipped elements are the intended line clamps and the blurred image fill.
+- **Opaque windows cost less GPU than v1.** `backdrop-filter` is now used only on sidebars, the menu bar, the Dock, menus, the Terminal and HUDs.
+- **Only the text-bearing areas are vibrancy.** Content panes are opaque, as on macOS, so body text never sits on a moving blur.
+- **The genie is approximate.** CSS transforms cannot warp a surface, so the window pinches (scaleX) before it pours (y, scaleY), with split timing. At 0.5s it reads as the genie. A true mesh warp would need WebGL.
+- **Windows cannot leave their space.** Dragging is clamped to the visible desktop of the window's own panel, so the horizontal journey stays coherent. On macOS you can push a window partly off-screen.
+- **Hidden windows leave a hint card.** macOS leaves empty desktop. Here a visitor could otherwise lose the section without knowing the Dock restores it. The hint is quiet, on HUD glass, and it is also where keyboard focus lands.
+- **Traffic lights are 12px at a 20px pitch,** true to macOS. Each is a 20×20 button, and every action also exists in the Window, File and App menus with 24px items. That covers the equivalent-control exception of WCAG 2.5.8.
+- **Menus are the real macOS set** (File, View, Go, Window) rather than a list of section names. Navigation is one more click in the menu bar. The Dock (always visible, labelled) and *Go* carry it.
+- **The wallpaper is static.** Animating it would re-render every backdrop blur on every frame, and macOS wallpapers are still unless dynamic.
+- **Terminal output and app names stay in English** in both languages (software names), as in v1.
+- **`/_vercel/speed-insights/script.js` 404s on a local `next start`.** This is pre-existing and only exists on Vercel. It is the only console error.
+- **Fit.** Every desktop panel fits 1440×900 without inner scrolling, checked by script. A `short:` variant (≤ 52rem tall) tightens About and Experience, so 1280×800 fits too.
 
 ## Previews
 
@@ -125,11 +223,22 @@ Mobile 390×844 (light / dark):
 | ![m1](style-preview/light/mobile-1.jpg) | ![m2](style-preview/light/mobile-2.jpg) | ![m3](style-preview/light/mobile-3.jpg) | ![m4](style-preview/light/mobile-4.jpg) | ![m5](style-preview/light/mobile-5.jpg) |
 | ![d1](style-preview/dark/mobile-1.jpg) | ![d2](style-preview/dark/mobile-2.jpg) | ![d3](style-preview/dark/mobile-3.jpg) | ![d4](style-preview/dark/mobile-4.jpg) | ![d5](style-preview/dark/mobile-5.jpg) |
 
-Dialogs, views, Greek and boot:
+Window manager (from `.research/interact.js`):
 
 | | |
 | --- | --- |
-| ![Quick Look](style-preview/extra/quicklook-light.jpg) | ![Quick Look dark](style-preview/extra/quicklook-dark.jpg) |
-| ![Projects list view](style-preview/extra/projects-list-light.jpg) | ![Service dialog](style-preview/extra/service-dialog-light.jpg) |
-| ![Greek hero](style-preview/extra/greek-hero-dark.jpg) | ![Greek services](style-preview/extra/greek-services-dark.jpg) |
-| ![Boot screen](style-preview/extra/boot.jpg) | ![Mobile launcher](style-preview/extra/mobile-launcher-light.jpg) ![Greek mobile](style-preview/extra/greek-mobile-hero-light.jpg) |
+| ![Terminal dragged over Welcome, now key](style-preview/extra/drag-terminal-light.jpg) | ![Zoomed Welcome](style-preview/extra/zoom-welcome-light.jpg) |
+| ![Genie minimise, mid-flight](style-preview/extra/minimize-genie-mid-light.jpg) | ![Minimised: hint + Dock](style-preview/extra/minimized-welcome-light.jpg) |
+| ![Restoring out of the Dock (icon bouncing)](style-preview/extra/restore-genie-mid-light.jpg) | ![About closed + Window menu with Restore All](style-preview/extra/menu-window-light.jpg) |
+| ![Dock magnification](style-preview/extra/dock-magnify-light.jpg) | ![Traffic-light glyphs on hover](style-preview/extra/lights-hover-light.jpg) ![Focus ring on a light](style-preview/extra/focus-ring-light.jpg) |
+
+Menus, dialogs, Greek, boot:
+
+| | |
+| --- | --- |
+| ![Go menu (dark)](style-preview/extra/menu-go-dark.jpg) | ![AF menu (dark)](style-preview/extra/menu-af-dark.jpg) |
+| ![Quick Look (dark)](style-preview/extra/quicklook-dark.jpg) | ![Service dialog](style-preview/extra/service-dialog-light.jpg) |
+| ![Projects list view](style-preview/extra/projects-list-light.jpg) | ![Restore All result](style-preview/extra/restore-all-light.jpg) |
+| ![Greek hero](style-preview/extra/greek-hero-light.jpg) | ![Greek Window menu](style-preview/extra/greek-menu-window-light.jpg) |
+| ![Greek services (dark)](style-preview/extra/greek-services-dark.jpg) | ![Greek contact (dark)](style-preview/extra/greek-contact-dark.jpg) |
+| ![Boot](style-preview/extra/boot.jpg) | ![Phone launcher](style-preview/extra/mobile-launcher-light.jpg) ![Greek phone hero](style-preview/extra/greek-mobile-hero-light.jpg) |
