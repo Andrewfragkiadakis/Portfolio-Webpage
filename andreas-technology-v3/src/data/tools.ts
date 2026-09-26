@@ -19,7 +19,7 @@ export interface Tool {
     row: 'ops' | 'build'
 }
 
-export const TOOLS: Tool[] = [
+export const TOOLS = [
     // Apple fleet & endpoint
     { label: 'Jamf Pro', logo: 'jamf', ratio: 2.875, brand: '#000000', row: 'ops' },
     { label: 'Apple Business Manager', logo: 'apple', brand: '#000000', row: 'ops' },
@@ -56,4 +56,9 @@ export const TOOLS: Tool[] = [
     { label: 'Confluence', logo: 'confluence', brand: '#172B4D', row: 'build' },
     { label: 'Google Workspace', logo: 'google', brand: '#4285F4', row: 'build' },
     { label: 'Slack', logo: 'slack', brand: '#E01E5A', row: 'build' },
-]
+] as const satisfies readonly Tool[]
+
+/** Every tool name, so other content can reference tools with compile-time checking. */
+export type ToolLabel = (typeof TOOLS)[number]['label']
+
+export const TOOL_BY_LABEL: ReadonlyMap<ToolLabel, Tool> = new Map(TOOLS.map((tool) => [tool.label, tool]))

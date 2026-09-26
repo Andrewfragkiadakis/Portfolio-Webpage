@@ -1,23 +1,28 @@
 'use client'
 
 import { useContent } from '@/hooks/useContent'
-import { motion, AnimatePresence } from 'motion/react'
+import { motion } from 'motion/react'
 import { EASE_OUT } from '@/utils/motion'
 import { scrollToSection } from '@/utils/smooth-scroll'
 import { sectionIndex } from '@/data/sections'
 import { useState } from 'react'
 import type { Service } from '@/data/content'
+import { TOOL_BY_LABEL, type Tool } from '@/data/tools'
 import SpotlightCard from '@/components/ui/SpotlightCard'
-import RollText from '@/components/ui/RollText'
 import SectionHeading from '@/components/ui/SectionHeading'
+import RollText from '@/components/ui/RollText'
+import Modal from '@/components/ui/Modal'
+import ToolBadge, { ToolLogo } from '@/components/ui/ToolBadge'
+
+/** Logos previewed on a card before it is opened. */
+const PREVIEW_TOOLS = 5
+
+const toolsFor = (service: Service): Tool[] =>
+    service.tools.map((label) => TOOL_BY_LABEL.get(label)).filter((tool): tool is Tool => Boolean(tool))
 
 export default function Services() {
     const t = useContent()
-    const [expandedIndex, setExpandedIndex] = useState<number | null>(null)
-
-    const toggleExpand = (index: number) => {
-        setExpandedIndex(expandedIndex === index ? null : index)
-    }
+    const [active, setActive] = useState<Service | null>(null)
 
     return (
         <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-4 md:py-0 overflow-visible md:overflow-x-hidden md:overflow-y-auto no-scrollbar">
@@ -27,13 +32,18 @@ export default function Services() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
                     {t.services.map((service: Service, index: number) => (
                         <motion.div
-                            key={index}
+                            key={service.title}
                             initial={{ opacity: 0, y: 32 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, amount: 0.3 }}
                             transition={{ duration: 0.8, ease: EASE_OUT, delay: index * 0.08 }}
                         >
-                            <SpotlightCard className="bg-[var(--background)] p-5 border border-[var(--foreground)]/50 hover:border-[var(--accent)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)] group flex flex-col justify-between h-full">
+                            <SpotlightCard
+                                onClick={() => setActive(service)}
+                                label={`${service.title} — ${t.servicesLabels.details}`}
+                                cursor={t.cursor.open}
+                                className="bg-[var(--background)] p-5 border border-[var(--foreground)]/50 hover:border-[var(--accent)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)] group flex flex-col justify-between h-full"
+                            >
                                 <div className="relative z-10">
                                     {/* Icon sits beside the title rather than above it: six cards
                                         in two rows only fit a laptop viewport without the stacked height. */}
@@ -45,41 +55,24 @@ export default function Services() {
                                             {service.title}
                                         </h3>
                                     </div>
-
-                                    <div className="hidden md:block">
-                                        <p className="text-[var(--foreground)] opacity-80 leading-relaxed text-body-sm">
-                                            {service.description}
-                                        </p>
-                                    </div>
-
-                                    <div className="md:hidden" id={`service-desc-${index}`}>
-                                        <AnimatePresence initial={false}>
-                                            {expandedIndex === index && (
-                                                <motion.div
-                                                    initial={{ height: 0, opacity: 0 }}
-                                                    animate={{ height: 'auto', opacity: 1 }}
-                                                    exit={{ height: 0, opacity: 0 }}
-                                                    transition={{ duration: 0.3, ease: 'easeInOut' }}
-                                                    className="overflow-hidden"
-                                                >
-                                                    <p className="text-[var(--foreground)] opacity-80 leading-relaxed text-sm pt-2">
-                                                        {service.description}
-                                                    </p>
-                                                </motion.div>
-                                            )}
-                                        </AnimatePresence>
-                                    </div>
+                                    <p className="hidden md:block text-[var(--foreground)] opacity-80 leading-relaxed text-body-sm">
+                                        {service.description}
+                                    </p>
                                 </div>
-                                <div className="relative z-10 mt-3 flex justify-between items-center">
-                                    <button
-                                        onClick={() => toggleExpand(index)}
-                                        className="md:hidden text-xs font-mono text-[var(--accent)] uppercase tracking-wider"
-                                        aria-expanded={expandedIndex === index}
-                                        aria-controls={`service-desc-${index}`}
+
+                                {/* Footer: toolkit preview on the left, the "open" affordance on the right. */}
+                                <div className="relative z-10 mt-4 flex items-center justify-between gap-3">
+                                    <span className="flex items-center gap-2.5 text-[var(--foreground)] opacity-60 group-hover:opacity-90 transition-opacity" aria-hidden="true">
+                                        {toolsFor(service).slice(0, PREVIEW_TOOLS).map((tool) => (
+                                            <ToolLogo key={tool.label} tool={tool} />
+                                        ))}
+                                    </span>
+                                    <span
+                                        className="w-9 h-9 shrink-0 rounded-full border border-[var(--accent)]/60 flex items-center justify-center text-[var(--accent)] transition-[transform,background-color,color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:rotate-90 group-hover:bg-[var(--accent)] group-hover:text-[var(--background)] group-focus-visible:rotate-90"
+                                        aria-hidden="true"
                                     >
-                                        {expandedIndex === index ? 'Less' : 'More'}
-                                    </button>
-                                    <i className="fas fa-plus text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity ml-auto" aria-hidden="true" />
+                                        <i className="fas fa-plus text-sm" />
+                                    </span>
                                 </div>
                             </SpotlightCard>
                         </motion.div>
@@ -103,6 +96,54 @@ export default function Services() {
                     </button>
                 </motion.div>
             </div>
+
+            <Modal
+                open={Boolean(active)}
+                onClose={() => setActive(null)}
+                labelledBy="service-modal-title"
+                closeLabel={t.projectsSection.close}
+                className="max-w-xl w-full p-6 sm:p-8"
+            >
+                {active && (
+                    <>
+                        <div className="flex items-center gap-4 mb-5 pr-10">
+                            <div className="w-12 h-12 shrink-0 border border-[var(--accent)] flex items-center justify-center text-xl text-[var(--accent)]">
+                                <i className={active.icon} aria-hidden="true" />
+                            </div>
+                            <h3 id="service-modal-title" className="text-lg sm:text-xl font-black text-[var(--accent)] uppercase tracking-tight leading-tight">
+                                {active.title}
+                            </h3>
+                        </div>
+
+                        <p className="text-sm text-[var(--foreground)] opacity-85 leading-relaxed mb-6">
+                            {active.detail}
+                        </p>
+
+                        <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--accent)] mb-3">
+                            {t.servicesLabels.highlights}
+                        </h4>
+                        <ul className="space-y-2 mb-6">
+                            {active.highlights.map((item) => (
+                                <li key={item} className="flex items-start gap-2.5 text-sm text-[var(--foreground)] opacity-85">
+                                    <i className="fas fa-check text-[var(--accent)] text-caption mt-1 shrink-0" aria-hidden="true" />
+                                    <span className="leading-relaxed">{item}</span>
+                                </li>
+                            ))}
+                        </ul>
+
+                        <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--accent)] mb-3">
+                            {t.servicesLabels.toolkit}
+                        </h4>
+                        <ul className="flex flex-wrap gap-2">
+                            {toolsFor(active).map((tool) => (
+                                <li key={tool.label}>
+                                    <ToolBadge tool={tool} />
+                                </li>
+                            ))}
+                        </ul>
+                    </>
+                )}
+            </Modal>
         </section>
     )
 }

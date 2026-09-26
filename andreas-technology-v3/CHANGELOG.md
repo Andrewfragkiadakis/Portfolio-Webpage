@@ -5,6 +5,9 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 ## [Unreleased]
 
 ### Added
+- What I Do: every card opens a detail dialog (whole card + always-visible plus control that rotates on hover) with a short explanation, three factual "In practice" points and a curated toolkit of official logos; cards preview their toolkit logos in the footer row. EN/GR
+- `Service.detail`, `highlights` and `tools` (typed `ToolLabel[]`, checked against `data/tools.ts` at compile time)
+- `ToolBadge` / `ToolLogo`: shared official-logo pill used by the About marquee and service toolkits
 - Type tokens `text-micro` (0.625rem), `text-caption` (0.6875rem), `text-body-sm` (0.8125rem) in `@theme`, replacing 37 px font sizes so small text follows the reader's font-size setting
 - `isDesktopViewport()` / `DESKTOP_MEDIA_QUERY` as the single JS source for the desktop breakpoint
 - `RollText`: button labels roll up on hover/focus with a copy rolling in (CSS only; duplicate hidden from assistive tech) — hero, Services, Projects, Experience and Contact CTAs
@@ -29,6 +32,7 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 - JSON-LD `hasCredential` and `knowsAbout` on the Person schema; Jamf keywords in metadata
 
 ### Changed
+- Services: replaced the mobile More/Less accordion with the detail dialog, so touch and desktop share one interaction
 - Sizing audit: px layout values converted to Tailwind's rem spacing scale (cards, images, touch targets, containers); breakpoint `--breakpoint-md` is now `64rem`; LogoLoop takes CSS lengths; tool logos size by `aspect-ratio`. Hairlines, borders, focus rings, blur, pointer and scroll thresholds intentionally stay px
 - Removed duplicated magic numbers: nav offset read from `--nav-h`, breakpoint via media query (not `innerWidth`), mobile card step uses measured card width + computed gap
 - Collapsed `md:`/`lg:` class pairs made dead by `md` == `lg` (1024px); corrected project image `sizes` to the real card widths

@@ -9,6 +9,7 @@ import Modal from '@/components/ui/Modal'
 import LogoLoop from '@/components/ui/LogoLoop'
 import type { LogoItem } from '@/components/ui/LogoLoop'
 import { TOOLS, type Tool } from '@/data/tools'
+import ToolBadge from '@/components/ui/ToolBadge'
 import SectionHeading from '@/components/ui/SectionHeading'
 
 /** Counts up once in view. Writes straight to the DOM so it never re-renders React per frame. */
@@ -75,28 +76,9 @@ function CredentialStrip({ items, label, cursorLabel }: { items: Education[]; la
     )
 }
 
-/** Near-black brand colours vanish on the dark theme, so those hover to the foreground instead. */
-function hoverColour(hex: string): string {
-    const n = parseInt(hex.slice(1), 16)
-    const [r, g, b] = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((c) => {
-        const v = c / 255
-        return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4
-    })
-    return 0.2126 * r + 0.7152 * g + 0.0722 * b < 0.06 ? 'var(--foreground)' : hex
-}
-
 const toLogos = (row: Tool['row']): LogoItem[] =>
     TOOLS.filter((tool) => tool.row === row).map((tool) => ({
-        node: (
-            <span className="tool-pill" style={{ '--brand': hoverColour(tool.brand) } as React.CSSProperties}>
-                <span
-                    className="tool-logo"
-                    aria-hidden="true"
-                    style={{ aspectRatio: tool.ratio ?? 1, maskImage: `url(/logos/${tool.logo}.svg)`, WebkitMaskImage: `url(/logos/${tool.logo}.svg)` }}
-                />
-                {tool.label}
-            </span>
-        ),
+        node: <ToolBadge tool={tool} />,
         title: tool.label,
     }))
 

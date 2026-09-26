@@ -1,3 +1,5 @@
+import type { ToolLabel } from '@/data/tools'
+
 export interface Skill {
     icon: string
     label: string
@@ -7,7 +9,14 @@ export interface Skill {
 export interface Service {
     icon: string
     title: string
+    /** One-line summary shown on the card. */
     description: string
+    /** Short explanation shown when the card is opened. */
+    detail: string
+    /** Concrete, factual examples of the work. */
+    highlights: string[]
+    /** Curated toolkit for this area, drawn from data/tools.ts. */
+    tools: ToolLabel[]
 }
 
 export interface Experience {
@@ -119,6 +128,11 @@ export interface Content {
     servicesSubtitle: string
     servicesCta: string
     servicesCtaButton: string
+    servicesLabels: {
+        highlights: string
+        toolkit: string
+        details: string
+    }
     services: Service[]
     experienceTitle: string
     experience: Experience[]
@@ -273,36 +287,79 @@ export const content: Record<'en' | 'gr', Content> = {
         servicesSubtitle: "// SERVICES & EXPERTISE",
         servicesCta: "Have a unique project in mind?",
         servicesCtaButton: "Let's Talk",
+        servicesLabels: { highlights: "In practice", toolkit: "Toolkit", details: "Details" },
         services: [
             {
                 icon: "fas fa-shield-halved",
                 title: "Endpoint Security & Compliance",
-                description: "Hardening fleets against real-world threats: CIS Benchmark implementation, EDR deployment and migration, disk-encryption management, and audit readiness for PCI-DSS and SOC 2."
+                description: "Hardening fleets against real-world threats: CIS Benchmark implementation, EDR deployment and migration, disk-encryption management, and audit readiness for PCI-DSS and SOC 2.",
+                detail: "Security that holds up in an audit and in production. I implemented CIS Benchmark hardening fleet-wide ahead of PCI-DSS and SOC 2 audits, led the migration to Checkpoint Harmony EDR, and feed endpoint telemetry into Microsoft Sentinel so detection has real context.",
+                highlights: [
+                    "CIS Benchmark hardening ahead of PCI-DSS and SOC 2 audits",
+                    "EDR migration with FileVault conflicts resolved and zero data loss",
+                    "Sentinel SIEM log pipelines over RFC 5424 + TLS"
+                ],
+                tools: ["Checkpoint Harmony EDR", "Microsoft Sentinel", "Jamf Pro", "Microsoft Entra ID", "DUO MFA", "1Password"]
             },
             {
                 icon: "fab fa-apple",
                 title: "Apple Fleet Engineering",
-                description: "Jamf Certified Tech (Jamf 200). Managing macOS at scale with Jamf Pro and Apple Business Manager — zero-touch enrollment, configuration profiles, patch strategy, and fleet hygiene across hundreds of devices."
+                description: "Jamf Certified Tech (Jamf 200). Managing macOS at scale with Jamf Pro and Apple Business Manager — zero-touch enrollment, configuration profiles, patch strategy, and fleet hygiene across hundreds of devices.",
+                detail: "I own Jamf Pro end-to-end for a 550+ Mac fleet. A new Mac enrolls itself through Apple Business Manager, pulls its profiles and apps, and is ready on day one — zero-touch enrollment cut onboarding time by 70%.",
+                highlights: [
+                    "Jamf Certified Tech (Jamf 200)",
+                    "Zero-touch enrollment: 70% faster onboarding",
+                    "Configuration profiles, patching, Self Service and fleet hygiene"
+                ],
+                tools: ["Jamf Pro", "Apple Business Manager", "macOS", "Bash / zsh", "Swift", "AppleScript"]
             },
             {
                 icon: "fas fa-gears",
                 title: "IT Automation & Scripting",
-                description: "Turning manual IT work into repeatable systems. Bash, Python and TypeScript against real APIs, plus certificate and provisioning pipelines that remove recurring toil for good."
+                description: "Turning manual IT work into repeatable systems. Bash, Python and TypeScript against real APIs, plus certificate and provisioning pipelines that remove recurring toil for good.",
+                detail: "If a task happens twice, it becomes a script. I write Bash, Python, Swift and TypeScript against real APIs, from Jamf tooling to a centralised certificate pipeline that renews SSL for Cisco ISE, ESXi, Proxmox and HPE iLO with no manual steps.",
+                highlights: [
+                    "Jamf API tooling and SIEM log collectors",
+                    "acme.sh / Let's Encrypt DNS-01 renewals — no manual cert toil",
+                    "Scripts version-controlled and reviewed in Git"
+                ],
+                tools: ["Python", "Bash / zsh", "TypeScript", "Swift", "Git / GitHub", "acme.sh / Let's Encrypt"]
             },
             {
                 icon: "fas fa-robot",
                 title: "AI-Augmented Operations",
-                description: "Deploying AI that measurably reduces work — org-wide assistant rollouts, agentic automation, and AI-powered ticket triage that cuts time-to-resolution instead of adding another dashboard."
+                description: "Deploying AI that measurably reduces work — org-wide assistant rollouts, agentic automation, and AI-powered ticket triage that cuts time-to-resolution instead of adding another dashboard.",
+                detail: "AI adoption that shows up in the numbers. I rolled out Google Gemini org-wide and Atlassian Rovo Agents, built an AI ticket-triage pipeline for Jira Service Management, and prototype MCP servers so assistants like Claude Code can work with IT systems directly.",
+                highlights: [
+                    "Org-wide Google Gemini rollout",
+                    "AI ticket triage across 350+ tickets a year",
+                    "MCP server prototypes for IT tooling"
+                ],
+                tools: ["Claude Code", "MCP Servers", "Google Gemini", "Atlassian Rovo", "Jira Service Management", "Slack"]
             },
             {
                 icon: "fas fa-headset",
                 title: "IT Service Management",
-                description: "ITIL 4 certified service delivery: incident and request workflows, ticketing automation, SLA-driven support, and vendor escalation management for business-critical systems."
+                description: "ITIL 4 certified service delivery: incident and request workflows, ticketing automation, SLA-driven support, and vendor escalation management for business-critical systems.",
+                detail: "Support people can rely on. ITIL 4 certified, I pair clear incident and request processes with automation and documentation, so the queue stays short and answers are easy to find.",
+                highlights: [
+                    "ITIL 4 Foundation certified",
+                    "350+ Jira tickets resolved at 95%+ SLA",
+                    "40+ Confluence guides and 9 enterprise platforms administered"
+                ],
+                tools: ["Jira Service Management", "Confluence", "Atlassian Rovo", "Slack", "Google Workspace"]
             },
             {
                 icon: "fas fa-network-wired",
                 title: "Networks & Infrastructure",
-                description: "The layer everything else depends on — Cisco ISE, Active Directory, MFA, and virtualization on ESXi and Proxmox, with monitoring that surfaces problems before users report them."
+                description: "The layer everything else depends on — Cisco ISE, Active Directory, MFA, and virtualization on ESXi and Proxmox, with monitoring that surfaces problems before users report them.",
+                detail: "The foundation under everything else: Cisco ISE network access control, identity across Active Directory and Entra ID, and virtualization on VMware ESXi and Proxmox — with MFA, certificates and monitoring kept in order around them.",
+                highlights: [
+                    "Cisco ISE network access control",
+                    "Identity across Active Directory and Entra ID",
+                    "Virtualization on VMware ESXi and Proxmox"
+                ],
+                tools: ["Cisco ISE", "Active Directory", "Microsoft Entra ID", "VMware ESXi", "Proxmox", "Linux"]
             }
         ],
 
@@ -769,36 +826,79 @@ export const content: Record<'en' | 'gr', Content> = {
         servicesSubtitle: "// ΕΞΕΙΔΙΚΕΥΣΗ & ΔΕΞΙΟΤΗΤΕΣ",
         servicesCta: "Εχετε ενα συγκεκριμενο project στο μυαλο σας;",
         servicesCtaButton: "Ας Μιλησουμε",
+        servicesLabels: { highlights: "Στην πραξη", toolkit: "Εργαλεια", details: "Λεπτομερειες" },
         services: [
             {
                 icon: "fas fa-shield-halved",
                 title: "Ασφαλεια Τερματικων & Συμμορφωση",
-                description: "Θωράκιση στόλου συσκευών απέναντι σε πραγματικές απειλές: εφαρμογή CIS Benchmarks, ανάπτυξη και μετάβαση EDR, διαχείριση κρυπτογράφησης δίσκων και ετοιμότητα για ελέγχους PCI-DSS και SOC 2."
+                description: "Θωράκιση στόλου συσκευών απέναντι σε πραγματικές απειλές: εφαρμογή CIS Benchmarks, ανάπτυξη και μετάβαση EDR, διαχείριση κρυπτογράφησης δίσκων και ετοιμότητα για ελέγχους PCI-DSS και SOC 2.",
+                detail: "Ασφάλεια που αντέχει τόσο σε έλεγχο όσο και στην παραγωγή. Εφάρμοσα θωράκιση κατά CIS Benchmarks σε όλο τον στόλο πριν από ελέγχους PCI-DSS και SOC 2, ηγήθηκα της μετάβασης σε Checkpoint Harmony EDR και τροφοδοτώ το Microsoft Sentinel με telemetry τερματικών ώστε η ανίχνευση να έχει πραγματικό πλαίσιο.",
+                highlights: [
+                    "Θωράκιση κατά CIS Benchmarks πριν από ελέγχους PCI-DSS και SOC 2",
+                    "Μετάβαση EDR με επίλυση συγκρούσεων FileVault και μηδενική απώλεια δεδομένων",
+                    "Pipelines Sentinel SIEM μέσω RFC 5424 + TLS"
+                ],
+                tools: ["Checkpoint Harmony EDR", "Microsoft Sentinel", "Jamf Pro", "Microsoft Entra ID", "DUO MFA", "1Password"]
             },
             {
                 icon: "fab fa-apple",
                 title: "Apple Fleet Engineering",
-                description: "Jamf Certified Tech (Jamf 200). Διαχείριση macOS σε κλίμακα με Jamf Pro και Apple Business Manager — zero-touch enrollment, configuration profiles, στρατηγική ενημερώσεων και συντήρηση εκατοντάδων συσκευών."
+                description: "Jamf Certified Tech (Jamf 200). Διαχείριση macOS σε κλίμακα με Jamf Pro και Apple Business Manager — zero-touch enrollment, configuration profiles, στρατηγική ενημερώσεων και συντήρηση εκατοντάδων συσκευών.",
+                detail: "Διαχειρίζομαι εξ ολοκλήρου το Jamf Pro για στόλο 550+ Mac. Ένα νέο Mac εγγράφεται αυτόματα μέσω Apple Business Manager, λαμβάνει profiles και εφαρμογές και είναι έτοιμο από την πρώτη μέρα — το zero-touch enrollment μείωσε τον χρόνο onboarding κατά 70%.",
+                highlights: [
+                    "Jamf Certified Tech (Jamf 200)",
+                    "Zero-touch enrollment: 70% ταχύτερο onboarding",
+                    "Configuration profiles, ενημερώσεις, Self Service και συντήρηση στόλου"
+                ],
+                tools: ["Jamf Pro", "Apple Business Manager", "macOS", "Bash / zsh", "Swift", "AppleScript"]
             },
             {
                 icon: "fas fa-gears",
                 title: "Αυτοματισμος IT & Scripting",
-                description: "Μετατροπή χειροκίνητων εργασιών IT σε επαναλήψιμα συστήματα. Bash, Python και TypeScript πάνω σε πραγματικά APIs, με pipelines πιστοποιητικών και provisioning που εξαλείφουν την επαναλαμβανόμενη εργασία."
+                description: "Μετατροπή χειροκίνητων εργασιών IT σε επαναλήψιμα συστήματα. Bash, Python και TypeScript πάνω σε πραγματικά APIs, με pipelines πιστοποιητικών και provisioning που εξαλείφουν την επαναλαμβανόμενη εργασία.",
+                detail: "Ό,τι γίνεται δύο φορές, γίνεται script. Γράφω Bash, Python, Swift και TypeScript πάνω σε πραγματικά APIs, από εργαλεία Jamf έως ένα κεντρικό pipeline που ανανεώνει πιστοποιητικά SSL για Cisco ISE, ESXi, Proxmox και HPE iLO χωρίς χειροκίνητα βήματα.",
+                highlights: [
+                    "Εργαλεία Jamf API και log collectors για SIEM",
+                    "Ανανεώσεις acme.sh / Let's Encrypt DNS-01 — χωρίς χειροκίνητη διαχείριση πιστοποιητικών",
+                    "Scripts με version control και review στο Git"
+                ],
+                tools: ["Python", "Bash / zsh", "TypeScript", "Swift", "Git / GitHub", "acme.sh / Let's Encrypt"]
             },
             {
                 icon: "fas fa-robot",
                 title: "AI-Augmented Operations",
-                description: "Ανάπτυξη AI που μειώνει μετρήσιμα τον φόρτο εργασίας — εταιρικά rollouts βοηθών, agentic automation και διαλογή αιτημάτων με AI που μειώνει τον χρόνο επίλυσης."
+                description: "Ανάπτυξη AI που μειώνει μετρήσιμα τον φόρτο εργασίας — εταιρικά rollouts βοηθών, agentic automation και διαλογή αιτημάτων με AI που μειώνει τον χρόνο επίλυσης.",
+                detail: "Υιοθέτηση AI που φαίνεται στα νούμερα. Ανέπτυξα το Google Gemini σε όλο τον οργανισμό και τους Atlassian Rovo Agents, δημιούργησα pipeline διαλογής αιτημάτων με AI για το Jira Service Management και αναπτύσσω prototypes MCP servers ώστε βοηθοί όπως το Claude Code να δουλεύουν απευθείας με συστήματα IT.",
+                highlights: [
+                    "Ανάπτυξη Google Gemini σε όλο τον οργανισμό",
+                    "Διαλογή αιτημάτων με AI σε 350+ tickets τον χρόνο",
+                    "Prototypes MCP servers για εργαλεία IT"
+                ],
+                tools: ["Claude Code", "MCP Servers", "Google Gemini", "Atlassian Rovo", "Jira Service Management", "Slack"]
             },
             {
                 icon: "fas fa-headset",
                 title: "IT Service Management",
-                description: "Παροχή υπηρεσιών με πιστοποίηση ITIL 4: ροές incident και request, αυτοματισμός ticketing, υποστήριξη βάσει SLA και διαχείριση κρίσιμων vendor escalations."
+                description: "Παροχή υπηρεσιών με πιστοποίηση ITIL 4: ροές incident και request, αυτοματισμός ticketing, υποστήριξη βάσει SLA και διαχείριση κρίσιμων vendor escalations.",
+                detail: "Υποστήριξη στην οποία μπορεί κανείς να βασιστεί. Με πιστοποίηση ITIL 4, συνδυάζω σαφείς διαδικασίες incident και request με αυτοματισμό και τεκμηρίωση, ώστε η ουρά να μένει μικρή και οι απαντήσεις να βρίσκονται εύκολα.",
+                highlights: [
+                    "Πιστοποίηση ITIL 4 Foundation",
+                    "350+ Jira tickets με SLA 95%+",
+                    "40+ οδηγοί Confluence και διαχείριση 9 εταιρικών πλατφορμών"
+                ],
+                tools: ["Jira Service Management", "Confluence", "Atlassian Rovo", "Slack", "Google Workspace"]
             },
             {
                 icon: "fas fa-network-wired",
                 title: "Δικτυα & Υποδομες",
-                description: "Το επίπεδο πάνω στο οποίο στηρίζονται όλα — Cisco ISE, Active Directory, MFA και virtualization σε ESXi και Proxmox, με monitoring που εντοπίζει προβλήματα πριν τα αναφέρουν οι χρήστες."
+                description: "Το επίπεδο πάνω στο οποίο στηρίζονται όλα — Cisco ISE, Active Directory, MFA και virtualization σε ESXi και Proxmox, με monitoring που εντοπίζει προβλήματα πριν τα αναφέρουν οι χρήστες.",
+                detail: "Η βάση πάνω στην οποία στηρίζονται όλα: έλεγχος πρόσβασης δικτύου με Cisco ISE, ταυτότητα σε Active Directory και Entra ID, και virtualization σε VMware ESXi και Proxmox — με MFA, πιστοποιητικά και monitoring σε τάξη γύρω τους.",
+                highlights: [
+                    "Έλεγχος πρόσβασης δικτύου με Cisco ISE",
+                    "Ταυτότητα σε Active Directory και Entra ID",
+                    "Virtualization σε VMware ESXi και Proxmox"
+                ],
+                tools: ["Cisco ISE", "Active Directory", "Microsoft Entra ID", "VMware ESXi", "Proxmox", "Linux"]
             }
         ],
 
