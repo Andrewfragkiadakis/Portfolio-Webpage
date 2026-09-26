@@ -56,45 +56,56 @@ export default function CinematicEntry() {
                     data-cinematic="true"
                     initial={{ opacity: 1 }}
                     exit={{ y: '-100%', transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } }}
-                    className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[var(--background)] text-[var(--foreground)]"
+                    className="fixed inset-0 z-[99999] flex flex-col items-center justify-center px-4 bg-[var(--background)] text-[var(--foreground)]"
                 >
                     <button
                         onClick={handleEnter}
-                        className="absolute top-6 right-6 text-xs font-mono uppercase tracking-[0.2em] text-[var(--foreground)] opacity-60 hover:opacity-100 hover:text-[var(--accent)] transition-all duration-300"
+                        className="pill pill--quiet absolute top-5 right-5 !text-caption"
                     >
-                        {t.cinematicEntry.skip} →
+                        <span className="el-caps">{t.cinematicEntry.skip}</span>
+                        <i className="fas fa-arrow-right text-[0.625rem]" aria-hidden="true" />
                     </button>
 
-                    <div className="font-mono text-xl md:text-2xl tracking-widest text-[var(--accent)] mb-8">
-                        <Typewriter
-                            onInit={(typewriter) => {
-                                typewriter
-                                    .typeString(t.cinematicEntry.initializing)
-                                    .pauseFor(1000)
-                                    .typeString(`<br>${t.cinematicEntry.loading}`)
-                                    .pauseFor(1000)
-                                    .typeString(`<br>${t.cinematicEntry.ready}`)
-                                    .callFunction(() => setShowButton(true))
-                                    .start()
-                            }}
-                            options={{
-                                delay: 50,
-                                cursor: '█'
-                            }}
-                        />
+                    <div className="w-[min(34rem,calc(100vw-2rem))] rounded-[2rem] bg-[var(--terminal)] border border-[var(--terminal-line)] shadow-[0_40px_80px_-32px_rgba(0,0,0,0.5)] overflow-hidden">
+                        <div className="flex items-center gap-1.5 px-5 pt-4" aria-hidden="true">
+                            <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+                            <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+                            <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+                        </div>
+                        <div className="px-6 pt-6 pb-8 min-h-[9.5rem] font-mono text-base md:text-lg leading-relaxed text-[#f5f5f7] terminal-text">
+                            <Typewriter
+                                onInit={(typewriter) => {
+                                    typewriter
+                                        .typeString(t.cinematicEntry.initializing)
+                                        .pauseFor(1000)
+                                        .typeString(`<br>${t.cinematicEntry.loading}`)
+                                        .pauseFor(1000)
+                                        .typeString(`<br>${t.cinematicEntry.ready}`)
+                                        .callFunction(() => setShowButton(true))
+                                        .start()
+                                }}
+                                options={{
+                                    delay: 45,
+                                    cursor: '▍'
+                                }}
+                            />
+                        </div>
                     </div>
 
-                    {showButton && (
-                        <motion.button
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            whileHover={{ scale: 1.1, textShadow: "0 0 8px var(--accent)" }}
-                            onClick={handleEnter}
-                            className="px-8 py-4 border border-[var(--accent)] text-[var(--accent)] font-bold uppercase tracking-[0.2em] hover:bg-[var(--accent)]/10 transition-all duration-300 ease-out"
-                        >
-                            {t.cinematicEntry.enterSystem}
-                        </motion.button>
-                    )}
+                    <div className="h-20 mt-8 flex items-start">
+                        {showButton && (
+                            <motion.button
+                                initial={{ opacity: 0, scale: 0.94 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                whileHover={{ scale: 1.04 }}
+                                onClick={handleEnter}
+                                className="pill pill--accent !min-h-12 !px-7 !text-base"
+                            >
+                                <span className="el-caps">{t.cinematicEntry.enterSystem}</span>
+                                <i className="fas fa-arrow-right" aria-hidden="true" />
+                            </motion.button>
+                        )}
+                    </div>
                 </motion.div>
             )}
         </AnimatePresence>

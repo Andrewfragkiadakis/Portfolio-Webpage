@@ -1,34 +1,133 @@
 @import "tailwindcss";
 
-:root {
-  --background: #fafafa;
-  --foreground: #0f172a;
-  --accent: #4f46e5;
-  --glow: rgba(79, 70, 229, 0.15);
+/* Theme is a class on <html> (set before paint by the inline script), not the media query. */
+@custom-variant dark (&:where(.dark, .dark *));
 
-  --font-display: "Inter", sans-serif;
+/* Desktop viewports shorter than a 1440×900 laptop: tiles tighten so every panel still fits. */
+@custom-variant short {
+  @media (min-width: 64rem) and (max-height: 820px) {
+    @slot;
+  }
+}
+
+/*
+ * BENTO GRID — Apple product-page clarity.
+ * A light grey page, white tiles, one blue accent and four soft tints used sparingly.
+ * Every section is one bento: a 12 × 6 grid of rounded tiles that fills the viewport.
+ */
+:root {
+  /* Surfaces */
+  --background: #f5f5f7;
+  --surface: #ffffff;
+  --surface-2: #f5f5f7;
+  --fill: rgba(0, 0, 0, 0.045);
+  --line: rgba(0, 0, 0, 0.08);
+
+  /* Text */
+  --foreground: #1d1d1f;
+  --muted: #6e6e73;
+
+  /* Accent: `--accent` is for text and marks, `--accent-fill` for filled controls. */
+  --accent: #0071e3;
+  --accent-fill: #0071e3;
+  --on-accent: #ffffff;
+  --glow: rgba(0, 113, 227, 0.16);
+
+  /* Inverse tile (ink on light, paper on dark) and the always-dark terminal tile. */
+  --ink: #1d1d1f;
+  --on-ink: #f5f5f7;
+  --on-ink-muted: #a1a1a6;
+  --terminal: #1d1d1f;
+  --terminal-line: transparent;
+
+  /* Soft tints — backgrounds plus an "ink" that passes AA on its own tint. */
+  --mint: #e3f6e9;
+  --mint-ink: #0f7a3a;
+  --lavender: #eeeafd;
+  --lavender-ink: #5b3fd1;
+  --peach: #fdeee2;
+  --peach-ink: #a8480a;
+  --sky: #e3f0fd;
+  --sky-ink: #0062c4;
+  --tint-muted: #56565b;
+
+  --tile-shadow: 0 1px 1px rgba(0, 0, 0, 0.02), 0 8px 24px -12px rgba(0, 0, 0, 0.1);
+  --tile-shadow-hover: 0 2px 4px rgba(0, 0, 0, 0.04), 0 24px 48px -16px rgba(0, 0, 0, 0.2);
+
+  /* Geometry */
+  --radius-tile: 1.5rem;
+  --gap: 0.75rem;
+  --tile-pad: 1.25rem;
+
+  --font-display: var(--font-inter), "Inter", system-ui, sans-serif;
+  --font-code: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
 
   /*
-   * Height of the fixed desktop navigation. Panels reserve this at the top so
-   * vertically-centred content is centred in the *visible* area rather than
-   * behind the bar.
+   * Height of the fixed navigation. Panels reserve this at the top so the bento
+   * fills the *visible* area rather than sliding behind the bar.
    */
   --nav-h: 3.9rem;
 }
 
 .dark {
-  --background: #030014;
-  --foreground: #e0e7ff;
-  --accent: #a5b4fc;
-  --glow: rgba(165, 180, 252, 0.2);
+  --background: #000000;
+  --surface: #1c1c1e;
+  --surface-2: #2c2c2e;
+  --fill: rgba(255, 255, 255, 0.08);
+  --line: rgba(255, 255, 255, 0.08);
+
+  --foreground: #f5f5f7;
+  --muted: #a1a1a6;
+
+  --accent: #2997ff;
+  --accent-fill: #0071e3;
+  --on-accent: #ffffff;
+  --glow: rgba(41, 151, 255, 0.22);
+
+  --ink: #f5f5f7;
+  --on-ink: #1d1d1f;
+  --on-ink-muted: #515154;
+  --terminal: #0b0b0c;
+  --terminal-line: rgba(255, 255, 255, 0.14);
+
+  --mint: #0f2a1a;
+  --mint-ink: #5bd98a;
+  --lavender: #221c3a;
+  --lavender-ink: #b4a6ff;
+  --peach: #33200f;
+  --peach-ink: #ffb27a;
+  --sky: #0c2340;
+  --sky-ink: #6cb8ff;
+  --tint-muted: #b4b4b9;
+
+  --tile-shadow: none;
+  --tile-shadow-hover: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 24px 48px -16px rgba(0, 0, 0, 0.9);
+}
+
+@media (min-width: 64rem) {
+  :root {
+    --radius-tile: 1.75rem;
+    --gap: 0.875rem;
+    --tile-pad: clamp(1rem, 2.4vh, 1.5rem);
+  }
+}
+
+@media (min-width: 64rem) and (max-height: 820px) {
+  :root {
+    --gap: 0.625rem;
+    --tile-pad: clamp(0.75rem, 2.1vh, 1.25rem);
+  }
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
+  --color-muted: var(--muted);
+  --color-surface: var(--surface);
 
   --font-sans: var(--font-display);
+  --font-mono: var(--font-code);
 }
 
 /*
@@ -40,23 +139,23 @@
 @theme {
   --breakpoint-md: 64rem;
 
-  /*
-   * Small type sizes below Tailwind's text-xs (0.75rem). In rem, not px, so they
-   * follow the reader's browser font-size setting like the rest of the scale.
-   * No line-height is set: these inherit it, as the px values they replace did.
-   */
-  --text-micro: 0.625rem;    /* 10px at default size — meta labels, badges */
-  --text-caption: 0.6875rem; /* 11px — mono captions, corner meta */
-  --text-body-sm: 0.8125rem; /* 13px — code block, tool pills */
+  /* Small type sizes below Tailwind's text-xs, in rem so they follow the reader's font size. */
+  --text-micro: 0.6875rem;   /* 11px — eyebrows, badges */
+  --text-caption: 0.75rem;   /* 12px — meta */
+  --text-body-sm: 0.8125rem; /* 13px — tool pills, compact body */
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  background-image:
-    radial-gradient(at 0% 0%, var(--glow) 0, transparent 50%),
-    radial-gradient(at 100% 100%, var(--glow) 0, transparent 50%);
+  font-feature-settings: "cv11", "ss01";
   min-height: 100vh;
 }
 
@@ -84,23 +183,16 @@ html[data-entered="true"] [data-cinematic] {
   display: none !important;
 }
 
-.glass-panel {
-  background: color-mix(in srgb, var(--background), transparent 30%);
-  backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid color-mix(in srgb, var(--foreground), transparent 90%);
-  border-radius: 1rem;
-}
-
 ::selection {
-  background: var(--accent);
+  background: var(--accent-fill);
   color: #fff;
 }
 
 /* Keyboard users must always be able to see where they are. */
 :focus-visible {
   outline: 2px solid var(--accent);
-  outline-offset: 2px;
-  border-radius: 2px;
+  outline-offset: 3px;
+  border-radius: 0.5rem;
 }
 
 button:not(:disabled),
@@ -135,56 +227,272 @@ a[href],
   scrollbar-width: none;
 }
 
-/* Gradient text accent */
-.gradient-text {
-  background: linear-gradient(135deg, var(--accent), #818cf8, #c084fc);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+@layer components {
+/* ───────────────────────── Type ───────────────────────── */
+
+/* Display type: solid, heavy, tight. Numerals are tabular so counters don't jitter. */
+.display {
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.92;
 }
 
-.dark .gradient-text {
-  background: linear-gradient(135deg, var(--accent), #818cf8, #e879f9);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.numeral {
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums;
 }
 
-/* SpotlightCard */
-.card-spotlight {
+/* Small uppercase label that opens a tile, Indisea-style ("02 / About"). */
+.eyebrow {
+  font-size: var(--text-micro);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  line-height: 1.2;
+}
+
+/*
+ * Several Greek labels in content.ts are written without tonos because they were
+ * designed to be shown in capitals. Set them in capitals in Greek only, so English
+ * keeps its natural Apple-style case.
+ */
+:lang(el) .el-caps {
+  text-transform: uppercase;
+}
+
+/* ───────────────────────── Bento ───────────────────────── */
+
+/*
+ * Mobile: two columns, tiles span one or both.
+ * Desktop (md): each section is a 12 × 6 grid that fills its panel exactly.
+ */
+.bento {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap);
+  width: 100%;
+}
+
+@media (min-width: 64rem) {
+  .bento {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-rows: repeat(6, minmax(0, 1fr));
+    height: 100%;
+  }
+}
+
+.tile {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  padding: var(--tile-pad);
+  border-radius: var(--radius-tile);
+  background: var(--surface);
+  color: var(--foreground);
+  border: 1px solid var(--line);
+  box-shadow: var(--tile-shadow);
   overflow: hidden;
-  --mouse-x: 50%;
-  --mouse-y: 50%;
-  --spotlight-color: rgba(165, 180, 252, 0.1);
+  isolation: isolate;
+  text-align: left;
 }
 
-.card-spotlight::before {
-  content: '';
+.tile--mint { background: var(--mint); --muted: var(--tint-muted); --tint: var(--mint-ink); }
+.tile--lavender { background: var(--lavender); --muted: var(--tint-muted); --tint: var(--lavender-ink); }
+.tile--peach { background: var(--peach); --muted: var(--tint-muted); --tint: var(--peach-ink); }
+.tile--sky { background: var(--sky); --muted: var(--tint-muted); --tint: var(--sky-ink); }
+.tile--mint, .tile--lavender, .tile--peach, .tile--sky { border-color: transparent; }
+
+.tile--ink {
+  background: var(--ink);
+  color: var(--on-ink);
+  border-color: transparent;
+  --muted: var(--on-ink-muted);
+  --fill: color-mix(in srgb, var(--on-ink), transparent 88%);
+}
+
+.tile--terminal {
+  background: var(--terminal);
+  color: #f5f5f7;
+  border-color: var(--terminal-line);
+  --muted: #a1a1a6;
+  --fill: rgba(255, 255, 255, 0.1);
+}
+
+.tile--accent {
+  background: var(--accent-fill);
+  color: var(--on-accent);
+  border-color: transparent;
+  --muted: #ffffff;
+  --fill: rgba(255, 255, 255, 0.18);
+}
+
+/* Colour of a tile's key mark (icon, numeral): the tint's ink, else the accent. */
+.tile-mark {
+  color: var(--tint, var(--accent));
+}
+
+.tile--ink .tile-mark,
+.tile--terminal .tile-mark,
+.tile--accent .tile-mark {
+  color: inherit;
+}
+
+/* Interactive tiles lift slightly on hover — only with a real pointer and motion allowed. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .tile--interactive {
+    transition: translate 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .tile--interactive:hover,
+  .tile--interactive:has(.tile-stretch:hover) {
+    translate: 0 -4px;
+    box-shadow: var(--tile-shadow-hover);
+  }
+}
+
+.tile--interactive:focus-visible,
+.tile--interactive:has(.tile-stretch:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-tile);
+}
+
+/* A button covering the whole tile, so secondary links can sit above it (not inside it). */
+.tile-stretch {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), var(--spotlight-color), transparent 80%);
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  pointer-events: none;
+  inset: 0;
   z-index: 1;
+  border-radius: inherit;
 }
 
-.card-spotlight:hover::before,
-.card-spotlight:focus-within::before {
-  opacity: 0.8;
+.tile-stretch:focus-visible {
+  outline: none;
 }
 
-/* LogoLoop marquee */
+.tile-above {
+  position: relative;
+  z-index: 2;
+}
+
+/* Round icon badge used in tile corners. */
+.tile-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.875rem;
+  background: var(--fill);
+}
+
+@media (min-width: 64rem) and (max-height: 820px) {
+  .tile-icon {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.625rem;
+  }
+}
+
+/* The "open" affordance: a small circle with a plus / arrow in the tile corner. */
+.tile-affordance {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: var(--fill);
+  font-size: 0.75rem;
+  transition: background-color 0.3s ease, color 0.3s ease, rotate 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tile--interactive:hover .tile-affordance,
+.tile--interactive:has(.tile-stretch:hover) .tile-affordance,
+.tile--interactive:has(.tile-stretch:focus-visible) .tile-affordance {
+  background: var(--accent-fill);
+  color: #fff;
+}
+
+.tile--accent.tile--interactive:hover .tile-affordance,
+.tile--ink.tile--interactive:hover .tile-affordance {
+  background: currentColor;
+}
+
+/* Pills: filled, fully rounded controls (Apple-style). */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+  padding: 0 1.125rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  transition: background-color 0.3s ease, color 0.3s ease, scale 0.3s ease;
+}
+
+.pill--accent { background: var(--accent-fill); color: #fff; }
+.pill--accent:hover { background: #0077ed; }
+.pill--quiet { background: var(--fill); color: inherit; }
+.pill--quiet:hover { background: color-mix(in srgb, currentColor, transparent 84%); }
+.pill--ink { background: var(--ink); color: var(--on-ink); }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 999px;
+  background: var(--fill);
+  font-size: var(--text-micro);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Live status dot. */
+.live-dot {
+  position: relative;
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: #30d158;
+  flex-shrink: 0;
+}
+
+.live-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: inherit;
+  animation: live-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes live-ping {
+  75%, 100% { transform: scale(2.6); opacity: 0; }
+}
+
+/* ───────────────────────── Marquee ───────────────────────── */
+
 .logoloop {
   position: relative;
   overflow-x: hidden;
   --logoloop-gap: 2rem;
   --logoloop-logoHeight: 1.75rem;
-  --logoloop-fadeColorAuto: var(--background);
+  --logoloop-fadeColorAuto: var(--surface);
 }
 
 .logoloop__track {
@@ -244,31 +552,12 @@ a[href],
 
 .logoloop--fade::before {
   left: 0;
-  background: linear-gradient(to right, var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(to right, var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%, transparent 100%);
 }
 
 .logoloop--fade::after {
   right: 0;
-  background: linear-gradient(to left, var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%, rgba(0, 0, 0, 0) 100%);
-}
-
-/* Rolling label (RollText): the track holds the label twice and slides up one line. */
-.roll-text {
-  display: inline-block;
-  overflow: hidden;
-  height: 1.25em;
-  line-height: 1.25em;
-  vertical-align: middle;
-}
-
-.roll-text__track {
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-:is(a, button):is(:hover, :focus-visible) .roll-text__track {
-  transform: translateY(-50%);
+  background: linear-gradient(to left, var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%, transparent 100%);
 }
 
 /* Underline that draws in from the left on hover/focus, then retracts to the right. */
@@ -287,18 +576,19 @@ a[href],
 }
 
 /* Tool pills: official logos drawn as a mask, so they take the text colour and
-   switch to the brand colour on hover. */
+   switch to the brand colour on hover. Filled and fully rounded, like Apple chips. */
 .tool-pill {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.25rem 0.75rem;
-  border: 1px solid color-mix(in srgb, var(--foreground), transparent 80%);
-  font-family: var(--font-geist-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  padding: 0.375rem 0.875rem;
+  border-radius: 999px;
+  background: var(--surface-2);
   font-size: var(--text-body-sm);
+  font-weight: 500;
   color: var(--foreground);
   white-space: nowrap;
-  transition: border-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Height follows the type scale; width comes from each logo's aspect ratio
@@ -320,15 +610,11 @@ a[href],
   transition: background-color 0.3s ease;
 }
 
-.tool-pill:hover {
-  border-color: var(--brand);
-}
-
 .tool-pill:hover .tool-logo {
   background-color: var(--brand);
 }
 
-/* Tool tiles (ToolTile): one square per tool, accent mark on a neutral tile. The
+/* Tool tiles (ToolTile): one rounded square per tool, accent mark on a neutral tile. The
    logo box fits inside the tile by width *and* height, so wide wordmarks (Jamf, Duo)
    shrink to the same footprint as square marks. */
 .tool-tile {
@@ -341,9 +627,16 @@ a[href],
   flex-shrink: 0;
   width: var(--tile);
   height: var(--tile);
-  border-radius: 0.375rem;
-  background-color: color-mix(in srgb, var(--foreground), transparent 92%);
-  color: var(--accent);
+  border-radius: 0.625rem;
+  background-color: var(--fill);
+  color: var(--tint, var(--accent));
+}
+
+.tool-tile--sm {
+  --tile: 1.75rem;
+  --mark: 0.9375rem;
+  --mark-wide: 1.375rem;
+  border-radius: 0.5rem;
 }
 
 .tool-tile__logo {
@@ -361,20 +654,20 @@ a[href],
   -webkit-mask-size: contain;
 }
 
-/* Text knockout: reveals LetterGlitch only inside letter shapes */
-.text-knockout {
-  background-color: var(--background);
-  mix-blend-mode: screen;
-  color: #000000;
 }
 
-.dark .text-knockout {
-  mix-blend-mode: multiply;
-  color: #ffffff;
+/* Typewriter caret in the terminal tile. */
+.terminal-text .Typewriter__cursor {
+  color: var(--accent);
+  font-weight: 400;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .logoloop__track {
     transform: translate3d(0, 0, 0) !important;
+  }
+
+  .live-dot::after {
+    display: none;
   }
 }

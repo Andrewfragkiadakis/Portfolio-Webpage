@@ -1,247 +1,264 @@
 'use client'
 
 import { useContent } from '@/hooks/useContent'
-import { useCardScroll } from '@/hooks/useCardScroll'
-import RollText from '@/components/ui/RollText'
-import ScrollRail from '@/components/ui/ScrollRail'
-import { motion } from 'motion/react'
-import { useRef } from 'react'
+import { useState } from 'react'
 import type { Experience as ExperienceType, Education as EducationType, EducationKind } from '@/data/content'
+import Modal from '@/components/ui/Modal'
+import { Bento, SectionTile, Tile, type Tone } from '@/components/ui/Bento'
 
 const KIND_ICON: Record<EducationKind, string> = {
     degree: 'fas fa-graduation-cap',
     certification: 'fas fa-award',
     license: 'fas fa-id-card',
 }
-import SectionHeading from '@/components/ui/SectionHeading'
 
+const iconFor = (edu: EducationType) => edu.icon ?? KIND_ICON[edu.kind ?? 'degree']
+const pad = (n: number) => String(n).padStart(2, '0')
 
-function ScrollButton({ onClick, direction, label, disabled = false }: { onClick: () => void; direction: 'left' | 'right'; label: string; disabled?: boolean }) {
-    return (
-        <button
-            onClick={onClick}
-            disabled={disabled}
-            className="w-11 h-11 md:w-12 md:h-12 border border-[var(--foreground)]/30 flex items-center justify-center text-[var(--foreground)] transition-all duration-300 cursor-pointer hover:bg-[var(--foreground)] hover:text-[var(--background)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[var(--foreground)] disabled:active:scale-100"
-            aria-label={label}
-        >
-            <i className={`fas fa-chevron-${direction} text-sm md:text-base`} aria-hidden="true" />
-        </button>
-    )
+/** Placement of the six earlier roles: two columns, three rows. */
+const ROLE_AREAS = [
+    'md:col-[5/9] md:row-[1/2]', 'md:col-[9/13] md:row-[1/2]',
+    'md:col-[5/9] md:row-[2/3]', 'md:col-[9/13] md:row-[2/3]',
+    'md:col-[5/9] md:row-[3/4]', 'md:col-[9/13] md:row-[3/4]',
+]
+const DEGREE_AREAS = ['md:col-[5/9] md:row-[4/5]', 'md:col-[9/13] md:row-[4/5]']
+const CERT_AREAS = ['md:col-[5/7] md:row-[5/7]', 'md:col-[7/9] md:row-[5/7]', 'md:col-[9/11] md:row-[5/7]', 'md:col-[11/13] md:row-[5/7]']
+
+const THIS_YEAR = new Date().getFullYear()
+
+/** Year span of a role, from its human-written duration ("May 2022 – November 2025", "April 2026 – Present"). */
+function yearSpan(duration: string): [number, number] {
+    const years = (duration.match(/\d{4}/g) ?? []).map(Number)
+    const start = years[0] ?? THIS_YEAR
+    const end = years[1] ?? Math.max(THIS_YEAR, start)
+    return [start, end]
 }
 
-function ExperienceCard({ exp, index }: { exp: ExperienceType; index: number }) {
-    return (
-        <motion.div
-            data-card="true"
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.1 }}
-            className="w-[85vw] max-w-95 min-h-85 sm:w-90 md:max-w-none md:min-h-auto md:min-w-100 md:w-100 md:aspect-square bg-[var(--background)] border border-[var(--foreground)]/40 flex-shrink-0 p-4 sm:p-5 md:p-8 flex flex-col justify-between hover:border-[var(--accent)] transition-all duration-300 md:hover:shadow-[0_0_20px_var(--accent)] group snap-start md:snap-align-none relative"
-        >
-            <div className="absolute top-0 right-0 p-4 opacity-10 text-4xl font-black text-[var(--foreground)] z-0">
-                {(index + 1).toString().padStart(2, '0')}
-            </div>
-            <div className="z-10 relative flex-1 flex flex-col">
-                <div className="flex items-center justify-between mb-4">
-                    <span className="w-12 h-12 flex items-center justify-center border border-[var(--accent)]/30 text-[var(--accent)] rounded-lg md:group-hover:bg-[var(--accent)] md:group-hover:text-[var(--background)] transition-colors">
-                        <i className="fas fa-briefcase text-lg" aria-hidden="true" />
-                    </span>
-                    <span className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest">
-                        {exp.duration}
-                    </span>
-                </div>
-                <h3 className="text-lg md:text-xl font-bold text-[var(--foreground)] uppercase leading-tight mb-2 md:group-hover:text-[var(--accent)] transition-colors">
-                    {exp.role}
-                </h3>
-                <p className="text-xs font-mono text-[var(--foreground)] opacity-85 mb-4">
-                    @ {exp.company}
-                </p>
-                <ul className="space-y-2 flex-1">
-                    {exp.tasks.map((task, ti) => (
-                        <li key={ti} className="text-xs text-[var(--foreground)] opacity-80 flex items-start gap-2">
-                            <span className="text-[var(--accent)] mt-1 text-[0.375rem] shrink-0">
-                                <i className="fas fa-square" aria-hidden="true" />
-                            </span>
-                            <span className="leading-tight">{task}</span>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        </motion.div>
-    )
-}
+/** Gantt of every role, year-granular: the whole career at a glance. Decorative — the tiles carry the words. */
+function CareerChart({ roles, label }: { roles: ExperienceType[]; label: string }) {
+    const spans = roles.map((r) => yearSpan(r.duration))
+    const first = Math.min(...spans.map(([s]) => s))
+    const last = Math.max(...spans.map(([, e]) => e)) + 1
+    const range = last - first
+    const ticks = Array.from({ length: range }, (_, i) => first + i)
 
-function EducationCard({ edu, index, verifyLabel, verifyCursor }: { edu: EducationType; index: number; verifyLabel: string; verifyCursor: string }) {
-    const featured = Boolean(edu.featured)
-    const icon = edu.icon ?? KIND_ICON[edu.kind ?? 'degree']
     return (
-        <motion.div
-            data-card="true"
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.1 }}
-            className={`w-[85vw] max-w-95 min-h-85 sm:w-90 md:max-w-none md:min-h-auto md:min-w-100 md:w-100 md:aspect-square bg-[var(--background)] border flex-shrink-0 p-4 sm:p-5 md:p-8 flex flex-col justify-between hover:border-[var(--accent)] transition-all duration-300 group snap-start md:snap-align-none relative overflow-hidden ${featured ? 'border-[var(--accent)]/70 shadow-[0_0_0_1px_var(--glow),0_0_40px_var(--glow)]' : 'border-[var(--foreground)]/20'}`}
-        >
-            {featured && (
-                <div
-                    className="pointer-events-none absolute -top-24 -right-24 w-56 h-56 rounded-full bg-[var(--accent)] opacity-[0.12] blur-3xl"
-                    aria-hidden="true"
-                />
-            )}
-            <div className="flex-1 flex flex-col relative">
-                <div className="flex items-center justify-between mb-4 gap-3">
-                    <span className={`w-12 h-12 shrink-0 flex items-center justify-center border rounded-lg md:group-hover:bg-[var(--accent)] md:group-hover:text-[var(--background)] md:group-hover:border-[var(--accent)] transition-colors ${featured ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-[var(--foreground)]/30 text-[var(--foreground)]'}`}>
-                        <i className={`${icon} text-lg`} aria-hidden="true" />
-                    </span>
-                    <div className="flex items-center gap-2 min-w-0">
-                        {edu.badge && (
-                            <span className={`text-micro font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 border whitespace-nowrap ${featured ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-[var(--foreground)]/40 text-[var(--foreground)] opacity-80'}`}>
-                                {edu.badge}
-                            </span>
-                        )}
-                        <span className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest whitespace-nowrap">
-                            {edu.duration}
-                        </span>
+        <>
+            <div className="flex items-baseline justify-between gap-3">
+                <p className="eyebrow el-caps">{label}</p>
+                <p className="eyebrow tabular-nums">{first} — {last - 1}</p>
+            </div>
+            <div className="flex-1 flex flex-col justify-center gap-[min(0.55vh,0.35rem)] min-h-0 py-2" aria-hidden="true">
+                {spans.map(([s, e], i) => (
+                    <div key={i} className="flex items-center gap-2" title={`${roles[i].role} · ${roles[i].duration}`}>
+                        <span className="w-5 shrink-0 text-[0.625rem] font-semibold tabular-nums text-[var(--muted)]">{pad(i + 1)}</span>
+                        <div className="relative flex-1 h-[min(1.1vh,0.625rem)] min-h-1.5 rounded-full bg-[var(--fill)]">
+                            <div
+                                className={`absolute inset-y-0 rounded-full ${i === 0 ? 'bg-[var(--accent-fill)]' : 'bg-[var(--foreground)] opacity-30'}`}
+                                style={{ left: `${((s - first) / range) * 100}%`, width: `${((e + 1 - s) / range) * 100}%` }}
+                            />
+                        </div>
                     </div>
-                </div>
-                <h3 className="text-lg md:text-xl font-bold text-[var(--foreground)] uppercase leading-tight mb-2 md:group-hover:text-[var(--accent)] transition-colors">
-                    {edu.degree}
-                </h3>
-                <p className="text-xs font-mono text-[var(--foreground)] opacity-85 mb-4">
-                    {edu.institution}
-                </p>
-                {edu.details && (
-                    <div className="space-y-2 mb-4 flex-1">
-                        {edu.details.map((detail, i) => (
-                            <div key={i} className="flex items-start gap-2 text-xs text-[var(--foreground)] opacity-80">
-                                <i className="fas fa-check text-[var(--accent)] text-micro mt-0.5" aria-hidden="true" />
-                                <span>{detail}</span>
-                            </div>
-                        ))}
-                    </div>
-                )}
+                ))}
             </div>
-            {edu.link && (
-                <a
-                    href={edu.link}
-                    data-cursor={verifyCursor}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`relative inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest border px-4 py-3 transition-all justify-center w-full mt-auto ${featured ? 'border-[var(--accent)] bg-[var(--accent)] text-[var(--background)] hover:shadow-[0_0_24px_var(--glow)]' : 'border-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)]'}`}
-                >
-                    <i className="fas fa-certificate" aria-hidden="true" />
-                    <RollText>{verifyLabel}</RollText>
-                </a>
-            )}
-        </motion.div>
+            <div className="flex pl-7 text-[0.625rem] font-semibold tabular-nums text-[var(--muted)]" aria-hidden="true">
+                {ticks.map((year) => (
+                    <span key={year} className="flex-1">{`’${String(year).slice(2)}`}</span>
+                ))}
+            </div>
+        </>
     )
 }
+
+type Active = { type: 'role'; item: ExperienceType; index: number } | { type: 'edu'; item: EducationType }
 
 export default function Experience() {
     const t = useContent()
-    const { scrollContainerRef, scroll, canScrollLeft, canScrollRight, progress, ratio } = useCardScroll('[data-card="true"]')
-    const expMobileRef = useRef<HTMLDivElement>(null)
-    const eduMobileRef = useRef<HTMLDivElement>(null)
-
-    const scrollMobileRow = (containerRef: React.RefObject<HTMLDivElement | null>, direction: 'left' | 'right') => {
-        const el = containerRef.current
-        if (!el) return
-        const maxScroll = el.scrollWidth - el.clientWidth
-        if (maxScroll <= 0) return
-        if (direction === 'right' && el.scrollLeft >= maxScroll - 1) return
-        if (direction === 'left' && el.scrollLeft <= 1) return
-        const card = el.querySelector<HTMLElement>('[data-card="true"]')
-        const gap = parseFloat(getComputedStyle(el).columnGap) || 0
-        const step = (card?.offsetWidth ?? el.clientWidth) + gap
-        const amount = direction === 'right' ? step : -step
-        el.scrollTo({ left: Math.max(0, Math.min(el.scrollLeft + amount, maxScroll)), behavior: 'smooth' })
-    }
+    const [active, setActive] = useState<Active | null>(null)
+    const [current, ...earlier] = t.experience
+    const degrees = t.education.filter((e) => (e.kind ?? 'degree') === 'degree')
+    const credentials = t.education.filter((e) => (e.kind ?? 'degree') !== 'degree')
 
     return (
-        <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-6 md:px-24 py-4 md:py-0 overflow-x-clip overflow-y-visible md:overflow-x-hidden md:overflow-y-auto no-scrollbar relative">
-            <div className="max-w-480 mx-auto w-full h-full flex flex-col justify-center">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 sm:mb-8 md:mb-12 gap-4 md:gap-6">
-                    <SectionHeading id="experience" title={t.experienceSection.title} subtitle={t.experienceSection.subtitle} sizeClass="text-[12vw] md:text-[min(6vw,8vh)]" />
-                    <div className="hidden md:flex gap-2">
-                        <ScrollButton onClick={() => scroll('left')} direction="left" label="Scroll left" disabled={!canScrollLeft} />
-                        <ScrollButton onClick={() => scroll('right')} direction="right" label="Scroll right" disabled={!canScrollRight} />
-                    </div>
-                </div>
+        <section aria-labelledby="experience-title" className="w-full h-auto md:h-full px-4 md:px-6 pt-3 md:pb-6">
+            <Bento className="max-w-[112rem] mx-auto">
+                <SectionTile
+                    id="experience"
+                    number={4}
+                    title={t.experienceSection.title}
+                    eyebrow={t.experienceSection.subtitle}
+                    index={0}
+                    className="col-span-2 md:col-[1/5] md:row-[1/2] min-h-[8rem] md:min-h-0"
+                />
 
-                <div className="flex flex-col gap-8 md:hidden">
-                    <div>
-                        <div className="flex items-center justify-between gap-2 mb-3 pl-1">
-                            <span className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest">
-                                {t.experienceSection.professional}
+                {/* The current role, in full. */}
+                {current && (
+                    <Tile as="article" index={1} tone="sky" className="col-span-2 md:col-[1/5] md:row-[2/5] gap-3 short:gap-2">
+                        <div className="flex items-center justify-between gap-3">
+                            <span className="chip bg-[var(--surface)]/70 dark:bg-black/25">
+                                <span className="live-dot" aria-hidden="true" />
+                                <span className="el-caps">{current.duration}</span>
                             </span>
-                            <div className="flex gap-2">
-                                <ScrollButton onClick={() => scrollMobileRow(expMobileRef, 'left')} direction="left" label="Previous experience" />
-                                <ScrollButton onClick={() => scrollMobileRow(expMobileRef, 'right')} direction="right" label="Next experience" />
-                            </div>
+                            <span className="eyebrow tabular-nums">01</span>
                         </div>
-                        <div
-                            ref={expMobileRef}
-                            className="flex gap-4 overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 scroll-px-4 scroll-smooth items-stretch"
-                            style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
-                        >
-                            {t.experience.map((exp, idx) => (
-                                <ExperienceCard key={`exp-m-${idx}`} exp={exp} index={idx} />
+                        <div>
+                            <h3 className="text-xl md:text-[min(1.75vw,3.1vh)] font-bold tracking-[-0.025em] leading-tight">{current.role}</h3>
+                            <p className="mt-1 text-sm font-medium text-[var(--muted)]">{current.company}</p>
+                        </div>
+                        <ul className="mt-auto space-y-2 short:space-y-1">
+                            {current.tasks.map((task, i) => (
+                                <li key={i} className="flex items-start gap-2 text-[0.875rem] md:text-[min(0.9vw,1.6vh)] short:text-[1.5vh] leading-snug">
+                                    <i className="fas fa-check tile-mark text-[0.6875rem] mt-[0.3em] shrink-0" aria-hidden="true" />
+                                    <span>{task}</span>
+                                </li>
                             ))}
-                            <div className="w-4 flex-shrink-0" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="flex items-center justify-between gap-2 mb-3 pl-1">
-                            <span className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest">
-                                {t.experienceSection.education}
-                            </span>
-                            <div className="flex gap-2">
-                                <ScrollButton onClick={() => scrollMobileRow(eduMobileRef, 'left')} direction="left" label="Previous education" />
-                                <ScrollButton onClick={() => scrollMobileRow(eduMobileRef, 'right')} direction="right" label="Next education" />
-                            </div>
-                        </div>
-                        <div
-                            ref={eduMobileRef}
-                            className="flex gap-4 overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 scroll-px-4 scroll-smooth items-stretch"
-                            style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
-                        >
-                            {t.education.map((edu, idx) => (
-                                <EducationCard key={`edu-m-${idx}`} edu={edu} index={idx} verifyLabel={t.experienceSection.verify} verifyCursor={t.cursor.verify} />
-                            ))}
-                            <div className="w-4 flex-shrink-0" />
-                        </div>
-                    </div>
-                </div>
+                        </ul>
+                    </Tile>
+                )}
 
-                <div
-                    ref={scrollContainerRef}
-                    className="hidden md:flex shrink-0 gap-4 md:gap-6 overflow-x-auto no-scrollbar pb-4 md:pb-8 -mx-4 px-4 scroll-smooth items-stretch"
-                    style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
-                    onScroll={(e) => e.stopPropagation()}
-                >
-                    <div className="hidden md:flex flex-shrink-0 items-center justify-center w-12.5 border-r border-[var(--foreground)]/10 mr-2 md:mr-4">
-                        <span className="text-[var(--foreground)] opacity-50 [writing-mode:vertical-rl] rotate-180 uppercase tracking-[0.3em] font-black text-xs md:text-sm">
-                            {t.experienceSection.professional}
+                <Tile index={2} className="col-span-2 md:col-[1/5] md:row-[5/7] min-h-[13rem] md:min-h-0">
+                    <CareerChart roles={t.experience} label={t.experienceSection.professional} />
+                </Tile>
+
+                {/* Earlier roles — each opens its full list of responsibilities. */}
+                {earlier.map((exp, i) => (
+                    <Tile key={`${exp.role}-${i}`} as="article" index={3 + i} interactive className={`col-span-2 ${ROLE_AREAS[i] ?? ''} justify-center gap-1`}>
+                        <button
+                            type="button"
+                            className="tile-stretch"
+                            onClick={() => setActive({ type: 'role', item: exp, index: i + 2 })}
+                            aria-label={`${exp.role} — ${exp.company} — ${t.projectsSection.details}`}
+                        />
+                        <div className="flex items-center justify-between gap-3 text-caption text-[var(--muted)]">
+                            <span className="font-semibold tabular-nums">{pad(i + 2)}</span>
+                            <span className="truncate el-caps">{exp.duration}</span>
+                        </div>
+                        <div className="flex items-end justify-between gap-3">
+                            <div className="min-w-0">
+                                <h3 className="text-[0.9375rem] md:text-[min(1.02vw,1.8vh)] font-semibold leading-tight tracking-[-0.01em] line-clamp-2 short:line-clamp-1" title={exp.role}>{exp.role}</h3>
+                                <p className="text-caption text-[var(--muted)] truncate mt-0.5">{exp.company}</p>
+                            </div>
+                            <span className="tile-affordance !w-7 !h-7" aria-hidden="true">
+                                <i className="fas fa-plus text-[0.625rem]" />
+                            </span>
+                        </div>
+                    </Tile>
+                ))}
+
+                {/* Degrees */}
+                {degrees.map((edu, i) => (
+                    <Tile key={edu.degree} as="article" index={9 + i} interactive className={`col-span-2 ${DEGREE_AREAS[i] ?? ''} flex-row items-center gap-3`}>
+                        <button
+                            type="button"
+                            className="tile-stretch"
+                            onClick={() => setActive({ type: 'edu', item: edu })}
+                            aria-label={`${edu.degree} — ${edu.institution} — ${t.projectsSection.details}`}
+                        />
+                        <span className="tile-icon tile-mark" aria-hidden="true">
+                            <i className={`${iconFor(edu)} text-base`} />
                         </span>
-                    </div>
-                    {t.experience.map((exp, idx) => (
-                        <ExperienceCard key={`exp-${idx}`} exp={exp} index={idx} />
-                    ))}
-                    <div className="hidden md:block w-px bg-[var(--foreground)]/20 mx-2 md:mx-4 flex-shrink-0" />
-                    <div className="hidden md:flex flex-shrink-0 items-center justify-center w-12.5 border-r border-[var(--foreground)]/10 mr-2 md:mr-4">
-                        <span className="text-[var(--foreground)] opacity-50 [writing-mode:vertical-rl] rotate-180 uppercase tracking-[0.3em] font-black text-xs md:text-sm">
-                            {t.experienceSection.education}
-                        </span>
-                    </div>
-                    {t.education.map((edu, idx) => (
-                        <EducationCard key={`edu-${idx}`} edu={edu} index={idx} verifyLabel={t.experienceSection.verify} verifyCursor={t.cursor.verify} />
-                    ))}
-                    <div className="w-4 md:w-12 flex-shrink-0" />
-                </div>
-                <ScrollRail progress={progress} ratio={ratio} className="hidden md:block mt-2" />
-            </div>
+                        <div className="min-w-0 flex-1">
+                            <h3 className="text-[0.875rem] md:text-[min(0.95vw,1.7vh)] font-semibold leading-tight line-clamp-2">{edu.degree}</h3>
+                            <p className="text-caption text-[var(--muted)] truncate mt-0.5" title={`${edu.institution} · ${edu.duration}`}>
+                                <span className="tabular-nums">{yearSpan(edu.duration).join(' – ')}</span> · {edu.institution}
+                            </p>
+                        </div>
+                    </Tile>
+                ))}
+
+                {/* Certifications and licence */}
+                {credentials.map((edu, i) => {
+                    const tone: Tone = edu.featured ? 'lavender' : 'plain'
+                    return (
+                        <Tile key={edu.degree} as="article" index={11 + i} tone={tone} interactive className={`col-span-1 ${CERT_AREAS[i] ?? ''} gap-2 min-h-[12rem] md:min-h-0`}>
+                            <button
+                                type="button"
+                                className="tile-stretch"
+                                onClick={() => setActive({ type: 'edu', item: edu })}
+                                aria-label={`${edu.degree} — ${edu.institution} — ${t.projectsSection.details}`}
+                            />
+                            <div className="flex items-center justify-between gap-2">
+                                <span className="tile-icon tile-mark !w-9 !h-9 !rounded-xl" aria-hidden="true">
+                                    <i className={`${iconFor(edu)} text-sm`} />
+                                </span>
+                                <span className="text-caption font-semibold tabular-nums text-[var(--muted)]">{edu.duration}</span>
+                            </div>
+                            <div className="min-w-0">
+                                {edu.badge && <p className="text-[0.9375rem] md:text-[min(1.05vw,1.85vh)] font-bold tracking-tight tile-mark leading-tight">{edu.badge}</p>}
+                                <h3 className={`${edu.badge ? 'text-caption font-medium text-[var(--muted)] line-clamp-2' : 'text-[0.875rem] md:text-[min(0.95vw,1.7vh)] font-semibold leading-tight line-clamp-3'} mt-0.5`}>
+                                    {edu.degree}
+                                </h3>
+                            </div>
+                            <div className="mt-auto tile-above self-start">
+                                {edu.link ? (
+                                    <a
+                                        href={edu.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        aria-label={`${t.experienceSection.verify}: ${edu.degree} (opens credential)`}
+                                        className={`pill !min-h-8 !px-3 !text-caption ${edu.featured ? 'pill--accent' : 'pill--quiet'}`}
+                                    >
+                                        <i className="fas fa-certificate" aria-hidden="true" />
+                                        <span className="el-caps">{t.cursor.verify}</span>
+                                    </a>
+                                ) : (
+                                    <span className="text-caption text-[var(--muted)] leading-snug line-clamp-2">{edu.institution}</span>
+                                )}
+                            </div>
+                        </Tile>
+                    )
+                })}
+            </Bento>
+
+            <Modal
+                open={Boolean(active)}
+                onClose={() => setActive(null)}
+                labelledBy="experience-modal-title"
+                closeLabel={t.projectsSection.close}
+                className="max-w-lg w-full p-7 sm:p-9"
+            >
+                {active?.type === 'role' && (
+                    <>
+                        <p className="eyebrow mb-3 tabular-nums">{pad(active.index)} · <span className="el-caps">{active.item.duration}</span></p>
+                        <h3 id="experience-modal-title" className="text-2xl font-bold tracking-tight leading-tight pr-10">{active.item.role}</h3>
+                        <p className="mt-1 mb-6 text-sm font-medium text-[var(--muted)]">{active.item.company}</p>
+                        <ul className="space-y-2.5">
+                            {active.item.tasks.map((task, i) => (
+                                <li key={i} className="flex items-start gap-2.5 text-[0.95rem]">
+                                    <i className="fas fa-check text-[var(--accent)] text-caption mt-1.5 shrink-0" aria-hidden="true" />
+                                    <span className="leading-relaxed">{task}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </>
+                )}
+                {active?.type === 'edu' && (
+                    <>
+                        <div className="flex items-center gap-3 mb-5 pr-10">
+                            <span className="tile-icon !w-12 !h-12 text-[var(--accent)]" aria-hidden="true">
+                                <i className={`${iconFor(active.item)} text-lg`} />
+                            </span>
+                            {active.item.badge && <span className="chip text-[var(--accent)]">{active.item.badge}</span>}
+                        </div>
+                        <h3 id="experience-modal-title" className="text-2xl font-bold tracking-tight leading-tight">{active.item.degree}</h3>
+                        <p className="mt-1 mb-6 text-sm font-medium text-[var(--muted)]">{active.item.institution} · {active.item.duration}</p>
+                        <ul className="space-y-2.5">
+                            {active.item.details.map((detail, i) => (
+                                <li key={i} className="flex items-start gap-2.5 text-[0.95rem]">
+                                    <i className="fas fa-check text-[var(--accent)] text-caption mt-1.5 shrink-0" aria-hidden="true" />
+                                    <span className="leading-relaxed">{detail}</span>
+                                </li>
+                            ))}
+                        </ul>
+                        {active.item.link && (
+                            <a href={active.item.link} target="_blank" rel="noopener noreferrer" className="pill pill--accent mt-7">
+                                <i className="fas fa-certificate" aria-hidden="true" />
+                                <span className="el-caps">{t.experienceSection.verify}</span>
+                            </a>
+                        )}
+                    </>
+                )}
+            </Modal>
         </section>
     )
 }

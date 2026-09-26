@@ -1,138 +1,121 @@
 'use client'
 
 import { useContent } from '@/hooks/useContent'
-import { motion } from 'motion/react'
 import LocalTime from '@/components/ui/LocalTime'
-import RollText from '@/components/ui/RollText'
 import CopyButton from '@/components/ui/CopyButton'
-import SectionHeading from '@/components/ui/SectionHeading'
+import { Bento, SectionTile, Tile, TileLink } from '@/components/ui/Bento'
+
+const CV_LINK = 'https://drive.google.com/uc?export=download&id=1b-GiyMU1D_6yxr70bmpufj_kIqKgW38A'
 
 export default function Contact() {
     const t = useContent()
-    const cvLink = "https://drive.google.com/uc?export=download&id=1b-GiyMU1D_6yxr70bmpufj_kIqKgW38A"
     const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(t.email)}&su=${encodeURIComponent('Project Collaboration // Andreas Technology')}`
+    const handle = (url: string) => url.replace(/\/$/, '').split('/').pop()
 
     return (
-        <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-4 md:py-0 overflow-visible md:overflow-x-hidden md:overflow-y-auto no-scrollbar">
-            <div className="max-w-6xl mx-auto w-full">
-                <SectionHeading id="contact" title={t.contact.title} subtitle={t.contact.subtitle} className="mb-8 md:mb-12" />
+        <section aria-labelledby="contact-title" className="w-full h-auto md:h-full px-4 md:px-6 pt-3 pb-32 md:pb-6">
+            <Bento className="max-w-[112rem] mx-auto">
+                <SectionTile
+                    id="contact"
+                    number={6}
+                    title={t.contact.title}
+                    eyebrow={t.contact.subtitle}
+                    index={0}
+                    className="col-span-2 md:col-[1/6] md:row-[1/3] min-h-[10rem] md:min-h-0"
+                >
+                    <p className="text-caption text-[var(--muted)]">{t.copyright}</p>
+                </SectionTile>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="space-y-6 border border-[var(--foreground)] p-8"
-                    >
-                        <h3 className="text-xl font-bold uppercase tracking-wider text-[var(--accent)] border-b border-[var(--foreground)]/20 pb-2">
-                            {t.contact.infoTitle}
-                        </h3>
+                {/* Availability */}
+                <Tile index={1} tone="mint" className="col-span-2 md:col-[6/13] md:row-[1/4] justify-between gap-6">
+                    <span className="chip self-start bg-[var(--surface)]/70 dark:bg-black/25">
+                        <span className="live-dot" aria-hidden="true" />
+                        <span className="el-caps">{t.location}</span>
+                    </span>
+                    <div className="max-w-[40rem]">
+                        <h3 className="display text-[2rem] md:text-[min(3.4vw,6vh)] el-caps">{t.contact.opportunitiesTitle}</h3>
+                        <p className="mt-3 text-[0.95rem] md:text-[min(1.1vw,1.95vh)] leading-snug text-[var(--muted)] max-w-[34rem]">
+                            {t.contact.opportunitiesDescription}
+                        </p>
+                    </div>
+                    <a href={gmailComposeUrl} target="_blank" rel="noopener noreferrer" aria-label="Contact via email" className="pill pill--accent self-start !min-h-11 !px-5 group">
+                        <i className="fas fa-paper-plane transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
+                        <span className="el-caps">{t.contact.sendMessage}</span>
+                    </a>
+                </Tile>
 
-                        <div className="flex items-start sm:items-center gap-3">
-                            <a href={gmailComposeUrl} target="_blank" rel="noopener noreferrer" className="flex flex-1 min-w-0 items-start sm:items-center gap-3 sm:gap-4 group" aria-label="Contact via email">
-                                <div className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-[var(--background)] transition-all duration-300 ease-out flex-shrink-0">
-                                    <i className="fas fa-envelope text-xl" aria-hidden="true" />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <div className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase">{t.contact.emailLabel}</div>
-                                    <div className="text-sm sm:text-lg font-bold text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors break-all"><span className="link-underline">{t.email}</span></div>
-                                </div>
-                            </a>
-                            <CopyButton value={t.email} label={t.contact.copyEmail} copiedLabel={t.contact.copied} failedLabel={t.contact.copyFailed} />
-                        </div>
-
-                        <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--accent)]">
-                                <i className="fas fa-map-marker-alt text-xl" aria-hidden="true" />
-                            </div>
-                            <div>
-                                <div className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase">{t.contact.locationLabel}</div>
-                                <div className="text-sm sm:text-lg font-bold text-[var(--foreground)]">{t.location}</div>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--accent)]">
-                                <i className="fas fa-clock text-xl" aria-hidden="true" />
-                            </div>
-                            <div>
-                                <div className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase">{t.contact.localTimeLabel}</div>
-                                <LocalTime className="text-sm sm:text-lg font-bold text-[var(--foreground)] tabular-nums" />
-                            </div>
-                        </div>
-
-                        <div className="pt-4">
-                            <div className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase mb-4">{t.contact.socialTitle}</div>
-                            <div className="flex gap-3">
-                                <a
-                                    href={t.github}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    aria-label="GitHub profile"
-                                    className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 ease-out hover:shadow-[0_0_20px_var(--accent)]"
-                                >
-                                    <i className="fab fa-github text-xl" aria-hidden="true" />
-                                </a>
-                                <a
-                                    href={t.linkedin}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    aria-label="LinkedIn profile"
-                                    className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 ease-out hover:shadow-[0_0_20px_var(--accent)]"
-                                >
-                                    <i className="fab fa-linkedin text-xl" aria-hidden="true" />
-                                </a>
-                            </div>
-                        </div>
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.1 }}
-                        className="border border-[var(--accent)] p-8 flex flex-col justify-between"
-                    >
-                        <div>
-                            <div className="flex items-center gap-3 mb-4">
-                                <i className="fas fa-star text-[var(--accent)] text-2xl" aria-hidden="true" />
-                                <h3 className="text-xl font-bold uppercase tracking-wider text-[var(--foreground)]">
-                                    {t.contact.opportunitiesTitle}
-                                </h3>
-                            </div>
-                            <p className="text-[var(--foreground)] opacity-80 text-sm leading-relaxed mb-6">
-                                {t.contact.opportunitiesDescription}
-                            </p>
-                        </div>
-
-                        <div className="space-y-3">
-                            <a
-                                href={gmailComposeUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                aria-label="Contact via email"
-                                className="group w-full flex items-center justify-center gap-2 px-6 py-4 bg-[var(--accent)] text-[var(--background)] font-bold uppercase tracking-widest hover:shadow-[0_0_30px_var(--accent)] transition-shadow duration-300 ease-out"
-                            >
-                                <i className="fas fa-paper-plane transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1 group-hover:-translate-y-1" aria-hidden="true" />
-                                <RollText>{t.contact.sendMessage}</RollText>
-                            </a>
-
-                            <a
-                                href={cvLink}
-                                download
-                                className="w-full flex items-center justify-center gap-2 px-6 py-4 border border-[var(--foreground)] text-[var(--foreground)] font-bold uppercase tracking-widest hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 ease-out"
-                            >
-                                <i className="fas fa-download" aria-hidden="true" />
-                                <RollText>{t.contact.downloadResume}</RollText>
+                {/* Email */}
+                <Tile index={2} className="col-span-2 md:col-[1/6] md:row-[3/5] justify-between gap-4">
+                    <div className="flex items-center justify-between gap-3">
+                        <p className="eyebrow el-caps">{t.contact.infoTitle}</p>
+                        <span className="tile-icon tile-mark !w-9 !h-9 !rounded-xl" aria-hidden="true">
+                            <i className="fas fa-envelope text-sm" />
+                        </span>
+                    </div>
+                    <div className="flex flex-col gap-3 min-w-0">
+                        <div className="min-w-0">
+                            <p className="text-caption font-medium text-[var(--muted)] mb-1">{t.contact.emailLabel}</p>
+                            <a href={gmailComposeUrl} target="_blank" rel="noopener noreferrer" aria-label="Contact via email" className="block text-lg md:text-[min(1.6vw,2.8vh)] font-semibold tracking-[-0.02em] break-all hover:text-[var(--accent)] transition-colors">
+                                <span className="link-underline">{t.email}</span>
                             </a>
                         </div>
-                    </motion.div>
-                </div>
+                        <CopyButton value={t.email} label={t.contact.copyEmail} copiedLabel={t.contact.copied} failedLabel={t.contact.copyFailed} />
+                    </div>
+                </Tile>
 
-                <div className="mt-6 pb-[7rem] md:pb-0 text-center text-xs font-mono text-[var(--foreground)] opacity-75">
-                    <p>{t.copyright}</p>
-                </div>
-            </div>
+                {/* Location */}
+                <Tile index={3} className="col-span-1 md:col-[1/4] md:row-[5/7] justify-between min-h-[9rem] md:min-h-0">
+                    <p className="eyebrow el-caps">{t.contact.locationLabel}</p>
+                    <div>
+                        <i className="fas fa-location-dot text-xl text-[var(--accent)] mb-2" aria-hidden="true" />
+                        <p className="text-xl md:text-[min(1.7vw,3vh)] font-bold tracking-[-0.02em] leading-tight">{t.location}</p>
+                    </div>
+                </Tile>
+
+                {/* Local time */}
+                <Tile index={4} className="col-span-1 md:col-[4/6] md:row-[5/7] justify-between min-h-[9rem] md:min-h-0">
+                    <p className="eyebrow el-caps">{t.contact.localTimeLabel}</p>
+                    <LocalTime className="numeral block text-[2.25rem] md:text-[min(3vw,5.4vh)] [&_span]:block [&_span]:mt-1 [&_span]:text-caption [&_span]:tracking-normal [&_span]:font-semibold" />
+                </Tile>
+
+                {/* Socials */}
+                <TileLink index={5} tone="ink" href={t.github} label="GitHub profile" className="col-span-1 md:col-[6/8] md:row-[4/7] justify-between min-h-[10rem] md:min-h-0">
+                    <span className="flex items-start justify-between gap-2">
+                        <i className="fab fa-github text-3xl md:text-[min(3vw,5.4vh)]" aria-hidden="true" />
+                        <span className="tile-affordance" aria-hidden="true"><i className="fas fa-arrow-right -rotate-45" /></span>
+                    </span>
+                    <span className="block min-w-0">
+                        <span className="block eyebrow el-caps mb-1">{t.contact.socialTitle}</span>
+                        <span className="block text-xl md:text-[min(1.6vw,2.9vh)] font-bold tracking-tight">GitHub</span>
+                        <span className="block text-caption text-[var(--muted)] truncate">@{handle(t.github)}</span>
+                    </span>
+                </TileLink>
+                <TileLink index={6} tone="sky" href={t.linkedin} label="LinkedIn profile" className="col-span-1 md:col-[8/10] md:row-[4/7] justify-between min-h-[10rem] md:min-h-0">
+                    <span className="flex items-start justify-between gap-2">
+                        <i className="fab fa-linkedin text-3xl md:text-[min(3vw,5.4vh)] tile-mark" aria-hidden="true" />
+                        <span className="tile-affordance" aria-hidden="true"><i className="fas fa-arrow-right -rotate-45" /></span>
+                    </span>
+                    <span className="block min-w-0">
+                        <span className="block eyebrow el-caps mb-1">{t.contact.socialTitle}</span>
+                        <span className="block text-xl md:text-[min(1.6vw,2.9vh)] font-bold tracking-tight">LinkedIn</span>
+                        <span className="block text-caption text-[var(--muted)] truncate">/in/{handle(t.linkedin)}</span>
+                    </span>
+                </TileLink>
+
+                {/* Résumé */}
+                <TileLink index={7} tone="peach" href={CV_LINK} external={false} download label={t.contact.downloadResume} className="col-span-2 md:col-[10/13] md:row-[4/7] justify-between min-h-[10rem] md:min-h-0">
+                    <span className="flex items-start justify-between gap-2">
+                        <span className="tile-icon tile-mark !w-12 !h-12" aria-hidden="true">
+                            <i className="fas fa-file-lines text-xl" />
+                        </span>
+                        <span className="tile-affordance" aria-hidden="true"><i className="fas fa-arrow-down" /></span>
+                    </span>
+                    <span className="block">
+                        <span className="block eyebrow mb-1">CV</span>
+                        <span className="block text-2xl md:text-[min(2vw,3.6vh)] font-bold tracking-[-0.03em] leading-tight el-caps">{t.contact.downloadResume}</span>
+                    </span>
+                </TileLink>
+            </Bento>
         </section>
     )
 }

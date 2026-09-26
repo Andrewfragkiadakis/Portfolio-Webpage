@@ -6,13 +6,15 @@ import './globals.css'
 import { LanguageProvider } from '@/contexts/LanguageContext'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import CinematicEntry from '@/components/dom/CinematicEntry'
-import NoiseOverlay from '@/components/dom/NoiseOverlay'
 import ThemeToggle from '@/components/ui/ThemeToggle'
-import CustomCursor from '@/components/ui/CustomCursor'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { SOCIAL_URLS, content } from '@/data/content'
 
-const inter = Inter({ subsets: ['latin'], display: 'swap' })
+/*
+ * Inter, variable weight, with the Greek subset so Greek headings render in Inter at the
+ * intended display weight instead of falling back to a system font.
+ */
+const inter = Inter({ subsets: ['latin', 'greek'], display: 'swap', variable: '--font-inter' })
 
 const SITE_URL = 'https://andreas.technology'
 
@@ -62,7 +64,7 @@ export const metadata: Metadata = {
         follow: true,
     },
     other: {
-        'theme-color': '#030014',
+        'theme-color': '#000000',
     },
 }
 
@@ -74,8 +76,8 @@ export default function RootLayout({
     return (
         <html lang="en" suppressHydrationWarning>
             <head>
-                <meta name="theme-color" content="#030014" media="(prefers-color-scheme: dark)" />
-                <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
+                <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+                <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
                 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
                 <link
@@ -160,10 +162,10 @@ export default function RootLayout({
                     }}
                 />
             </head>
-            <body className={inter.className}>
+            <body className={`${inter.variable} ${inter.className}`}>
                 <a
                     href="#main-content"
-                    className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100001] focus:px-4 focus:py-2 focus:bg-[var(--accent)] focus:text-white focus:rounded focus:outline-none"
+                    className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100001] focus:px-4 focus:py-2 focus:bg-[var(--accent-fill)] focus:text-white focus:rounded-full focus:outline-none"
                 >
                     Skip to content
                 </a>
@@ -171,9 +173,7 @@ export default function RootLayout({
                     <LanguageProvider>
                         <MotionConfig reducedMotion="user">
                             <CinematicEntry />
-                            <NoiseOverlay />
                             <ThemeToggle />
-                            <CustomCursor />
                             {children}
                         </MotionConfig>
                     </LanguageProvider>

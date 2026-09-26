@@ -1,204 +1,175 @@
 'use client'
 
 import { useContent } from '@/hooks/useContent'
-import { useCardScroll } from '@/hooks/useCardScroll'
-import { motion, type Variants } from 'motion/react'
 import { useState } from 'react'
 import type { Project } from '@/data/content'
 import Modal from '@/components/ui/Modal'
 import ProjectImage from '@/components/ui/ProjectImage'
-import RollText from '@/components/ui/RollText'
-import ScrollRail from '@/components/ui/ScrollRail'
-import { EASE_OUT } from '@/utils/motion'
-import SectionHeading from '@/components/ui/SectionHeading'
+import { Bento, SectionTile, Tile, TileLink } from '@/components/ui/Bento'
 
-/** Stagger only the first screenful; cards scrolled into view later reveal at once. */
-const staggerDelay = (index: number) => Math.min(index, 3) * 0.08
+/**
+ * The other ten projects: a 4 × 3 block of 2 × 2 tiles on the right two-thirds of the
+ * panel. The last two slots of the bottom row hold the GitHub tile instead.
+ */
+const SMALL_AREAS = [
+    'md:col-[5/7] md:row-[1/3]', 'md:col-[7/9] md:row-[1/3]', 'md:col-[9/11] md:row-[1/3]', 'md:col-[11/13] md:row-[1/3]',
+    'md:col-[5/7] md:row-[3/5]', 'md:col-[7/9] md:row-[3/5]', 'md:col-[9/11] md:row-[3/5]', 'md:col-[11/13] md:row-[3/5]',
+    'md:col-[5/7] md:row-[5/7]', 'md:col-[7/9] md:row-[5/7]',
+]
 
-const CARD_RISE: Variants = {
-    hidden: { opacity: 0, y: 40 },
-    visible: (index: number) => ({ opacity: 1, y: 0, transition: { delay: staggerDelay(index), duration: 0.7, ease: EASE_OUT } }),
+const pad = (n: number) => String(n).padStart(2, '0')
+
+function statusesOf(project: Project) {
+    return [
+        project.liveSiteLink && { label: 'LIVE', accent: true },
+        project.githubLink && { label: 'OSS', accent: false },
+        (project.reportLink || project.publicationLink) && { label: 'PAPER', accent: false },
+    ].filter(Boolean) as { label: string; accent: boolean }[]
 }
 
-const IMAGE_WIPE: Variants = {
-    hidden: { clipPath: 'inset(100% 0% 0% 0%)' },
-    visible: (index: number) => ({ clipPath: 'inset(0% 0% 0% 0%)', transition: { delay: 0.15 + staggerDelay(index), duration: 1.1, ease: EASE_OUT } }),
+function ProjectLinks({ project, live, code, small = false }: { project: Project; live: string; code: string; small?: boolean }) {
+    const cls = small
+        ? 'w-8 h-8 rounded-full bg-[var(--fill)] flex items-center justify-center text-caption hover:bg-[var(--accent-fill)] hover:text-white transition-colors duration-300'
+        : 'pill pill--quiet !min-h-9 !text-body-sm'
+    return (
+        <span className="tile-above flex items-center gap-1.5">
+            {project.liveSiteLink && (
+                <a href={project.liveSiteLink} target="_blank" rel="noopener noreferrer" aria-label={`${project.name} — ${live}`} className={cls}>
+                    <i className="fas fa-arrow-up-right-from-square" aria-hidden="true" />
+                    {!small && <span>{live}</span>}
+                </a>
+            )}
+            {project.githubLink && (
+                <a href={project.githubLink} target="_blank" rel="noopener noreferrer" aria-label={`${project.name} — ${code}`} className={cls}>
+                    <i className="fab fa-github" aria-hidden="true" />
+                    {!small && <span>{code}</span>}
+                </a>
+            )}
+        </span>
+    )
 }
 
 export default function Projects() {
     const t = useContent()
     const [activeProject, setActiveProject] = useState<Project | null>(null)
-    const { scrollContainerRef, scroll: scrollProjects, canScrollLeft, canScrollRight, progress, ratio } = useCardScroll('[data-project-card]')
-    const arrowClass = "w-11 h-11 md:w-12 md:h-12 border border-[var(--foreground)]/30 flex items-center justify-center text-[var(--foreground)] transition-all duration-300 cursor-pointer hover:bg-[var(--foreground)] hover:text-[var(--background)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[var(--foreground)] disabled:active:scale-100"
+    const [featured, ...rest] = t.projects
+
+    const openButton = (project: Project) =>
+        project.detail ? (
+            <button
+                type="button"
+                className="tile-stretch"
+                onClick={() => setActiveProject(project)}
+                aria-label={`${project.name} — ${t.projectsSection.details}`}
+            />
+        ) : null
 
     return (
-        <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-4 md:py-0 overflow-x-clip overflow-y-visible md:overflow-x-hidden md:overflow-y-auto no-scrollbar">
-            <div className="max-w-480 mx-auto w-full max-h-[calc(100vh-8rem)] md:max-h-none overflow-y-auto md:overflow-visible">
-                <SectionHeading id="projects" title={t.projectsSection.title} subtitle={t.projectsSection.subtitle} align="end" className="mb-6 sm:mb-8" />
+        <section aria-labelledby="projects-title" className="w-full h-auto md:h-full px-4 md:px-6 pt-3 md:pb-6">
+            <Bento className="max-w-[112rem] mx-auto">
+                <SectionTile
+                    id="projects"
+                    number={5}
+                    title={t.projectsSection.title}
+                    eyebrow={t.projectsSection.subtitle}
+                    index={0}
+                    className="col-span-2 md:col-[1/5] md:row-[1/2] min-h-[8rem] md:min-h-0"
+                />
 
-                <div className="flex justify-end gap-2 mb-4">
-                    <button
-                        onClick={() => scrollProjects('left')}
-                        disabled={!canScrollLeft}
-                        className={arrowClass}
-                        aria-label="Previous project"
-                    >
-                        <i className="fas fa-chevron-left text-sm md:text-base" aria-hidden="true" />
-                    </button>
-                    <button
-                        onClick={() => scrollProjects('right')}
-                        disabled={!canScrollRight}
-                        className={arrowClass}
-                        aria-label="Next project"
-                    >
-                        <i className="fas fa-chevron-right text-sm md:text-base" aria-hidden="true" />
-                    </button>
-                </div>
+                {/* Featured project */}
+                {featured && (
+                    <Tile as="article" index={1} interactive className="col-span-2 md:col-[1/5] md:row-[2/7] !p-0">
+                        {openButton(featured)}
+                        <div className="relative w-full aspect-[16/10] shrink-0 overflow-hidden bg-[var(--surface-2)]">
+                            <ProjectImage
+                                project={featured}
+                                sizes="(max-width: 1023px) 100vw, 34vw"
+                                className="transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]"
+                            />
+                            <span className="absolute top-4 left-4 chip bg-[var(--surface)]/85 backdrop-blur">
+                                {t.projectsSection.caseStudy} · {pad(1)}
+                            </span>
+                        </div>
+                        <div className="flex-1 min-h-0 p-[var(--tile-pad)] flex flex-col gap-2">
+                            <div className="flex items-start justify-between gap-4">
+                                <h3 className="text-xl md:text-[min(1.75vw,3.1vh)] font-bold tracking-[-0.025em] leading-tight el-caps">
+                                    {featured.name}
+                                </h3>
+                                {featured.year && <span className="text-sm font-semibold tabular-nums text-[var(--muted)] pt-1">{featured.year}</span>}
+                            </div>
+                            <p className="text-sm md:text-[min(0.95vw,1.7vh)] leading-snug text-[var(--muted)] line-clamp-3 short:line-clamp-2">{featured.description}</p>
+                            {featured.highlights && (
+                                <ul className="hidden md:block short:hidden space-y-1 mt-1">
+                                    {featured.highlights.slice(0, 3).map((item) => (
+                                        <li key={item} className="flex items-start gap-2 text-[min(0.9vw,1.6vh)] leading-snug">
+                                            <i className="fas fa-check text-[var(--accent)] text-[0.625rem] mt-[0.35em] shrink-0" aria-hidden="true" />
+                                            <span>{item}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                            <div className="flex flex-wrap items-center justify-between gap-3 mt-auto pt-1">
+                                <span className="flex flex-wrap gap-1.5">
+                                    {featured.tags.slice(0, 3).map((tag) => (
+                                        <span key={tag} className="chip normal-case tracking-normal font-medium">{tag}</span>
+                                    ))}
+                                </span>
+                                <ProjectLinks project={featured} live={t.projectsSection.live} code={t.projectsSection.code} />
+                            </div>
+                        </div>
+                    </Tile>
+                )}
 
-                <div
-                    ref={scrollContainerRef}
-                    className="flex gap-4 md:gap-6 overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 scroll-px-4 md:-mx-0 md:px-0 md:scroll-px-0 scroll-smooth items-stretch"
-                    style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
-                >
-                    {t.projects.map((project: Project, index: number) => {
-                        const openDetail = project.detail ? () => setActiveProject(project) : undefined
-                        const statuses = [
-                            project.liveSiteLink && { label: 'LIVE', accent: true },
-                            project.githubLink && { label: 'OSS', accent: false },
-                            (project.reportLink || project.publicationLink) && { label: 'PAPER', accent: false },
-                        ].filter(Boolean) as { label: string; accent: boolean }[]
-
-                        const media = (
-                            <>
+                {/* Everything else */}
+                {rest.map((project, i) => {
+                    const statuses = statusesOf(project)
+                    return (
+                        <Tile key={project.name} as="article" index={2 + i} interactive className={`col-span-1 ${SMALL_AREAS[i] ?? ''} !p-0`}>
+                            {openButton(project)}
+                            <div className="relative w-full aspect-[16/10] md:aspect-auto md:flex-1 min-h-0 overflow-hidden bg-[var(--surface-2)]">
                                 {project.image && (
-                                    // Wipe the image in from the bottom as the card scrolls into view.
-                                    // Driven by the card's in-view state: an element clipped to nothing
-                                    // never registers as intersecting, so it can't trigger itself.
-                                    <motion.span
-                                        className="absolute inset-0 block"
-                                        variants={IMAGE_WIPE}
-                                        custom={index}
-                                    >
-                                        <ProjectImage
-                                            project={project}
-                                            sizes="(max-width: 639px) 300px, (max-width: 1023px) 340px, 440px"
-                                            className="transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
-                                        />
-                                    </motion.span>
+                                    <ProjectImage
+                                        project={project}
+                                        sizes="(max-width: 1023px) 50vw, 240px"
+                                        className="transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
+                                    />
                                 )}
-                                <span className="absolute top-3 left-3 z-10 font-mono text-caption font-bold px-2 py-1 bg-[var(--background)]/85 backdrop-blur text-[var(--foreground)] border border-[var(--foreground)]/15">
-                                    {(index + 1).toString().padStart(2, '0')}
-                                </span>
-                                {/* Touch: a small corner badge says "this opens"; the title is printed right below. */}
-                                {project.detail && (
-                                    <span className="md:hidden absolute bottom-3 right-3 z-10 w-8 h-8 rounded-full bg-[var(--background)]/85 backdrop-blur border border-[var(--foreground)]/15 flex items-center justify-center text-[var(--foreground)]" aria-hidden="true">
-                                        <i className="fas fa-arrow-right -rotate-45 text-caption" />
+                                <span className="absolute top-2.5 left-2.5 chip !px-2 bg-[var(--surface)]/85 backdrop-blur tabular-nums">{pad(i + 2)}</span>
+                            </div>
+                            <div className="px-3.5 pt-2.5 pb-3 flex flex-col gap-1.5">
+                                <h3 className="text-[0.8125rem] md:text-[min(0.9vw,1.6vh)] font-semibold leading-tight line-clamp-2 el-caps min-h-[2.5em]">
+                                    {project.name}
+                                </h3>
+                                <div className="flex items-center justify-between gap-2 min-h-8">
+                                    <span className="flex flex-wrap items-center gap-x-1 min-w-0 text-[0.625rem] font-semibold tracking-wide text-[var(--muted)] tabular-nums">
+                                        {project.year}
+                                        {statuses.map((st) => (
+                                            <span key={st.label} className={st.accent ? 'text-[var(--accent)]' : ''}>· {st.label}</span>
+                                        ))}
                                     </span>
-                                )}
-                                {/* Desktop hover caption, Awwwards-style: rises from the bottom edge. */}
-                                <span className="absolute inset-x-0 bottom-0 z-10 hidden md:flex items-end justify-between gap-3 p-4 pt-16 bg-gradient-to-t from-black/85 via-black/40 to-transparent text-white transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:translate-y-4 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 md:group-focus-within:translate-y-0 md:group-focus-within:opacity-100">
-                                    <span className="min-w-0 text-left">
-                                        <span className="block text-micro font-mono uppercase tracking-[0.2em] opacity-75">{t.projectsSection.caseStudy}</span>
-                                        <span className="block text-sm font-semibold truncate">{project.name}</span>
-                                    </span>
-                                    <i className="fas fa-arrow-right text-sm shrink-0 -rotate-45 transition-transform duration-500 group-hover:rotate-0" aria-hidden="true" />
-                                </span>
-                            </>
-                        )
-
-                        return (
-                            <motion.article
-                                key={project.name}
-                                data-project-card
-                                initial="hidden"
-                                whileInView="visible"
-                                viewport={{ once: true, amount: 0.3 }}
-                                variants={CARD_RISE}
-                                custom={index}
-                                className="w-75 sm:w-85 md:w-110 flex-shrink-0 group flex flex-col snap-start"
-                            >
-                                {openDetail ? (
-                                    <button
-                                        type="button"
-                                        onClick={openDetail}
-                                        aria-label={`${project.name} — ${t.projectsSection.details}`}
-                                        data-cursor={t.cursor.view}
-                                        className="relative block w-full aspect-[16/10] overflow-hidden bg-[var(--foreground)]/5 border border-[var(--foreground)]/15 transition-[border-color,box-shadow] duration-500 hover:border-[var(--accent)] hover:shadow-[0_20px_60px_-20px_var(--glow)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
-                                    >
-                                        {media}
-                                    </button>
-                                ) : (
-                                    <div className="relative w-full aspect-[16/10] overflow-hidden bg-[var(--foreground)]/5 border border-[var(--foreground)]/15">
-                                        {media}
-                                    </div>
-                                )}
-
-                                <div className="flex items-start justify-between gap-3 pt-4">
-                                    <h3 className="text-base md:text-lg font-bold text-[var(--foreground)] leading-tight line-clamp-2 group-hover:text-[var(--accent)] transition-colors">
-                                        {project.name}
-                                        {project.year && (
-                                            <sup className="ml-1 text-micro font-mono font-bold tracking-wider opacity-60 align-super">{project.year}</sup>
-                                        )}
-                                    </h3>
-                                    {statuses.length > 0 && (
-                                        <div className="flex gap-1.5 shrink-0 pt-0.5">
-                                            {statuses.map((st) => (
-                                                <span
-                                                    key={st.label}
-                                                    className={`text-micro font-mono font-bold tracking-wider px-1.5 py-0.5 border ${st.accent ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-[var(--foreground)]/30 text-[var(--foreground)] opacity-75'}`}
-                                                >
-                                                    {st.label}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    )}
+                                    <ProjectLinks project={project} live={t.projectsSection.live} code={t.projectsSection.code} small />
                                 </div>
-
-                                <p className="text-xs text-[var(--foreground)] opacity-70 leading-relaxed line-clamp-2 mt-2">
-                                    {project.description}
-                                </p>
-
-                                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-3">
-                                    <span className="text-micro font-mono text-[var(--foreground)] opacity-60 truncate">
-                                        {project.tags.slice(0, 3).join(' · ')}
-                                    </span>
-                                    <span className="ml-auto flex items-center gap-3">
-                                        {project.liveSiteLink && (
-                                            <a href={project.liveSiteLink} target="_blank" rel="noopener noreferrer" aria-label={`${project.name} — ${t.projectsSection.live}`} className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)] hover:text-[var(--accent)] flex items-center gap-1 transition-colors">
-                                                <i className="fas fa-external-link-alt" aria-hidden="true" /> <span className="link-underline">{t.projectsSection.live}</span>
-                                            </a>
-                                        )}
-                                        {project.githubLink && (
-                                            <a href={project.githubLink} target="_blank" rel="noopener noreferrer" aria-label={`${project.name} — ${t.projectsSection.code}`} className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)] hover:text-[var(--accent)] flex items-center gap-1 transition-colors">
-                                                <i className="fab fa-github" aria-hidden="true" /> <span className="link-underline">{t.projectsSection.code}</span>
-                                            </a>
-                                        )}
-                                    </span>
-                                </div>
-                            </motion.article>
-                        )
-                    })}
-                </div>
-                <ScrollRail progress={progress} ratio={ratio} className="mt-1" />
-
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="mt-8 text-center"
+                            </div>
+                        </Tile>
+                    )
+                })}
+                <TileLink
+                    index={3 + rest.length}
+                    tone="ink"
+                    href="https://github.com/Andrewfragkiadakis"
+                    label={`${t.projectsSection.githubCta} (GitHub profile)`}
+                    className="col-span-2 md:col-[9/13] md:row-[5/7] justify-between gap-4 min-h-[9rem] md:min-h-0"
                 >
-                    <a
-                        href="https://github.com/Andrewfragkiadakis"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="GitHub profile"
-                        className="inline-flex items-center gap-3 px-8 py-4 border border-[var(--foreground)] text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 ease-out font-bold uppercase tracking-widest hover:shadow-[0_0_20px_var(--accent)]"
-                    >
-                        <i className="fab fa-github text-xl" aria-hidden="true" />
-                        <RollText>{t.projectsSection.githubCta}</RollText>
-                    </a>
-                </motion.div>
-            </div>
+                    <span className="flex items-start justify-between gap-3">
+                        <i className="fab fa-github text-4xl md:text-[min(3.2vw,5.6vh)]" aria-hidden="true" />
+                        <span className="tile-affordance" aria-hidden="true"><i className="fas fa-arrow-right -rotate-45" /></span>
+                    </span>
+                    <span className="block">
+                        <span className="block eyebrow normal-case tracking-normal mb-1">github.com/Andrewfragkiadakis</span>
+                        <span className="block text-xl md:text-[min(1.7vw,3vh)] font-bold tracking-[-0.025em] leading-tight el-caps">{t.projectsSection.githubCta}</span>
+                    </span>
+                </TileLink>
+            </Bento>
 
             <Modal
                 open={Boolean(activeProject)}
@@ -210,50 +181,46 @@ export default function Projects() {
                 {activeProject && (
                     <>
                         {activeProject.image && (
-                            <div className="relative aspect-[16/10] max-h-[45vh] w-full overflow-hidden bg-[var(--foreground)]/5">
+                            <div className="relative aspect-[16/10] max-h-[45vh] w-full overflow-hidden bg-[var(--surface-2)]">
                                 <ProjectImage project={activeProject} sizes="(max-width: 767px) 100vw, 672px" />
                             </div>
                         )}
 
-                        <div className="p-6 sm:p-8">
-                            <div className="flex items-baseline justify-between gap-4 mb-3">
-                                <h3 id="project-modal-title" className="text-xl sm:text-2xl font-black text-[var(--accent)] uppercase tracking-tight">
+                        <div className="p-7 sm:p-9">
+                            <div className="flex items-baseline justify-between gap-4 mb-2">
+                                <h3 id="project-modal-title" className="text-2xl sm:text-3xl font-bold tracking-tight leading-tight el-caps">
                                     {activeProject.name}
                                 </h3>
                                 {activeProject.year && (
-                                    <span className="font-mono text-sm text-[var(--foreground)] opacity-60 shrink-0">
+                                    <span className="text-sm font-semibold tabular-nums text-[var(--muted)] shrink-0">
                                         {activeProject.year}
                                     </span>
                                 )}
                             </div>
 
                             {activeProject.role && (
-                                <p className="text-xs font-mono uppercase tracking-widest text-[var(--foreground)] opacity-70 mb-5">
+                                <p className="text-sm font-medium text-[var(--muted)] mb-5">
                                     {t.projectsSection.roleLabel}: {activeProject.role}
                                 </p>
                             )}
 
                             <div className="flex flex-wrap gap-1.5 mb-5">
                                 {activeProject.tags.map((tag, i) => (
-                                    <span key={i} className="text-micro font-mono border border-[var(--foreground)]/40 px-2 py-0.5 text-[var(--foreground)]">
-                                        {tag}
-                                    </span>
+                                    <span key={i} className="chip normal-case tracking-normal font-medium">{tag}</span>
                                 ))}
                             </div>
 
-                            <p className="text-sm text-[var(--foreground)] opacity-85 leading-relaxed mb-6">
+                            <p className="text-[0.95rem] leading-relaxed mb-6">
                                 {activeProject.detail}
                             </p>
 
                             {activeProject.highlights && activeProject.highlights.length > 0 && (
-                                <div className="mb-6">
-                                    <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--accent)] mb-3">
-                                        {t.projectsSection.highlightsLabel}
-                                    </h4>
+                                <div className="mb-7">
+                                    <h4 className="eyebrow el-caps mb-3">{t.projectsSection.highlightsLabel}</h4>
                                     <ul className="space-y-2">
                                         {activeProject.highlights.map((item, i) => (
-                                            <li key={i} className="flex items-start gap-2.5 text-sm text-[var(--foreground)] opacity-85">
-                                                <i className="fas fa-check text-[var(--accent)] text-caption mt-1 shrink-0" aria-hidden="true" />
+                                            <li key={i} className="flex items-start gap-2.5 text-[0.95rem]">
+                                                <i className="fas fa-check text-[var(--accent)] text-caption mt-1.5 shrink-0" aria-hidden="true" />
                                                 <span className="leading-relaxed">{item}</span>
                                             </li>
                                         ))}
@@ -261,24 +228,24 @@ export default function Projects() {
                                 </div>
                             )}
 
-                            <div className="flex flex-wrap gap-3 pt-4 border-t border-[var(--foreground)]/15">
+                            <div className="flex flex-wrap gap-2 pt-5 border-t border-[var(--line)]">
                                 {activeProject.liveSiteLink && (
-                                    <a href={activeProject.liveSiteLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2.5 bg-[var(--accent)] text-[var(--background)] text-xs font-bold uppercase tracking-widest hover:shadow-[0_0_20px_var(--glow)] transition-all">
-                                        <i className="fas fa-external-link-alt" aria-hidden="true" /> {t.projectsSection.live}
+                                    <a href={activeProject.liveSiteLink} target="_blank" rel="noopener noreferrer" className="pill pill--accent">
+                                        <i className="fas fa-arrow-up-right-from-square" aria-hidden="true" /> {t.projectsSection.live}
                                     </a>
                                 )}
                                 {activeProject.githubLink && (
-                                    <a href={activeProject.githubLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2.5 border border-[var(--foreground)] text-[var(--foreground)] text-xs font-bold uppercase tracking-widest hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all">
+                                    <a href={activeProject.githubLink} target="_blank" rel="noopener noreferrer" className="pill pill--quiet">
                                         <i className="fab fa-github" aria-hidden="true" /> {t.projectsSection.code}
                                     </a>
                                 )}
                                 {activeProject.reportLink && (
-                                    <a href={activeProject.reportLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2.5 border border-[var(--foreground)] text-[var(--foreground)] text-xs font-bold uppercase tracking-widest hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all">
+                                    <a href={activeProject.reportLink} target="_blank" rel="noopener noreferrer" className="pill pill--quiet">
                                         <i className="fas fa-file-lines" aria-hidden="true" /> {t.projectsSection.report}
                                     </a>
                                 )}
                                 {activeProject.publicationLink && (
-                                    <a href={activeProject.publicationLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2.5 border border-[var(--foreground)] text-[var(--foreground)] text-xs font-bold uppercase tracking-widest hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all">
+                                    <a href={activeProject.publicationLink} target="_blank" rel="noopener noreferrer" className="pill pill--quiet">
                                         <i className="fas fa-book-open" aria-hidden="true" /> {t.projectsSection.publication}
                                     </a>
                                 )}

@@ -38,9 +38,12 @@ export default function MobileNav() {
             // Whichever section owns the middle of the viewport is the active one.
             const midpoint = currentScrollY + window.innerHeight / 2
             for (const section of SECTION_IDS) {
-                const element = document.getElementById(section)
+                // The id sits on the section's opening tile; measure the whole section.
+                const anchor = document.getElementById(section)
+                const element = anchor?.closest('section') ?? anchor
                 if (!element) continue
-                const top = element.offsetTop
+                // Page-relative top: offsetTop would be relative to the positioned panel wrapper.
+                const top = element.getBoundingClientRect().top + currentScrollY
                 if (midpoint >= top && midpoint < top + element.offsetHeight) {
                     setActiveSection(section)
                     break
@@ -71,7 +74,7 @@ export default function MobileNav() {
             className={`md:hidden fixed left-4 right-4 z-50 transition-all duration-300 ease-out ${isVisible ? 'bottom-5 opacity-100 translate-y-0' : 'bottom-0 opacity-0 translate-y-4 pointer-events-none'}`}
         >
             <nav
-                className="mx-auto max-w-md rounded-2xl border border-[var(--foreground)]/20 bg-[var(--background)]/95 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.12)] py-3 px-4 flex items-center justify-around gap-1"
+                className="mx-auto max-w-md rounded-[1.75rem] border border-[var(--line)] bg-[var(--surface)]/85 backdrop-blur-xl backdrop-saturate-150 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.3)] p-1.5 flex items-center justify-around gap-1"
                 aria-label="Mobile navigation"
             >
                 {navItems.map((item) => {
@@ -81,18 +84,15 @@ export default function MobileNav() {
                             key={item.id}
                             onClick={() => scrollToSection(item.id)}
                             aria-current={isActive ? 'true' : undefined}
-                            className={`relative flex flex-1 cursor-pointer flex-col items-center justify-center gap-1.5 min-h-13 min-w-0 py-2 px-2 rounded-xl transition-colors duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] ${isActive
-                                ? 'text-[var(--accent)] bg-[var(--foreground)]/10'
-                                : 'text-[var(--foreground)] opacity-85 hover:opacity-100 hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10'
+                            className={`relative flex flex-1 cursor-pointer flex-col items-center justify-center gap-1 min-h-13 min-w-0 py-2 px-2 rounded-[1.375rem] transition-colors duration-300 ease-out ${isActive
+                                ? 'text-[var(--accent)] bg-[var(--fill)]'
+                                : 'text-[var(--muted)] hover:text-[var(--foreground)] active:bg-[var(--fill)]'
                                 }`}
                         >
-                            <i className={`${item.icon} text-lg`} aria-hidden="true" />
-                            <span className="text-micro font-semibold uppercase tracking-widest truncate w-full text-center">
+                            <i className={`${item.icon} text-base`} aria-hidden="true" />
+                            <span className="text-[0.625rem] font-semibold uppercase tracking-[0.06em] truncate w-full text-center">
                                 {item.label}
                             </span>
-                            {isActive && (
-                                <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-0.5 rounded-full bg-[var(--accent)]" aria-hidden="true" />
-                            )}
                         </button>
                     )
                 })}

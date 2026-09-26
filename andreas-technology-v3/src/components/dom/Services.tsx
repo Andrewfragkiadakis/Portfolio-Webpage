@@ -1,139 +1,180 @@
 'use client'
 
 import { useContent } from '@/hooks/useContent'
-import { motion } from 'motion/react'
-import { EASE_OUT } from '@/utils/motion'
 import { scrollToSection } from '@/utils/smooth-scroll'
 import { sectionIndex } from '@/data/sections'
 import { useState } from 'react'
 import type { Service } from '@/data/content'
 import { TOOL_BY_LABEL, type Tool } from '@/data/tools'
-import SpotlightCard from '@/components/ui/SpotlightCard'
-import SectionHeading from '@/components/ui/SectionHeading'
-import RollText from '@/components/ui/RollText'
 import Modal from '@/components/ui/Modal'
 import { ToolTile } from '@/components/ui/ToolBadge'
+import { Bento, SectionTile, TileButton, type Tone } from '@/components/ui/Bento'
 
 const toolsFor = (service: Service): Tool[] =>
     service.tools.map((label) => TOOL_BY_LABEL.get(label)).filter((tool): tool is Tool => Boolean(tool))
+
+/**
+ * Placement per service, in content order:
+ * Endpoint Security · Apple Fleet (the large tile) · Automation · AI · ITSM · Networks.
+ */
+const LAYOUT: { area: string; tone: Tone; size: 'lg' | 'md' | 'sm' }[] = [
+    { area: 'md:col-[9/13] md:row-[1/3]', tone: 'plain', size: 'md' },
+    { area: 'md:col-[5/9] md:row-[1/5]', tone: 'plain', size: 'lg' },
+    { area: 'md:col-[9/13] md:row-[3/5]', tone: 'plain', size: 'md' },
+    { area: 'md:col-[1/5] md:row-[3/5]', tone: 'lavender', size: 'md' },
+    { area: 'md:col-[1/4] md:row-[5/7]', tone: 'plain', size: 'sm' },
+    { area: 'md:col-[4/9] md:row-[5/7]', tone: 'plain', size: 'md' },
+]
+
+function ServiceTile({ service, index, onOpen, detailsLabel, toolsLabel }: {
+    service: Service
+    index: number
+    onOpen: () => void
+    detailsLabel: string
+    toolsLabel: string
+}) {
+    const { area, tone, size } = LAYOUT[index] ?? LAYOUT[0]
+    const tools = toolsFor(service)
+    const large = size === 'lg'
+
+    return (
+        <TileButton
+            index={index + 1}
+            tone={tone}
+            onClick={onOpen}
+            label={`${service.title} — ${detailsLabel}`}
+            className={`col-span-2 ${area} gap-3 short:gap-2 ${large ? 'md:gap-4' : ''}`}
+        >
+            <span className="flex items-start justify-between gap-3">
+                <span className={`tile-icon tile-mark ${large ? 'md:!w-14 md:!h-14 md:!rounded-[1.125rem]' : ''}`} aria-hidden="true">
+                    <i className={`${service.icon} ${large ? 'text-xl md:text-2xl' : 'text-lg'}`} />
+                </span>
+                <span className="tile-affordance transition-transform group-hover:rotate-90" aria-hidden="true">
+                    <i className="fas fa-plus" />
+                </span>
+            </span>
+
+            <span className={`block ${large ? 'md:mt-auto' : 'mt-auto'}`}>
+                <span className={`block font-semibold tracking-[-0.02em] leading-tight el-caps ${large ? 'text-xl sm:text-2xl md:text-[min(2.3vw,4.1vh)] break-words' : 'text-lg md:text-[min(1.3vw,2.3vh)]'}`}>
+                    {service.title}
+                </span>
+                <span className={`block mt-1.5 short:mt-1 text-sm md:text-[min(0.95vw,1.65vh)] leading-snug text-[var(--muted)] ${large ? 'md:line-clamp-4' : 'line-clamp-2'}`}>
+                    {service.description}
+                </span>
+            </span>
+
+            {large && (
+                <span className="hidden md:block space-y-1.5">
+                    {service.highlights.map((item) => (
+                        <span key={item} className="flex items-start gap-2 text-[min(0.95vw,1.65vh)] leading-snug">
+                            <i className="fas fa-check tile-mark text-caption mt-[0.2em] shrink-0" aria-hidden="true" />
+                            <span>{item}</span>
+                        </span>
+                    ))}
+                </span>
+            )}
+
+            <span className="flex items-center justify-between gap-3 pt-1 short:pt-0">
+                <span className="flex gap-1.5 min-w-0 overflow-hidden" aria-hidden="true">
+                    {tools.map((tool) => (
+                        <ToolTile key={tool.label} tool={tool} className="tool-tile--sm" />
+                    ))}
+                </span>
+                <span className="shrink-0 eyebrow el-caps tabular-nums">
+                    {String(service.tools.length).padStart(2, '0')} {toolsLabel}
+                </span>
+            </span>
+        </TileButton>
+    )
+}
 
 export default function Services() {
     const t = useContent()
     const [active, setActive] = useState<Service | null>(null)
 
     return (
-        <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-4 md:py-0 overflow-visible md:overflow-x-hidden md:overflow-y-auto no-scrollbar">
-            <div className="max-w-7xl mx-auto w-full">
-                <SectionHeading id="services" title={t.servicesTitle} subtitle={t.servicesSubtitle} align="end" className="mb-5 sm:mb-6" />
+        <section aria-labelledby="services-title" className="w-full h-auto md:h-full px-4 md:px-6 pt-3 md:pb-6">
+            <Bento className="max-w-[112rem] mx-auto">
+                <SectionTile
+                    id="services"
+                    number={3}
+                    title={t.servicesTitle}
+                    eyebrow={t.servicesSubtitle}
+                    index={0}
+                    className="col-span-2 md:col-[1/5] md:row-[1/3] min-h-[9rem] md:min-h-0"
+                />
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
-                    {t.services.map((service: Service, index: number) => (
-                        <motion.div
-                            key={service.title}
-                            initial={{ opacity: 0, y: 32 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, amount: 0.3 }}
-                            transition={{ duration: 0.8, ease: EASE_OUT, delay: index * 0.08 }}
-                        >
-                            <SpotlightCard
-                                onClick={() => setActive(service)}
-                                label={`${service.title} — ${t.servicesLabels.details}`}
-                                cursor={t.cursor.open}
-                                className="bg-[var(--background)] p-5 border border-[var(--foreground)]/50 hover:border-[var(--accent)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)] group flex flex-col justify-between h-full"
-                            >
-                                <div className="relative z-10">
-                                    {/* Icon sits beside the title rather than above it: six cards
-                                        in two rows only fit a laptop viewport without the stacked height. */}
-                                    <div className="flex items-center gap-3 mb-3">
-                                        <div className="w-11 h-11 shrink-0 bg-[var(--foreground)]/10 rounded-full flex items-center justify-center text-xl text-[var(--accent)] group-hover:scale-110 transition-transform duration-300">
-                                            <i className={service.icon} aria-hidden="true" />
-                                        </div>
-                                        <h3 className="text-base lg:text-lg font-bold text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors uppercase tracking-tight leading-tight">
-                                            {service.title}
-                                        </h3>
-                                    </div>
-                                    <p className="hidden md:block text-[var(--foreground)] opacity-80 leading-relaxed text-body-sm">
-                                        {service.description}
-                                    </p>
-                                </div>
+                {t.services.map((service: Service, index: number) => (
+                    <ServiceTile
+                        key={service.title}
+                        service={service}
+                        index={index}
+                        onOpen={() => setActive(service)}
+                        detailsLabel={t.servicesLabels.details}
+                        toolsLabel={t.servicesLabels.tools}
+                    />
+                ))}
 
-                                {/* Footer: a quiet hint of what's inside, and the "open" affordance. */}
-                                <div className="relative z-10 mt-4 flex items-center justify-between gap-3">
-                                    <span className="text-micro font-mono uppercase tracking-widest text-[var(--foreground)] opacity-60 group-hover:opacity-100 group-hover:text-[var(--accent)] transition-[opacity,color] duration-300">
-                                        {service.tools.length} {t.servicesLabels.tools}
-                                    </span>
-                                    <span
-                                        className="w-9 h-9 shrink-0 rounded-full border border-[var(--accent)]/60 flex items-center justify-center text-[var(--accent)] transition-[transform,background-color,color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:rotate-90 group-hover:bg-[var(--accent)] group-hover:text-[var(--background)] group-focus-visible:rotate-90"
-                                        aria-hidden="true"
-                                    >
-                                        <i className="fas fa-plus text-sm" />
-                                    </span>
-                                </div>
-                            </SpotlightCard>
-                        </motion.div>
-                    ))}
-                </div>
-
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="mt-5 md:mt-6 text-center"
+                {/* Call to action */}
+                <TileButton
+                    index={7}
+                    tone="accent"
+                    onClick={() => scrollToSection(sectionIndex('contact'), 'contact')}
+                    className="col-span-2 md:col-[9/13] md:row-[5/7] justify-between gap-6 min-h-[9rem] md:min-h-0"
                 >
-                    <p className="text-base md:text-lg text-[var(--foreground)] opacity-90 mb-3">
-                        {t.servicesCta}
-                    </p>
-                    <button
-                        onClick={() => scrollToSection(sectionIndex('contact'), 'contact')}
-                        className="inline-block px-8 py-3.5 border border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--accent)] hover:text-[var(--background)] transition-all duration-300 ease-out font-bold uppercase tracking-widest hover:shadow-[0_0_20px_var(--accent)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]"
-                    >
-                        <RollText>{t.servicesCtaButton}</RollText>
-                    </button>
-                </motion.div>
-            </div>
+                    <span className="flex items-start justify-between gap-3">
+                        <span className="tile-icon" aria-hidden="true">
+                            <i className="fas fa-comments text-lg" />
+                        </span>
+                        <span className="tile-affordance" aria-hidden="true">
+                            <i className="fas fa-arrow-right" />
+                        </span>
+                    </span>
+                    <span className="block">
+                        <span className="block text-sm md:text-[min(1vw,1.8vh)] font-medium mb-1 el-caps">{t.servicesCta}</span>
+                        <span className="block text-2xl md:text-[min(2.2vw,4vh)] font-bold tracking-[-0.03em] leading-none el-caps">{t.servicesCtaButton}</span>
+                    </span>
+                </TileButton>
+            </Bento>
 
             <Modal
                 open={Boolean(active)}
                 onClose={() => setActive(null)}
                 labelledBy="service-modal-title"
                 closeLabel={t.projectsSection.close}
-                className="max-w-xl w-full p-6 sm:p-8"
+                className="max-w-xl w-full p-7 sm:p-9"
             >
                 {active && (
                     <>
                         <div className="flex items-center gap-4 mb-5 pr-10">
-                            <div className="w-12 h-12 shrink-0 border border-[var(--accent)] flex items-center justify-center text-xl text-[var(--accent)]">
-                                <i className={active.icon} aria-hidden="true" />
-                            </div>
-                            <h3 id="service-modal-title" className="text-lg sm:text-xl font-black text-[var(--accent)] uppercase tracking-tight leading-tight">
+                            <span className="tile-icon !w-12 !h-12 text-[var(--accent)]" aria-hidden="true">
+                                <i className={`${active.icon} text-xl`} />
+                            </span>
+                            <h3 id="service-modal-title" className="text-2xl font-bold tracking-tight leading-tight el-caps">
                                 {active.title}
                             </h3>
                         </div>
 
-                        <p className="text-sm text-[var(--foreground)] opacity-85 leading-relaxed mb-6">
+                        <p className="text-[0.95rem] text-[var(--muted)] leading-relaxed mb-6">
                             {active.detail}
                         </p>
 
-                        <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--accent)] mb-3">
-                            {t.servicesLabels.highlights}
-                        </h4>
+                        <h4 className="eyebrow el-caps mb-3">{t.servicesLabels.highlights}</h4>
                         <ul className="space-y-2 mb-6">
                             {active.highlights.map((item) => (
-                                <li key={item} className="flex items-start gap-2.5 text-sm text-[var(--foreground)] opacity-85">
-                                    <i className="fas fa-check text-[var(--accent)] text-caption mt-1 shrink-0" aria-hidden="true" />
+                                <li key={item} className="flex items-start gap-2.5 text-[0.95rem]">
+                                    <i className="fas fa-check text-[var(--accent)] text-caption mt-1.5 shrink-0" aria-hidden="true" />
                                     <span className="leading-relaxed">{item}</span>
                                 </li>
                             ))}
                         </ul>
 
-                        <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--accent)] mb-3">
-                            {t.servicesLabels.toolkit}
-                        </h4>
-                        <ul className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-3">
+                        <h4 className="eyebrow el-caps mb-3">{t.servicesLabels.toolkit}</h4>
+                        <ul className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                             {toolsFor(active).map((tool) => (
-                                <li key={tool.label} className="flex items-center gap-2.5 min-w-0">
+                                <li key={tool.label} className="flex items-center gap-2.5 min-w-0 rounded-2xl bg-[var(--surface-2)] p-2">
                                     <ToolTile tool={tool} />
-                                    <span className="text-body-sm text-[var(--foreground)] leading-tight">{tool.label}</span>
+                                    <span className="text-body-sm font-medium leading-tight">{tool.label}</span>
                                 </li>
                             ))}
                         </ul>

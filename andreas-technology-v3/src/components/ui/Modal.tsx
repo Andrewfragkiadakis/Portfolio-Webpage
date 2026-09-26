@@ -91,17 +91,17 @@ export default function Modal({
                     className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
                     onClick={onClose}
                 >
-                    <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+                    <div className="absolute inset-0 bg-black/45 dark:bg-black/70 backdrop-blur-md" />
                     <motion.div
                         ref={panelRef}
                         role="dialog"
                         aria-modal="true"
                         aria-labelledby={labelledBy}
-                        initial={{ opacity: 0, scale: 0.94, y: 16 }}
+                        initial={{ opacity: 0, scale: 0.96, y: 16 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.94, y: 16 }}
-                        transition={{ duration: 0.2 }}
-                        className={`relative z-10 bg-[var(--background)] border border-[var(--accent)] shadow-[0_0_40px_var(--glow)] max-h-[85vh] overflow-y-auto ${className}`}
+                        exit={{ opacity: 0, scale: 0.96, y: 16 }}
+                        transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                        className={`relative z-10 bg-[var(--surface)] text-[var(--foreground)] rounded-[2rem] border border-[var(--line)] shadow-[0_40px_80px_-24px_rgba(0,0,0,0.45)] max-h-[85vh] overflow-y-auto no-scrollbar ${className}`}
                         onClick={e => e.stopPropagation()}
                     >
                         <button
@@ -109,7 +109,7 @@ export default function Modal({
                             type="button"
                             onClick={onClose}
                             aria-label={closeLabel}
-                            className="absolute top-3 right-3 z-20 w-11 h-11 flex items-center justify-center cursor-pointer bg-[var(--background)]/80 text-[var(--foreground)] hover:text-[var(--accent)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+                            className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full flex items-center justify-center cursor-pointer bg-[var(--surface-2)]/90 backdrop-blur text-[var(--foreground)] hover:bg-[var(--accent-fill)] hover:text-white transition-colors"
                         >
                             <i className="fas fa-times" aria-hidden="true" />
                         </button>

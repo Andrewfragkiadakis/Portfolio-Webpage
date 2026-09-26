@@ -4,7 +4,11 @@ import { useTheme } from '@/contexts/ThemeContext'
 import { centreOf } from '@/utils/dom'
 import { useEffect, useState } from 'react'
 
-export default function ThemeToggle() {
+/**
+ * Light/dark switch. `inline` sits in the desktop navigation bar; `floating` is the
+ * round button pinned above the mobile tab bar.
+ */
+export default function ThemeToggle({ variant = 'floating' }: { variant?: 'floating' | 'inline' }) {
     const { theme, setTheme } = useTheme()
     const [mounted, setMounted] = useState(false)
 
@@ -12,21 +16,22 @@ export default function ThemeToggle() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     useEffect(() => setMounted(true), [])
 
-    if (!mounted) return null
+    if (!mounted) return <span className={variant === 'inline' ? 'w-9 h-9' : 'hidden'} aria-hidden="true" />
 
-    const isKernel = theme === 'dark'
+    const isDark = theme === 'dark'
+    const placement = variant === 'inline'
+        ? 'w-9 h-9 bg-[var(--fill)] hover:bg-[color-mix(in_srgb,var(--foreground),transparent_85%)]'
+        : 'md:hidden fixed right-4 bottom-[7rem] z-50 w-12 h-12 bg-[var(--surface)]/85 backdrop-blur-xl border border-[var(--line)] shadow-[0_8px_24px_-8px_rgba(0,0,0,0.25)]'
 
     return (
         <button
             type="button"
-            onClick={(e) => setTheme(isKernel ? 'light' : 'dark', centreOf(e.currentTarget))}
-            aria-label={isKernel ? 'Switch to light mode' : 'Switch to dark mode'}
-            className="fixed right-4 md:right-8 z-50 flex items-center gap-3 px-4 py-2 bg-[var(--background)]/80 backdrop-blur border border-[var(--foreground)] rounded-full hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-colors bottom-[7rem] md:bottom-8"
+            onClick={(e) => setTheme(isDark ? 'light' : 'dark', centreOf(e.currentTarget))}
+            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+            title={isDark ? 'Light mode' : 'Dark mode'}
+            className={`${placement} rounded-full flex items-center justify-center text-[var(--foreground)] transition-colors duration-300`}
         >
-            <span className="text-xs font-mono uppercase tracking-widest hidden sm:block">
-                {isKernel ? 'DARK_MODE' : 'LIGHT_MODE'}
-            </span>
-            <div className={`w-3 h-3 rounded-full bg-[var(--accent)]`} />
+            <i className={`fas ${isDark ? 'fa-sun' : 'fa-moon'} text-sm`} aria-hidden="true" />
         </button>
     )
 }

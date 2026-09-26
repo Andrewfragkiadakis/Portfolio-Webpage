@@ -5,7 +5,8 @@ import HeroOverlay from '@/components/dom/HeroOverlay'
 import About from '@/components/dom/About'
 import Services from '@/components/dom/Services'
 import { useIsDesktop } from '@/hooks/useIsDesktop'
-import { SECTION_STEPS, TRACK_HEIGHT_VH, TRACK_TRAVEL_VW } from '@/data/sections'
+import { SECTION_IDS, SECTION_STEPS, TRACK_HEIGHT_VH, TRACK_TRAVEL_VW } from '@/data/sections'
+import { scrollToSection } from '@/utils/smooth-scroll'
 
 const Experience = dynamic(() => import('@/components/dom/Experience'), { ssr: false })
 const Projects = dynamic(() => import('@/components/dom/Projects'), { ssr: false })
@@ -24,6 +25,7 @@ const SNAP_IDLE_MS = 140
 
 export default function HorizontalLayout() {
     const targetRef = useRef<HTMLDivElement>(null)
+    const viewportRef = useRef<HTMLDivElement>(null)
     const isDesktop = useIsDesktop()
     const prefersReducedMotion = useReducedMotion()
 
@@ -129,6 +131,34 @@ export default function HorizontalLayout() {
         }
     }, [isDesktop, scrollYProgress])
 
+    // Keyboard users: focusing a tile on another panel makes the browser scroll the clipped
+    // viewport sideways, which would desync the track. Undo that, and travel to the panel.
+    useEffect(() => {
+        const viewport = viewportRef.current
+        if (!isDesktop || !viewport) return
+
+        const resetClip = () => {
+            if (viewport.scrollLeft !== 0) viewport.scrollLeft = 0
+            if (viewport.scrollTop !== 0) viewport.scrollTop = 0
+        }
+
+        const onFocusIn = (e: FocusEvent) => {
+            resetClip()
+            const panel = (e.target as HTMLElement | null)?.closest<HTMLElement>('[data-panel]')
+            if (!panel) return
+            const index = Number(panel.dataset.panel)
+            const current = Math.round(scrollYProgress.get() * SECTION_STEPS)
+            if (index !== current) scrollToSection(index, SECTION_IDS[index], 700)
+        }
+
+        viewport.addEventListener('scroll', resetClip, { passive: true })
+        viewport.addEventListener('focusin', onFocusIn)
+        return () => {
+            viewport.removeEventListener('scroll', resetClip)
+            viewport.removeEventListener('focusin', onFocusIn)
+        }
+    }, [isDesktop, scrollYProgress])
+
     // Sections are declared once. The wrapper's CSS — not a second copy of the tree —
     // is what differs between the vertical stack and the horizontal journey.
     const sections = [
@@ -143,23 +173,25 @@ export default function HorizontalLayout() {
     return (
         <div
             ref={targetRef}
-            className="relative bg-[var(--background)] md:h-[var(--track-height)]"
+            className="relative bg-[var(--background)] pt-[var(--nav-h)] md:pt-0 md:h-[var(--track-height)]"
             style={{ '--track-height': `${TRACK_HEIGHT_VH}vh` } as React.CSSProperties}
         >
-            <div className="md:sticky md:top-0 md:left-0 md:flex md:h-screen md:w-full md:items-center md:overflow-hidden">
+            <div ref={viewportRef} className="md:sticky md:top-0 md:left-0 md:flex md:h-screen md:w-full md:items-center md:overflow-hidden">
                 <motion.div
                     style={{ x, scale: gatedScale }}
-                    className="flex flex-col gap-[10vh] md:flex-row md:gap-0 md:h-screen md:items-center md:will-change-transform"
+                    className="flex flex-col md:flex-row md:h-screen md:items-center md:will-change-transform"
                 >
                     {/*
                       Panels use overflow-x-clip rather than overflow-hidden: it contains the
-                      sideways entry animations without creating a scroll container, which
+                      tile entry animations without creating a scroll container, which
                       would break the sticky positioning the desktop track relies on.
+                      On desktop each panel is exactly one viewport and its bento fills it.
                     */}
                     {sections.map((section, index) => (
                         <div
                             key={index}
-                            className="relative w-full min-h-screen overflow-x-clip md:h-screen md:w-screen md:min-h-0 md:flex-shrink-0 md:flex md:items-center md:justify-center md:overflow-hidden md:pt-[var(--nav-h)]"
+                            data-panel={index}
+                            className="relative w-full overflow-x-clip md:h-screen md:w-screen md:flex-shrink-0 md:flex md:items-center md:justify-center md:overflow-hidden md:pt-[var(--nav-h)]"
                         >
                             {section}
                         </div>
@@ -168,7 +200,7 @@ export default function HorizontalLayout() {
             </div>
 
             <motion.div
-                className="hidden md:block fixed bottom-0 left-0 h-1 bg-[var(--accent)] z-50 origin-left w-full"
+                className="hidden md:block fixed bottom-0 left-0 h-[3px] bg-[var(--accent-fill)] z-50 origin-left w-full"
                 style={{ scaleX: scrollYProgress }}
                 aria-hidden="true"
             />
