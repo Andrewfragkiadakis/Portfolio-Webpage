@@ -59,6 +59,18 @@ html.theme-transition *::after {
   transition-delay: 0s !important;
 }
 
+/* Theme switch: the new theme is revealed by a clip-path circle (see ThemeContext),
+   so the default cross-fade is switched off. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  z-index: 1;
+}
+
 html[data-entered="true"] [data-cinematic] {
   display: none !important;
 }

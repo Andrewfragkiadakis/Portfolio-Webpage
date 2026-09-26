@@ -103,6 +103,12 @@ export interface Content {
         downloadResume: string
         emailLabel: string
         locationLabel: string
+        localTimeLabel: string
+    }
+    cursor: {
+        view: string
+        verify: string
+        open: string
     }
     skillsTitle: string
     skills: Skill[]
@@ -223,7 +229,14 @@ export const content: Record<'en' | 'gr', Content> = {
             sendMessage: "Send Message",
             downloadResume: "Download Resume",
             emailLabel: "Email",
-            locationLabel: "Location"
+            locationLabel: "Location",
+            localTimeLabel: "Local time"
+        },
+
+        cursor: {
+            view: "View",
+            verify: "Verify",
+            open: "Open"
         },
 
         skillsTitle: "CORE SKILLS",
@@ -709,7 +722,14 @@ export const content: Record<'en' | 'gr', Content> = {
             sendMessage: "Αποστολη Μηνυματος",
             downloadResume: "Ληψη Βιογραφικου",
             emailLabel: "Email",
-            locationLabel: "Τοποθεσια"
+            locationLabel: "Τοποθεσια",
+            localTimeLabel: "Τοπικη ωρα"
+        },
+
+        cursor: {
+            view: "Δειτε",
+            verify: "Ελεγχος",
+            open: "Ανοιγμα"
         },
 
         skillsTitle: "ΒΑΣΙΚΕΣ ΔΕΞΙΟΤΗΤΕΣ",

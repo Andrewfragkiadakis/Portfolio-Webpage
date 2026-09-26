@@ -2,6 +2,8 @@
 
 import { useContent } from '@/hooks/useContent'
 import { motion } from 'motion/react'
+import LocalTime from '@/components/ui/LocalTime'
+import Magnetic from '@/components/ui/Magnetic'
 import SectionHeading from '@/components/ui/SectionHeading'
 
 export default function Contact() {
@@ -42,6 +44,16 @@ export default function Contact() {
                             <div>
                                 <div className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase">{t.contact.locationLabel}</div>
                                 <div className="text-sm sm:text-lg font-bold text-[var(--foreground)]">{t.location}</div>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--accent)]">
+                                <i className="fas fa-clock text-xl" aria-hidden="true" />
+                            </div>
+                            <div>
+                                <div className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase">{t.contact.localTimeLabel}</div>
+                                <LocalTime className="text-sm sm:text-lg font-bold text-[var(--foreground)] tabular-nums" />
                             </div>
                         </div>
 
@@ -90,16 +102,18 @@ export default function Contact() {
                         </div>
 
                         <div className="space-y-3">
-                            <a
-                                href={gmailComposeUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                aria-label="Contact via email"
-                                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[var(--accent)] text-[var(--background)] font-bold uppercase tracking-widest hover:shadow-[0_0_30px_var(--accent)] transition-all duration-300 ease-out"
-                            >
-                                <i className="fas fa-paper-plane" aria-hidden="true" />
-                                {t.contact.sendMessage}
-                            </a>
+                            <Magnetic strength={0.12} className="block">
+                                <a
+                                    href={gmailComposeUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label="Contact via email"
+                                    className="group w-full flex items-center justify-center gap-2 px-6 py-4 bg-[var(--accent)] text-[var(--background)] font-bold uppercase tracking-widest hover:shadow-[0_0_30px_var(--accent)] transition-shadow duration-300 ease-out"
+                                >
+                                    <i className="fas fa-paper-plane transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1 group-hover:-translate-y-1" aria-hidden="true" />
+                                    {t.contact.sendMessage}
+                                </a>
+                            </Magnetic>
 
                             <a
                                 href={cvLink}

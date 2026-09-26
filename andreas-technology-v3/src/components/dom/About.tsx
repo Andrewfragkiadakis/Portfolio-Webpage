@@ -36,7 +36,7 @@ function AnimatedCounter({ value, suffix = '', duration = 2 }: { value: number; 
     return <span ref={ref}>{value}{suffix}</span>
 }
 
-function CredentialStrip({ items, label }: { items: Education[]; label: string }) {
+function CredentialStrip({ items, label, cursorLabel }: { items: Education[]; label: string; cursorLabel: string }) {
     if (items.length === 0) return null
     return (
         <motion.div
@@ -62,7 +62,7 @@ function CredentialStrip({ items, label }: { items: Education[]; label: string }
                 )
                 const cls = `inline-flex items-center gap-1.5 px-2.5 py-1 border text-[11px] font-mono font-bold uppercase tracking-wider transition-colors duration-300 ${pill}`
                 return item.link ? (
-                    <a key={item.badge} href={item.link} target="_blank" rel="noopener noreferrer" className={cls} aria-label={`${item.degree} — ${item.institution} (opens credential)`}>
+                    <a key={item.badge} href={item.link} target="_blank" rel="noopener noreferrer" data-cursor={cursorLabel} className={cls} aria-label={`${item.degree} — ${item.institution} (opens credential)`}>
                         {body}
                     </a>
                 ) : (
@@ -167,6 +167,7 @@ export default function About() {
                         <CredentialStrip
                             items={t.education.filter((e) => e.badge && e.kind && e.kind !== 'degree')}
                             label={t.about.credentialsLabel}
+                            cursorLabel={t.cursor.verify}
                         />
                         <h3 className="text-xl md:text-2xl font-bold text-[var(--foreground)] mb-3">
                             {t.about.tagline}
@@ -211,6 +212,7 @@ export default function About() {
                                 className="border border-[var(--foreground)]/30 p-3 hover:border-[var(--accent)] transition-all duration-300 group h-full"
                                 onClick={() => setActiveSkill(skill)}
                                 label={`${skill.label} — read more`}
+                                cursor={t.cursor.open}
                             >
                                 <div className="relative z-10">
                                     <div className="w-9 h-9 border border-[var(--foreground)]/50 flex items-center justify-center text-[var(--foreground)] group-hover:border-[var(--accent)] group-hover:text-[var(--accent)] transition-colors mb-2">

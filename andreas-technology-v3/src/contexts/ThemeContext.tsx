@@ -1,12 +1,17 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
+import { flushSync } from 'react-dom'
 
 type Theme = 'light' | 'dark'
 
 interface ThemeContextType {
     theme: Theme
-    setTheme: (theme: Theme) => void
+    /**
+     * Switch theme. Pass the click point to reveal the new theme as a circle growing
+     * from it (View Transitions API); unsupported browsers and reduced motion get a fade.
+     */
+    setTheme: (theme: Theme, origin?: { x: number; y: number }) => void
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
@@ -57,13 +62,33 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         return () => mediaQuery.removeEventListener('change', updateTheme)
     }, [])
 
-    const setTheme = (newTheme: Theme) => {
-        document.documentElement.classList.add('theme-transition')
+    const applyTheme = (newTheme: Theme) => {
         document.documentElement.classList.remove('light', 'dark')
         document.documentElement.classList.add(newTheme)
         localStorage.setItem('theme', newTheme)
         setThemeState(newTheme)
+    }
 
+    const setTheme = (newTheme: Theme, origin?: { x: number; y: number }) => {
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+        if (origin && !reduceMotion && typeof document.startViewTransition === 'function') {
+            const { x, y } = origin
+            const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y))
+            const transition = document.startViewTransition(() => {
+                flushSync(() => applyTheme(newTheme))
+            })
+            transition.ready.then(() => {
+                document.documentElement.animate(
+                    { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+                    { duration: 650, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', pseudoElement: '::view-transition-new(root)' },
+                )
+            }).catch(() => { /* transition skipped — theme is already applied */ })
+            return
+        }
+
+        document.documentElement.classList.add('theme-transition')
+        applyTheme(newTheme)
         setTimeout(() => {
             document.documentElement.classList.remove('theme-transition')
         }, 350)

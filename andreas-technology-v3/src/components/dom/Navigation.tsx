@@ -3,8 +3,10 @@
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useContent } from '@/hooks/useContent'
 import { useTheme } from '@/contexts/ThemeContext'
+import { centreOf } from '@/utils/dom'
 import { useState, useEffect } from 'react'
-import { motion } from 'motion/react'
+import { motion, AnimatePresence } from 'motion/react'
+import { EASE_OUT } from '@/utils/motion'
 import { scrollToSection as smoothScrollToSection } from '@/utils/smooth-scroll'
 import { SECTION_IDS, SECTION_STEPS } from '@/data/sections'
 
@@ -66,6 +68,29 @@ export default function Navigation() {
     return (
         <nav className="fixed top-0 left-0 right-0 z-50 bg-[var(--background)] border-b border-[var(--foreground)]/20 transition-all duration-300" aria-label="Main navigation">
             <div className="max-w-7xl mx-auto px-4 sm:px-8 py-4 sm:py-4 min-h-[56px] flex justify-center items-center relative">
+                {/* Section counter: the number rolls as the horizontal track moves. */}
+                <div className="hidden md:flex absolute left-8 top-1/2 -translate-y-1/2 items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--foreground)]" aria-hidden="true">
+                    <span className="relative inline-flex h-[1.2em] overflow-hidden text-[var(--accent)] font-bold">
+                        {/* Invisible sizer: the box always fits two digits at this letter-spacing. */}
+                        <span className="invisible">00</span>
+                        <AnimatePresence mode="popLayout" initial={false}>
+                            <motion.span
+                                key={activeIndex}
+                                className="absolute inset-0"
+                                initial={{ y: '100%' }}
+                                animate={{ y: '0%' }}
+                                exit={{ y: '-100%' }}
+                                transition={{ duration: 0.45, ease: EASE_OUT }}
+                            >
+                                {String(activeIndex + 1).padStart(2, '0')}
+                            </motion.span>
+                        </AnimatePresence>
+                    </span>
+                    <span className="opacity-50">/ {String(SECTION_IDS.length).padStart(2, '0')}</span>
+                    <span className="h-px w-6 bg-[var(--foreground)]/30" />
+                    <span className="opacity-70 hidden xl:inline">{navItems[activeIndex]?.label}</span>
+                </div>
+
                 <div className="hidden md:flex gap-6 lg:gap-8 items-center">
                     {navItems.map((item) => {
                         const isActive = activeIndex === item.i
@@ -146,7 +171,7 @@ export default function Navigation() {
                     </button>
                     <div className="flex items-center gap-3">
                         <button
-                            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                            onClick={(e) => setTheme(theme === 'dark' ? 'light' : 'dark', centreOf(e.currentTarget))}
                             className="flex items-center gap-2 px-4 py-2 border border-[var(--foreground)] rounded-full hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-colors duration-300 ease-out"
                             aria-label="Toggle theme"
                         >

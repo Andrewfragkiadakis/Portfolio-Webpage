@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import Typewriter from 'typewriter-effect'
 import { useContent } from '@/hooks/useContent'
+import { SITE_ENTERED_EVENT } from '@/utils/motion'
 
 export default function CinematicEntry() {
     const t = useContent()
@@ -36,6 +37,9 @@ export default function CinematicEntry() {
 
     const handleEnter = () => {
         setEntered(true)
+        // Let the hero start its reveal while the overlay slides away.
+        document.documentElement.dataset.revealed = 'true'
+        window.dispatchEvent(new Event(SITE_ENTERED_EVENT))
         try {
             localStorage.setItem('cinematic-entered', 'true')
         } catch {

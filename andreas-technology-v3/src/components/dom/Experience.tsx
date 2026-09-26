@@ -71,7 +71,7 @@ function ExperienceCard({ exp, index }: { exp: ExperienceType; index: number }) 
     )
 }
 
-function EducationCard({ edu, index, verifyLabel }: { edu: EducationType; index: number; verifyLabel: string }) {
+function EducationCard({ edu, index, verifyLabel, verifyCursor }: { edu: EducationType; index: number; verifyLabel: string; verifyCursor: string }) {
     const featured = Boolean(edu.featured)
     const icon = edu.icon ?? KIND_ICON[edu.kind ?? 'degree']
     return (
@@ -125,6 +125,7 @@ function EducationCard({ edu, index, verifyLabel }: { edu: EducationType; index:
             {edu.link && (
                 <a
                     href={edu.link}
+                    data-cursor={verifyCursor}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`relative inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest border px-4 py-3 transition-all justify-center w-full mt-auto ${featured ? 'border-[var(--accent)] bg-[var(--accent)] text-[var(--background)] hover:shadow-[0_0_24px_var(--glow)]' : 'border-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)]'}`}
@@ -203,7 +204,7 @@ export default function Experience() {
                             style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
                         >
                             {t.education.map((edu, idx) => (
-                                <EducationCard key={`edu-m-${idx}`} edu={edu} index={idx} verifyLabel={t.experienceSection.verify} />
+                                <EducationCard key={`edu-m-${idx}`} edu={edu} index={idx} verifyLabel={t.experienceSection.verify} verifyCursor={t.cursor.verify} />
                             ))}
                             <div className="w-4 flex-shrink-0" />
                         </div>
@@ -231,7 +232,7 @@ export default function Experience() {
                         </span>
                     </div>
                     {t.education.map((edu, idx) => (
-                        <EducationCard key={`edu-${idx}`} edu={edu} index={idx} verifyLabel={t.experienceSection.verify} />
+                        <EducationCard key={`edu-${idx}`} edu={edu} index={idx} verifyLabel={t.experienceSection.verify} verifyCursor={t.cursor.verify} />
                     ))}
                     <div className="w-4 md:w-12 flex-shrink-0" />
                 </div>

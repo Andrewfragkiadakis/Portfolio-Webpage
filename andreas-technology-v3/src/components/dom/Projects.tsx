@@ -92,6 +92,7 @@ export default function Projects() {
                                         type="button"
                                         onClick={openDetail}
                                         aria-label={`${project.name} — ${t.projectsSection.details}`}
+                                        data-cursor={t.cursor.view}
                                         className="relative block w-full aspect-[4/3] overflow-hidden bg-[var(--foreground)]/5 border border-[var(--foreground)]/15 transition-[border-color,box-shadow] duration-500 hover:border-[var(--accent)] hover:shadow-[0_20px_60px_-20px_var(--glow)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
                                     >
                                         {media}

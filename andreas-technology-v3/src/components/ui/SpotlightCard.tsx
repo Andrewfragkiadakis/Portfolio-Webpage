@@ -8,6 +8,8 @@ interface SpotlightCardProps extends React.PropsWithChildren {
     onClick?: () => void
     /** Accessible name for the control. Required when `onClick` is set. */
     label?: string
+    /** Label the custom cursor shows while hovering this card. */
+    cursor?: string
 }
 
 export default function SpotlightCard({
@@ -16,6 +18,7 @@ export default function SpotlightCard({
     spotlightColor = 'rgba(165, 180, 252, 0.15)',
     onClick,
     label,
+    cursor,
 }: SpotlightCardProps) {
     const elementRef = useRef<HTMLElement>(null)
 
@@ -37,6 +40,7 @@ export default function SpotlightCard({
                 onMouseMove={handleMouseMove}
                 onClick={onClick}
                 aria-label={label}
+                data-cursor={cursor}
                 className={`card-spotlight cursor-pointer text-left w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] ${className}`}
             >
                 {children}

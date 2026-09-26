@@ -5,6 +5,14 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 ## [Unreleased]
 
 ### Added
+- Motion system: shared easing/stagger tokens (`utils/motion.ts`) used by every reveal
+- Hero: outlined name rises letter-by-letter from a mask, then role, socials and CTAs in sequence; held until the intro overlay clears (`useSiteEntered` + `site:entered` event) so the reveal is never played underneath it
+- Hero corner meta: Athens location and live local time; one-shot line-draw scroll cue replaces the infinite pulse
+- `Magnetic`: spring-follow wrapper for primary CTAs (mouse only, inert under reduced motion)
+- Contextual cursor: grows into a labelled bubble over `data-cursor` targets (project images "View", credentials "Verify", skill cards "Open"; EN/GR)
+- Theme switch reveals the new theme as a circle from the toggle via the View Transitions API; fade fallback elsewhere and under reduced motion
+- Navigation: rolling "02 / 06 — Section" counter on desktop
+- Contact: live Athens local time row
 - Official brand logos for the tools marquee in `public/logos`: 21 from Simple Icons via `scripts/add-logo.mjs <slug>`, and Jamf, Check Point, Duo, Slack, Microsoft Sentinel, Entra ID and Active Directory (Entra Domain Services) from each vendor's own brand/press or architecture-icon kit. Drawn as CSS masks in the text colour; hover switches to the brand colour (near-black brands fall back to the foreground)
 - `data/tools.ts`: single source for the About tools marquee, split into two opposing rows (fleet/security/infra · code/AI/collaboration); tool list reflects tools in active use
 - Jamf Certified Tech — Jamf Pro (Jamf 200) credential (EN/GR) with Credly verification link, hero typewriter line, About summary and Apple Fleet service copy
@@ -14,6 +22,8 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 - JSON-LD `hasCredential` and `knowsAbout` on the Person schema; Jamf keywords in metadata
 
 ### Changed
+- CustomCursor attaches its listeners once instead of on every hover change
+- Services cards use the shared rise-and-ease reveal instead of scaling from 90%
 - Fleet size updated to 550+ Macs wherever it describes the current fleet (stat, tagline, About copy, skill card, current role); past-achievement bullets keep the 400+ figure from when that work shipped
 - About: skill cards now reflect actual work (Apple Fleet & MDM, Endpoint Security & Identity, IT Automation & Scripting, AI & Workflow Automation) in EN/GR; code block shows real role, fleet, stack and certifications; "Languages" stat replaced by a certification count derived from content
 - Project cards redesigned gallery-style: 4:3 image-first cards, slow hover zoom, rising "Case study" caption (always visible on touch), LIVE/OSS/PAPER status pills and year superscript

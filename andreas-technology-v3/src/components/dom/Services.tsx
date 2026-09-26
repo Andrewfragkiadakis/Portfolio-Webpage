@@ -2,6 +2,7 @@
 
 import { useContent } from '@/hooks/useContent'
 import { motion, AnimatePresence } from 'motion/react'
+import { EASE_OUT } from '@/utils/motion'
 import { scrollToSection } from '@/utils/smooth-scroll'
 import { sectionIndex } from '@/data/sections'
 import { useState } from 'react'
@@ -26,10 +27,10 @@ export default function Services() {
                     {t.services.map((service: Service, index: number) => (
                         <motion.div
                             key={index}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.15 }}
+                            initial={{ opacity: 0, y: 32 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, amount: 0.3 }}
+                            transition={{ duration: 0.8, ease: EASE_OUT, delay: index * 0.08 }}
                         >
                             <SpotlightCard className="bg-[var(--background)] p-5 border border-[var(--foreground)]/50 hover:border-[var(--accent)] transition-all duration-300 hover:shadow-[0_0_20px_var(--accent)] group flex flex-col justify-between h-full">
                                 <div className="relative z-10">

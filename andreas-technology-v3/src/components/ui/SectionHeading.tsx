@@ -1,6 +1,7 @@
 'use client'
 
 import { motion, type Variants } from 'motion/react'
+import { EASE_OUT, LETTER_STAGGER } from '@/utils/motion'
 
 interface SectionHeadingProps {
     /** Anchor id used by navigation and smooth-scroll. */
@@ -13,11 +14,11 @@ interface SectionHeadingProps {
     className?: string
 }
 
-const EASE = [0.22, 1, 0.36, 1] as const
+const EASE = EASE_OUT
 
 const container: Variants = {
     hidden: {},
-    visible: { transition: { staggerChildren: 0.035 } },
+    visible: { transition: { staggerChildren: LETTER_STAGGER } },
 }
 
 const letter: Variants = {
