@@ -2,15 +2,18 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
-import Typewriter from 'typewriter-effect'
 import { useContent } from '@/hooks/useContent'
 import { SITE_ENTERED_EVENT } from '@/utils/motion'
+import { Chevron, Headline } from '@/components/ui/keynote'
 
+/**
+ * First-visit intro: the house lights go down. A black stage, one gradient word and
+ * an "Enter" pill; the stage lifts away to reveal the title slide. Shown once.
+ */
 export default function CinematicEntry() {
-    const t = useContent()
+    const k = useContent().keynote
     const [hasVisited, setHasVisited] = useState(false)
     const [entered, setEntered] = useState(false)
-    const [showButton, setShowButton] = useState(false)
 
     useEffect(() => {
         try {
@@ -25,11 +28,7 @@ export default function CinematicEntry() {
     }, [])
 
     useEffect(() => {
-        if (!hasVisited && !entered) {
-            document.body.style.overflow = 'hidden'
-        } else {
-            document.body.style.overflow = 'auto'
-        }
+        document.body.style.overflow = !hasVisited && !entered ? 'hidden' : 'auto'
         return () => {
             document.body.style.overflow = 'auto'
         }
@@ -37,7 +36,6 @@ export default function CinematicEntry() {
 
     const handleEnter = () => {
         setEntered(true)
-        // Let the hero start its reveal while the overlay slides away.
         document.documentElement.dataset.revealed = 'true'
         window.dispatchEvent(new Event(SITE_ENTERED_EVENT))
         try {
@@ -55,46 +53,32 @@ export default function CinematicEntry() {
                 <motion.div
                     data-cinematic="true"
                     initial={{ opacity: 1 }}
-                    exit={{ y: '-100%', transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } }}
-                    className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[var(--background)] text-[var(--foreground)]"
+                    exit={{ y: '-100%', transition: { duration: 0.9, ease: [0.76, 0, 0.24, 1] } }}
+                    className="tone-dark fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[var(--background)] text-[var(--foreground)]"
                 >
                     <button
+                        type="button"
                         onClick={handleEnter}
-                        className="absolute top-6 right-6 text-xs font-mono uppercase tracking-[0.2em] text-[var(--foreground)] opacity-60 hover:opacity-100 hover:text-[var(--accent)] transition-all duration-300"
+                        className="absolute top-5 right-6 text-caption text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
                     >
-                        {t.cinematicEntry.skip} →
+                        {k.intro.skip}
                     </button>
 
-                    <div className="font-mono text-xl md:text-2xl tracking-widest text-[var(--accent)] mb-8">
-                        <Typewriter
-                            onInit={(typewriter) => {
-                                typewriter
-                                    .typeString(t.cinematicEntry.initializing)
-                                    .pauseFor(1000)
-                                    .typeString(`<br>${t.cinematicEntry.loading}`)
-                                    .pauseFor(1000)
-                                    .typeString(`<br>${t.cinematicEntry.ready}`)
-                                    .callFunction(() => setShowButton(true))
-                                    .start()
-                            }}
-                            options={{
-                                delay: 50,
-                                cursor: '█'
-                            }}
-                        />
-                    </div>
+                    <div className="kn-glow absolute inset-[15%] pointer-events-none" aria-hidden="true" />
 
-                    {showButton && (
-                        <motion.button
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            whileHover={{ scale: 1.1, textShadow: "0 0 8px var(--accent)" }}
-                            onClick={handleEnter}
-                            className="px-8 py-4 border border-[var(--accent)] text-[var(--accent)] font-bold uppercase tracking-[0.2em] hover:bg-[var(--accent)]/10 transition-all duration-300 ease-out"
-                        >
-                            {t.cinematicEntry.enterSystem}
-                        </motion.button>
-                    )}
+                    <Headline as="p" text={`*${k.intro.headline}*`} play className="relative text-[clamp(3.5rem,16vw,11rem)]" />
+
+                    <motion.button
+                        type="button"
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                        onClick={handleEnter}
+                        className="relative mt-10 kn-pill kn-pill--fill"
+                    >
+                        {k.intro.enter}
+                        <Chevron />
+                    </motion.button>
                 </motion.div>
             )}
         </AnimatePresence>

@@ -1,248 +1,153 @@
 'use client'
 
+import { useState } from 'react'
 import { useContent } from '@/hooks/useContent'
-import { motion, useInView, useReducedMotion, animate } from 'motion/react'
-import { useRef, useEffect, useState } from 'react'
-import type { Skill, Education } from '@/data/content'
-import SpotlightCard from '@/components/ui/SpotlightCard'
+import type { Skill } from '@/data/content'
 import Modal from '@/components/ui/Modal'
-import LogoLoop from '@/components/ui/LogoLoop'
-import type { LogoItem } from '@/components/ui/LogoLoop'
-import { TOOLS, type Tool } from '@/data/tools'
-import ToolBadge from '@/components/ui/ToolBadge'
-import SectionHeading from '@/components/ui/SectionHeading'
+import { ArrowOut, Chevron, CountUp, Headline, Parallax, Rich, Rise } from '@/components/ui/keynote'
 
-/** Counts up once in view. Writes straight to the DOM so it never re-renders React per frame. */
-function AnimatedCounter({ value, suffix = '', duration = 2 }: { value: number; suffix?: string; duration?: number }) {
-    const ref = useRef<HTMLSpanElement>(null)
-    const isInView = useInView(ref, { once: true })
-    const prefersReducedMotion = useReducedMotion()
-
-    useEffect(() => {
-        const el = ref.current
-        if (!el || !isInView) return
-        if (prefersReducedMotion) {
-            el.textContent = `${value}${suffix}`
-            return
-        }
-        const controls = animate(0, value, {
-            duration,
-            ease: [0.22, 1, 0.36, 1],
-            onUpdate: (latest) => { el.textContent = `${Math.round(latest)}${suffix}` },
-        })
-        return () => controls.stop()
-    }, [isInView, value, suffix, duration, prefersReducedMotion])
-
-    // Server/initial render shows the final value so it is correct without JS.
-    return <span ref={ref}>{value}{suffix}</span>
-}
-
-function CredentialStrip({ items, label, cursorLabel }: { items: Education[]; label: string; cursorLabel: string }) {
-    if (items.length === 0) return null
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            className="flex flex-wrap items-center gap-2 mb-4"
-        >
-            <span className="text-micro font-mono uppercase tracking-[0.2em] text-[var(--foreground)] opacity-70 mr-1">
-                {label}
-            </span>
-            {items.map((item) => {
-                const pill = item.featured
-                    ? 'border-[var(--accent)] text-[var(--accent)] bg-[var(--accent)]/10 hover:bg-[var(--accent)] hover:text-[var(--background)]'
-                    : 'border-[var(--foreground)]/35 text-[var(--foreground)] hover:border-[var(--foreground)]'
-                const body = (
-                    <>
-                        {item.icon && <i className={`${item.icon} text-caption`} aria-hidden="true" />}
-                        {item.badge}
-                        {item.link && <i className="fas fa-arrow-up-right-from-square text-[0.5rem] opacity-70" aria-hidden="true" />}
-                    </>
-                )
-                const cls = `inline-flex items-center gap-1.5 px-2.5 py-1 border text-caption font-mono font-bold uppercase tracking-wider transition-colors duration-300 ${pill}`
-                return item.link ? (
-                    <a key={item.badge} href={item.link} target="_blank" rel="noopener noreferrer" data-cursor={cursorLabel} className={cls} aria-label={`${item.degree} — ${item.institution} (opens credential)`}>
-                        {body}
-                    </a>
-                ) : (
-                    <span key={item.badge} className={cls} title={`${item.degree} — ${item.institution}`}>
-                        {body}
-                    </span>
-                )
-            })}
-        </motion.div>
-    )
-}
-
-const toLogos = (row: Tool['row']): LogoItem[] =>
-    TOOLS.filter((tool) => tool.row === row).map((tool) => ({
-        node: <ToolBadge tool={tool} />,
-        title: tool.label,
-    }))
-
-const OPS_TOOLS = toLogos('ops')
-const BUILD_TOOLS = toLogos('build')
-
+/**
+ * Slide 2 — "Meet Andreas." A short bio on the left; on the right, four huge stat
+ * callouts that count up, with the gradient reserved for the headline number.
+ * The full bio and the four focus areas open as dialogs.
+ */
 export default function About() {
     const t = useContent()
+    const k = t.keynote
     const [activeSkill, setActiveSkill] = useState<Skill | null>(null)
+    const [bioOpen, setBioOpen] = useState(false)
 
     const certifications = t.education.filter((e) => e.kind === 'certification')
-    const certBadges = certifications.map((e) => e.badge).filter(Boolean)
+    const credentials = t.education.filter((e) => e.badge && e.kind && e.kind !== 'degree')
 
-    // Order matches t.about.statsLabels:
-    // years experience · endpoints managed · faster onboarding · certifications
     const stats = [
-        { value: 7, suffix: '+' },
-        { value: 550, suffix: '+' },
-        { value: 70, suffix: '%' },
-        { value: certifications.length, suffix: '' },
+        { value: 550, suffix: '+', unit: '', grad: true },
+        { value: 70, suffix: '%', unit: '', grad: false },
+        { value: 7, suffix: '+', unit: k.about.yearsUnit, grad: false },
+        { value: certifications.length, suffix: '', unit: '', grad: false },
     ]
 
     return (
-        <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-4 md:py-0 overflow-visible md:overflow-x-hidden md:overflow-y-auto no-scrollbar">
-            <div className="max-w-7xl mx-auto w-full">
-                <SectionHeading id="about" title={t.about.title} subtitle={t.about.subtitle} sizeClass="text-[12vw] md:text-[min(7vw,9vh)]" className="mb-6 md:mb-8" />
+        <section
+            id="about"
+            aria-labelledby="about-title"
+            className="relative w-full md:h-full flex items-center px-5 sm:px-10 md:px-[max(3rem,6vw)] py-20 md:py-0"
+        >
+            <div className="mx-auto w-full max-w-[76rem] grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-x-[4vw] items-center">
+                <Parallax depth={-0.05} className="md:col-span-6">
+                    <Rise>
+                        <p className="kn-eyebrow">{k.about.eyebrow}</p>
+                    </Rise>
+                    <Headline
+                        id="about-title"
+                        text={k.about.headline}
+                        className="mt-3 text-[clamp(2.5rem,11vw,4.5rem)] md:text-[min(6.2vw,10vh)]"
+                    />
+                    <Rise delay={0.3}>
+                        <p className="kn-lede mt-6 text-[1.125rem] md:text-[min(1.45vw,2.6vh)] max-w-[34rem]">
+                            <Rich text={k.about.bio} />
+                        </p>
+                        <button type="button" onClick={() => setBioOpen(true)} className="kn-link mt-4 text-[1.0625rem]">
+                            {k.about.fullStory}
+                            <Chevron />
+                        </button>
+                    </Rise>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    <motion.div
-                        initial={{ opacity: 0, x: -30 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                    >
-                        <SpotlightCard className="border border-[var(--foreground)]/30 bg-[var(--background)] p-5 relative h-full overflow-hidden">
-                            <div className="absolute top-0 left-0 w-16 h-16 border-b border-r border-[var(--accent)]/30 rounded-br-3xl z-10" />
-                            <div className="flex items-center gap-3 mb-4 relative z-10">
-                                <div className="w-10 h-10 border border-[var(--accent)] flex items-center justify-center text-[var(--accent)]">
-                                    <i className="fas fa-code text-lg" aria-hidden="true" />
-                                </div>
-                                <div>
-                                    <div className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase">{t.about.currentFocus}</div>
-                                    <div className="text-base font-bold text-[var(--foreground)]">{t.about.currentFocusDetail}</div>
-                                </div>
-                            </div>
-                            <div className="font-mono text-body-sm space-y-1 text-[var(--foreground)] opacity-85 relative z-10">
-                                <p><span className="text-[var(--accent)]">const</span> engineer = {'{'}</p>
-                                <p className="pl-4">role: <span className="text-[var(--accent)]">&quot;Apple Fleet &amp; IT Automation Lead&quot;</span>,</p>
-                                <p className="pl-4">company: <span className="text-[var(--accent)]">&quot;Omilia&quot;</span>,</p>
-                                <p className="pl-4">fleet: <span className="text-[var(--accent)]">&quot;550+ Macs&quot;</span>,</p>
-                                <p className="pl-4">stack: [{['Jamf Pro', 'Python', 'Bash', 'Swift'].map((item, i, arr) => (
-                                    <span key={item}><span className="text-[var(--accent)]">&quot;{item}&quot;</span>{i < arr.length - 1 ? ', ' : ''}</span>
-                                ))}],</p>
-                                <p className="pl-4">certs: [{certBadges.map((badge, i) => (
-                                    <span key={badge}><span className="text-[var(--accent)]">&quot;{badge}&quot;</span>{i < certBadges.length - 1 ? ', ' : ''}</span>
-                                ))}],</p>
-                                <p className="pl-4">location: <span className="text-[var(--accent)]">&quot;Athens, GR&quot;</span>,</p>
-                                <p>{'};'}</p>
-                            </div>
-                        </SpotlightCard>
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, x: 30 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        className="flex flex-col justify-center"
-                    >
-                        <CredentialStrip
-                            items={t.education.filter((e) => e.badge && e.kind && e.kind !== 'degree')}
-                            label={t.about.credentialsLabel}
-                            cursorLabel={t.cursor.verify}
-                        />
-                        <h3 className="text-xl md:text-2xl font-bold text-[var(--foreground)] mb-3">
-                            {t.about.tagline}
-                        </h3>
-                        <div className="space-y-3 text-sm text-[var(--foreground)] opacity-80 leading-relaxed">
-                            {t.about.description.slice(0, 2).map((paragraph, index) => (
-                                <p key={index}>{paragraph}</p>
-                            ))}
+                    <Rise delay={0.45} className="mt-8 md:mt-[min(4.5vh,2.5rem)] grid gap-6 sm:grid-cols-2">
+                        <div>
+                            <h3 className="text-caption font-semibold text-[var(--muted)] mb-3">{k.about.credentials}</h3>
+                            <ul className="flex flex-wrap gap-2">
+                                {credentials.map((item) => {
+                                    const body = (
+                                        <>
+                                            {item.badge}
+                                            {item.link && <ArrowOut className="opacity-70" />}
+                                        </>
+                                    )
+                                    const cls = `inline-flex items-center gap-1.5 h-8 px-3.5 rounded-full text-body-sm font-medium transition-colors duration-300 ${item.featured
+                                        ? 'bg-[var(--accent-fill)] text-white hover:bg-[var(--accent-fill-hover)]'
+                                        : 'bg-[var(--surface)] text-[var(--foreground)] hover:bg-[var(--surface-2)]'}`
+                                    return (
+                                        <li key={item.badge}>
+                                            {item.link ? (
+                                                <a href={item.link} target="_blank" rel="noopener noreferrer" className={cls} aria-label={`${item.degree} — ${item.institution} (${k.common.newTab})`}>
+                                                    {body}
+                                                </a>
+                                            ) : (
+                                                <span className={cls} title={`${item.degree} — ${item.institution}`}>{body}</span>
+                                            )}
+                                        </li>
+                                    )
+                                })}
+                            </ul>
                         </div>
-                        <div className="grid grid-cols-4 gap-3 mt-5 pt-5 border-t border-[var(--foreground)]/20">
-                            {stats.map((stat, index) => (
-                                <motion.div
-                                    key={index}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: 0.3 + index * 0.1 }}
-                                    className="text-center"
-                                >
-                                    <div className="text-xl md:text-2xl font-black gradient-text">
-                                        <AnimatedCounter value={stat.value} suffix={stat.suffix} duration={1.5} />
-                                    </div>
-                                    <div className="text-caption font-mono text-[var(--foreground)] opacity-80 uppercase leading-tight">
-                                        {t.about.statsLabels[index]}
-                                    </div>
-                                </motion.div>
-                            ))}
+                        <div>
+                            <h3 className="text-caption font-semibold text-[var(--muted)] mb-3">{k.about.focus}</h3>
+                            <ul className="flex flex-col gap-1.5">
+                                {t.skills.map((skill) => (
+                                    <li key={skill.label}>
+                                        <button type="button" onClick={() => setActiveSkill(skill)} className="kn-link text-body-sm text-left">
+                                            {skill.label}
+                                            <Chevron />
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
-                    </motion.div>
-                </div>
+                    </Rise>
+                </Parallax>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-                    {t.skills.slice(0, 4).map((skill: Skill, index: number) => (
-                        <motion.div
-                            key={index}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.4 + index * 0.1 }}
-                        >
-                            <SpotlightCard
-                                className="border border-[var(--foreground)]/30 p-3 hover:border-[var(--accent)] transition-all duration-300 group h-full"
-                                onClick={() => setActiveSkill(skill)}
-                                label={`${skill.label} — read more`}
-                                cursor={t.cursor.open}
-                            >
-                                <div className="relative z-10">
-                                    <div className="w-9 h-9 border border-[var(--foreground)]/50 flex items-center justify-center text-[var(--foreground)] group-hover:border-[var(--accent)] group-hover:text-[var(--accent)] transition-colors mb-2">
-                                        <i className={`${skill.icon} text-base`} aria-hidden="true" />
-                                    </div>
-                                    <h4 className="font-bold text-sm text-[var(--foreground)] mb-1">{skill.label}</h4>
-                                    <p className="text-micro text-[var(--foreground)] opacity-80 leading-relaxed line-clamp-2">
-                                        {skill.detail || 'Building innovative solutions'}
-                                    </p>
-                                    {/* Always visible: touch devices have no hover to reveal this. */}
-                                    <span className="text-micro font-mono text-[var(--accent)] opacity-60 md:opacity-40 md:group-hover:opacity-80 transition-opacity mt-1 block">
-                                        {t.about.readMore} ↗
+                <Parallax depth={0.07} className="md:col-span-6">
+                    <dl className="grid grid-cols-2 gap-x-6 sm:gap-x-10 gap-y-10 md:gap-y-[min(6vh,3.5rem)]">
+                        {stats.map((stat, i) => (
+                            <Rise key={i} delay={0.15 + i * 0.1} className="border-t border-[var(--line)] pt-5 flex flex-col-reverse justify-end">
+                                {/* dt precedes dd in the DOM (valid <dl>); flex-col-reverse puts the number on top. */}
+                                <dt className="mt-3 text-body-sm md:text-[min(1.15vw,2vh)] font-semibold leading-snug text-[var(--foreground)] max-w-[15rem]">
+                                    {k.about.stats[i]}
+                                </dt>
+                                <dd className="kn-numeral text-[clamp(3rem,15vw,5rem)] md:text-[min(7.2vw,12vh)]">
+                                    <span className={stat.grad ? 'kn-grad' : undefined}>
+                                        <CountUp value={stat.value} suffix={stat.suffix} />
                                     </span>
-                                </div>
-                            </SpotlightCard>
-                        </motion.div>
+                                    {stat.unit && (
+                                        <span className="ml-1.5 text-[0.36em] font-semibold tracking-[-0.01em] text-[var(--muted)]">{stat.unit}</span>
+                                    )}
+                                </dd>
+                            </Rise>
+                        ))}
+                    </dl>
+                </Parallax>
+            </div>
+
+            <Modal open={bioOpen} onClose={() => setBioOpen(false)} labelledBy="bio-modal-title" closeLabel={k.common.close} className="max-w-2xl w-full p-7 sm:p-10">
+                <p className="kn-eyebrow text-body-sm">{k.about.eyebrow}</p>
+                <h3 id="bio-modal-title" className="kn-title text-[1.75rem] sm:text-[2rem] mt-1 mb-6 pr-10">{k.about.dialogTitle}</h3>
+                <div className="space-y-4 text-[1.0625rem] leading-relaxed text-[var(--foreground)]">
+                    {t.about.description.map((paragraph, i) => (
+                        <p key={i} className={i === t.about.description.length - 1 ? 'text-body-sm text-[var(--muted)] pt-2 border-t border-[var(--line)]' : undefined}>
+                            {paragraph}
+                        </p>
                     ))}
                 </div>
+            </Modal>
 
-                <Modal
-                    open={Boolean(activeSkill)}
-                    onClose={() => setActiveSkill(null)}
-                    labelledBy="skill-modal-title"
-                    className="p-6 max-w-sm w-full"
-                >
-                    {activeSkill && (
-                        <>
-                            <div className="w-10 h-10 border border-[var(--accent)] flex items-center justify-center text-[var(--accent)] mb-4">
-                                <i className={`${activeSkill.icon} text-base`} aria-hidden="true" />
-                            </div>
-                            <h4 id="skill-modal-title" className="font-black text-base text-[var(--accent)] uppercase tracking-tight mb-3 pr-8">{activeSkill.label}</h4>
-                            <p className="text-sm text-[var(--foreground)] opacity-80 leading-relaxed">{activeSkill.detail}</p>
-                        </>
-                    )}
-                </Modal>
-
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.6 }}
-                >
-                    <div className="flex flex-col gap-2">
-                        <LogoLoop logos={OPS_TOOLS} speed={55} direction="left" logoHeight="1.75rem" gap="0.75rem" fadeOut scaleOnHover pauseOnHover />
-                        <LogoLoop logos={BUILD_TOOLS} speed={55} direction="right" logoHeight="1.75rem" gap="0.75rem" fadeOut scaleOnHover pauseOnHover />
-                    </div>
-                </motion.div>
-            </div>
+            <Modal
+                open={Boolean(activeSkill)}
+                onClose={() => setActiveSkill(null)}
+                labelledBy="skill-modal-title"
+                closeLabel={k.common.close}
+                className="p-7 sm:p-9 max-w-md w-full"
+            >
+                {activeSkill && (
+                    <>
+                        <span className="w-12 h-12 rounded-2xl bg-[var(--surface)] flex items-center justify-center text-[var(--accent)] mb-5" aria-hidden="true">
+                            <i className={`${activeSkill.icon} text-xl`} />
+                        </span>
+                        <h3 id="skill-modal-title" className="kn-title text-[1.5rem] mb-3 pr-10">{activeSkill.label}</h3>
+                        <p className="text-[1.0625rem] leading-relaxed text-[var(--muted)]">{activeSkill.detail}</p>
+                    </>
+                )}
+            </Modal>
         </section>
     )
 }

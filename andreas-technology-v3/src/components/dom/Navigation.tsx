@@ -1,37 +1,62 @@
 'use client'
 
+import { useEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion } from 'motion/react'
 import { useLanguage } from '@/contexts/LanguageContext'
-import { useContent } from '@/hooks/useContent'
 import { useTheme } from '@/contexts/ThemeContext'
+import { useContent } from '@/hooks/useContent'
+import { useIsDesktop } from '@/hooks/useIsDesktop'
 import { centreOf } from '@/utils/dom'
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
 import { EASE_OUT } from '@/utils/motion'
-import ScrambleText from '@/components/ui/ScrambleText'
-import { scrollToSection as smoothScrollToSection } from '@/utils/smooth-scroll'
-import { SECTION_IDS, SECTION_STEPS } from '@/data/sections'
+import { scrollToSection } from '@/utils/smooth-scroll'
+import { SECTION_IDS, SECTION_STEPS, type SectionId } from '@/data/sections'
+import ThemeToggle from '@/components/ui/ThemeToggle'
 
+/**
+ * Apple-style global nav: a slim translucent bar with the name on the left, the six
+ * slides in the middle, and language, appearance and a "Let's talk" pill on the right.
+ * The bar takes on the tone of the slide beneath it, so it is black over black slides
+ * and white over white ones.
+ */
 export default function Navigation() {
     const { language, setLanguage } = useLanguage()
     const { theme, setTheme } = useTheme()
     const t = useContent()
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const k = t.keynote
+    const isDesktop = useIsDesktop()
+    const [menuOpen, setMenuOpen] = useState(false)
     const [activeIndex, setActiveIndex] = useState(0)
+    const [toneIndex, setToneIndex] = useState(0)
+    const firstLinkRef = useRef<HTMLButtonElement>(null)
+    const menuButtonRef = useRef<HTMLButtonElement>(null)
 
-    const scrollToSection = (id: string, index: number) => {
-        smoothScrollToSection(index, id)
-        setMobileMenuOpen(false)
-    }
-
-    // Derive the active section from scroll progress along the track.
+    // Active slide (for the links) and the slide under the bar (for its tone).
     useEffect(() => {
         let ticking = false
 
+        const indexAt = (y: number) => {
+            let found = 0
+            SECTION_IDS.forEach((id, i) => {
+                const el = document.getElementById(id)
+                if (el && el.getBoundingClientRect().top + window.scrollY <= y) found = i
+            })
+            return found
+        }
+
         const update = () => {
-            const maxScroll = document.documentElement.scrollHeight - window.innerHeight
-            const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0
-            setActiveIndex(Math.round(progress * SECTION_STEPS))
             ticking = false
+            if (window.matchMedia('(min-width: 64rem)').matches) {
+                const maxScroll = document.documentElement.scrollHeight - window.innerHeight
+                const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0
+                const index = Math.round(progress * SECTION_STEPS)
+                setActiveIndex(index)
+                setToneIndex(index)
+                return
+            }
+            setActiveIndex(indexAt(window.scrollY + window.innerHeight / 2))
+            // The slide showing through the bar's bottom edge decides its tone.
+            const navBottom = document.querySelector('header nav')?.getBoundingClientRect().bottom ?? 48
+            setToneIndex(indexAt(window.scrollY + navBottom))
         }
 
         const onScroll = () => {
@@ -41,191 +66,172 @@ export default function Navigation() {
         }
 
         window.addEventListener('scroll', onScroll, { passive: true })
+        window.addEventListener('resize', onScroll)
         update()
-        return () => window.removeEventListener('scroll', onScroll)
-    }, [])
+        return () => {
+            window.removeEventListener('scroll', onScroll)
+            window.removeEventListener('resize', onScroll)
+        }
+    }, [isDesktop])
 
-    // Close the mobile menu with Escape.
+    // Menu: Escape closes it, focus moves in on open and back to the button on close.
     useEffect(() => {
-        if (!mobileMenuOpen) return
+        if (!menuOpen) return
+        firstLinkRef.current?.focus()
+        const button = menuButtonRef.current
         const onKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') setMobileMenuOpen(false)
+            if (e.key === 'Escape') setMenuOpen(false)
         }
         document.addEventListener('keydown', onKeyDown)
-        return () => document.removeEventListener('keydown', onKeyDown)
-    }, [mobileMenuOpen])
+        return () => {
+            document.removeEventListener('keydown', onKeyDown)
+            button?.focus()
+        }
+    }, [menuOpen])
 
-    const navLabels: Record<(typeof SECTION_IDS)[number], string> = {
-        hero: t.nav.home,
-        about: t.nav.about,
-        services: t.nav.services,
-        experience: t.nav.experience,
-        projects: t.nav.projects,
-        contact: t.nav.contact,
+    const labels: Record<SectionId, string> = {
+        hero: k.nav.home,
+        about: k.nav.about,
+        services: k.nav.services,
+        experience: k.nav.experience,
+        projects: k.nav.projects,
+        contact: k.nav.contact,
     }
 
-    const navItems = SECTION_IDS.map((section, i) => ({ section, i, label: navLabels[section] }))
+    const go = (id: SectionId, index: number) => {
+        setMenuOpen(false)
+        scrollToSection(index, id)
+    }
+
+    const toggleLanguage = () => setLanguage(language === 'en' ? 'gr' : 'en')
+    const tone = menuOpen ? undefined : toneIndex % 2 === 0 ? 'primary' : 'inverse'
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-[var(--background)] border-b border-[var(--foreground)]/20 transition-all duration-300" aria-label="Main navigation">
-            <div className="max-w-7xl mx-auto px-4 sm:px-8 py-4 sm:py-4 min-h-14 flex justify-center items-center relative">
-                {/* Section counter: the number rolls as the horizontal track moves. */}
-                <div className="hidden md:flex absolute left-8 top-1/2 -translate-y-1/2 items-center gap-3 font-mono text-caption uppercase tracking-[0.2em] text-[var(--foreground)]" aria-hidden="true">
-                    <span className="relative inline-flex h-[1.2em] overflow-hidden text-[var(--accent)] font-bold">
-                        {/* Invisible sizer: the box always fits two digits at this letter-spacing. */}
-                        <span className="invisible">00</span>
-                        <AnimatePresence mode="popLayout" initial={false}>
-                            <motion.span
-                                key={activeIndex}
-                                className="absolute inset-0"
-                                initial={{ y: '100%' }}
-                                animate={{ y: '0%' }}
-                                exit={{ y: '-100%' }}
-                                transition={{ duration: 0.45, ease: EASE_OUT }}
-                            >
-                                {String(activeIndex + 1).padStart(2, '0')}
-                            </motion.span>
-                        </AnimatePresence>
-                    </span>
-                    <span className="opacity-50">/ {String(SECTION_IDS.length).padStart(2, '0')}</span>
-                    <span className="h-px w-6 bg-[var(--foreground)]/30" />
-                    <span className="opacity-70 hidden xl:inline">{navItems[activeIndex]?.label}</span>
-                </div>
-
-                <div className="hidden md:flex gap-6 lg:gap-8 items-center">
-                    {navItems.map((item) => {
-                        const isActive = activeIndex === item.i
-                        return (
-                            <button
-                                key={item.section}
-                                onClick={() => scrollToSection(item.section, item.i)}
-                                aria-current={isActive ? 'true' : undefined}
-                                className={`relative text-sm uppercase tracking-widest cursor-pointer transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] rounded-sm px-0.5 ${isActive
-                                    ? 'text-[var(--accent)] opacity-100'
-                                    : 'text-[var(--foreground)] opacity-90 hover:opacity-100 hover:text-[var(--accent)]'
-                                    }`}
-                            >
-                                <ScrambleText text={item.label} />
-                                {isActive && (
-                                    <motion.span
-                                        layoutId="nav-active-underline"
-                                        className="absolute -bottom-1.5 left-0 right-0 h-0.5 bg-[var(--accent)]"
-                                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                                        aria-hidden="true"
-                                    />
-                                )}
-                            </button>
-                        )
-                    })}
-                    <button
-                        onClick={() => setLanguage(language === 'en' ? 'gr' : 'en')}
-                        aria-label={language === 'en' ? 'Switch to Greek' : 'Switch to English'}
-                        className="ml-4 px-3 py-1 bg-[var(--foreground)]/10 hover:bg-[var(--foreground)]/20 text-[var(--foreground)] rounded transition-all duration-300 ease-out text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
-                    >
-                        {language === 'en' ? 'GR' : 'EN'}
-                    </button>
-                </div>
-
-                <button
-                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                    className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 text-[var(--foreground)] p-3 min-w-11 min-h-11 flex items-center justify-center rounded-lg hover:bg-[var(--foreground)]/10 active:bg-[var(--foreground)]/15 transition-colors duration-300 ease-out"
-                    aria-label="Toggle menu"
-                    aria-expanded={mobileMenuOpen}
+        <>
+            <header data-tone={tone} className="fixed top-0 inset-x-0 z-50">
+                <nav
+                    aria-label="Main navigation"
+                    className="h-[var(--nav-h)] bg-[var(--background)]/80 backdrop-blur-xl backdrop-saturate-150 border-b border-[var(--line)] text-[var(--foreground)] transition-colors duration-500"
                 >
-                    <motion.span
-                        className="relative w-7 h-5 flex flex-col justify-center"
-                        initial={false}
-                        animate={mobileMenuOpen ? 'open' : 'closed'}
-                    >
-                        <motion.span
-                            className="absolute left-0 right-0 h-0.5 bg-current rounded-full origin-center"
-                            style={{ y: -6 }}
-                            variants={{ closed: { rotate: 0, y: -6 }, open: { rotate: 45, y: 0 } }}
-                            transition={{ duration: 0.2, ease: 'easeInOut' }}
-                        />
-                        <motion.span
-                            className="absolute left-0 right-0 h-0.5 bg-current rounded-full"
-                            variants={{ closed: { opacity: 1, scaleX: 1 }, open: { opacity: 0, scaleX: 0 } }}
-                            transition={{ duration: 0.15 }}
-                        />
-                        <motion.span
-                            className="absolute left-0 right-0 h-0.5 bg-current rounded-full origin-center"
-                            style={{ y: 6 }}
-                            variants={{ closed: { rotate: 0, y: 6 }, open: { rotate: -45, y: 0 } }}
-                            transition={{ duration: 0.2, ease: 'easeInOut' }}
-                        />
-                    </motion.span>
-                </button>
-            </div>
-
-            <div
-                className={`md:hidden fixed inset-0 z-[100] flex flex-col bg-[var(--background)] transition-all duration-300 ease-in-out ${mobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}
-                aria-hidden={!mobileMenuOpen}
-            >
-                <div className="flex justify-between items-center px-6 pt-8 pb-4 border-b border-[var(--foreground)]/10">
-                    <button
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="px-5 py-3 border border-[var(--foreground)] text-[var(--foreground)] font-mono text-sm uppercase tracking-widest hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 ease-out"
-                        aria-label="Close menu"
-                    >
-                        {t.nav.close}
-                    </button>
-                    <div className="flex items-center gap-3">
+                    <div className="mx-auto h-full max-w-[76rem] px-4 sm:px-8 md:px-[max(1.5rem,3vw)] xl:px-0 flex items-center justify-between gap-6">
                         <button
-                            onClick={(e) => setTheme(theme === 'dark' ? 'light' : 'dark', centreOf(e.currentTarget))}
-                            className="flex items-center gap-2 px-4 py-2 border border-[var(--foreground)] rounded-full hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-colors duration-300 ease-out"
-                            aria-label="Toggle theme"
+                            type="button"
+                            onClick={() => go('hero', 0)}
+                            className="text-[0.9375rem] font-semibold tracking-[-0.015em] whitespace-nowrap"
                         >
-                            <span className="text-xs font-mono uppercase tracking-widest" suppressHydrationWarning>
-                                {theme === 'dark' ? 'DARK_MODE' : 'LIGHT_MODE'}
-                            </span>
-                            <div className="w-2.5 h-2.5 rounded-full bg-[var(--accent)]" />
+                            {k.common.name}
                         </button>
-                        <button
-                            onClick={() => setLanguage(language === 'en' ? 'gr' : 'en')}
-                            className="px-4 py-2 text-[var(--foreground)] font-mono text-xs uppercase tracking-widest border border-[var(--foreground)]/30 hover:border-[var(--foreground)] hover:bg-[var(--foreground)]/5 transition-all duration-300 ease-out"
-                        >
-                            {language === 'en' ? 'GR' : 'EN'}
-                        </button>
-                    </div>
-                </div>
 
-                <nav className="flex-1 flex flex-col justify-start pt-6 pb-8 overflow-y-auto px-6" aria-label="Mobile menu">
-                    <motion.div
-                        className="flex flex-col gap-0"
-                        initial="closed"
-                        animate={mobileMenuOpen ? 'open' : 'closed'}
-                        variants={{
-                            open: { transition: { staggerChildren: 0.04, delayChildren: 0.06 } },
-                            closed: { transition: { staggerChildren: 0.02, staggerDirection: -1 } },
-                        }}
-                    >
-                        {navItems.map((item, idx) => (
-                            <motion.div
-                                key={item.section}
-                                className="flex items-center gap-4 py-3 px-4 border-b border-[var(--foreground)]/15"
-                                variants={{ open: { opacity: 1, x: 0 }, closed: { opacity: 0, x: -12 } }}
-                                transition={{ duration: 0.2, ease: 'easeOut' }}
+                        <ul className="hidden md:flex items-center gap-[min(2.2vw,2rem)]">
+                            {SECTION_IDS.map((id, i) => (
+                                <li key={id}>
+                                    <button
+                                        type="button"
+                                        onClick={() => go(id, i)}
+                                        aria-current={activeIndex === i ? 'true' : undefined}
+                                        className={`text-caption tracking-[-0.005em] transition-colors duration-300 ${activeIndex === i ? 'text-[var(--foreground)]' : 'text-[var(--muted)] hover:text-[var(--foreground)]'}`}
+                                    >
+                                        {labels[id]}
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+
+                        <div className="flex items-center gap-1">
+                            <button
+                                type="button"
+                                onClick={toggleLanguage}
+                                aria-label={k.nav.switchLanguage}
+                                className="inline-flex items-center justify-center h-9 min-w-9 px-2 rounded-full text-caption font-semibold hover:bg-[var(--surface)] transition-colors duration-300"
                             >
-                                <span className="text-micro font-mono text-[var(--foreground)] opacity-75 uppercase tracking-[0.2em]">
-                                    {(idx + 1).toString().padStart(2, '0')}
+                                {language === 'en' ? 'ΕΛ' : 'EN'}
+                            </button>
+                            <ThemeToggle />
+                            <button
+                                type="button"
+                                onClick={() => go('contact', SECTION_IDS.length - 1)}
+                                className="hidden md:inline-flex kn-pill kn-pill--fill !min-h-0 !py-1 !px-3.5 !text-caption ml-2"
+                            >
+                                {k.nav.cta}
+                            </button>
+                            <button
+                                ref={menuButtonRef}
+                                type="button"
+                                onClick={() => setMenuOpen((open) => !open)}
+                                aria-label={menuOpen ? k.nav.closeMenu : k.nav.openMenu}
+                                aria-expanded={menuOpen}
+                                aria-controls="mobile-menu"
+                                className="md:hidden inline-flex items-center justify-center w-10 h-10 -mr-2 rounded-full"
+                            >
+                                <span className="relative block w-[1.1rem] h-3" aria-hidden="true">
+                                    <span className={`absolute left-0 right-0 h-[1.5px] rounded-full bg-current transition-transform duration-300 ${menuOpen ? 'top-[5px] rotate-45' : 'top-[1px]'}`} />
+                                    <span className={`absolute left-0 right-0 h-[1.5px] rounded-full bg-current transition-transform duration-300 ${menuOpen ? 'top-[5px] -rotate-45' : 'top-[9px]'}`} />
                                 </span>
-                                <button
-                                    onClick={() => scrollToSection(item.section, item.i)}
-                                    className="flex-1 text-left py-2 px-2 min-h-12 flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-300 ease-out text-xl sm:text-2xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
-                                >
-                                    {item.label}
-                                </button>
-                            </motion.div>
-                        ))}
-                    </motion.div>
+                            </button>
+                        </div>
+                    </div>
                 </nav>
+            </header>
 
-                <div className="px-6 py-6 border-t border-[var(--foreground)]/10 flex justify-between items-center text-[var(--foreground)] opacity-80 text-sm font-mono uppercase tracking-widest">
-                    <span>{t.nav.languageLabel}</span>
-                    <span>{t.location}</span>
-                </div>
-            </div>
-        </nav>
+            <AnimatePresence>
+                {menuOpen && (
+                    <motion.div
+                        id="mobile-menu"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.25 }}
+                        className="md:hidden fixed inset-x-0 top-[var(--nav-h)] bottom-0 z-[55] bg-[var(--background)] text-[var(--foreground)] overflow-y-auto"
+                    >
+                        <nav aria-label={k.nav.openMenu} className="px-8 pt-8 pb-10 flex flex-col min-h-full">
+                            <ul className="flex flex-col gap-1">
+                                {SECTION_IDS.map((id, i) => (
+                                    <motion.li
+                                        key={id}
+                                        initial={{ opacity: 0, y: -8 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.35, ease: EASE_OUT, delay: 0.03 * i }}
+                                    >
+                                        <button
+                                            ref={i === 0 ? firstLinkRef : undefined}
+                                            type="button"
+                                            onClick={() => go(id, i)}
+                                            aria-current={activeIndex === i ? 'true' : undefined}
+                                            className="w-full text-left py-2 text-[1.75rem] font-semibold tracking-[-0.02em]"
+                                        >
+                                            {labels[id]}
+                                        </button>
+                                    </motion.li>
+                                ))}
+                            </ul>
+
+                            <div className="mt-auto pt-10 grid grid-cols-2 gap-3 text-body-sm">
+                                <div>
+                                    <p className="text-caption text-[var(--muted)] mb-2">{k.nav.appearance}</p>
+                                    <button
+                                        type="button"
+                                        onClick={(e) => setTheme(theme === 'dark' ? 'light' : 'dark', centreOf(e.currentTarget))}
+                                        className="kn-pill kn-pill--sm bg-[var(--surface)] w-full"
+                                    >
+                                        {theme === 'dark' ? k.nav.light : k.nav.dark}
+                                    </button>
+                                </div>
+                                <div>
+                                    <p className="text-caption text-[var(--muted)] mb-2">{k.nav.language}</p>
+                                    <button
+                                        type="button"
+                                        onClick={toggleLanguage}
+                                        aria-label={k.nav.switchLanguage}
+                                        className="kn-pill kn-pill--sm bg-[var(--surface)] w-full"
+                                    >
+                                        {language === 'en' ? 'Ελληνικά' : 'English'}
+                                    </button>
+                                </div>
+                            </div>
+                        </nav>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </>
     )
 }

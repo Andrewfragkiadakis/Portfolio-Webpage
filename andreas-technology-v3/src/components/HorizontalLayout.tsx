@@ -1,18 +1,19 @@
 import { useEffect, useRef, Suspense, useCallback } from 'react'
 import dynamic from 'next/dynamic'
-import { motion, useScroll, useTransform, useSpring, useVelocity, useMotionValue, animate, useReducedMotion } from 'motion/react'
+import { motion, useScroll, useTransform, useVelocity, useMotionValue, animate, useReducedMotion } from 'motion/react'
 import HeroOverlay from '@/components/dom/HeroOverlay'
 import About from '@/components/dom/About'
 import Services from '@/components/dom/Services'
 import { useIsDesktop } from '@/hooks/useIsDesktop'
 import { SECTION_STEPS, TRACK_HEIGHT_VH, TRACK_TRAVEL_VW } from '@/data/sections'
+import { SlideIndexContext, TrackContext } from '@/components/ui/keynote'
 
 const Experience = dynamic(() => import('@/components/dom/Experience'), { ssr: false })
 const Projects = dynamic(() => import('@/components/dom/Projects'), { ssr: false })
 const Contact = dynamic(() => import('@/components/dom/Contact'), { ssr: false })
 
 function SectionFallback() {
-    return <div className="min-h-screen w-full flex items-center justify-center bg-transparent" aria-hidden />
+    return <div className="min-h-screen w-full" aria-hidden />
 }
 
 /** Stop settling the scroll once it is this close to a section boundary (in progress units). */
@@ -29,34 +30,23 @@ export default function HorizontalLayout() {
 
     const { scrollYProgress } = useScroll({ target: targetRef })
 
-    // Gates for the two scroll-linked transforms. These are motion values rather than
+    // Gates for the scroll-linked transforms. These are motion values rather than
     // plain booleans on purpose: swapping `style` between a motion value and a literal
     // leaves the last transform stuck on the element, so a desktop→mobile resize would
     // strand the vertical stack off-screen. Keeping one stable binding whose output
-    // collapses to zero avoids that entirely.
+    // collapses to zero avoids that entirely. `motionGate` switches off the parallax
+    // layers and product-shot scaling (see components/ui/keynote.tsx).
     const trackGate = useMotionValue(0)
-    const scaleGate = useMotionValue(0)
+    const motionGate = useMotionValue(0)
 
     useEffect(() => {
         trackGate.set(isDesktop ? 1 : 0)
-        scaleGate.set(isDesktop && !prefersReducedMotion ? 1 : 0)
-    }, [isDesktop, prefersReducedMotion, trackGate, scaleGate])
+        motionGate.set(isDesktop && !prefersReducedMotion ? 1 : 0)
+    }, [isDesktop, prefersReducedMotion, trackGate, motionGate])
 
     const x = useTransform(
         [scrollYProgress, trackGate],
         ([progress, gate]: number[]) => `${-progress * gate * TRACK_TRAVEL_VW}vw`
-    )
-
-    // Gentle "breathing" as each section passes centre. Purely decorative.
-    const scale = useTransform(
-        scrollYProgress,
-        [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
-        [1, 0.98, 1, 0.98, 1, 0.98, 1, 0.98, 1, 0.98, 1]
-    )
-    const smoothScale = useSpring(scale, { stiffness: 60, damping: 25, restDelta: 0.001 })
-    const gatedScale = useTransform(
-        [smoothScale, scaleGate],
-        ([value, gate]: number[]) => (gate ? value : 1)
     )
 
     const velocity = useVelocity(scrollYProgress)
@@ -141,37 +131,42 @@ export default function HorizontalLayout() {
     ]
 
     return (
-        <div
-            ref={targetRef}
-            className="relative bg-[var(--background)] md:h-[var(--track-height)]"
-            style={{ '--track-height': `${TRACK_HEIGHT_VH}vh` } as React.CSSProperties}
-        >
-            <div className="md:sticky md:top-0 md:left-0 md:flex md:h-screen md:w-full md:items-center md:overflow-hidden">
-                <motion.div
-                    style={{ x, scale: gatedScale }}
-                    className="flex flex-col gap-[10vh] md:flex-row md:gap-0 md:h-screen md:items-center md:will-change-transform"
-                >
-                    {/*
-                      Panels use overflow-x-clip rather than overflow-hidden: it contains the
-                      sideways entry animations without creating a scroll container, which
-                      would break the sticky positioning the desktop track relies on.
-                    */}
-                    {sections.map((section, index) => (
-                        <div
-                            key={index}
-                            className="relative w-full min-h-screen overflow-x-clip md:h-screen md:w-screen md:min-h-0 md:flex-shrink-0 md:flex md:items-center md:justify-center md:overflow-hidden md:pt-[var(--nav-h)]"
-                        >
-                            {section}
-                        </div>
-                    ))}
-                </motion.div>
-            </div>
+        <TrackContext.Provider value={{ progress: scrollYProgress, gate: motionGate }}>
+            <div
+                ref={targetRef}
+                className="relative bg-[var(--background)] md:h-[var(--track-height)]"
+                style={{ '--track-height': `${TRACK_HEIGHT_VH}vh` } as React.CSSProperties}
+            >
+                <div className="md:sticky md:top-0 md:left-0 md:flex md:h-screen md:w-full md:items-center md:overflow-hidden">
+                    <motion.div
+                        style={{ x }}
+                        className="flex flex-col md:flex-row md:h-screen md:items-center md:will-change-transform"
+                    >
+                        {/*
+                          Each panel is a keynote slide. Slides alternate tone; the theme only
+                          decides which tone opens the show (see [data-tone] in globals.css).
+                          Panels use overflow-x-clip rather than overflow-hidden: it contains the
+                          sideways entry animations without creating a scroll container, which
+                          would break the sticky positioning the desktop track relies on.
+                        */}
+                        {sections.map((section, index) => (
+                            <div
+                                key={index}
+                                data-tone={index % 2 === 0 ? 'primary' : 'inverse'}
+                                className="slide relative w-full overflow-x-clip md:h-screen md:w-screen md:flex-shrink-0 md:flex md:items-center md:justify-center md:overflow-hidden md:pt-[var(--nav-h)]"
+                            >
+                                <SlideIndexContext.Provider value={index}>{section}</SlideIndexContext.Provider>
+                            </div>
+                        ))}
+                    </motion.div>
+                </div>
 
-            <motion.div
-                className="hidden md:block fixed bottom-0 left-0 h-1 bg-[var(--accent)] z-50 origin-left w-full"
-                style={{ scaleX: scrollYProgress }}
-                aria-hidden="true"
-            />
-        </div>
+                <motion.div
+                    className="hidden md:block fixed bottom-0 left-0 h-[2px] z-50 origin-left w-full"
+                    style={{ scaleX: scrollYProgress, backgroundImage: 'var(--grad)' }}
+                    aria-hidden="true"
+                />
+            </div>
+        </TrackContext.Provider>
     )
 }

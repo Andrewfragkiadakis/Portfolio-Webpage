@@ -1,247 +1,198 @@
 'use client'
 
+import { useState } from 'react'
 import { useContent } from '@/hooks/useContent'
-import { useCardScroll } from '@/hooks/useCardScroll'
-import RollText from '@/components/ui/RollText'
-import ScrollRail from '@/components/ui/ScrollRail'
-import { motion } from 'motion/react'
-import { useRef } from 'react'
-import type { Experience as ExperienceType, Education as EducationType, EducationKind } from '@/data/content'
+import type { Education, Experience as Role } from '@/data/content'
+import Modal from '@/components/ui/Modal'
+import { ToolTile } from '@/components/ui/ToolBadge'
+import { TOOL_BY_LABEL, type Tool, type ToolLabel } from '@/data/tools'
+import { ArrowOut, Chevron, Headline, Parallax, Rise } from '@/components/ui/keynote'
 
-const KIND_ICON: Record<EducationKind, string> = {
-    degree: 'fas fa-graduation-cap',
-    certification: 'fas fa-award',
-    license: 'fas fa-id-card',
-}
-import SectionHeading from '@/components/ui/SectionHeading'
+/** The stack named in the current role's own task list. */
+const NOW_STACK: ToolLabel[] = ['Jamf Pro', 'Bash / zsh', 'Python', 'TypeScript', 'MCP Servers', "acme.sh / Let's Encrypt"]
+const nowStack = NOW_STACK.map((label) => TOOL_BY_LABEL.get(label)).filter((tool): tool is Tool => Boolean(tool))
 
-
-function ScrollButton({ onClick, direction, label, disabled = false }: { onClick: () => void; direction: 'left' | 'right'; label: string; disabled?: boolean }) {
+function Check() {
     return (
-        <button
-            onClick={onClick}
-            disabled={disabled}
-            className="w-11 h-11 md:w-12 md:h-12 border border-[var(--foreground)]/30 flex items-center justify-center text-[var(--foreground)] transition-all duration-300 cursor-pointer hover:bg-[var(--foreground)] hover:text-[var(--background)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[var(--foreground)] disabled:active:scale-100"
-            aria-label={label}
-        >
-            <i className={`fas fa-chevron-${direction} text-sm md:text-base`} aria-hidden="true" />
-        </button>
+        <svg viewBox="0 0 16 16" className="w-4 h-4 mt-[0.2em] shrink-0 text-[var(--accent)]" aria-hidden="true" fill="none">
+            <path d="M3.5 8.5 6.5 11.5 12.5 4.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
     )
 }
 
-function ExperienceCard({ exp, index }: { exp: ExperienceType; index: number }) {
-    return (
-        <motion.div
-            data-card="true"
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.1 }}
-            className="w-[85vw] max-w-95 min-h-85 sm:w-90 md:max-w-none md:min-h-auto md:min-w-100 md:w-100 md:aspect-square bg-[var(--background)] border border-[var(--foreground)]/40 flex-shrink-0 p-4 sm:p-5 md:p-8 flex flex-col justify-between hover:border-[var(--accent)] transition-all duration-300 md:hover:shadow-[0_0_20px_var(--accent)] group snap-start md:snap-align-none relative"
-        >
-            <div className="absolute top-0 right-0 p-4 opacity-10 text-4xl font-black text-[var(--foreground)] z-0">
-                {(index + 1).toString().padStart(2, '0')}
-            </div>
-            <div className="z-10 relative flex-1 flex flex-col">
-                <div className="flex items-center justify-between mb-4">
-                    <span className="w-12 h-12 flex items-center justify-center border border-[var(--accent)]/30 text-[var(--accent)] rounded-lg md:group-hover:bg-[var(--accent)] md:group-hover:text-[var(--background)] transition-colors">
-                        <i className="fas fa-briefcase text-lg" aria-hidden="true" />
-                    </span>
-                    <span className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest">
-                        {exp.duration}
-                    </span>
-                </div>
-                <h3 className="text-lg md:text-xl font-bold text-[var(--foreground)] uppercase leading-tight mb-2 md:group-hover:text-[var(--accent)] transition-colors">
-                    {exp.role}
-                </h3>
-                <p className="text-xs font-mono text-[var(--foreground)] opacity-85 mb-4">
-                    @ {exp.company}
-                </p>
-                <ul className="space-y-2 flex-1">
-                    {exp.tasks.map((task, ti) => (
-                        <li key={ti} className="text-xs text-[var(--foreground)] opacity-80 flex items-start gap-2">
-                            <span className="text-[var(--accent)] mt-1 text-[0.375rem] shrink-0">
-                                <i className="fas fa-square" aria-hidden="true" />
-                            </span>
-                            <span className="leading-tight">{task}</span>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        </motion.div>
-    )
-}
-
-function EducationCard({ edu, index, verifyLabel, verifyCursor }: { edu: EducationType; index: number; verifyLabel: string; verifyCursor: string }) {
-    const featured = Boolean(edu.featured)
-    const icon = edu.icon ?? KIND_ICON[edu.kind ?? 'degree']
-    return (
-        <motion.div
-            data-card="true"
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.1 }}
-            className={`w-[85vw] max-w-95 min-h-85 sm:w-90 md:max-w-none md:min-h-auto md:min-w-100 md:w-100 md:aspect-square bg-[var(--background)] border flex-shrink-0 p-4 sm:p-5 md:p-8 flex flex-col justify-between hover:border-[var(--accent)] transition-all duration-300 group snap-start md:snap-align-none relative overflow-hidden ${featured ? 'border-[var(--accent)]/70 shadow-[0_0_0_1px_var(--glow),0_0_40px_var(--glow)]' : 'border-[var(--foreground)]/20'}`}
-        >
-            {featured && (
-                <div
-                    className="pointer-events-none absolute -top-24 -right-24 w-56 h-56 rounded-full bg-[var(--accent)] opacity-[0.12] blur-3xl"
-                    aria-hidden="true"
-                />
-            )}
-            <div className="flex-1 flex flex-col relative">
-                <div className="flex items-center justify-between mb-4 gap-3">
-                    <span className={`w-12 h-12 shrink-0 flex items-center justify-center border rounded-lg md:group-hover:bg-[var(--accent)] md:group-hover:text-[var(--background)] md:group-hover:border-[var(--accent)] transition-colors ${featured ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-[var(--foreground)]/30 text-[var(--foreground)]'}`}>
-                        <i className={`${icon} text-lg`} aria-hidden="true" />
-                    </span>
-                    <div className="flex items-center gap-2 min-w-0">
-                        {edu.badge && (
-                            <span className={`text-micro font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 border whitespace-nowrap ${featured ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-[var(--foreground)]/40 text-[var(--foreground)] opacity-80'}`}>
-                                {edu.badge}
-                            </span>
-                        )}
-                        <span className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest whitespace-nowrap">
-                            {edu.duration}
-                        </span>
-                    </div>
-                </div>
-                <h3 className="text-lg md:text-xl font-bold text-[var(--foreground)] uppercase leading-tight mb-2 md:group-hover:text-[var(--accent)] transition-colors">
-                    {edu.degree}
-                </h3>
-                <p className="text-xs font-mono text-[var(--foreground)] opacity-85 mb-4">
-                    {edu.institution}
-                </p>
-                {edu.details && (
-                    <div className="space-y-2 mb-4 flex-1">
-                        {edu.details.map((detail, i) => (
-                            <div key={i} className="flex items-start gap-2 text-xs text-[var(--foreground)] opacity-80">
-                                <i className="fas fa-check text-[var(--accent)] text-micro mt-0.5" aria-hidden="true" />
-                                <span>{detail}</span>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
-            {edu.link && (
-                <a
-                    href={edu.link}
-                    data-cursor={verifyCursor}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`relative inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest border px-4 py-3 transition-all justify-center w-full mt-auto ${featured ? 'border-[var(--accent)] bg-[var(--accent)] text-[var(--background)] hover:shadow-[0_0_24px_var(--glow)]' : 'border-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)]'}`}
-                >
-                    <i className="fas fa-certificate" aria-hidden="true" />
-                    <RollText>{verifyLabel}</RollText>
-                </a>
-            )}
-        </motion.div>
-    )
-}
-
+/**
+ * Slide 4 — "Then. Now." The current role is the hero card; earlier roles run down a
+ * timeline rail and education and credentials sit beside it. Every row opens a dialog
+ * with the full detail, so the slide itself never needs to scroll.
+ */
 export default function Experience() {
     const t = useContent()
-    const { scrollContainerRef, scroll, canScrollLeft, canScrollRight, progress, ratio } = useCardScroll('[data-card="true"]')
-    const expMobileRef = useRef<HTMLDivElement>(null)
-    const eduMobileRef = useRef<HTMLDivElement>(null)
+    const k = t.keynote
+    const [role, setRole] = useState<Role | null>(null)
+    const [edu, setEdu] = useState<Education | null>(null)
 
-    const scrollMobileRow = (containerRef: React.RefObject<HTMLDivElement | null>, direction: 'left' | 'right') => {
-        const el = containerRef.current
-        if (!el) return
-        const maxScroll = el.scrollWidth - el.clientWidth
-        if (maxScroll <= 0) return
-        if (direction === 'right' && el.scrollLeft >= maxScroll - 1) return
-        if (direction === 'left' && el.scrollLeft <= 1) return
-        const card = el.querySelector<HTMLElement>('[data-card="true"]')
-        const gap = parseFloat(getComputedStyle(el).columnGap) || 0
-        const step = (card?.offsetWidth ?? el.clientWidth) + gap
-        const amount = direction === 'right' ? step : -step
-        el.scrollTo({ left: Math.max(0, Math.min(el.scrollLeft + amount, maxScroll)), behavior: 'smooth' })
-    }
+    const [current, ...earlier] = t.experience
 
     return (
-        <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-6 md:px-24 py-4 md:py-0 overflow-x-clip overflow-y-visible md:overflow-x-hidden md:overflow-y-auto no-scrollbar relative">
-            <div className="max-w-480 mx-auto w-full h-full flex flex-col justify-center">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 sm:mb-8 md:mb-12 gap-4 md:gap-6">
-                    <SectionHeading id="experience" title={t.experienceSection.title} subtitle={t.experienceSection.subtitle} sizeClass="text-[12vw] md:text-[min(6vw,8vh)]" />
-                    <div className="hidden md:flex gap-2">
-                        <ScrollButton onClick={() => scroll('left')} direction="left" label="Scroll left" disabled={!canScrollLeft} />
-                        <ScrollButton onClick={() => scroll('right')} direction="right" label="Scroll right" disabled={!canScrollRight} />
-                    </div>
-                </div>
+        <section
+            id="experience"
+            aria-labelledby="experience-title"
+            className="relative w-full md:h-full flex items-center px-5 sm:px-10 md:px-[max(3rem,6vw)] py-20 md:py-0"
+        >
+            <div className="mx-auto w-full max-w-[76rem]">
+                <Parallax depth={-0.05}>
+                    <Rise>
+                        <p className="kn-eyebrow">{k.experience.eyebrow}</p>
+                    </Rise>
+                    <Headline
+                        id="experience-title"
+                        text={k.experience.headline}
+                        className="mt-3 text-[clamp(2.5rem,12vw,4.5rem)] md:text-[min(5.6vw,9vh)]"
+                    />
+                </Parallax>
 
-                <div className="flex flex-col gap-8 md:hidden">
-                    <div>
-                        <div className="flex items-center justify-between gap-2 mb-3 pl-1">
-                            <span className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest">
-                                {t.experienceSection.professional}
-                            </span>
-                            <div className="flex gap-2">
-                                <ScrollButton onClick={() => scrollMobileRow(expMobileRef, 'left')} direction="left" label="Previous experience" />
-                                <ScrollButton onClick={() => scrollMobileRow(expMobileRef, 'right')} direction="right" label="Next experience" />
-                            </div>
-                        </div>
-                        <div
-                            ref={expMobileRef}
-                            className="flex gap-4 overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 scroll-px-4 scroll-smooth items-stretch"
-                            style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
-                        >
-                            {t.experience.map((exp, idx) => (
-                                <ExperienceCard key={`exp-m-${idx}`} exp={exp} index={idx} />
-                            ))}
-                            <div className="w-4 flex-shrink-0" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="flex items-center justify-between gap-2 mb-3 pl-1">
-                            <span className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest">
-                                {t.experienceSection.education}
-                            </span>
-                            <div className="flex gap-2">
-                                <ScrollButton onClick={() => scrollMobileRow(eduMobileRef, 'left')} direction="left" label="Previous education" />
-                                <ScrollButton onClick={() => scrollMobileRow(eduMobileRef, 'right')} direction="right" label="Next education" />
-                            </div>
-                        </div>
-                        <div
-                            ref={eduMobileRef}
-                            className="flex gap-4 overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 scroll-px-4 scroll-smooth items-stretch"
-                            style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
-                        >
-                            {t.education.map((edu, idx) => (
-                                <EducationCard key={`edu-m-${idx}`} edu={edu} index={idx} verifyLabel={t.experienceSection.verify} verifyCursor={t.cursor.verify} />
-                            ))}
-                            <div className="w-4 flex-shrink-0" />
-                        </div>
-                    </div>
-                </div>
+                <div className="mt-8 md:mt-[min(4.5vh,2.75rem)] grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-x-[2.6vw]">
+                    {/* Now — the hero card, outlined in the signature gradient. */}
+                    <Parallax depth={0.06} className="md:col-span-5">
+                        <Rise delay={0.15} className="h-full rounded-[1.75rem] p-[1.5px] bg-[image:var(--grad)]">
+                            <article className="h-full rounded-[calc(1.75rem-1.5px)] bg-[var(--background)] p-6 md:p-[min(2.4vw,4vh)] flex flex-col" aria-labelledby="now-role">
+                                <div className="flex items-baseline justify-between gap-4">
+                                    <h3 className="kn-grad text-[1.0625rem] font-semibold">{k.experience.now}</h3>
+                                    <span className="text-caption text-[var(--muted)] text-right">{current.duration}</span>
+                                </div>
+                                <p id="now-role" className="kn-title mt-4 text-[1.75rem] md:text-[min(2.3vw,3.9vh)]">{current.role}</p>
+                                <p className="mt-2 text-body-sm text-[var(--muted)]">{current.company}</p>
+                                <ul className="mt-6 space-y-3 border-t border-[var(--line)] pt-5">
+                                    {current.tasks.map((task) => (
+                                        <li key={task} className="flex items-start gap-3 text-[0.9375rem] md:text-[min(1.1vw,1.9vh)] leading-snug">
+                                            <Check />
+                                            <span>{task}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                                <ul className="mt-auto pt-6 flex flex-wrap gap-2 short:hidden" aria-label={k.services.toolkit}>
+                                    {nowStack.map((tool) => (
+                                        <li key={tool.label} title={tool.label} className="inline-flex items-center gap-2 h-8 pl-1 pr-3 rounded-full bg-[var(--surface)] text-caption">
+                                            <ToolTile tool={tool} className="tool-tile--sm" />
+                                            {tool.label}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </article>
+                        </Rise>
+                    </Parallax>
 
-                <div
-                    ref={scrollContainerRef}
-                    className="hidden md:flex shrink-0 gap-4 md:gap-6 overflow-x-auto no-scrollbar pb-4 md:pb-8 -mx-4 px-4 scroll-smooth items-stretch"
-                    style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
-                    onScroll={(e) => e.stopPropagation()}
-                >
-                    <div className="hidden md:flex flex-shrink-0 items-center justify-center w-12.5 border-r border-[var(--foreground)]/10 mr-2 md:mr-4">
-                        <span className="text-[var(--foreground)] opacity-50 [writing-mode:vertical-rl] rotate-180 uppercase tracking-[0.3em] font-black text-xs md:text-sm">
-                            {t.experienceSection.professional}
-                        </span>
-                    </div>
-                    {t.experience.map((exp, idx) => (
-                        <ExperienceCard key={`exp-${idx}`} exp={exp} index={idx} />
-                    ))}
-                    <div className="hidden md:block w-px bg-[var(--foreground)]/20 mx-2 md:mx-4 flex-shrink-0" />
-                    <div className="hidden md:flex flex-shrink-0 items-center justify-center w-12.5 border-r border-[var(--foreground)]/10 mr-2 md:mr-4">
-                        <span className="text-[var(--foreground)] opacity-50 [writing-mode:vertical-rl] rotate-180 uppercase tracking-[0.3em] font-black text-xs md:text-sm">
-                            {t.experienceSection.education}
-                        </span>
-                    </div>
-                    {t.education.map((edu, idx) => (
-                        <EducationCard key={`edu-${idx}`} edu={edu} index={idx} verifyLabel={t.experienceSection.verify} verifyCursor={t.cursor.verify} />
-                    ))}
-                    <div className="w-4 md:w-12 flex-shrink-0" />
+                    {/* Then — earlier roles on a rail. */}
+                    <Parallax depth={0.03} className="md:col-span-4">
+                        <Rise delay={0.25}>
+                            <h3 className="text-[1.0625rem] font-semibold">{k.experience.then}</h3>
+                            <ol className="mt-4 relative before:absolute before:left-[5px] before:top-2 before:bottom-2 before:w-px before:bg-[var(--line)]">
+                                {earlier.map((item) => (
+                                    <li key={`${item.role}-${item.duration}`} className="relative pl-7">
+                                        <span className="absolute left-0 top-[0.95rem] w-[11px] h-[11px] rounded-full border-2 border-[var(--muted)] bg-[var(--background)]" aria-hidden="true" />
+                                        <button
+                                            type="button"
+                                            onClick={() => setRole(item)}
+                                            aria-label={`${item.role}, ${item.company} — ${k.experience.more}`}
+                                            className="group w-full text-left py-2 md:py-[min(0.9vh,0.55rem)] rounded-lg"
+                                        >
+                                            <span className="block text-caption text-[var(--muted)] tabular-nums">{item.duration}</span>
+                                            <span className="flex items-start justify-between gap-3">
+                                                <span className="text-body-sm md:text-[min(1.05vw,1.8vh)] font-semibold leading-snug group-hover:text-[var(--accent)] transition-colors">
+                                                    {item.role}
+                                                </span>
+                                                <Chevron className="kn-chevron--nudge mt-1 text-[var(--accent)]" />
+                                            </span>
+                                            <span className="block text-caption text-[var(--muted)]">{item.company}</span>
+                                        </button>
+                                    </li>
+                                ))}
+                            </ol>
+                        </Rise>
+                    </Parallax>
+
+                    {/* Education & credentials. */}
+                    <Parallax depth={0.08} className="md:col-span-3">
+                        <Rise delay={0.35}>
+                            <h3 className="text-[1.0625rem] font-semibold">{k.experience.education}</h3>
+                            <ul className="mt-4 divide-y divide-[var(--line)]">
+                                {t.education.map((item) => (
+                                    <li key={item.degree} className="py-2.5 md:py-[min(1.1vh,0.7rem)] first:pt-0">
+                                        <button
+                                            type="button"
+                                            onClick={() => setEdu(item)}
+                                            aria-label={`${item.degree} — ${k.experience.details}`}
+                                            className="group w-full text-left rounded-lg"
+                                        >
+                                            <span className="block text-body-sm md:text-[min(1vw,1.75vh)] font-semibold leading-snug group-hover:text-[var(--accent)] transition-colors">
+                                                {item.degree}
+                                            </span>
+                                        </button>
+                                        <span className="mt-0.5 flex items-center justify-between gap-3 text-caption text-[var(--muted)]">
+                                            <span className="min-w-0">{item.institution} · {item.duration}</span>
+                                            {item.link && (
+                                                <a
+                                                    href={item.link}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="kn-link shrink-0 text-caption"
+                                                    aria-label={`${k.experience.verify}: ${item.degree} (${k.common.newTab})`}
+                                                >
+                                                    {k.experience.verify}
+                                                    <ArrowOut />
+                                                </a>
+                                            )}
+                                        </span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </Rise>
+                    </Parallax>
                 </div>
-                <ScrollRail progress={progress} ratio={ratio} className="hidden md:block mt-2" />
             </div>
+
+            <Modal open={Boolean(role)} onClose={() => setRole(null)} labelledBy="role-modal-title" closeLabel={k.common.close} className="max-w-xl w-full p-7 sm:p-9">
+                {role && (
+                    <>
+                        <p className="text-caption text-[var(--muted)]">{role.duration}</p>
+                        <h3 id="role-modal-title" className="kn-title text-[1.625rem] sm:text-[1.875rem] mt-1 pr-10">{role.role}</h3>
+                        <p className="mt-1 text-body-sm text-[var(--muted)]">{role.company}</p>
+                        <h4 className="mt-7 mb-3 text-body-sm font-semibold">{k.experience.tasks}</h4>
+                        <ul className="space-y-3">
+                            {role.tasks.map((task) => (
+                                <li key={task} className="flex items-start gap-3 text-[0.9375rem] leading-snug">
+                                    <Check />
+                                    <span>{task}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </>
+                )}
+            </Modal>
+
+            <Modal open={Boolean(edu)} onClose={() => setEdu(null)} labelledBy="edu-modal-title" closeLabel={k.common.close} className="max-w-xl w-full p-7 sm:p-9">
+                {edu && (
+                    <>
+                        <p className="text-caption text-[var(--muted)]">{edu.duration}{edu.badge ? ` · ${edu.badge}` : ''}</p>
+                        <h3 id="edu-modal-title" className="kn-title text-[1.5rem] sm:text-[1.75rem] mt-1 pr-10">{edu.degree}</h3>
+                        <p className="mt-1 text-body-sm text-[var(--muted)]">{edu.institution}</p>
+                        <ul className="mt-6 space-y-3">
+                            {edu.details.map((detail) => (
+                                <li key={detail} className="flex items-start gap-3 text-[0.9375rem] leading-snug">
+                                    <Check />
+                                    <span>{detail}</span>
+                                </li>
+                            ))}
+                        </ul>
+                        {edu.link && (
+                            <a href={edu.link} target="_blank" rel="noopener noreferrer" className="kn-pill kn-pill--fill kn-pill--sm mt-7">
+                                {k.experience.verify}
+                                <ArrowOut />
+                            </a>
+                        )}
+                    </>
+                )}
+            </Modal>
         </section>
     )
 }

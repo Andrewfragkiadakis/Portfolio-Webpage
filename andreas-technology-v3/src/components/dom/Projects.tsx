@@ -1,288 +1,234 @@
 'use client'
 
-import { useContent } from '@/hooks/useContent'
-import { useCardScroll } from '@/hooks/useCardScroll'
-import { motion, type Variants } from 'motion/react'
 import { useState } from 'react'
-import type { Project } from '@/data/content'
+import { AnimatePresence, motion } from 'motion/react'
+import { useContent } from '@/hooks/useContent'
+import type { KeynoteCopy, Project } from '@/data/content'
 import Modal from '@/components/ui/Modal'
-import ProjectImage from '@/components/ui/ProjectImage'
-import RollText from '@/components/ui/RollText'
-import ScrollRail from '@/components/ui/ScrollRail'
+import { ProjectShot } from '@/components/ui/Device'
+import { ArrowOut, Chevron, Headline, Parallax, Rise, ScaleIn } from '@/components/ui/keynote'
 import { EASE_OUT } from '@/utils/motion'
-import SectionHeading from '@/components/ui/SectionHeading'
 
-/** Stagger only the first screenful; cards scrolled into view later reveal at once. */
-const staggerDelay = (index: number) => Math.min(index, 3) * 0.08
+type ProjectLink = { href: string; label: string }
 
-const CARD_RISE: Variants = {
-    hidden: { opacity: 0, y: 40 },
-    visible: (index: number) => ({ opacity: 1, y: 0, transition: { delay: staggerDelay(index), duration: 0.7, ease: EASE_OUT } }),
+function linksFor(project: Project, k: KeynoteCopy['projects']): ProjectLink[] {
+    return [
+        project.liveSiteLink && { href: project.liveSiteLink, label: k.visit },
+        project.githubLink && { href: project.githubLink, label: k.code },
+        project.reportLink && { href: project.reportLink, label: k.report },
+        project.publicationLink && { href: project.publicationLink, label: k.publication },
+    ].filter(Boolean) as ProjectLink[]
 }
 
-const IMAGE_WIPE: Variants = {
-    hidden: { clipPath: 'inset(100% 0% 0% 0%)' },
-    visible: (index: number) => ({ clipPath: 'inset(0% 0% 0% 0%)', transition: { delay: 0.15 + staggerDelay(index), duration: 1.1, ease: EASE_OUT } }),
+/** "Learn more ›" plus the project's outbound links, in Apple link style. */
+function ProjectLinks({ project, onOpen, k, newTab }: { project: Project; onOpen: () => void; k: KeynoteCopy['projects']; newTab: string }) {
+    return (
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[1.0625rem]">
+            {project.detail && (
+                <button type="button" onClick={onOpen} className="kn-link" aria-label={`${project.name} — ${k.learnMore}`}>
+                    {k.learnMore}
+                    <Chevron />
+                </button>
+            )}
+            {linksFor(project, k).map((link) => (
+                <a key={link.href} href={link.href} target="_blank" rel="noopener noreferrer" className="kn-link" aria-label={`${project.name} — ${link.label} (${newTab})`}>
+                    {link.label}
+                    <ArrowOut />
+                </a>
+            ))}
+        </div>
+    )
 }
 
+/**
+ * Slide 5 — a product shot. The selected project sits in a device frame on a stage
+ * that scales up as the slide arrives; the full line-up sits beside it. On phones the
+ * line-up becomes an accordion with the shot inline.
+ */
 export default function Projects() {
     const t = useContent()
-    const [activeProject, setActiveProject] = useState<Project | null>(null)
-    const { scrollContainerRef, scroll: scrollProjects, canScrollLeft, canScrollRight, progress, ratio } = useCardScroll('[data-project-card]')
-    const arrowClass = "w-11 h-11 md:w-12 md:h-12 border border-[var(--foreground)]/30 flex items-center justify-center text-[var(--foreground)] transition-all duration-300 cursor-pointer hover:bg-[var(--foreground)] hover:text-[var(--background)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[var(--foreground)] disabled:active:scale-100"
+    const k = t.keynote
+    const [activeIndex, setActiveIndex] = useState(0)
+    const [dialog, setDialog] = useState<Project | null>(null)
+
+    const project = t.projects[Math.min(activeIndex, t.projects.length - 1)]
 
     return (
-        <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-4 md:py-0 overflow-x-clip overflow-y-visible md:overflow-x-hidden md:overflow-y-auto no-scrollbar">
-            <div className="max-w-480 mx-auto w-full max-h-[calc(100vh-8rem)] md:max-h-none overflow-y-auto md:overflow-visible">
-                <SectionHeading id="projects" title={t.projectsSection.title} subtitle={t.projectsSection.subtitle} align="end" className="mb-6 sm:mb-8" />
+        <section
+            id="projects"
+            aria-labelledby="projects-title"
+            className="relative w-full md:h-full flex items-center px-5 sm:px-10 md:px-[max(3rem,6vw)] py-20 md:py-0"
+        >
+            <Parallax depth={-0.3} className="pointer-events-none absolute inset-0 hidden md:block">
+                <div className="kn-glow absolute inset-x-[5%] inset-y-[15%]" aria-hidden="true" />
+            </Parallax>
 
-                <div className="flex justify-end gap-2 mb-4">
-                    <button
-                        onClick={() => scrollProjects('left')}
-                        disabled={!canScrollLeft}
-                        className={arrowClass}
-                        aria-label="Previous project"
-                    >
-                        <i className="fas fa-chevron-left text-sm md:text-base" aria-hidden="true" />
-                    </button>
-                    <button
-                        onClick={() => scrollProjects('right')}
-                        disabled={!canScrollRight}
-                        className={arrowClass}
-                        aria-label="Next project"
-                    >
-                        <i className="fas fa-chevron-right text-sm md:text-base" aria-hidden="true" />
-                    </button>
-                </div>
+            <div className="relative mx-auto w-full max-w-[76rem]">
+                <Parallax depth={-0.05} className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+                    <div>
+                        <Rise>
+                            <p className="kn-eyebrow">{k.projects.eyebrow}</p>
+                        </Rise>
+                        <Headline
+                            id="projects-title"
+                            text={k.projects.headline}
+                            className="mt-3 text-[clamp(2.5rem,11vw,4.5rem)] md:text-[min(5.2vw,8.4vh)]"
+                        />
+                    </div>
+                    <Rise delay={0.3} className="md:pb-2">
+                        <a href={t.github} target="_blank" rel="noopener noreferrer" className="kn-link text-[1.0625rem]" aria-label={`${k.projects.github} (${k.common.newTab})`}>
+                            {k.projects.github}
+                            <ArrowOut />
+                        </a>
+                    </Rise>
+                </Parallax>
 
-                <div
-                    ref={scrollContainerRef}
-                    className="flex gap-4 md:gap-6 overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 scroll-px-4 md:-mx-0 md:px-0 md:scroll-px-0 scroll-smooth items-stretch"
-                    style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
-                >
-                    {t.projects.map((project: Project, index: number) => {
-                        const openDetail = project.detail ? () => setActiveProject(project) : undefined
-                        const statuses = [
-                            project.liveSiteLink && { label: 'LIVE', accent: true },
-                            project.githubLink && { label: 'OSS', accent: false },
-                            (project.reportLink || project.publicationLink) && { label: 'PAPER', accent: false },
-                        ].filter(Boolean) as { label: string; accent: boolean }[]
+                <div className="mt-8 md:mt-[min(4vh,2.5rem)] grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-x-[3vw]">
+                    {/* Stage (desktop). */}
+                    <div className="hidden md:flex md:col-span-7 flex-col" id="project-stage" aria-live="polite">
+                        <ScaleIn className="relative h-[min(47vh,29rem)] flex items-end justify-center">
+                            <AnimatePresence mode="wait" initial={false}>
+                                <motion.div
+                                    key={project.name}
+                                    initial={{ opacity: 0, y: 18, scale: 0.97 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    exit={{ opacity: 0, y: -10, scale: 0.99 }}
+                                    transition={{ duration: 0.5, ease: EASE_OUT }}
+                                    className="relative w-[min(100%,74vh)] flex justify-center"
+                                >
+                                    <ProjectShot
+                                        project={project}
+                                        sizes="(min-width: 1024px) 46vw, 100vw"
+                                        className={project.device === 'phone' ? '' : 'w-full'}
+                                        phoneClassName="w-[min(13rem,21vh)]"
+                                    />
+                                    <span className="device-floor" aria-hidden="true" />
+                                </motion.div>
+                            </AnimatePresence>
+                        </ScaleIn>
 
-                        const media = (
-                            <>
-                                {project.image && (
-                                    // Wipe the image in from the bottom as the card scrolls into view.
-                                    // Driven by the card's in-view state: an element clipped to nothing
-                                    // never registers as intersecting, so it can't trigger itself.
-                                    <motion.span
-                                        className="absolute inset-0 block"
-                                        variants={IMAGE_WIPE}
-                                        custom={index}
-                                    >
-                                        <ProjectImage
-                                            project={project}
-                                            sizes="(max-width: 639px) 300px, (max-width: 1023px) 340px, 440px"
-                                            className="transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
-                                        />
-                                    </motion.span>
-                                )}
-                                <span className="absolute top-3 left-3 z-10 font-mono text-caption font-bold px-2 py-1 bg-[var(--background)]/85 backdrop-blur text-[var(--foreground)] border border-[var(--foreground)]/15">
-                                    {(index + 1).toString().padStart(2, '0')}
-                                </span>
-                                {/* Touch: a small corner badge says "this opens"; the title is printed right below. */}
-                                {project.detail && (
-                                    <span className="md:hidden absolute bottom-3 right-3 z-10 w-8 h-8 rounded-full bg-[var(--background)]/85 backdrop-blur border border-[var(--foreground)]/15 flex items-center justify-center text-[var(--foreground)]" aria-hidden="true">
-                                        <i className="fas fa-arrow-right -rotate-45 text-caption" />
-                                    </span>
-                                )}
-                                {/* Desktop hover caption, Awwwards-style: rises from the bottom edge. */}
-                                <span className="absolute inset-x-0 bottom-0 z-10 hidden md:flex items-end justify-between gap-3 p-4 pt-16 bg-gradient-to-t from-black/85 via-black/40 to-transparent text-white transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:translate-y-4 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 md:group-focus-within:translate-y-0 md:group-focus-within:opacity-100">
-                                    <span className="min-w-0 text-left">
-                                        <span className="block text-micro font-mono uppercase tracking-[0.2em] opacity-75">{t.projectsSection.caseStudy}</span>
-                                        <span className="block text-sm font-semibold truncate">{project.name}</span>
-                                    </span>
-                                    <i className="fas fa-arrow-right text-sm shrink-0 -rotate-45 transition-transform duration-500 group-hover:rotate-0" aria-hidden="true" />
-                                </span>
-                            </>
-                        )
+                        <Rise delay={0.2} className="mt-[min(4vh,2.25rem)]">
+                            <div className="flex items-baseline gap-3">
+                                <h3 className="kn-title text-[min(2vw,3.4vh)]">{project.name}</h3>
+                                {project.year && <span className="text-body-sm text-[var(--muted)] tabular-nums">{project.year}</span>}
+                            </div>
+                            <p className="mt-2 text-[min(1.1vw,1.9vh)] leading-snug text-[var(--muted)] line-clamp-2 max-w-[42rem]">{project.description}</p>
+                            <div className="mt-3">
+                                <ProjectLinks project={project} onOpen={() => setDialog(project)} k={k.projects} newTab={k.common.newTab} />
+                            </div>
+                        </Rise>
+                    </div>
 
-                        return (
-                            <motion.article
-                                key={project.name}
-                                data-project-card
-                                initial="hidden"
-                                whileInView="visible"
-                                viewport={{ once: true, amount: 0.3 }}
-                                variants={CARD_RISE}
-                                custom={index}
-                                className="w-75 sm:w-85 md:w-110 flex-shrink-0 group flex flex-col snap-start"
-                            >
-                                {openDetail ? (
-                                    <button
-                                        type="button"
-                                        onClick={openDetail}
-                                        aria-label={`${project.name} — ${t.projectsSection.details}`}
-                                        data-cursor={t.cursor.view}
-                                        className="relative block w-full aspect-[16/10] overflow-hidden bg-[var(--foreground)]/5 border border-[var(--foreground)]/15 transition-[border-color,box-shadow] duration-500 hover:border-[var(--accent)] hover:shadow-[0_20px_60px_-20px_var(--glow)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
-                                    >
-                                        {media}
-                                    </button>
-                                ) : (
-                                    <div className="relative w-full aspect-[16/10] overflow-hidden bg-[var(--foreground)]/5 border border-[var(--foreground)]/15">
-                                        {media}
-                                    </div>
-                                )}
-
-                                <div className="flex items-start justify-between gap-3 pt-4">
-                                    <h3 className="text-base md:text-lg font-bold text-[var(--foreground)] leading-tight line-clamp-2 group-hover:text-[var(--accent)] transition-colors">
-                                        {project.name}
-                                        {project.year && (
-                                            <sup className="ml-1 text-micro font-mono font-bold tracking-wider opacity-60 align-super">{project.year}</sup>
-                                        )}
-                                    </h3>
-                                    {statuses.length > 0 && (
-                                        <div className="flex gap-1.5 shrink-0 pt-0.5">
-                                            {statuses.map((st) => (
-                                                <span
-                                                    key={st.label}
-                                                    className={`text-micro font-mono font-bold tracking-wider px-1.5 py-0.5 border ${st.accent ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-[var(--foreground)]/30 text-[var(--foreground)] opacity-75'}`}
-                                                >
-                                                    {st.label}
+                    {/* Line-up: a selector on desktop, an accordion on phones. */}
+                    <Parallax depth={0.06} className="md:col-span-5">
+                        <Rise delay={0.25}>
+                            <h3 className="text-caption font-semibold text-[var(--muted)] pb-2 border-b border-[var(--line)]">{k.projects.lineup}</h3>
+                            <ul>
+                                {t.projects.map((item, index) => {
+                                    const isActive = index === activeIndex
+                                    return (
+                                        <li key={item.name} className="border-b border-[var(--line)]">
+                                            <button
+                                                type="button"
+                                                onClick={() => setActiveIndex(index)}
+                                                aria-pressed={isActive}
+                                                className={`group w-full flex items-center justify-between gap-4 text-left py-3 md:py-[min(1.05vh,0.62rem)] transition-colors duration-300 ${isActive ? 'text-[var(--foreground)]' : 'text-[var(--muted)] hover:text-[var(--foreground)]'}`}
+                                            >
+                                                <span className="flex items-center gap-3 min-w-0">
+                                                    <span
+                                                        className={`w-1.5 h-1.5 rounded-full shrink-0 transition-opacity duration-300 bg-[image:var(--grad)] ${isActive ? 'opacity-100' : 'opacity-0'}`}
+                                                        aria-hidden="true"
+                                                    />
+                                                    <span className="text-[1rem] md:text-[min(1.12vw,1.95vh)] font-semibold tracking-[-0.01em] leading-snug">{item.name}</span>
                                                 </span>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
+                                                <span className="text-caption tabular-nums shrink-0">{item.year}</span>
+                                            </button>
 
-                                <p className="text-xs text-[var(--foreground)] opacity-70 leading-relaxed line-clamp-2 mt-2">
-                                    {project.description}
-                                </p>
-
-                                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-3">
-                                    <span className="text-micro font-mono text-[var(--foreground)] opacity-60 truncate">
-                                        {project.tags.slice(0, 3).join(' · ')}
-                                    </span>
-                                    <span className="ml-auto flex items-center gap-3">
-                                        {project.liveSiteLink && (
-                                            <a href={project.liveSiteLink} target="_blank" rel="noopener noreferrer" aria-label={`${project.name} — ${t.projectsSection.live}`} className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)] hover:text-[var(--accent)] flex items-center gap-1 transition-colors">
-                                                <i className="fas fa-external-link-alt" aria-hidden="true" /> <span className="link-underline">{t.projectsSection.live}</span>
-                                            </a>
-                                        )}
-                                        {project.githubLink && (
-                                            <a href={project.githubLink} target="_blank" rel="noopener noreferrer" aria-label={`${project.name} — ${t.projectsSection.code}`} className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)] hover:text-[var(--accent)] flex items-center gap-1 transition-colors">
-                                                <i className="fab fa-github" aria-hidden="true" /> <span className="link-underline">{t.projectsSection.code}</span>
-                                            </a>
-                                        )}
-                                    </span>
-                                </div>
-                            </motion.article>
-                        )
-                    })}
+                                            {/* Phones: the shot and links open inline under the active row. */}
+                                            <AnimatePresence initial={false}>
+                                                {isActive && (
+                                                    <motion.div
+                                                        className="md:hidden overflow-hidden"
+                                                        initial={{ height: 0, opacity: 0 }}
+                                                        animate={{ height: 'auto', opacity: 1 }}
+                                                        exit={{ height: 0, opacity: 0 }}
+                                                        transition={{ duration: 0.45, ease: EASE_OUT }}
+                                                    >
+                                                        <div className="pt-3 pb-6">
+                                                            <ProjectShot project={item} sizes="100vw" className="w-full" phoneClassName="w-[11rem]" />
+                                                            <p className="mt-5 text-[0.9375rem] leading-snug text-[var(--muted)]">{item.description}</p>
+                                                            <div className="mt-3">
+                                                                <ProjectLinks project={item} onOpen={() => setDialog(item)} k={k.projects} newTab={k.common.newTab} />
+                                                            </div>
+                                                        </div>
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+                                        </li>
+                                    )
+                                })}
+                            </ul>
+                        </Rise>
+                    </Parallax>
                 </div>
-                <ScrollRail progress={progress} ratio={ratio} className="mt-1" />
-
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="mt-8 text-center"
-                >
-                    <a
-                        href="https://github.com/Andrewfragkiadakis"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="GitHub profile"
-                        className="inline-flex items-center gap-3 px-8 py-4 border border-[var(--foreground)] text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 ease-out font-bold uppercase tracking-widest hover:shadow-[0_0_20px_var(--accent)]"
-                    >
-                        <i className="fab fa-github text-xl" aria-hidden="true" />
-                        <RollText>{t.projectsSection.githubCta}</RollText>
-                    </a>
-                </motion.div>
             </div>
 
             <Modal
-                open={Boolean(activeProject)}
-                onClose={() => setActiveProject(null)}
+                open={Boolean(dialog)}
+                onClose={() => setDialog(null)}
                 labelledBy="project-modal-title"
-                closeLabel={t.projectsSection.close}
+                closeLabel={k.common.close}
                 className="max-w-2xl w-full"
             >
-                {activeProject && (
+                {dialog && (
                     <>
-                        {activeProject.image && (
-                            <div className="relative aspect-[16/10] max-h-[45vh] w-full overflow-hidden bg-[var(--foreground)]/5">
-                                <ProjectImage project={activeProject} sizes="(max-width: 767px) 100vw, 672px" />
+                        {dialog.image && (
+                            <div className="bg-[var(--surface)] px-8 sm:px-14 pt-12 pb-10 flex justify-center">
+                                <ProjectShot project={dialog} sizes="(max-width: 767px) 90vw, 560px" className={dialog.device === 'phone' ? '' : 'w-full'} phoneClassName="w-[10rem]" />
                             </div>
                         )}
-
-                        <div className="p-6 sm:p-8">
-                            <div className="flex items-baseline justify-between gap-4 mb-3">
-                                <h3 id="project-modal-title" className="text-xl sm:text-2xl font-black text-[var(--accent)] uppercase tracking-tight">
-                                    {activeProject.name}
-                                </h3>
-                                {activeProject.year && (
-                                    <span className="font-mono text-sm text-[var(--foreground)] opacity-60 shrink-0">
-                                        {activeProject.year}
-                                    </span>
-                                )}
-                            </div>
-
-                            {activeProject.role && (
-                                <p className="text-xs font-mono uppercase tracking-widest text-[var(--foreground)] opacity-70 mb-5">
-                                    {t.projectsSection.roleLabel}: {activeProject.role}
-                                </p>
-                            )}
-
-                            <div className="flex flex-wrap gap-1.5 mb-5">
-                                {activeProject.tags.map((tag, i) => (
-                                    <span key={i} className="text-micro font-mono border border-[var(--foreground)]/40 px-2 py-0.5 text-[var(--foreground)]">
-                                        {tag}
-                                    </span>
-                                ))}
-                            </div>
-
-                            <p className="text-sm text-[var(--foreground)] opacity-85 leading-relaxed mb-6">
-                                {activeProject.detail}
+                        <div className="p-7 sm:p-9">
+                            <p className="text-caption text-[var(--muted)]">
+                                {[dialog.year, dialog.role].filter(Boolean).join(' · ')}
                             </p>
-
-                            {activeProject.highlights && activeProject.highlights.length > 0 && (
-                                <div className="mb-6">
-                                    <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--accent)] mb-3">
-                                        {t.projectsSection.highlightsLabel}
-                                    </h4>
-                                    <ul className="space-y-2">
-                                        {activeProject.highlights.map((item, i) => (
-                                            <li key={i} className="flex items-start gap-2.5 text-sm text-[var(--foreground)] opacity-85">
-                                                <i className="fas fa-check text-[var(--accent)] text-caption mt-1 shrink-0" aria-hidden="true" />
-                                                <span className="leading-relaxed">{item}</span>
+                            <h3 id="project-modal-title" className="kn-title text-[1.625rem] sm:text-[2rem] mt-1 pr-10">{dialog.name}</h3>
+                            <ul className="mt-4 flex flex-wrap gap-1.5">
+                                {dialog.tags.map((tag) => (
+                                    <li key={tag} className="px-2.5 py-1 rounded-full bg-[var(--surface)] text-caption">{tag}</li>
+                                ))}
+                            </ul>
+                            <p className="mt-5 text-[1.0625rem] leading-relaxed text-[var(--muted)]">{dialog.detail}</p>
+                            {dialog.highlights && dialog.highlights.length > 0 && (
+                                <>
+                                    <h4 className="mt-7 mb-3 text-body-sm font-semibold">{k.projects.highlights}</h4>
+                                    <ul className="space-y-2.5">
+                                        {dialog.highlights.map((item) => (
+                                            <li key={item} className="flex items-start gap-3 text-[0.9375rem] leading-snug">
+                                                <svg viewBox="0 0 16 16" className="w-4 h-4 mt-0.5 shrink-0 text-[var(--accent)]" aria-hidden="true" fill="none">
+                                                    <path d="M3.5 8.5 6.5 11.5 12.5 4.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                                                </svg>
+                                                <span>{item}</span>
                                             </li>
                                         ))}
                                     </ul>
+                                </>
+                            )}
+                            {linksFor(dialog, k.projects).length > 0 && (
+                                <div className="mt-8 pt-6 border-t border-[var(--line)] flex flex-wrap gap-3">
+                                    {linksFor(dialog, k.projects).map((link, i) => (
+                                        <a
+                                            key={link.href}
+                                            href={link.href}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className={`kn-pill kn-pill--sm ${i === 0 ? 'kn-pill--fill' : 'kn-pill--line'}`}
+                                        >
+                                            {link.label}
+                                            <ArrowOut />
+                                        </a>
+                                    ))}
                                 </div>
                             )}
-
-                            <div className="flex flex-wrap gap-3 pt-4 border-t border-[var(--foreground)]/15">
-                                {activeProject.liveSiteLink && (
-                                    <a href={activeProject.liveSiteLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2.5 bg-[var(--accent)] text-[var(--background)] text-xs font-bold uppercase tracking-widest hover:shadow-[0_0_20px_var(--glow)] transition-all">
-                                        <i className="fas fa-external-link-alt" aria-hidden="true" /> {t.projectsSection.live}
-                                    </a>
-                                )}
-                                {activeProject.githubLink && (
-                                    <a href={activeProject.githubLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2.5 border border-[var(--foreground)] text-[var(--foreground)] text-xs font-bold uppercase tracking-widest hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all">
-                                        <i className="fab fa-github" aria-hidden="true" /> {t.projectsSection.code}
-                                    </a>
-                                )}
-                                {activeProject.reportLink && (
-                                    <a href={activeProject.reportLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2.5 border border-[var(--foreground)] text-[var(--foreground)] text-xs font-bold uppercase tracking-widest hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all">
-                                        <i className="fas fa-file-lines" aria-hidden="true" /> {t.projectsSection.report}
-                                    </a>
-                                )}
-                                {activeProject.publicationLink && (
-                                    <a href={activeProject.publicationLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2.5 border border-[var(--foreground)] text-[var(--foreground)] text-xs font-bold uppercase tracking-widest hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all">
-                                        <i className="fas fa-book-open" aria-hidden="true" /> {t.projectsSection.publication}
-                                    </a>
-                                )}
-                            </div>
                         </div>
                     </>
                 )}

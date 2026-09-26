@@ -1,138 +1,94 @@
 'use client'
 
 import { useContent } from '@/hooks/useContent'
-import { motion } from 'motion/react'
 import LocalTime from '@/components/ui/LocalTime'
-import RollText from '@/components/ui/RollText'
 import CopyButton from '@/components/ui/CopyButton'
-import SectionHeading from '@/components/ui/SectionHeading'
+import { ArrowOut, Chevron, Headline, Parallax, Rich, Rise } from '@/components/ui/keynote'
 
+const CV_LINK = 'https://drive.google.com/uc?export=download&id=1b-GiyMU1D_6yxr70bmpufj_kIqKgW38A'
+
+/**
+ * Slide 6 — the closing slide. One big line, one sentence, two actions; the practical
+ * details (email with copy, location, local time, profiles) sit in a quiet row below.
+ */
 export default function Contact() {
     const t = useContent()
-    const cvLink = "https://drive.google.com/uc?export=download&id=1b-GiyMU1D_6yxr70bmpufj_kIqKgW38A"
+    const k = t.keynote
     const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(t.email)}&su=${encodeURIComponent('Project Collaboration // Andreas Technology')}`
 
     return (
-        <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-4 md:py-0 overflow-visible md:overflow-x-hidden md:overflow-y-auto no-scrollbar">
-            <div className="max-w-6xl mx-auto w-full">
-                <SectionHeading id="contact" title={t.contact.title} subtitle={t.contact.subtitle} className="mb-8 md:mb-12" />
+        <section
+            id="contact"
+            aria-labelledby="contact-title"
+            className="relative w-full md:h-full flex flex-col items-center justify-center px-5 sm:px-10 md:px-[max(3rem,6vw)] pt-20 pb-36 md:py-0 overflow-hidden text-center"
+        >
+            <Parallax depth={-0.3} className="pointer-events-none absolute inset-0">
+                <div className="kn-glow absolute inset-[-5%]" aria-hidden="true" />
+            </Parallax>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="space-y-6 border border-[var(--foreground)] p-8"
-                    >
-                        <h3 className="text-xl font-bold uppercase tracking-wider text-[var(--accent)] border-b border-[var(--foreground)]/20 pb-2">
-                            {t.contact.infoTitle}
-                        </h3>
+            <Parallax depth={0.06} className="relative w-full max-w-[76rem] flex flex-col items-center">
+                <Rise>
+                    <p className="kn-eyebrow">{k.contact.eyebrow}</p>
+                </Rise>
+                <Headline
+                    id="contact-title"
+                    text={k.contact.headline}
+                    className="mt-3 text-[clamp(2.5rem,11.5vw,4.75rem)] md:text-[min(8vw,12.5vh)]"
+                />
+                <Rise delay={0.35}>
+                    <p className="kn-lede mt-6 md:mt-8 mx-auto max-w-[36rem] text-[1.125rem] md:text-[min(1.6vw,2.8vh)]">
+                        <Rich text={k.contact.sub} />
+                    </p>
+                </Rise>
+                <Rise delay={0.5} className="mt-8 md:mt-10 flex flex-wrap justify-center gap-3 sm:gap-4">
+                    <a href={gmailComposeUrl} target="_blank" rel="noopener noreferrer" className="kn-pill kn-pill--fill" aria-label={`${k.contact.send} (${k.common.newTab})`}>
+                        {k.contact.send}
+                        <Chevron />
+                    </a>
+                    <a href={CV_LINK} download className="kn-pill kn-pill--line">
+                        {k.contact.resume}
+                        <Chevron />
+                    </a>
+                </Rise>
+            </Parallax>
 
-                        <div className="flex items-start sm:items-center gap-3">
-                            <a href={gmailComposeUrl} target="_blank" rel="noopener noreferrer" className="flex flex-1 min-w-0 items-start sm:items-center gap-3 sm:gap-4 group" aria-label="Contact via email">
-                                <div className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-[var(--background)] transition-all duration-300 ease-out flex-shrink-0">
-                                    <i className="fas fa-envelope text-xl" aria-hidden="true" />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <div className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase">{t.contact.emailLabel}</div>
-                                    <div className="text-sm sm:text-lg font-bold text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors break-all"><span className="link-underline">{t.email}</span></div>
-                                </div>
-                            </a>
-                            <CopyButton value={t.email} label={t.contact.copyEmail} copiedLabel={t.contact.copied} failedLabel={t.contact.copyFailed} />
+            <Parallax depth={0.1} className="relative w-full max-w-[76rem] mt-14 md:mt-[min(9vh,5rem)]">
+                <Rise delay={0.65}>
+                    <dl className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[1.6fr_1fr_1fr_1fr] border-t border-[var(--line)] text-left">
+                        <div className="py-5 md:pr-6 border-b md:border-b-0 border-[var(--line)]">
+                            <dt className="text-caption text-[var(--muted)]">{k.contact.email}</dt>
+                            <dd className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-2">
+                                <a href={`mailto:${t.email}`} className="text-body-sm font-semibold break-all hover:text-[var(--accent)] transition-colors">{t.email}</a>
+                                <CopyButton value={t.email} label={k.contact.copy} copiedLabel={k.contact.copied} failedLabel={k.contact.copyFailed} />
+                            </dd>
                         </div>
-
-                        <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--accent)]">
-                                <i className="fas fa-map-marker-alt text-xl" aria-hidden="true" />
-                            </div>
-                            <div>
-                                <div className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase">{t.contact.locationLabel}</div>
-                                <div className="text-sm sm:text-lg font-bold text-[var(--foreground)]">{t.location}</div>
-                            </div>
+                        <div className="py-5 md:px-6 border-b md:border-b-0 md:border-l border-[var(--line)]">
+                            <dt className="text-caption text-[var(--muted)]">{k.contact.location}</dt>
+                            <dd className="mt-1.5 text-body-sm font-semibold">{t.location}</dd>
                         </div>
-
-                        <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--accent)]">
-                                <i className="fas fa-clock text-xl" aria-hidden="true" />
-                            </div>
-                            <div>
-                                <div className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase">{t.contact.localTimeLabel}</div>
-                                <LocalTime className="text-sm sm:text-lg font-bold text-[var(--foreground)] tabular-nums" />
-                            </div>
+                        <div className="py-5 md:px-6 border-b md:border-b-0 md:border-l border-[var(--line)]">
+                            <dt className="text-caption text-[var(--muted)]">{k.contact.time}</dt>
+                            <dd className="mt-1.5 text-body-sm font-semibold">
+                                <LocalTime className="tabular-nums" />
+                            </dd>
                         </div>
-
-                        <div className="pt-4">
-                            <div className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase mb-4">{t.contact.socialTitle}</div>
-                            <div className="flex gap-3">
-                                <a
-                                    href={t.github}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    aria-label="GitHub profile"
-                                    className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 ease-out hover:shadow-[0_0_20px_var(--accent)]"
-                                >
-                                    <i className="fab fa-github text-xl" aria-hidden="true" />
+                        <div className="py-5 md:pl-6 md:border-l border-[var(--line)]">
+                            <dt className="text-caption text-[var(--muted)]">{k.contact.elsewhere}</dt>
+                            <dd className="mt-1.5 flex gap-5 text-body-sm">
+                                <a href={t.linkedin} target="_blank" rel="noopener noreferrer" className="kn-link" aria-label={`LinkedIn (${k.common.newTab})`}>
+                                    LinkedIn
+                                    <ArrowOut />
                                 </a>
-                                <a
-                                    href={t.linkedin}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    aria-label="LinkedIn profile"
-                                    className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 ease-out hover:shadow-[0_0_20px_var(--accent)]"
-                                >
-                                    <i className="fab fa-linkedin text-xl" aria-hidden="true" />
+                                <a href={t.github} target="_blank" rel="noopener noreferrer" className="kn-link" aria-label={`GitHub (${k.common.newTab})`}>
+                                    GitHub
+                                    <ArrowOut />
                                 </a>
-                            </div>
+                            </dd>
                         </div>
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.1 }}
-                        className="border border-[var(--accent)] p-8 flex flex-col justify-between"
-                    >
-                        <div>
-                            <div className="flex items-center gap-3 mb-4">
-                                <i className="fas fa-star text-[var(--accent)] text-2xl" aria-hidden="true" />
-                                <h3 className="text-xl font-bold uppercase tracking-wider text-[var(--foreground)]">
-                                    {t.contact.opportunitiesTitle}
-                                </h3>
-                            </div>
-                            <p className="text-[var(--foreground)] opacity-80 text-sm leading-relaxed mb-6">
-                                {t.contact.opportunitiesDescription}
-                            </p>
-                        </div>
-
-                        <div className="space-y-3">
-                            <a
-                                href={gmailComposeUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                aria-label="Contact via email"
-                                className="group w-full flex items-center justify-center gap-2 px-6 py-4 bg-[var(--accent)] text-[var(--background)] font-bold uppercase tracking-widest hover:shadow-[0_0_30px_var(--accent)] transition-shadow duration-300 ease-out"
-                            >
-                                <i className="fas fa-paper-plane transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1 group-hover:-translate-y-1" aria-hidden="true" />
-                                <RollText>{t.contact.sendMessage}</RollText>
-                            </a>
-
-                            <a
-                                href={cvLink}
-                                download
-                                className="w-full flex items-center justify-center gap-2 px-6 py-4 border border-[var(--foreground)] text-[var(--foreground)] font-bold uppercase tracking-widest hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 ease-out"
-                            >
-                                <i className="fas fa-download" aria-hidden="true" />
-                                <RollText>{t.contact.downloadResume}</RollText>
-                            </a>
-                        </div>
-                    </motion.div>
-                </div>
-
-                <div className="mt-6 pb-[7rem] md:pb-0 text-center text-xs font-mono text-[var(--foreground)] opacity-75">
-                    <p>{t.copyright}</p>
-                </div>
-            </div>
+                    </dl>
+                    <p className="mt-6 md:mt-8 text-caption text-[var(--muted)]">{t.copyright}</p>
+                </Rise>
+            </Parallax>
         </section>
     )
 }

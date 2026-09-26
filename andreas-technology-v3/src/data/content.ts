@@ -9,6 +9,8 @@ export interface Skill {
 export interface Service {
     icon: string
     title: string
+    /** Keynote one-liner shown on the feature grid (one short sentence). */
+    oneLiner: string
     /** One-line summary shown on the card. */
     description: string
     /** Short explanation shown when the card is opened. */
@@ -69,6 +71,46 @@ export interface Project {
     imageFit?: 'cover' | 'contain'
     /** CSS object-position for 'cover' crops, e.g. "50% 62%" to keep the subject in frame. */
     imagePosition?: string
+    /**
+     * Which device frame the screenshot is shown in: a laptop (default), a phone for
+     * mobile-first work, or 'bare' when the image is already a product shot.
+     */
+    device?: 'laptop' | 'phone' | 'bare'
+}
+
+/** Copy written for the Apple Keynote layout: short, sentence-case, fully accented Greek. */
+export interface KeynoteCopy {
+    common: { name: string; close: string; newTab: string }
+    nav: {
+        home: string; about: string; services: string; experience: string; projects: string; contact: string
+        cta: string; openMenu: string; closeMenu: string; switchLanguage: string
+        toLight: string; toDark: string; appearance: string; language: string; light: string; dark: string
+    }
+    intro: { headline: string; enter: string; skip: string }
+    hero: { eyebrow: string; headline: string; sub: string; viewWork: string; contact: string; scroll: string }
+    about: {
+        eyebrow: string; headline: string; bio: string; fullStory: string; dialogTitle: string
+        credentials: string; focus: string; yearsUnit: string
+        /** Captions for 550+, 70%, 7+ and the certification count, in that order. */
+        stats: [string, string, string, string]
+    }
+    services: {
+        eyebrow: string; headline: string; learnMore: string; specsTitle: string; specsNote: string
+        groups: Record<'apple' | 'security' | 'infra' | 'code' | 'ai' | 'collab', string>
+        ctaLead: string; ctaLink: string; highlights: string; toolkit: string
+    }
+    experience: {
+        eyebrow: string; headline: string; now: string; then: string; education: string
+        more: string; verify: string; tasks: string; details: string
+    }
+    projects: {
+        eyebrow: string; headline: string; learnMore: string; visit: string; code: string; report: string
+        publication: string; github: string; lineup: string; role: string; highlights: string
+    }
+    contact: {
+        eyebrow: string; headline: string; sub: string; send: string; resume: string; email: string
+        location: string; time: string; elsewhere: string; copy: string; copied: string; copyFailed: string
+    }
 }
 
 export interface Content {
@@ -179,6 +221,7 @@ export interface Content {
     }
     contactTitle: string
     copyright: string
+    keynote: KeynoteCopy
 }
 
 export const SOCIAL_URLS = {
@@ -301,6 +344,7 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fas fa-shield-halved",
                 title: "Endpoint Security & Compliance",
+                oneLiner: "CIS-hardened, EDR-protected Macs, ready for PCI-DSS and SOC 2 audits.",
                 description: "Hardening fleets against real-world threats: CIS Benchmark implementation, EDR deployment and migration, disk-encryption management, and audit readiness for PCI-DSS and SOC 2.",
                 detail: "Security that holds up in an audit and in production. I implemented CIS Benchmark hardening fleet-wide ahead of PCI-DSS and SOC 2 audits, led the migration to Checkpoint Harmony EDR, and feed endpoint telemetry into Microsoft Sentinel so detection has real context.",
                 highlights: [
@@ -313,6 +357,7 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fab fa-apple",
                 title: "Apple Fleet Engineering",
+                oneLiner: "550+ Macs on Jamf Pro. Zero-touch enrollment, 70% faster onboarding.",
                 description: "Jamf Certified Tech (Jamf 200). Managing macOS at scale with Jamf Pro and Apple Business Manager — zero-touch enrollment, configuration profiles, patch strategy, and fleet hygiene across hundreds of devices.",
                 detail: "I own Jamf Pro end-to-end for a 550+ Mac fleet. A new Mac enrolls itself through Apple Business Manager, pulls its profiles and apps, and is ready on day one — zero-touch enrollment cut onboarding time by 70%.",
                 highlights: [
@@ -325,6 +370,7 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fas fa-gears",
                 title: "IT Automation & Scripting",
+                oneLiner: "Python, Bash and Swift against real APIs — recurring toil, removed.",
                 description: "Turning manual IT work into repeatable systems. Bash, Python and TypeScript against real APIs, plus certificate and provisioning pipelines that remove recurring toil for good.",
                 detail: "If a task happens twice, it becomes a script. I write Bash, Python, Swift and TypeScript against real APIs, from Jamf tooling to a centralised certificate pipeline that renews SSL for Cisco ISE, ESXi, Proxmox and HPE iLO with no manual steps.",
                 highlights: [
@@ -337,6 +383,7 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fas fa-robot",
                 title: "AI-Augmented Operations",
+                oneLiner: "Gemini, Rovo Agents and AI ticket triage that measurably cut work.",
                 description: "Deploying AI that measurably reduces work — org-wide assistant rollouts, agentic automation, and AI-powered ticket triage that cuts time-to-resolution instead of adding another dashboard.",
                 detail: "AI adoption that shows up in the numbers. I rolled out Google Gemini org-wide and Atlassian Rovo Agents, built an AI ticket-triage pipeline for Jira Service Management, and prototype MCP servers so assistants like Claude Code can work with IT systems directly.",
                 highlights: [
@@ -349,6 +396,7 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fas fa-headset",
                 title: "IT Service Management",
+                oneLiner: "ITIL 4 service delivery: 350+ tickets resolved at 95%+ SLA.",
                 description: "ITIL 4 certified service delivery: incident and request workflows, ticketing automation, SLA-driven support, and vendor escalation management for business-critical systems.",
                 detail: "Support people can rely on. ITIL 4 certified, I pair clear incident and request processes with automation and documentation, so the queue stays short and answers are easy to find.",
                 highlights: [
@@ -361,6 +409,7 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fas fa-network-wired",
                 title: "Networks & Infrastructure",
+                oneLiner: "Cisco ISE, Active Directory, ESXi and Proxmox — the layer under it all.",
                 description: "The layer everything else depends on — Cisco ISE, Active Directory, MFA, and virtualization on ESXi and Proxmox, with monitoring that surfaces problems before users report them.",
                 detail: "The foundation under everything else: Cisco ISE network access control, identity across Active Directory and Entra ID, and virtualization on VMware ESXi and Proxmox — with MFA, certificates and monitoring kept in order around them.",
                 highlights: [
@@ -642,6 +691,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 ],
                 liveSiteLink: "https://nexus-party-app.vercel.app/",
                 image: "/images/NexusPartyApp/nexuspartyapp.png",
+                device: "phone",
                 imageFit: "cover"
             },
             {
@@ -659,6 +709,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 ],
                 githubLink: "https://github.com/Andrewfragkiadakis/Mental-Health-Project/tree/main",
                 image: "/images/happyfox/happyfox-app.png",
+                device: "bare",
                 imageFit: "cover"
             },
             {
@@ -730,6 +781,85 @@ export const content: Record<'en' | 'gr', Content> = {
             }
         ],
 
+        keynote: {
+            common: { name: "Andreas Fragkiadakis", close: "Close", newTab: "opens in a new tab" },
+            nav: {
+                home: "Home", about: "About", services: "What I do", experience: "Career", projects: "Projects", contact: "Contact",
+                cta: "Let's talk", openMenu: "Open menu", closeMenu: "Close menu", switchLanguage: "Switch to Greek",
+                toLight: "Switch to light theme", toDark: "Switch to dark theme", appearance: "Appearance", language: "Language", light: "Light", dark: "Dark"
+            },
+            intro: { headline: "Hello.", enter: "Enter", skip: "Skip intro" },
+            hero: {
+                eyebrow: "Apple Fleet & IT Automation",
+                headline: "Apple fleets.\n*Automated.*",
+                sub: "I'm **Andreas Fragkiadakis**. I lead Apple Fleet & IT Automation at Omilia: **550+ Macs** on Jamf Pro, enrolled **zero-touch** and hardened to CIS Benchmarks.",
+                viewWork: "View work",
+                contact: "Contact",
+                scroll: "Scroll to explore"
+            },
+            about: {
+                eyebrow: "About",
+                headline: "Meet Andreas.",
+                bio: "An IT & Computer Engineer (M.Eng.) who owns **Jamf Pro end to end** at Omilia, a global conversational-AI company. The work sits where **security, automation and scale** meet — and every repeated task becomes a system.",
+                fullStory: "Read the full story",
+                dialogTitle: "About Andreas",
+                credentials: "Credentials",
+                focus: "Focus areas",
+                yearsUnit: "yrs",
+                stats: ["Macs managed on Jamf Pro", "faster onboarding, zero-touch", "in IT, infrastructure and security", "certifications, plus a TEE licence"]
+            },
+            services: {
+                eyebrow: "What I do",
+                headline: "Happens twice?\nIt becomes a *script.*",
+                learnMore: "Learn more",
+                specsTitle: "Tech specs",
+                specsNote: "Tools in day-to-day use",
+                groups: { apple: "Apple fleet", security: "Security & identity", infra: "Infrastructure", code: "Code", ai: "AI", collab: "Collaboration & ITSM" },
+                ctaLead: "Have a unique project in mind?",
+                ctaLink: "Let's talk",
+                highlights: "In practice",
+                toolkit: "Toolkit"
+            },
+            experience: {
+                eyebrow: "Career",
+                headline: "Then. *Now.*",
+                now: "Now",
+                then: "Then",
+                education: "Education & credentials",
+                more: "Role details",
+                verify: "Verify",
+                tasks: "What the role involved",
+                details: "Details"
+            },
+            projects: {
+                eyebrow: "Projects",
+                headline: "Selected work.",
+                learnMore: "Learn more",
+                visit: "Visit site",
+                code: "View code",
+                report: "Report",
+                publication: "Publication",
+                github: "All projects on GitHub",
+                lineup: "All projects",
+                role: "Role",
+                highlights: "Highlights"
+            },
+            contact: {
+                eyebrow: "Contact",
+                headline: "Let's build\n*something.*",
+                sub: "Open to **full-time roles**, **freelance projects** and interesting collaborations.",
+                send: "Send a message",
+                resume: "Download résumé",
+                email: "Email",
+                location: "Location",
+                time: "Local time",
+                elsewhere: "Elsewhere",
+                copy: "Copy",
+                copied: "Copied",
+                copyFailed: "Copy failed"
+            }
+        },
+
         contactTitle: "GET IN TOUCH",
         copyright: "© 2026 Created By Andreas Fragkiadakis. All rights reserved."
     },
@@ -765,7 +895,7 @@ export const content: Record<'en' | 'gr', Content> = {
             statsLabels: ["Χρονια Εμπειριας", "Συσκευες υπο Διαχειριση", "Ταχυτερο Onboarding", "Πιστοποιησεις"],
             credentialsLabel: "Πιστοποιησεις",
             description: [
-                "Είμαι Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) και ηγούμαι του τομέα Apple Fleet & IT Automation στην Omilia, μια παγκόσμια εταιρεία conversational AI, σε περιβάλλον άνω των 400 συσκευών. Διαχειρίζομαι εξ ολοκλήρου την πλατφόρμα Jamf Pro και ηγούμαι του endpoint engineering για Checkpoint Harmony EDR, pipelines Microsoft Sentinel SIEM και αυτοματοποίηση πιστοποιητικών SSL.",
+                "Είμαι Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) και ηγούμαι του τομέα Apple Fleet & IT Automation στην Omilia, μια παγκόσμια εταιρεία conversational AI, σε περιβάλλον άνω των 550 συσκευών. Διαχειρίζομαι εξ ολοκλήρου την πλατφόρμα Jamf Pro και ηγούμαι του endpoint engineering για Checkpoint Harmony EDR, pipelines Microsoft Sentinel SIEM και αυτοματοποίηση πιστοποιητικών SSL.",
                 "Η δουλειά μου βρίσκεται στο σημείο όπου συναντώνται η ασφάλεια, ο αυτοματισμός και η κλίμακα: θωράκιση κατά CIS Benchmarks ενόψει ελέγχων PCI-DSS και SOC 2, και zero-touch enrollment για macOS που μείωσε τον χρόνο onboarding κατά 70%.",
                 "Παράλληλα οδηγώ την υιοθέτηση AI σε εταιρικό επίπεδο — Google Gemini, Atlassian Rovo Agents και ένα AI pipeline διαλογής αιτημάτων που μείωσε τον μέσο χρόνο triage σε 350+ tickets ετησίως.",
                 "Jamf Certified Tech (Jamf 200) | Αδειούχος Μηχανικός Πληροφορικής (ΤΕΕ) | Πιστοποίηση ITIL 4 | Με έδρα την Αθήνα | Αγγλικά (C2), Ελληνικά (Μητρική), Γερμανικά (B2)"
@@ -845,7 +975,8 @@ export const content: Record<'en' | 'gr', Content> = {
         services: [
             {
                 icon: "fas fa-shield-halved",
-                title: "Ασφαλεια Τερματικων & Συμμορφωση",
+                title: "Ασφάλεια Τερματικών & Συμμόρφωση",
+                oneLiner: "Mac θωρακισμένα κατά CIS, με EDR, έτοιμα για ελέγχους PCI-DSS και SOC 2.",
                 description: "Θωράκιση στόλου συσκευών απέναντι σε πραγματικές απειλές: εφαρμογή CIS Benchmarks, ανάπτυξη και μετάβαση EDR, διαχείριση κρυπτογράφησης δίσκων και ετοιμότητα για ελέγχους PCI-DSS και SOC 2.",
                 detail: "Ασφάλεια που αντέχει τόσο σε έλεγχο όσο και στην παραγωγή. Εφάρμοσα θωράκιση κατά CIS Benchmarks σε όλο τον στόλο πριν από ελέγχους PCI-DSS και SOC 2, ηγήθηκα της μετάβασης σε Checkpoint Harmony EDR και τροφοδοτώ το Microsoft Sentinel με telemetry τερματικών ώστε η ανίχνευση να έχει πραγματικό πλαίσιο.",
                 highlights: [
@@ -858,6 +989,7 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fab fa-apple",
                 title: "Apple Fleet Engineering",
+                oneLiner: "550+ Mac στο Jamf Pro. Zero-touch enrollment, 70% ταχύτερο onboarding.",
                 description: "Jamf Certified Tech (Jamf 200). Διαχείριση macOS σε κλίμακα με Jamf Pro και Apple Business Manager — zero-touch enrollment, configuration profiles, στρατηγική ενημερώσεων και συντήρηση εκατοντάδων συσκευών.",
                 detail: "Διαχειρίζομαι εξ ολοκλήρου το Jamf Pro για στόλο 550+ Mac. Ένα νέο Mac εγγράφεται αυτόματα μέσω Apple Business Manager, λαμβάνει profiles και εφαρμογές και είναι έτοιμο από την πρώτη μέρα — το zero-touch enrollment μείωσε τον χρόνο onboarding κατά 70%.",
                 highlights: [
@@ -869,7 +1001,8 @@ export const content: Record<'en' | 'gr', Content> = {
             },
             {
                 icon: "fas fa-gears",
-                title: "Αυτοματισμος IT & Scripting",
+                title: "Αυτοματισμός IT & Scripting",
+                oneLiner: "Python, Bash και Swift πάνω σε πραγματικά APIs — τέλος στη χειροκίνητη δουλειά.",
                 description: "Μετατροπή χειροκίνητων εργασιών IT σε επαναλήψιμα συστήματα. Bash, Python και TypeScript πάνω σε πραγματικά APIs, με pipelines πιστοποιητικών και provisioning που εξαλείφουν την επαναλαμβανόμενη εργασία.",
                 detail: "Ό,τι γίνεται δύο φορές, γίνεται script. Γράφω Bash, Python, Swift και TypeScript πάνω σε πραγματικά APIs, από εργαλεία Jamf έως ένα κεντρικό pipeline που ανανεώνει πιστοποιητικά SSL για Cisco ISE, ESXi, Proxmox και HPE iLO χωρίς χειροκίνητα βήματα.",
                 highlights: [
@@ -882,6 +1015,7 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fas fa-robot",
                 title: "AI-Augmented Operations",
+                oneLiner: "Gemini, Rovo Agents και AI ticket triage που μειώνουν μετρήσιμα τη δουλειά.",
                 description: "Ανάπτυξη AI που μειώνει μετρήσιμα τον φόρτο εργασίας — εταιρικά rollouts βοηθών, agentic automation και διαλογή αιτημάτων με AI που μειώνει τον χρόνο επίλυσης.",
                 detail: "Υιοθέτηση AI που φαίνεται στα νούμερα. Ανέπτυξα το Google Gemini σε όλο τον οργανισμό και τους Atlassian Rovo Agents, δημιούργησα pipeline διαλογής αιτημάτων με AI για το Jira Service Management και αναπτύσσω prototypes MCP servers ώστε βοηθοί όπως το Claude Code να δουλεύουν απευθείας με συστήματα IT.",
                 highlights: [
@@ -894,6 +1028,7 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fas fa-headset",
                 title: "IT Service Management",
+                oneLiner: "Υπηρεσίες IT κατά ITIL 4: 350+ tickets με SLA άνω του 95%.",
                 description: "Παροχή υπηρεσιών με πιστοποίηση ITIL 4: ροές incident και request, αυτοματισμός ticketing, υποστήριξη βάσει SLA και διαχείριση κρίσιμων vendor escalations.",
                 detail: "Υποστήριξη στην οποία μπορεί κανείς να βασιστεί. Με πιστοποίηση ITIL 4, συνδυάζω σαφείς διαδικασίες incident και request με αυτοματισμό και τεκμηρίωση, ώστε η ουρά να μένει μικρή και οι απαντήσεις να βρίσκονται εύκολα.",
                 highlights: [
@@ -905,7 +1040,8 @@ export const content: Record<'en' | 'gr', Content> = {
             },
             {
                 icon: "fas fa-network-wired",
-                title: "Δικτυα & Υποδομες",
+                title: "Δίκτυα & Υποδομές",
+                oneLiner: "Cisco ISE, Active Directory, ESXi και Proxmox — η βάση κάτω από όλα.",
                 description: "Το επίπεδο πάνω στο οποίο στηρίζονται όλα — Cisco ISE, Active Directory, MFA και virtualization σε ESXi και Proxmox, με monitoring που εντοπίζει προβλήματα πριν τα αναφέρουν οι χρήστες.",
                 detail: "Η βάση πάνω στην οποία στηρίζονται όλα: έλεγχος πρόσβασης δικτύου με Cisco ISE, ταυτότητα σε Active Directory και Entra ID, και virtualization σε VMware ESXi και Proxmox — με MFA, πιστοποιητικά και monitoring σε τάξη γύρω τους.",
                 highlights: [
@@ -1088,7 +1224,7 @@ export const content: Record<'en' | 'gr', Content> = {
         projectsTitle: "PROJECTS",
         projects: [
             {
-                name: "Plano Plus - Επιγραφες & Οπτικη Ταυτοτητα",
+                name: "Plano Plus - Επιγραφές & Οπτική Ταυτότητα",
                 year: 2026,
                 tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion", "Resend"],
                 description: "Ιστοσελίδα στούντιο επιγραφών και οπτικής επικοινωνίας με Next.js App Router. Χαρακτηριστικά: light/dark theme, parallax effects, smooth scrolling, φόρμα επικοινωνίας με email integration, και σύγχρονο UI/UX. Εξυπηρετεί πελάτες σε όλη την Κρήτη με επαγγελματικές λύσεις επιγραφών και branding.",
@@ -1121,7 +1257,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 imageFit: "cover"
             },
             {
-                name: "Προσωπικη Ιστοσελιδα Portfolio",
+                name: "Προσωπική Ιστοσελίδα Portfolio",
                 year: 2026,
                 tags: ["Next.js", "React", "TypeScript", "Framer Motion", "Canvas"],
                 description: "Σχεδίαση και υλοποίηση modern portfolio με horizontal scroll εμπειρία, διαδραστικό Canvas glitch effect, animations και υποστήριξη Dark/Light mode σε δύο γλώσσες.",
@@ -1185,10 +1321,11 @@ export const content: Record<'en' | 'gr', Content> = {
                 ],
                 liveSiteLink: "https://nexus-party-app.vercel.app/",
                 image: "/images/NexusPartyApp/nexuspartyapp.png",
+                device: "phone",
                 imageFit: "cover"
             },
             {
-                name: "HappyFox 🦊 - Εφαρμογη Ψυχικης Υγειας",
+                name: "HappyFox 🦊 - Εφαρμογή Ψυχικής Υγείας",
                 year: 2023,
                 tags: ["UI/UX Design", "Figma", "Team Project", "SRH Heidelberg"],
                 description: "Σχεδιασμός UI/UX για εφαρμογή ψυχικής υγείας με στόχο την προώθηση της συναισθηματικής ευεξίας. Υλοποιήθηκε στα πλαίσια μεταπτυχιακού μαθήματος.",
@@ -1202,10 +1339,11 @@ export const content: Record<'en' | 'gr', Content> = {
                 ],
                 githubLink: "https://github.com/Andrewfragkiadakis/Mental-Health-Project/tree/main",
                 image: "/images/happyfox/happyfox-app.png",
+                device: "bare",
                 imageFit: "cover"
             },
             {
-                name: "Ιστοσελιδα Κεντρων Ξενων Γλωσσων Schiller",
+                name: "Ιστοσελίδα Κέντρων Ξένων Γλωσσών Schiller",
                 year: 2026,
                 tags: ["Wix", "Wix Studio", "Web Development", "Educational"],
                 description: "Ανάπτυξη ιστοσελίδας για τα εκπαιδευτικά κέντρα Schiller στο Ρέθυμνο. Παρουσίαση προγραμμάτων σπουδών Αγγλικών, Γερμανικών και Εκπαιδευτικής Ρομποτικής.",
@@ -1237,7 +1375,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 imageFit: "cover"
             },
             {
-                name: "Ερευνα: LLMs & Ανθρωπινη Γνωση",
+                name: "Έρευνα: LLMs & Ανθρώπινη Γνώση",
                 year: 2024,
                 tags: ["Research", "Cognitive Science", "LLMs", "GPT-3", "Python"],
                 description: "Συγκριτική μελέτη απόδοσης GPT-3 και ανθρώπων στο 'False Belief Task'. Η έρευνα δημοσιεύθηκε στο περιοδικό Cognitive Science.",
@@ -1272,6 +1410,85 @@ export const content: Record<'en' | 'gr', Content> = {
                 imagePosition: "50% 62%"
             }
         ],
+
+        keynote: {
+            common: { name: "Ανδρέας Φραγκιαδάκης", close: "Κλείσιμο", newTab: "ανοίγει σε νέα καρτέλα" },
+            nav: {
+                home: "Αρχική", about: "Σχετικά", services: "Υπηρεσίες", experience: "Καριέρα", projects: "Projects", contact: "Επικοινωνία",
+                cta: "Ας μιλήσουμε", openMenu: "Άνοιγμα μενού", closeMenu: "Κλείσιμο μενού", switchLanguage: "Switch to English",
+                toLight: "Φωτεινό θέμα", toDark: "Σκοτεινό θέμα", appearance: "Εμφάνιση", language: "Γλώσσα", light: "Φωτεινό", dark: "Σκοτεινό"
+            },
+            intro: { headline: "Γεια σας.", enter: "Είσοδος", skip: "Παράλειψη" },
+            hero: {
+                eyebrow: "Apple Fleet & IT Automation",
+                headline: "Στόλοι Apple.\n*Αυτοματοποιημένοι.*",
+                sub: "Είμαι ο **Ανδρέας Φραγκιαδάκης**. Ηγούμαι του Apple Fleet & IT Automation στην Omilia: **550+ Mac** στο Jamf Pro, με **zero-touch** enrollment και θωράκιση κατά CIS Benchmarks.",
+                viewWork: "Δείτε τη δουλειά μου",
+                contact: "Επικοινωνία",
+                scroll: "Κάντε scroll"
+            },
+            about: {
+                eyebrow: "Σχετικά",
+                headline: "Γνωρίστε τον Ανδρέα.",
+                bio: "Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) με **πλήρη ευθύνη του Jamf Pro** στην Omilia, μια παγκόσμια εταιρεία conversational AI. Η δουλειά μου βρίσκεται εκεί όπου συναντώνται **η ασφάλεια, ο αυτοματισμός και η κλίμακα** — και κάθε επαναλαμβανόμενη εργασία γίνεται σύστημα.",
+                fullStory: "Διαβάστε ολόκληρη την ιστορία",
+                dialogTitle: "Σχετικά με τον Ανδρέα",
+                credentials: "Πιστοποιήσεις",
+                focus: "Τομείς εστίασης",
+                yearsUnit: "έτη",
+                stats: ["Mac υπό διαχείριση στο Jamf Pro", "ταχύτερο onboarding, zero-touch", "στο IT, τις υποδομές και την ασφάλεια", "πιστοποιήσεις, συν άδεια ΤΕΕ"]
+            },
+            services: {
+                eyebrow: "Υπηρεσίες",
+                headline: "Συμβαίνει δύο φορές;\nΓίνεται *script.*",
+                learnMore: "Μάθετε περισσότερα",
+                specsTitle: "Τεχνικά χαρακτηριστικά",
+                specsNote: "Εργαλεία καθημερινής χρήσης",
+                groups: { apple: "Στόλος Apple", security: "Ασφάλεια & ταυτότητα", infra: "Υποδομές", code: "Κώδικας", ai: "AI", collab: "Συνεργασία & ITSM" },
+                ctaLead: "Έχετε ένα συγκεκριμένο project στο μυαλό σας;",
+                ctaLink: "Ας μιλήσουμε",
+                highlights: "Στην πράξη",
+                toolkit: "Εργαλεία"
+            },
+            experience: {
+                eyebrow: "Καριέρα",
+                headline: "Τότε. *Τώρα.*",
+                now: "Τώρα",
+                then: "Τότε",
+                education: "Εκπαίδευση & πιστοποιήσεις",
+                more: "Λεπτομέρειες ρόλου",
+                verify: "Επαλήθευση",
+                tasks: "Τι περιλάμβανε ο ρόλος",
+                details: "Λεπτομέρειες"
+            },
+            projects: {
+                eyebrow: "Projects",
+                headline: "Επιλεγμένα έργα.",
+                learnMore: "Μάθετε περισσότερα",
+                visit: "Επίσκεψη",
+                code: "Κώδικας",
+                report: "Αναφορά",
+                publication: "Δημοσίευση",
+                github: "Όλα τα projects στο GitHub",
+                lineup: "Όλα τα projects",
+                role: "Ρόλος",
+                highlights: "Βασικά σημεία"
+            },
+            contact: {
+                eyebrow: "Επικοινωνία",
+                headline: "Ας φτιάξουμε\nκάτι *μαζί.*",
+                sub: "Διαθέσιμος για **freelance projects** και ενδιαφέρουσες συνεργασίες.",
+                send: "Αποστολή μηνύματος",
+                resume: "Λήψη βιογραφικού",
+                email: "Email",
+                location: "Τοποθεσία",
+                time: "Τοπική ώρα",
+                elsewhere: "Βρείτε με",
+                copy: "Αντιγραφή",
+                copied: "Αντιγράφηκε",
+                copyFailed: "Αποτυχία"
+            }
+        },
 
         contactTitle: "ΕΠΙΚΟΙΝΩΝΙΑ",
         copyright: "© 2026 Created By Ανδρέας Φραγκιαδάκης. All rights reserved."
