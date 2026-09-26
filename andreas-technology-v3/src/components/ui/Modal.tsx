@@ -12,11 +12,16 @@ interface ModalProps {
     /** Element id of the heading that names this dialog. */
     labelledBy: string
     closeLabel?: string
+    /** Text in the window title bar, e.g. "Quick Look". */
+    title?: string
     children: ReactNode
     className?: string
 }
 
 /**
+ * A dialog drawn as a desktop window (Quick Look style): the red traffic light is the
+ * real close button, and small screens also get a text button that is easier to hit.
+ *
  * Accessible dialog: Escape closes it, focus is trapped inside while open, and focus
  * returns to whatever opened it. Rendered through a portal so it escapes the
  * transformed horizontal track, which would otherwise become its containing block.
@@ -26,6 +31,7 @@ export default function Modal({
     onClose,
     labelledBy,
     closeLabel = 'Close',
+    title = '',
     children,
     className = '',
 }: ModalProps) {
@@ -91,29 +97,47 @@ export default function Modal({
                     className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
                     onClick={onClose}
                 >
-                    <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+                    <div className="absolute inset-0 bg-black/45 backdrop-blur-[6px]" />
                     <motion.div
                         ref={panelRef}
                         role="dialog"
                         aria-modal="true"
                         aria-labelledby={labelledBy}
-                        initial={{ opacity: 0, scale: 0.94, y: 16 }}
+                        initial={{ opacity: 0, scale: 0.9, y: 24 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.94, y: 16 }}
-                        transition={{ duration: 0.2 }}
-                        className={`relative z-10 bg-[var(--background)] border border-[var(--accent)] shadow-[0_0_40px_var(--glow)] max-h-[85vh] overflow-y-auto ${className}`}
+                        exit={{ opacity: 0, scale: 0.94, y: 12 }}
+                        transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                        className={`os-window relative z-10 bg-[var(--window-solid)] max-h-[88vh] ${className}`}
                         onClick={e => e.stopPropagation()}
                     >
-                        <button
-                            ref={closeRef}
-                            type="button"
-                            onClick={onClose}
-                            aria-label={closeLabel}
-                            className="absolute top-3 right-3 z-20 w-11 h-11 flex items-center justify-center cursor-pointer bg-[var(--background)]/80 text-[var(--foreground)] hover:text-[var(--accent)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
-                        >
-                            <i className="fas fa-times" aria-hidden="true" />
-                        </button>
-                        {children}
+                        <div className="os-titlebar grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+                            <span className="os-lights">
+                                <button
+                                    ref={closeRef}
+                                    type="button"
+                                    onClick={onClose}
+                                    aria-label={closeLabel}
+                                    className="group relative -m-1.5 p-1.5 rounded-full focus-visible:outline-offset-0"
+                                >
+                                    <span className="os-light os-light--close flex items-center justify-center text-[0.5rem] text-black/60">
+                                        <i className="fas fa-xmark opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100" aria-hidden="true" />
+                                    </span>
+                                </button>
+                                <span className="os-light os-light--min" aria-hidden="true" />
+                                <span className="os-light os-light--max" aria-hidden="true" />
+                            </span>
+                            <span className="os-title text-center">{title}</span>
+                            <button
+                                type="button"
+                                onClick={onClose}
+                                className="md:hidden justify-self-end text-body-sm font-semibold text-[var(--accent)] px-2 py-1.5 -my-1.5 rounded-md caps-gr"
+                            >
+                                {closeLabel}
+                            </button>
+                        </div>
+                        <div className="min-h-0 overflow-y-auto overscroll-contain">
+                            {children}
+                        </div>
                     </motion.div>
                 </motion.div>
             )}

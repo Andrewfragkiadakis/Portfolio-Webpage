@@ -17,7 +17,7 @@ export default function ScrollRail({ progress, ratio, className = '' }: { progre
 
     return (
         <motion.div className={`relative h-px w-full bg-[var(--foreground)]/15 ${className}`} style={{ opacity: hidden }} aria-hidden="true">
-            <motion.div className="absolute inset-y-0 left-0 -top-px h-[3px] bg-[var(--accent)]" style={{ width, x }} />
+            <motion.div className="absolute inset-y-0 left-0 -top-px h-[3px] bg-[var(--accent-brand)]" style={{ width, x }} />
         </motion.div>
     )
 }

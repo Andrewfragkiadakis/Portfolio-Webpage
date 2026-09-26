@@ -1,32 +1,35 @@
 'use client'
 
 import { useTheme } from '@/contexts/ThemeContext'
+import { useContent } from '@/hooks/useContent'
 import { centreOf } from '@/utils/dom'
 import { useEffect, useState } from 'react'
 
-export default function ThemeToggle() {
+/**
+ * Light/dark switch as a menu-bar status item. With `showLabel` it also names the
+ * current theme (used in the mobile app launcher).
+ */
+export default function ThemeToggle({ className = '', showLabel = false }: { className?: string; showLabel?: boolean }) {
     const { theme, setTheme } = useTheme()
+    const t = useContent()
     const [mounted, setMounted] = useState(false)
 
-    // Theme is only knowable after hydration; render nothing until then to avoid a flash.
+    // Theme is only knowable after hydration; render a placeholder until then to avoid a flash.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     useEffect(() => setMounted(true), [])
 
-    if (!mounted) return null
-
-    const isKernel = theme === 'dark'
+    const isDark = mounted && theme === 'dark'
 
     return (
         <button
             type="button"
-            onClick={(e) => setTheme(isKernel ? 'light' : 'dark', centreOf(e.currentTarget))}
-            aria-label={isKernel ? 'Switch to light mode' : 'Switch to dark mode'}
-            className="fixed right-4 md:right-8 z-50 flex items-center gap-3 px-4 py-2 bg-[var(--background)]/80 backdrop-blur border border-[var(--foreground)] rounded-full hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-colors bottom-[7rem] md:bottom-8"
+            onClick={(e) => setTheme(isDark ? 'light' : 'dark', centreOf(e.currentTarget))}
+            aria-label={isDark ? t.os.aria.toLight : t.os.aria.toDark}
+            className={`inline-flex items-center justify-center gap-2 rounded-md transition-colors hover:bg-[var(--control-hover)] ${className}`}
+            suppressHydrationWarning
         >
-            <span className="text-xs font-mono uppercase tracking-widest hidden sm:block">
-                {isKernel ? 'DARK_MODE' : 'LIGHT_MODE'}
-            </span>
-            <div className={`w-3 h-3 rounded-full bg-[var(--accent)]`} />
+            <i className={`fas ${isDark ? 'fa-moon' : 'fa-sun'}`} aria-hidden="true" />
+            {showLabel && <span className="text-body-sm font-semibold">{isDark ? t.os.theme.dark : t.os.theme.light}</span>}
         </button>
     )
 }

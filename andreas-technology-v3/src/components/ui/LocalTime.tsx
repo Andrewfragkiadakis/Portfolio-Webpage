@@ -13,7 +13,7 @@ function format(date: Date): { time: string; offset: string } {
 }
 
 /** Live Athens clock. Renders nothing until mounted so server and client never disagree. */
-export default function LocalTime({ className = '' }: { className?: string }) {
+export default function LocalTime({ className = '', showOffset = true }: { className?: string; showOffset?: boolean }) {
     const [now, setNow] = useState<Date | null>(null)
 
     useEffect(() => {
@@ -36,7 +36,7 @@ export default function LocalTime({ className = '' }: { className?: string }) {
     const { time, offset } = format(now)
     return (
         <time className={className} dateTime={now.toISOString()}>
-            {time} <span className="opacity-60">{offset}</span>
+            {time}{showOffset && <> <span className="text-[var(--muted)]">{offset}</span></>}
         </time>
     )
 }

@@ -1,6 +1,6 @@
 import { useEffect, useRef, Suspense, useCallback } from 'react'
 import dynamic from 'next/dynamic'
-import { motion, useScroll, useTransform, useSpring, useVelocity, useMotionValue, animate, useReducedMotion } from 'motion/react'
+import { motion, useScroll, useTransform, useVelocity, useMotionValue, animate, useReducedMotion } from 'motion/react'
 import HeroOverlay from '@/components/dom/HeroOverlay'
 import About from '@/components/dom/About'
 import Services from '@/components/dom/Services'
@@ -29,34 +29,20 @@ export default function HorizontalLayout() {
 
     const { scrollYProgress } = useScroll({ target: targetRef })
 
-    // Gates for the two scroll-linked transforms. These are motion values rather than
-    // plain booleans on purpose: swapping `style` between a motion value and a literal
-    // leaves the last transform stuck on the element, so a desktop→mobile resize would
-    // strand the vertical stack off-screen. Keeping one stable binding whose output
-    // collapses to zero avoids that entirely.
+    // Gate for the scroll-linked transform. A motion value rather than a plain boolean
+    // on purpose: swapping `style` between a motion value and a literal leaves the last
+    // transform stuck on the element, so a desktop→mobile resize would strand the
+    // vertical stack off-screen. One stable binding whose output collapses to zero
+    // avoids that entirely.
     const trackGate = useMotionValue(0)
-    const scaleGate = useMotionValue(0)
 
     useEffect(() => {
         trackGate.set(isDesktop ? 1 : 0)
-        scaleGate.set(isDesktop && !prefersReducedMotion ? 1 : 0)
-    }, [isDesktop, prefersReducedMotion, trackGate, scaleGate])
+    }, [isDesktop, trackGate])
 
     const x = useTransform(
         [scrollYProgress, trackGate],
         ([progress, gate]: number[]) => `${-progress * gate * TRACK_TRAVEL_VW}vw`
-    )
-
-    // Gentle "breathing" as each section passes centre. Purely decorative.
-    const scale = useTransform(
-        scrollYProgress,
-        [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
-        [1, 0.98, 1, 0.98, 1, 0.98, 1, 0.98, 1, 0.98, 1]
-    )
-    const smoothScale = useSpring(scale, { stiffness: 60, damping: 25, restDelta: 0.001 })
-    const gatedScale = useTransform(
-        [smoothScale, scaleGate],
-        ([value, gate]: number[]) => (gate ? value : 1)
     )
 
     const velocity = useVelocity(scrollYProgress)
@@ -143,35 +129,34 @@ export default function HorizontalLayout() {
     return (
         <div
             ref={targetRef}
-            className="relative bg-[var(--background)] md:h-[var(--track-height)]"
+            className="relative md:h-[var(--track-height)]"
             style={{ '--track-height': `${TRACK_HEIGHT_VH}vh` } as React.CSSProperties}
         >
+            {/*
+              Desktop: the wallpaper stays put while the windows slide past, like swiping
+              between desktop spaces. Mobile: a stack of app cards, clear of the status
+              bar at the top and the dock at the bottom.
+            */}
             <div className="md:sticky md:top-0 md:left-0 md:flex md:h-screen md:w-full md:items-center md:overflow-hidden">
                 <motion.div
-                    style={{ x, scale: gatedScale }}
-                    className="flex flex-col gap-[10vh] md:flex-row md:gap-0 md:h-screen md:items-center md:will-change-transform"
+                    style={{ x }}
+                    className="flex flex-col gap-5 px-3 sm:px-6 pt-[calc(var(--nav-h)+0.75rem)] pb-32 md:p-0 md:flex-row md:gap-0 md:h-screen md:items-center md:will-change-transform"
                 >
                     {/*
                       Panels use overflow-x-clip rather than overflow-hidden: it contains the
-                      sideways entry animations without creating a scroll container, which
-                      would break the sticky positioning the desktop track relies on.
+                      entry animations without creating a scroll container, which would break
+                      the sticky positioning the desktop track relies on.
                     */}
                     {sections.map((section, index) => (
                         <div
                             key={index}
-                            className="relative w-full min-h-screen overflow-x-clip md:h-screen md:w-screen md:min-h-0 md:flex-shrink-0 md:flex md:items-center md:justify-center md:overflow-hidden md:pt-[var(--nav-h)]"
+                            className="relative w-full max-w-2xl mx-auto overflow-x-clip md:max-w-none md:mx-0 md:h-screen md:w-screen md:flex-shrink-0 md:flex md:items-center md:justify-center md:overflow-hidden md:pt-[calc(var(--nav-h)+1rem)] md:pb-[var(--dock-h)] md:px-10 lg:px-14"
                         >
                             {section}
                         </div>
                     ))}
                 </motion.div>
             </div>
-
-            <motion.div
-                className="hidden md:block fixed bottom-0 left-0 h-1 bg-[var(--accent)] z-50 origin-left w-full"
-                style={{ scaleX: scrollYProgress }}
-                aria-hidden="true"
-            />
         </div>
     )
 }

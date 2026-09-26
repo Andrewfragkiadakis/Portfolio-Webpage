@@ -1,101 +1,75 @@
 'use client'
 
 import { useContent } from '@/hooks/useContent'
+import { useActiveSection } from '@/hooks/useActiveSection'
 import { useState, useEffect, useRef } from 'react'
 import { smoothScrollToElement } from '@/utils/smooth-scroll'
-import { SECTION_IDS } from '@/data/sections'
+import { SECTION_APPS } from '@/data/apps'
+import type { SectionId } from '@/data/sections'
+import { AppTile } from '@/components/ui/Window'
 
-/** Hide the bar only after a deliberate downward scroll, not on jitter. */
+/** Hide the dock only after a deliberate downward scroll, not on jitter. */
 const HIDE_AFTER_SCROLL_PX = 50
 
+const DOCK_APPS: SectionId[] = ['hero', 'about', 'projects', 'contact']
+
+/** Phone-style dock: four apps in a frosted tray that tucks away while reading. */
 export default function MobileNav() {
     const t = useContent()
-    const [activeSection, setActiveSection] = useState<string>(SECTION_IDS[0])
+    const active = useActiveSection()
     const [isVisible, setIsVisible] = useState(true)
     const lastScrollY = useRef(0)
 
-    const scrollToSection = (id: string) => {
+    const go = (id: SectionId) => {
         const element = document.getElementById(id)
-        if (element) {
-            smoothScrollToElement(element)
-            setActiveSection(id)
-        }
+        if (element) smoothScrollToElement(element)
     }
 
     useEffect(() => {
         let ticking = false
-
         const update = () => {
-            const currentScrollY = window.scrollY
-
-            if (currentScrollY > lastScrollY.current && currentScrollY > HIDE_AFTER_SCROLL_PX) {
-                setIsVisible(false)
-            } else if (currentScrollY < lastScrollY.current || currentScrollY < HIDE_AFTER_SCROLL_PX) {
-                setIsVisible(true)
-            }
-            lastScrollY.current = currentScrollY
-
-            // Whichever section owns the middle of the viewport is the active one.
-            const midpoint = currentScrollY + window.innerHeight / 2
-            for (const section of SECTION_IDS) {
-                const element = document.getElementById(section)
-                if (!element) continue
-                const top = element.offsetTop
-                if (midpoint >= top && midpoint < top + element.offsetHeight) {
-                    setActiveSection(section)
-                    break
-                }
-            }
+            const y = window.scrollY
+            if (y > lastScrollY.current && y > HIDE_AFTER_SCROLL_PX) setIsVisible(false)
+            else if (y < lastScrollY.current || y < HIDE_AFTER_SCROLL_PX) setIsVisible(true)
+            lastScrollY.current = y
             ticking = false
         }
-
-        const handleScroll = () => {
+        const onScroll = () => {
             if (ticking) return
             ticking = true
             requestAnimationFrame(update)
         }
-
-        window.addEventListener('scroll', handleScroll, { passive: true })
-        return () => window.removeEventListener('scroll', handleScroll)
+        window.addEventListener('scroll', onScroll, { passive: true })
+        return () => window.removeEventListener('scroll', onScroll)
     }, [])
-
-    const navItems = [
-        { id: 'hero', icon: 'fas fa-home', label: t.nav.home },
-        { id: 'about', icon: 'fas fa-user', label: t.nav.about },
-        { id: 'projects', icon: 'fas fa-code', label: t.nav.projects },
-        { id: 'contact', icon: 'fas fa-envelope', label: t.nav.contact },
-    ]
 
     return (
         <div
-            className={`md:hidden fixed left-4 right-4 z-50 transition-all duration-300 ease-out ${isVisible ? 'bottom-5 opacity-100 translate-y-0' : 'bottom-0 opacity-0 translate-y-4 pointer-events-none'}`}
+            className={`md:hidden fixed inset-x-3 z-50 transition-all duration-300 ease-out ${isVisible ? 'bottom-3 opacity-100 translate-y-0' : 'bottom-0 opacity-0 translate-y-4 pointer-events-none'}`}
         >
-            <nav
-                className="mx-auto max-w-md rounded-2xl border border-[var(--foreground)]/20 bg-[var(--background)]/95 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.12)] py-3 px-4 flex items-center justify-around gap-1"
-                aria-label="Mobile navigation"
-            >
-                {navItems.map((item) => {
-                    const isActive = activeSection === item.id
-                    return (
-                        <button
-                            key={item.id}
-                            onClick={() => scrollToSection(item.id)}
-                            aria-current={isActive ? 'true' : undefined}
-                            className={`relative flex flex-1 cursor-pointer flex-col items-center justify-center gap-1.5 min-h-13 min-w-0 py-2 px-2 rounded-xl transition-colors duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] ${isActive
-                                ? 'text-[var(--accent)] bg-[var(--foreground)]/10'
-                                : 'text-[var(--foreground)] opacity-85 hover:opacity-100 hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10'
-                                }`}
-                        >
-                            <i className={`${item.icon} text-lg`} aria-hidden="true" />
-                            <span className="text-micro font-semibold uppercase tracking-widest truncate w-full text-center">
-                                {item.label}
-                            </span>
-                            {isActive && (
-                                <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-0.5 rounded-full bg-[var(--accent)]" aria-hidden="true" />
-                            )}
-                        </button>
-                    )
-                })}
+            <nav className="os-dock bg-[var(--window)] mx-auto max-w-sm rounded-[1.75rem] px-3 py-2.5" aria-label="Mobile navigation">
+                <ul className="grid grid-cols-4 gap-1">
+                    {DOCK_APPS.map((id) => {
+                        const isActive = active === id
+                        return (
+                            <li key={id}>
+                                <button
+                                    type="button"
+                                    onClick={() => go(id)}
+                                    aria-current={isActive ? 'true' : undefined}
+                                    tabIndex={isVisible ? 0 : -1}
+                                    className="w-full flex flex-col items-center gap-0.5 rounded-xl pt-0.5 min-h-11"
+                                >
+                                    <AppTile app={SECTION_APPS[id]} size="md" />
+                                    <span className="text-micro font-semibold truncate max-w-full text-[var(--foreground)]">
+                                        {t.os.menus[id]}
+                                    </span>
+                                    <span className={`w-1 h-1 rounded-full bg-[var(--foreground)] ${isActive ? 'opacity-80' : 'opacity-0'}`} aria-hidden="true" />
+                                </button>
+                            </li>
+                        )
+                    })}
+                </ul>
             </nav>
         </div>
     )

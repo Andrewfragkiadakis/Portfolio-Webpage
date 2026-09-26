@@ -2,230 +2,205 @@
 
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useContent } from '@/hooks/useContent'
-import { useTheme } from '@/contexts/ThemeContext'
-import { centreOf } from '@/utils/dom'
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
-import { EASE_OUT } from '@/utils/motion'
-import ScrambleText from '@/components/ui/ScrambleText'
+import { useActiveSection } from '@/hooks/useActiveSection'
+import { useState, useEffect, useRef } from 'react'
+import { motion } from 'motion/react'
 import { scrollToSection as smoothScrollToSection } from '@/utils/smooth-scroll'
-import { SECTION_IDS, SECTION_STEPS } from '@/data/sections'
+import { SECTION_IDS, sectionIndex, type SectionId } from '@/data/sections'
+import { SECTION_APPS } from '@/data/apps'
+import LocalTime from '@/components/ui/LocalTime'
+import ThemeToggle from '@/components/ui/ThemeToggle'
+import { AppTile } from '@/components/ui/Window'
 
+/**
+ * Desktop: a menu bar — "AF" monogram, the front app's name, one menu per section,
+ * then status items (language, theme, Athens clock).
+ * Mobile: a status bar with the same status items and a launcher that opens an
+ * app grid, like a phone home screen.
+ */
 export default function Navigation() {
     const { language, setLanguage } = useLanguage()
-    const { theme, setTheme } = useTheme()
     const t = useContent()
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-    const [activeIndex, setActiveIndex] = useState(0)
+    const active = useActiveSection()
+    const [launcherOpen, setLauncherOpen] = useState(false)
+    const closeRef = useRef<HTMLButtonElement>(null)
+    const launcherButtonRef = useRef<HTMLButtonElement>(null)
 
-    const scrollToSection = (id: string, index: number) => {
-        smoothScrollToSection(index, id)
-        setMobileMenuOpen(false)
+    const go = (id: SectionId) => {
+        smoothScrollToSection(sectionIndex(id), id)
+        setLauncherOpen(false)
     }
 
-    // Derive the active section from scroll progress along the track.
+    // Like a real menu bar, the bold item names the app that owns the front window:
+    // "Contact — Mail" → "Mail", "About.app" → "About".
+    const windowTitles: Record<SectionId, string> = {
+        hero: t.os.windows.welcome,
+        about: t.os.windows.about,
+        services: t.os.windows.services,
+        experience: t.os.windows.experience,
+        projects: t.os.windows.projects,
+        contact: t.os.windows.contact,
+    }
+    const title = windowTitles[active]
+    const frontApp = title.includes(' — ') ? title.split(' — ').pop() : title.replace(/\.app$/, '')
+
+    const toggleLanguage = () => setLanguage(language === 'en' ? 'gr' : 'en')
+
+    // Escape closes the launcher; focus moves in on open and back out on close.
     useEffect(() => {
-        let ticking = false
-
-        const update = () => {
-            const maxScroll = document.documentElement.scrollHeight - window.innerHeight
-            const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0
-            setActiveIndex(Math.round(progress * SECTION_STEPS))
-            ticking = false
-        }
-
-        const onScroll = () => {
-            if (ticking) return
-            ticking = true
-            requestAnimationFrame(update)
-        }
-
-        window.addEventListener('scroll', onScroll, { passive: true })
-        update()
-        return () => window.removeEventListener('scroll', onScroll)
-    }, [])
-
-    // Close the mobile menu with Escape.
-    useEffect(() => {
-        if (!mobileMenuOpen) return
+        if (!launcherOpen) return
+        closeRef.current?.focus()
+        const launcherButton = launcherButtonRef.current
         const onKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') setMobileMenuOpen(false)
+            if (e.key === 'Escape') setLauncherOpen(false)
         }
         document.addEventListener('keydown', onKeyDown)
-        return () => document.removeEventListener('keydown', onKeyDown)
-    }, [mobileMenuOpen])
+        return () => {
+            document.removeEventListener('keydown', onKeyDown)
+            launcherButton?.focus()
+        }
+    }, [launcherOpen])
 
-    const navLabels: Record<(typeof SECTION_IDS)[number], string> = {
-        hero: t.nav.home,
-        about: t.nav.about,
-        services: t.nav.services,
-        experience: t.nav.experience,
-        projects: t.nav.projects,
-        contact: t.nav.contact,
-    }
-
-    const navItems = SECTION_IDS.map((section, i) => ({ section, i, label: navLabels[section] }))
+    const languageButton = (className: string) => (
+        <button
+            type="button"
+            onClick={toggleLanguage}
+            aria-label={t.os.aria.switchLanguage}
+            className={`inline-flex items-center justify-center rounded-md font-semibold tabular-nums transition-colors hover:bg-[var(--control-hover)] ${className}`}
+        >
+            {language === 'en' ? 'EN' : 'ΕΛ'}
+        </button>
+    )
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-[var(--background)] border-b border-[var(--foreground)]/20 transition-all duration-300" aria-label="Main navigation">
-            <div className="max-w-7xl mx-auto px-4 sm:px-8 py-4 sm:py-4 min-h-14 flex justify-center items-center relative">
-                {/* Section counter: the number rolls as the horizontal track moves. */}
-                <div className="hidden md:flex absolute left-8 top-1/2 -translate-y-1/2 items-center gap-3 font-mono text-caption uppercase tracking-[0.2em] text-[var(--foreground)]" aria-hidden="true">
-                    <span className="relative inline-flex h-[1.2em] overflow-hidden text-[var(--accent)] font-bold">
-                        {/* Invisible sizer: the box always fits two digits at this letter-spacing. */}
-                        <span className="invisible">00</span>
-                        <AnimatePresence mode="popLayout" initial={false}>
-                            <motion.span
-                                key={activeIndex}
-                                className="absolute inset-0"
-                                initial={{ y: '100%' }}
-                                animate={{ y: '0%' }}
-                                exit={{ y: '-100%' }}
-                                transition={{ duration: 0.45, ease: EASE_OUT }}
-                            >
-                                {String(activeIndex + 1).padStart(2, '0')}
-                            </motion.span>
-                        </AnimatePresence>
-                    </span>
-                    <span className="opacity-50">/ {String(SECTION_IDS.length).padStart(2, '0')}</span>
-                    <span className="h-px w-6 bg-[var(--foreground)]/30" />
-                    <span className="opacity-70 hidden xl:inline">{navItems[activeIndex]?.label}</span>
-                </div>
-
-                <div className="hidden md:flex gap-6 lg:gap-8 items-center">
-                    {navItems.map((item) => {
-                        const isActive = activeIndex === item.i
+        <>
+            {/* ── Desktop menu bar ─────────────────────────────────────── */}
+            <nav
+                className="os-menubar hidden md:flex fixed top-0 inset-x-0 z-50 h-[var(--nav-h)] items-center justify-between px-3 text-body-sm text-[var(--foreground)]"
+                aria-label="Main navigation"
+            >
+                <div className="flex items-center gap-0.5 min-w-0">
+                    <button
+                        type="button"
+                        onClick={() => go('hero')}
+                        aria-label={t.nav.home}
+                        className="h-6 px-2 mr-1 rounded-md font-black tracking-tight text-[0.8125rem] hover:bg-[var(--control-hover)]"
+                    >
+                        AF
+                    </button>
+                    <span className="px-2 font-bold whitespace-nowrap" aria-hidden="true">{frontApp}</span>
+                    {SECTION_IDS.map((id) => {
+                        const isActive = active === id
                         return (
                             <button
-                                key={item.section}
-                                onClick={() => scrollToSection(item.section, item.i)}
+                                key={id}
+                                type="button"
+                                onClick={() => go(id)}
                                 aria-current={isActive ? 'true' : undefined}
-                                className={`relative text-sm uppercase tracking-widest cursor-pointer transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] rounded-sm px-0.5 ${isActive
-                                    ? 'text-[var(--accent)] opacity-100'
-                                    : 'text-[var(--foreground)] opacity-90 hover:opacity-100 hover:text-[var(--accent)]'
-                                    }`}
+                                className={`h-6 px-2.5 rounded-md whitespace-nowrap transition-colors ${isActive ? 'bg-[var(--accent-fill)] text-[var(--on-accent)]' : 'hover:bg-[var(--control-hover)]'}`}
                             >
-                                <ScrambleText text={item.label} />
-                                {isActive && (
-                                    <motion.span
-                                        layoutId="nav-active-underline"
-                                        className="absolute -bottom-1.5 left-0 right-0 h-0.5 bg-[var(--accent)]"
-                                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                                        aria-hidden="true"
-                                    />
-                                )}
+                                {t.os.menus[id]}
                             </button>
                         )
                     })}
-                    <button
-                        onClick={() => setLanguage(language === 'en' ? 'gr' : 'en')}
-                        aria-label={language === 'en' ? 'Switch to Greek' : 'Switch to English'}
-                        className="ml-4 px-3 py-1 bg-[var(--foreground)]/10 hover:bg-[var(--foreground)]/20 text-[var(--foreground)] rounded transition-all duration-300 ease-out text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
-                    >
-                        {language === 'en' ? 'GR' : 'EN'}
-                    </button>
                 </div>
 
-                <button
-                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                    className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 text-[var(--foreground)] p-3 min-w-11 min-h-11 flex items-center justify-center rounded-lg hover:bg-[var(--foreground)]/10 active:bg-[var(--foreground)]/15 transition-colors duration-300 ease-out"
-                    aria-label="Toggle menu"
-                    aria-expanded={mobileMenuOpen}
-                >
-                    <motion.span
-                        className="relative w-7 h-5 flex flex-col justify-center"
-                        initial={false}
-                        animate={mobileMenuOpen ? 'open' : 'closed'}
-                    >
-                        <motion.span
-                            className="absolute left-0 right-0 h-0.5 bg-current rounded-full origin-center"
-                            style={{ y: -6 }}
-                            variants={{ closed: { rotate: 0, y: -6 }, open: { rotate: 45, y: 0 } }}
-                            transition={{ duration: 0.2, ease: 'easeInOut' }}
-                        />
-                        <motion.span
-                            className="absolute left-0 right-0 h-0.5 bg-current rounded-full"
-                            variants={{ closed: { opacity: 1, scaleX: 1 }, open: { opacity: 0, scaleX: 0 } }}
-                            transition={{ duration: 0.15 }}
-                        />
-                        <motion.span
-                            className="absolute left-0 right-0 h-0.5 bg-current rounded-full origin-center"
-                            style={{ y: 6 }}
-                            variants={{ closed: { rotate: 0, y: 6 }, open: { rotate: -45, y: 0 } }}
-                            transition={{ duration: 0.2, ease: 'easeInOut' }}
-                        />
-                    </motion.span>
+                <div className="flex items-center gap-1 shrink-0">
+                    {languageButton('h-6 px-2 text-xs')}
+                    <ThemeToggle className="h-6 w-7 text-xs" />
+                    <span className="h-6 px-2 inline-flex items-center gap-2 font-medium tabular-nums whitespace-nowrap">
+                        <span className="text-[var(--muted)]">{t.location.split(',')[0]}</span>
+                        <LocalTime showOffset={false} />
+                    </span>
+                </div>
+            </nav>
+
+            {/* ── Mobile status bar ────────────────────────────────────── */}
+            <div className="md:hidden fixed top-0 inset-x-0 z-50 os-menubar h-[var(--nav-h)] flex items-center justify-between pl-4 pr-2 text-[var(--foreground)]">
+                <button type="button" onClick={() => go('hero')} aria-label={t.nav.home} className="flex items-center gap-2.5 min-h-11 pr-2">
+                    <span className="app-tile w-7 h-7 text-[0.6875rem] font-black" style={{ background: SECTION_APPS.hero.tile }} aria-hidden="true">AF</span>
+                    <LocalTime showOffset={false} className="text-sm font-semibold tabular-nums" />
                 </button>
+                <div className="flex items-center gap-1">
+                    {languageButton('min-w-11 h-11 text-sm')}
+                    <ThemeToggle className="w-11 h-11 text-base" />
+                    <button
+                        ref={launcherButtonRef}
+                        type="button"
+                        onClick={() => setLauncherOpen((open) => !open)}
+                        aria-label={t.os.aria.menu}
+                        aria-expanded={launcherOpen}
+                        className="w-11 h-11 inline-flex items-center justify-center rounded-md text-lg hover:bg-[var(--control-hover)]"
+                    >
+                        <i className="fas fa-grip" aria-hidden="true" />
+                    </button>
+                </div>
             </div>
 
+            {/* ── Mobile launcher: the sections as a home-screen app grid ── */}
             <div
-                className={`md:hidden fixed inset-0 z-[100] flex flex-col bg-[var(--background)] transition-all duration-300 ease-in-out ${mobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}
-                aria-hidden={!mobileMenuOpen}
+                className={`md:hidden fixed inset-0 z-[100] flex flex-col transition-[opacity,visibility] duration-300 ${launcherOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}
+                aria-hidden={!launcherOpen}
+                role="dialog"
+                aria-modal="true"
+                aria-label={t.os.aria.menu}
             >
-                <div className="flex justify-between items-center px-6 pt-8 pb-4 border-b border-[var(--foreground)]/10">
+                <div className="absolute inset-0 os-glass" onClick={() => setLauncherOpen(false)} />
+                <div className="relative flex items-center justify-between px-4 h-[var(--nav-h)]">
+                    <span className="text-sm font-semibold">{t.os.displayName}</span>
                     <button
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="px-5 py-3 border border-[var(--foreground)] text-[var(--foreground)] font-mono text-sm uppercase tracking-widest hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 ease-out"
-                        aria-label="Close menu"
+                        ref={closeRef}
+                        type="button"
+                        onClick={() => setLauncherOpen(false)}
+                        className="os-btn os-btn--secondary min-h-11 caps-gr"
                     >
-                        {t.nav.close}
+                        {t.projectsSection.close}
                     </button>
-                    <div className="flex items-center gap-3">
-                        <button
-                            onClick={(e) => setTheme(theme === 'dark' ? 'light' : 'dark', centreOf(e.currentTarget))}
-                            className="flex items-center gap-2 px-4 py-2 border border-[var(--foreground)] rounded-full hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-colors duration-300 ease-out"
-                            aria-label="Toggle theme"
-                        >
-                            <span className="text-xs font-mono uppercase tracking-widest" suppressHydrationWarning>
-                                {theme === 'dark' ? 'DARK_MODE' : 'LIGHT_MODE'}
-                            </span>
-                            <div className="w-2.5 h-2.5 rounded-full bg-[var(--accent)]" />
-                        </button>
-                        <button
-                            onClick={() => setLanguage(language === 'en' ? 'gr' : 'en')}
-                            className="px-4 py-2 text-[var(--foreground)] font-mono text-xs uppercase tracking-widest border border-[var(--foreground)]/30 hover:border-[var(--foreground)] hover:bg-[var(--foreground)]/5 transition-all duration-300 ease-out"
-                        >
-                            {language === 'en' ? 'GR' : 'EN'}
-                        </button>
-                    </div>
                 </div>
 
-                <nav className="flex-1 flex flex-col justify-start pt-6 pb-8 overflow-y-auto px-6" aria-label="Mobile menu">
-                    <motion.div
-                        className="flex flex-col gap-0"
-                        initial="closed"
-                        animate={mobileMenuOpen ? 'open' : 'closed'}
-                        variants={{
-                            open: { transition: { staggerChildren: 0.04, delayChildren: 0.06 } },
-                            closed: { transition: { staggerChildren: 0.02, staggerDirection: -1 } },
-                        }}
+                <nav className="relative flex-1 px-6 pt-8" aria-label="Mobile menu">
+                    <motion.ul
+                        className="grid grid-cols-3 gap-x-4 gap-y-7"
+                        initial={false}
+                        animate={launcherOpen ? 'open' : 'closed'}
+                        variants={{ open: { transition: { staggerChildren: 0.03 } }, closed: {} }}
                     >
-                        {navItems.map((item, idx) => (
-                            <motion.div
-                                key={item.section}
-                                className="flex items-center gap-4 py-3 px-4 border-b border-[var(--foreground)]/15"
-                                variants={{ open: { opacity: 1, x: 0 }, closed: { opacity: 0, x: -12 } }}
-                                transition={{ duration: 0.2, ease: 'easeOut' }}
+                        {SECTION_IDS.map((id) => (
+                            <motion.li
+                                key={id}
+                                variants={{ open: { opacity: 1, scale: 1 }, closed: { opacity: 0, scale: 0.85 } }}
+                                transition={{ duration: 0.25 }}
                             >
-                                <span className="text-micro font-mono text-[var(--foreground)] opacity-75 uppercase tracking-[0.2em]">
-                                    {(idx + 1).toString().padStart(2, '0')}
-                                </span>
                                 <button
-                                    onClick={() => scrollToSection(item.section, item.i)}
-                                    className="flex-1 text-left py-2 px-2 min-h-12 flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-300 ease-out text-xl sm:text-2xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
+                                    type="button"
+                                    onClick={() => go(id)}
+                                    aria-current={active === id ? 'true' : undefined}
+                                    tabIndex={launcherOpen ? 0 : -1}
+                                    className="w-full flex flex-col items-center gap-2 rounded-2xl py-1"
                                 >
-                                    {item.label}
+                                    <AppTile app={SECTION_APPS[id]} size="xl" />
+                                    <span className={`text-xs font-semibold text-center leading-tight ${active === id ? 'text-[var(--accent)]' : ''}`}>{t.os.menus[id]}</span>
                                 </button>
-                            </motion.div>
+                            </motion.li>
                         ))}
-                    </motion.div>
+                    </motion.ul>
                 </nav>
 
-                <div className="px-6 py-6 border-t border-[var(--foreground)]/10 flex justify-between items-center text-[var(--foreground)] opacity-80 text-sm font-mono uppercase tracking-widest">
-                    <span>{t.nav.languageLabel}</span>
-                    <span>{t.location}</span>
+                <div className="relative mx-4 mb-8 os-card flex items-center justify-between gap-3 p-2">
+                    <ThemeToggle showLabel className="h-11 px-3" />
+                    <button
+                        type="button"
+                        onClick={toggleLanguage}
+                        tabIndex={launcherOpen ? 0 : -1}
+                        aria-label={t.os.aria.switchLanguage}
+                        className="h-11 px-3 inline-flex items-center gap-2 rounded-md text-body-sm font-semibold hover:bg-[var(--control-hover)]"
+                    >
+                        <i className="fas fa-globe" aria-hidden="true" />
+                        {t.nav.languageLabel}
+                    </button>
+                    <span className="px-3 text-body-sm text-[var(--muted)]">{t.location}</span>
                 </div>
             </div>
-        </nav>
+        </>
     )
 }

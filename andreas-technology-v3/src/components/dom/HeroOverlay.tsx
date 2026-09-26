@@ -1,241 +1,233 @@
 'use client'
 
 import { useContent } from '@/hooks/useContent'
-import { useState, useRef, useCallback } from 'react'
-import dynamic from 'next/dynamic'
-import { motion, useSpring, useMotionTemplate } from 'motion/react'
+import { motion, useReducedMotion } from 'motion/react'
 import Typewriter from 'typewriter-effect'
-import { scrollToSection as smoothScrollToSection } from '@/utils/smooth-scroll'
-import { EASE_OUT, LETTER_STAGGER } from '@/utils/motion'
+import { scrollToSection } from '@/utils/smooth-scroll'
+import { gmailComposeUrl } from '@/utils/links'
+import { EASE_OUT } from '@/utils/motion'
 import { useSiteEntered } from '@/hooks/useSiteEntered'
 import LocalTime from '@/components/ui/LocalTime'
-import RollText from '@/components/ui/RollText'
+import Window, { AppTile } from '@/components/ui/Window'
+import CredentialChips from '@/components/ui/CredentialChips'
 import { sectionIndex, type SectionId } from '@/data/sections'
+import { SECTION_APPS, LINK_APPS, type AppTile as AppTileData } from '@/data/apps'
+import { RESUME_URL } from '@/data/content'
 
-const LetterGlitch = dynamic(() => import('@/components/ui/LetterGlitch'), { ssr: false })
-
-/**
- * Hero blob cursor (trail) – edit this object to tune the effect.
- * Uses mask gradients + Framer Motion springs (no inner dot/shadow in this build).
- *
- * Trail Count: number of trailing blobs (fixed 2 in code; lead + 1 trail).
- * Lead Blob Size (px): radius of the blob that follows the cursor immediately.
- * Trail Blob Size (px): radius of the single trailing blob.
- * Lead/Trail Gradient Stops (%): 0–100, where the gradient goes from solid to transparent (higher = harder edge).
- * Fast Duration / Slow Duration: approximate “snap” vs “trail” feel; mapped to spring stiffness/damping.
- * Lead Stiffness/Damping: spring for lead blob (higher stiffness = faster).
- * Trail Stiffness/Damping: spring for the trailing blob – lower = slower, more wobble.
- * Z-Index: stacking order of the blob overlay.
- *
- * Not used here (mask-only): Inner Color, Lead Inner Dot Size, Shadow Color/Blur/Offset.
- */
-const BLOB_CURSOR = {
-    trailCount: 2,
-    leadBlobSize: 92,
-    trailBlobSize: 78,
-    leadBlobOpacity: 1,
-    trailBlobOpacity: 0.6,
-    leadGradientStop: 48,
-    trailGradientStop: 40,
-    fastDuration: 0.42,
-    slowDuration: 0.51,
-    leadStiffness: 220,
-    leadDamping: 24,
-    trailStiffness: 105,
-    trailDamping: 20,
-    zIndex: 100,
-}
-
-const FIRST_NAME_SIZE = 'text-[clamp(2.5rem,12vw,11rem)]'
-const LAST_NAME_SIZE = 'text-[clamp(2rem,10vw,9rem)]'
-const OUTLINE = { WebkitTextStroke: '2px var(--foreground)' } as const
-
-/**
- * One outlined word whose letters rise out of a mask. The vertical padding/negative
- * margin pair gives the tight 0.8 line-height room so glyph tops are never clipped.
- */
-function RevealWord({ text, className, delay, play }: { text: string; className: string; delay: number; play: boolean }) {
+/** A file-style icon on the desktop: tile plus a label pill that reads on any wallpaper. */
+function DesktopIcon({ app, label, href, ariaLabel, download = false }: { app: AppTileData; label: string; href: string; ariaLabel: string; download?: boolean }) {
+    const external = !download
     return (
-        <span aria-hidden="true" className={`${className} leading-[0.8] font-black tracking-tighter text-transparent select-none flex overflow-hidden py-[0.08em] -my-[0.08em] px-[0.04em] -mx-[0.04em]`} style={OUTLINE}>
-            {Array.from(text).map((char, i) => (
-                <motion.span
-                    key={i}
-                    className="inline-block will-change-transform"
-                    initial={{ y: '115%' }}
-                    animate={{ y: play ? '0%' : '115%' }}
-                    transition={{ duration: 1, ease: EASE_OUT, delay: delay + i * LETTER_STAGGER }}
-                >
-                    {char}
-                </motion.span>
-            ))}
-        </span>
+        <a
+            href={href}
+            {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : { download: true })}
+            aria-label={ariaLabel}
+            className="group flex flex-col items-center gap-1.5 w-full md:w-[6.5rem] p-1.5 rounded-xl transition-colors hover:bg-[var(--control)] focus-visible:bg-[var(--control)]"
+        >
+            <AppTile app={app} size="xl" className="transition-transform duration-200 motion-safe:group-hover:-translate-y-0.5" />
+            <span className="os-icon-label text-center [overflow-wrap:anywhere]">{label}</span>
+        </a>
     )
 }
 
-const SOCIAL_BTN = "w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-colors duration-300"
-const CTA_BTN = "group relative px-6 py-3 bg-transparent overflow-hidden w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]"
-
 export default function HeroOverlay() {
     const t = useContent()
-    const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(t.email)}&su=${encodeURIComponent('Project Collaboration // Andreas Technology')}`
-    const nameRef = useRef<HTMLDivElement>(null)
-    const [isHovering, setIsHovering] = useState(false)
     const entered = useSiteEntered()
+    const reduceMotion = useReducedMotion()
 
-    /** Fade-and-rise for supporting elements, held until the intro has cleared. */
-    const rise = (delay: number) => ({
-        initial: { opacity: 0, y: 24 },
-        animate: entered ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 },
-        transition: { duration: 0.9, ease: EASE_OUT, delay },
-    })
+    const [first, ...rest] = t.os.displayName.split(' ')
+    const credentials = t.education.filter((e) => e.badge && e.kind && e.kind !== 'degree')
+    const credly = t.education.find((e) => e.featured && e.link)?.link ?? t.linkedin
+    const certCount = t.education.filter((e) => e.kind === 'certification').length
 
-    const scrollToSection = (id: SectionId) => {
-        smoothScrollToSection(sectionIndex(id), id)
-    }
+    const go = (id: SectionId) => scrollToSection(sectionIndex(id), id)
 
-    const blobX1 = useSpring(0, { stiffness: BLOB_CURSOR.leadStiffness, damping: BLOB_CURSOR.leadDamping })
-    const blobY1 = useSpring(0, { stiffness: BLOB_CURSOR.leadStiffness, damping: BLOB_CURSOR.leadDamping })
-    const blobX2 = useSpring(0, { stiffness: BLOB_CURSOR.trailStiffness, damping: BLOB_CURSOR.trailDamping })
-    const blobY2 = useSpring(0, { stiffness: BLOB_CURSOR.trailStiffness, damping: BLOB_CURSOR.trailDamping })
+    /** Stickers and the widget drop in after the windows. */
+    const pop = (delay: number, rotate: number) =>
+        reduceMotion
+            ? { initial: false as const, style: { rotate } }
+            : {
+                initial: { opacity: 0, scale: 0.6, rotate: rotate - 12 },
+                animate: entered ? { opacity: 1, scale: 1, rotate } : { opacity: 0, scale: 0.6, rotate: rotate - 12 },
+                transition: { type: 'spring' as const, stiffness: 260, damping: 18, delay },
+            }
 
-    const handleMouseMove = useCallback((e: React.MouseEvent) => {
-        if (!nameRef.current) return
-        const rect = nameRef.current.getBoundingClientRect()
-        const x = e.clientX - rect.left
-        const y = e.clientY - rect.top
-        blobX1.set(x); blobY1.set(y)
-        blobX2.set(x); blobY2.set(y)
-    }, [blobX1, blobY1, blobX2, blobY2])
-
-    const r1 = BLOB_CURSOR.leadBlobSize
-    const r2 = BLOB_CURSOR.trailBlobSize
-    const g1 = BLOB_CURSOR.leadGradientStop
-    const g2 = BLOB_CURSOR.trailGradientStop
-    const blobMask = useMotionTemplate`radial-gradient(circle ${r1}px at ${blobX1}px ${blobY1}px, black ${g1}%, transparent 100%), radial-gradient(circle ${r2}px at ${blobX2}px ${blobY2}px, black ${g2}%, transparent 100%)`
+    const desktopIcons = (
+        <>
+            <DesktopIcon app={LINK_APPS.resume} label={t.os.desktop.resume} href={RESUME_URL} ariaLabel={t.os.aria.resume} download />
+            <DesktopIcon app={LINK_APPS.credential} label={t.os.desktop.credential} href={credly} ariaLabel={`${t.os.aria.credential} (${t.os.aria.newTab})`} />
+            <DesktopIcon app={LINK_APPS.github} label={t.os.desktop.github} href={t.github} ariaLabel={`GitHub profile (${t.os.aria.newTab})`} />
+            <DesktopIcon app={LINK_APPS.linkedin} label={t.os.desktop.linkedin} href={t.linkedin} ariaLabel={`LinkedIn profile (${t.os.aria.newTab})`} />
+        </>
+    )
 
     return (
-        <div
-            onMouseMove={handleMouseMove}
-            onMouseEnter={() => setIsHovering(true)}
-            onMouseLeave={() => setIsHovering(false)}
-            className="absolute top-0 left-0 w-full h-screen flex flex-col justify-center items-center overflow-hidden z-10"
-        >
-            <div className="relative z-10 flex flex-col items-center justify-center w-full">
-                <div ref={nameRef} className="relative">
-                    <div id="hero" className="flex flex-col items-center">
-                        <h1 className="flex flex-col items-center">
-                            <span className="sr-only">{`${t.hero.firstName} ${t.hero.lastName}`}</span>
-                            <RevealWord text={t.hero.firstName} className={FIRST_NAME_SIZE} delay={0.15} play={entered} />
-                            <RevealWord text={t.hero.lastName} className={`${LAST_NAME_SIZE} mt-2`} delay={0.3} play={entered} />
-                        </h1>
+        <div className="relative w-full md:h-full md:max-w-[88rem] flex flex-col gap-4 md:grid md:grid-cols-[minmax(0,1.12fr)_minmax(0,0.88fr)_auto] md:items-center md:gap-8 lg:gap-10">
+            {/* ── Welcome window ─────────────────────────────────────── */}
+            <Window
+                as="section"
+                id="hero"
+                labelledBy="hero-title"
+                title={t.os.windows.welcome}
+                app={SECTION_APPS.hero}
+                play={entered}
+                className="w-full md:max-w-[44rem] md:justify-self-end"
+                footer={
+                    <div className="flex items-center justify-between gap-3 px-4 min-h-8 py-1.5 text-caption text-[var(--muted)]">
+                        <span className="inline-flex items-center gap-1.5 min-w-0">
+                            <i className="fas fa-location-dot" aria-hidden="true" />
+                            <span className="truncate">{t.location}</span>
+                            <span aria-hidden="true">·</span>
+                            <LocalTime className="tabular-nums" />
+                        </span>
+                        <span className="hidden md:inline-flex items-center gap-2 font-semibold uppercase tracking-[0.08em]">
+                            {t.hero.scroll}
+                            <i className="fas fa-arrow-right" aria-hidden="true" />
+                        </span>
                     </div>
-                    <motion.div
-                        className="absolute top-0 left-0 w-full h-full hidden md:block pointer-events-none"
-                        aria-hidden="true"
-                        style={{
-                            maskImage: blobMask,
-                            WebkitMaskImage: blobMask,
-                            opacity: isHovering && entered ? 1 : 0,
-                            transition: 'opacity 0.3s ease',
-                            isolation: 'isolate',
-                            zIndex: BLOB_CURSOR.zIndex,
-                        }}
-                    >
-                        <div className="absolute inset-0 z-0">
-                            <LetterGlitch
-                                backgroundColor="transparent"
-                                glitchColors={['#6366f1', '#818cf8', '#a5b4fc']}
-                                glitchSpeed={80}
-                                centerVignette={false}
-                                outerVignette={false}
-                                smooth
-                            />
-                        </div>
-                        <div className="absolute inset-0 z-10 flex flex-col items-center text-knockout">
-                            <span className={`${FIRST_NAME_SIZE} leading-[0.8] font-black tracking-tighter select-none`}>
-                                {t.hero.firstName}
+                }
+            >
+                <div className="p-5 sm:p-8 lg:p-10">
+                    <div className="flex flex-wrap items-center gap-3 mb-5 md:mb-7">
+                        <span className="app-tile w-12 h-12 md:w-14 md:h-14 text-lg md:text-xl font-black tracking-tight" style={{ background: SECTION_APPS.hero.tile }} aria-hidden="true">
+                            AF
+                        </span>
+                        <span className="os-chip">
+                            <span className="relative flex w-2 h-2" aria-hidden="true">
+                                <span className="absolute inset-0 rounded-full bg-[var(--success)] motion-safe:animate-ping opacity-60" />
+                                <span className="relative w-2 h-2 rounded-full bg-[var(--success)]" />
                             </span>
-                            <span className={`${LAST_NAME_SIZE} leading-[0.8] font-black tracking-tighter select-none mt-2`}>
-                                {t.hero.lastName}
+                            <span className="caps-gr">{t.contact.opportunitiesTitle}</span>
+                        </span>
+                    </div>
+
+                    <p className="text-base md:text-lg font-medium text-[var(--muted)]">{t.os.greeting}</p>
+                    <h1 id="hero-title" className="mt-1 text-[clamp(2.4rem,11vw,3rem)] md:text-[clamp(3rem,4.6vw,4.5rem)] font-bold tracking-[-0.035em] leading-[1.02] text-[var(--foreground)]">
+                        <span className="block">{first}</span>
+                        <span className="block">{rest.join(' ')}</span>
+                    </h1>
+                    <p className="mt-4 text-lg md:text-xl font-semibold tracking-tight">{t.title}</p>
+                    <p className="mt-1 text-sm md:text-base text-[var(--muted)] max-w-[34rem]">{t.about.tagline}</p>
+
+                    <CredentialChips items={credentials} newTabLabel={t.os.aria.newTab} className="mt-5" />
+
+                    <div className="mt-6 md:mt-8 flex flex-wrap items-center gap-2.5">
+                        <button type="button" onClick={() => go('projects')} className="os-btn os-btn--primary h-10 px-5">
+                            <span className="caps-gr">{t.hero.viewWork}</span>
+                            <i className="fas fa-arrow-right text-xs" aria-hidden="true" />
+                        </button>
+                        <button type="button" onClick={() => go('contact')} className="os-btn os-btn--secondary h-10 px-5">
+                            <span className="caps-gr">{t.hero.getInTouch}</span>
+                        </button>
+                        <span className="flex items-center gap-1.5 sm:ml-auto">
+                            <a href={t.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" className="os-icon-btn w-10 h-10">
+                                <i className="fab fa-linkedin-in" aria-hidden="true" />
+                            </a>
+                            <a href={t.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub profile" className="os-icon-btn w-10 h-10">
+                                <i className="fab fa-github" aria-hidden="true" />
+                            </a>
+                            <a href={gmailComposeUrl(t.email)} target="_blank" rel="noopener noreferrer" aria-label="Contact via email" className="os-icon-btn w-10 h-10">
+                                <i className="fas fa-envelope" aria-hidden="true" />
+                            </a>
+                        </span>
+                    </div>
+                </div>
+            </Window>
+
+            {/* Mobile: desktop icons as a home-screen row. */}
+            <div className="md:hidden grid grid-cols-4 gap-1 px-1">{desktopIcons}</div>
+
+            {/* ── Terminal, "Now" widget and stickers ────────────────── */}
+            <div className="relative flex flex-col gap-4 md:gap-5 md:self-center">
+                <Window
+                    title={t.os.windows.terminal}
+                    variant="terminal"
+                    play={entered}
+                    delay={0.15}
+                    className="w-full md:max-w-[32rem] md:rotate-[1.2deg]"
+                >
+                    <div className="px-4 py-3.5 md:px-5 md:py-4 font-mono text-[0.75rem] md:text-[0.8125rem] leading-[1.7]">
+                        <p>
+                            <span className="text-[#7EE787]">andreas@af</span> <span className="text-[#79C0FF]">~</span> % whoami
+                        </p>
+                        <div className="text-[#FFD37A] min-h-[1.7em]" role="status" aria-live="polite">
+                            <span className="sr-only">{t.hero.typewriter.join(' | ')}</span>
+                            <span aria-hidden="true">
+                                {entered && (
+                                    <Typewriter
+                                        options={{ strings: t.hero.typewriter, autoStart: true, loop: true, delay: 45, deleteSpeed: 25, cursor: '▍' }}
+                                    />
+                                )}
                             </span>
                         </div>
-                    </motion.div>
+                        <p className="mt-1.5">
+                            <span className="text-[#7EE787]">andreas@af</span> <span className="text-[#79C0FF]">~</span> % fleet --summary
+                        </p>
+                        <dl className="grid grid-cols-[7.5rem_1fr] text-[#C9C9D1]">
+                            <dt className="text-[#8B8B96]">endpoints</dt><dd>550+ macOS</dd>
+                            <dt className="text-[#8B8B96]">enrollment</dt><dd>zero-touch · ABM</dd>
+                            <dt className="text-[#8B8B96]">onboarding</dt><dd><span className="text-[#7EE787]">−70%</span> time</dd>
+                        </dl>
+                        <p className="mt-1.5">
+                            <span className="text-[#7EE787]">andreas@af</span> <span className="text-[#79C0FF]">~</span> % cat credentials.txt
+                        </p>
+                        <p className="text-[#C9C9D1]">{credentials.map((c) => c.badge).join(' · ')}</p>
+                        <p className="mt-1.5">
+                            <span className="text-[#7EE787]">andreas@af</span> <span className="text-[#79C0FF]">~</span> %{' '}
+                            <span className="inline-block w-[0.55em] h-[1.1em] align-[-0.2em] bg-[#E6E6EA] motion-safe:animate-pulse" aria-hidden="true" />
+                        </p>
+                    </div>
+                </Window>
+
+                {/* "Now" widget: current focus plus three numbers. */}
+                <motion.div
+                    initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+                    animate={entered ? { opacity: 1, y: 0 } : undefined}
+                    transition={{ duration: 0.7, ease: EASE_OUT, delay: 0.3 }}
+                    className="os-glass os-window w-full md:max-w-[26rem] md:ml-6 md:-rotate-[1.5deg] rounded-[1.25rem] p-4 md:p-5"
+                >
+                    <div className="flex items-center gap-2 text-caption font-semibold uppercase tracking-[0.08em] text-[var(--muted)]">
+                        <AppTile app={SECTION_APPS.about} size="xs" />
+                        {t.os.windows.widget}
+                    </div>
+                    <p className="mt-2.5 text-caption font-semibold text-[var(--accent)] caps-gr">{t.about.currentFocus}</p>
+                    <p className="text-base md:text-lg font-bold tracking-tight leading-snug">{t.about.currentFocusDetail}</p>
+                    <dl className="mt-3 grid grid-cols-3 gap-2">
+                        {[
+                            { value: '550+', label: t.about.statsLabels[1] },
+                            { value: '70%', label: t.about.statsLabels[2] },
+                            { value: String(certCount), label: t.about.statsLabels[3] },
+                        ].map((stat) => (
+                            <div key={stat.label} className="flex flex-col-reverse justify-end rounded-xl bg-[var(--control)] px-2.5 py-2">
+                                <dt className="mt-1 text-micro font-medium leading-tight text-[var(--muted)] caps-gr">{stat.label}</dt>
+                                <dd className="text-lg font-bold tabular-nums leading-none">{stat.value}</dd>
+                            </div>
+                        ))}
+                    </dl>
+                </motion.div>
+
+                {/* Stickers slapped on the desktop. */}
+                <div className="flex flex-wrap justify-center gap-3 md:block" aria-hidden="true">
+                    <motion.span {...pop(0.55, -7)} className="os-sticker os-sticker--accent md:absolute md:-top-5 md:right-2 z-10">
+                        <i className="fas fa-circle-check" /> JAMF 200
+                    </motion.span>
+                    <motion.span {...pop(0.65, 6)} className="os-sticker md:absolute md:bottom-1 md:right-0">
+                        <i className="fas fa-laptop" /> 550+ Macs
+                    </motion.span>
+                    <motion.span {...pop(0.75, -3)} className="os-sticker md:absolute md:-bottom-12 md:left-10">
+                        <i className="fas fa-terminal" /> bash · python · swift
+                    </motion.span>
                 </div>
             </div>
 
+            {/* Desktop icons, top right like a real desktop. */}
             <motion.div
-                {...rise(0.9)}
-                className="mt-12 text-lg sm:text-xl md:text-2xl font-light tracking-widest text-[var(--foreground)] uppercase h-12 flex items-center"
+                initial={reduceMotion ? false : { opacity: 0, x: 16 }}
+                animate={entered ? { opacity: 1, x: 0 } : undefined}
+                transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.4 }}
+                className="hidden md:flex flex-col gap-3 self-start pt-2"
             >
-                <div role="status" aria-live="polite">
-                    <span className="sr-only">{t.hero.typewriter.join(' | ')}</span>
-                    <span aria-hidden="true">
-                        {entered && (
-                            <Typewriter
-                                options={{
-                                    strings: t.hero.typewriter,
-                                    autoStart: true,
-                                    loop: true,
-                                    delay: 50,
-                                    deleteSpeed: 30,
-                                }}
-                            />
-                        )}
-                    </span>
-                </div>
-            </motion.div>
-
-            <motion.div {...rise(1.05)} className="flex gap-4 mt-12 pointer-events-auto">
-                <a href={t.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" className={SOCIAL_BTN}>
-                    <i className="fab fa-linkedin text-xl" aria-hidden="true" />
-                </a>
-                <a href={t.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub profile" className={SOCIAL_BTN}>
-                    <i className="fab fa-github text-xl" aria-hidden="true" />
-                </a>
-                <a href={gmailComposeUrl} target="_blank" rel="noopener noreferrer" aria-label="Contact via email" className={SOCIAL_BTN}>
-                    <i className="fas fa-envelope text-xl" aria-hidden="true" />
-                </a>
-            </motion.div>
-
-            <motion.div
-                {...rise(1.2)}
-                className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8 pointer-events-auto w-full sm:w-auto max-w-xs sm:max-w-none"
-            >
-                {([['projects', t.hero.viewWork], ['contact', t.hero.getInTouch]] as const).map(([id, label]) => (
-                    <button key={id} onClick={() => scrollToSection(id)} className={CTA_BTN}>
-                        <span className="relative z-10 flex items-center justify-center gap-2 font-bold uppercase tracking-widest text-xs text-foreground group-hover:text-background transition-colors duration-300 ease-out whitespace-nowrap">
-                            <RollText>{label}</RollText>
-                            <i className="fas fa-arrow-right text-micro transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
-                        </span>
-                        <span className="absolute inset-0 bg-foreground scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] origin-left" aria-hidden="true" />
-                        <span className="absolute inset-0 border border-foreground" aria-hidden="true" />
-                    </button>
-                ))}
-            </motion.div>
-
-            {/* Corner meta, desktop only: where and when, plus a one-time scroll cue. */}
-            <motion.div
-                {...rise(1.5)}
-                className="hidden md:flex absolute bottom-10 left-12 flex-col gap-1 font-mono text-caption uppercase tracking-[0.2em] text-[var(--foreground)]"
-            >
-                <span className="opacity-60">{t.location}</span>
-                <LocalTime />
-            </motion.div>
-
-            <motion.div
-                {...rise(1.5)}
-                className="hidden md:flex absolute bottom-10 left-1/2 -translate-x-1/2 items-center gap-4 font-mono text-caption uppercase tracking-[0.2em] text-[var(--accent)]"
-            >
-                {t.hero.scroll}
-                <span className="relative block w-16 h-px bg-[var(--accent)]/25 overflow-hidden" aria-hidden="true">
-                    <motion.span
-                        className="absolute inset-0 bg-[var(--accent)] origin-left"
-                        initial={{ scaleX: 0 }}
-                        animate={{ scaleX: entered ? 1 : 0 }}
-                        transition={{ duration: 1.2, ease: EASE_OUT, delay: 1.8 }}
-                    />
-                </span>
-                <i className="fas fa-arrow-right" aria-hidden="true" />
+                {desktopIcons}
             </motion.div>
         </div>
     )

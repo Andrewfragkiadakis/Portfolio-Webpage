@@ -1,18 +1,18 @@
 
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, JetBrains_Mono } from 'next/font/google'
 import { MotionConfig } from 'motion/react'
 import './globals.css'
 import { LanguageProvider } from '@/contexts/LanguageContext'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import CinematicEntry from '@/components/dom/CinematicEntry'
-import NoiseOverlay from '@/components/dom/NoiseOverlay'
-import ThemeToggle from '@/components/ui/ThemeToggle'
-import CustomCursor from '@/components/ui/CustomCursor'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { SOCIAL_URLS, content } from '@/data/content'
 
-const inter = Inter({ subsets: ['latin'], display: 'swap' })
+// Both families ship Greek glyphs, so Greek headings and labels never fall back
+// to a system font.
+const inter = Inter({ subsets: ['latin', 'greek'], display: 'swap', variable: '--font-inter' })
+const jetbrains = JetBrains_Mono({ subsets: ['latin', 'greek'], display: 'swap', variable: '--font-jetbrains' })
 
 const SITE_URL = 'https://andreas.technology'
 
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
         follow: true,
     },
     other: {
-        'theme-color': '#030014',
+        'theme-color': '#0C1020',
     },
 }
 
@@ -72,10 +72,10 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
-        <html lang="en" suppressHydrationWarning>
+        <html lang="en" className={`${inter.variable} ${jetbrains.variable}`} suppressHydrationWarning>
             <head>
-                <meta name="theme-color" content="#030014" media="(prefers-color-scheme: dark)" />
-                <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
+                <meta name="theme-color" content="#0C1020" media="(prefers-color-scheme: dark)" />
+                <meta name="theme-color" content="#E9ECF6" media="(prefers-color-scheme: light)" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
                 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
                 <link
@@ -160,10 +160,11 @@ export default function RootLayout({
                     }}
                 />
             </head>
-            <body className={inter.className}>
+            <body className="font-sans">
+                <div className="wallpaper" aria-hidden="true" />
                 <a
                     href="#main-content"
-                    className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100001] focus:px-4 focus:py-2 focus:bg-[var(--accent)] focus:text-white focus:rounded focus:outline-none"
+                    className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100001] focus:px-4 focus:py-2 focus:bg-[var(--accent-fill)] focus:text-white focus:rounded-lg focus:outline-none"
                 >
                     Skip to content
                 </a>
@@ -171,9 +172,6 @@ export default function RootLayout({
                     <LanguageProvider>
                         <MotionConfig reducedMotion="user">
                             <CinematicEntry />
-                            <NoiseOverlay />
-                            <ThemeToggle />
-                            <CustomCursor />
                             {children}
                         </MotionConfig>
                     </LanguageProvider>

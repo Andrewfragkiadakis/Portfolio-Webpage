@@ -2,10 +2,10 @@
 
 import { useContent } from '@/hooks/useContent'
 import { useCardScroll } from '@/hooks/useCardScroll'
-import RollText from '@/components/ui/RollText'
 import ScrollRail from '@/components/ui/ScrollRail'
-import { motion } from 'motion/react'
-import { useRef } from 'react'
+import Window from '@/components/ui/Window'
+import { SECTION_APPS, uiIcon } from '@/data/apps'
+import { useEffect, useState } from 'react'
 import type { Experience as ExperienceType, Education as EducationType, EducationKind } from '@/data/content'
 
 const KIND_ICON: Record<EducationKind, string> = {
@@ -13,235 +13,182 @@ const KIND_ICON: Record<EducationKind, string> = {
     certification: 'fas fa-award',
     license: 'fas fa-id-card',
 }
-import SectionHeading from '@/components/ui/SectionHeading'
 
+const CARD = 'w-[82vw] max-w-[21rem] md:w-[21.5rem] md:max-w-none shrink-0 snap-start flex flex-col'
 
-function ScrollButton({ onClick, direction, label, disabled = false }: { onClick: () => void; direction: 'left' | 'right'; label: string; disabled?: boolean }) {
+/** One stop on the timeline: a dot on the rail, the date, then the card. */
+function Stop({ date, accent, children, marker }: { date: string; accent?: boolean; children: React.ReactNode; marker?: string }) {
     return (
-        <button
-            onClick={onClick}
-            disabled={disabled}
-            className="w-11 h-11 md:w-12 md:h-12 border border-[var(--foreground)]/30 flex items-center justify-center text-[var(--foreground)] transition-all duration-300 cursor-pointer hover:bg-[var(--foreground)] hover:text-[var(--background)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[var(--foreground)] disabled:active:scale-100"
-            aria-label={label}
-        >
-            <i className={`fas fa-chevron-${direction} text-sm md:text-base`} aria-hidden="true" />
-        </button>
+        <li data-card="true" data-marker={marker} className={CARD}>
+            <div className="relative h-8 flex items-center">
+                <span className={`relative z-10 w-3 h-3 rounded-full ring-4 ring-[var(--window-solid)] ${accent ? 'bg-[var(--accent-fill)]' : 'bg-[var(--muted)]'}`} aria-hidden="true" />
+                <span className="ml-2 os-chip h-6 px-2.5 text-caption tabular-nums bg-[var(--window-solid)] whitespace-nowrap">{date}</span>
+            </div>
+            <article className="os-card flex-1 mt-2 p-4 md:p-5 flex flex-col">{children}</article>
+        </li>
     )
 }
 
-function ExperienceCard({ exp, index }: { exp: ExperienceType; index: number }) {
+function ExperienceCard({ exp, current }: { exp: ExperienceType; current: boolean }) {
     return (
-        <motion.div
-            data-card="true"
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.1 }}
-            className="w-[85vw] max-w-95 min-h-85 sm:w-90 md:max-w-none md:min-h-auto md:min-w-100 md:w-100 md:aspect-square bg-[var(--background)] border border-[var(--foreground)]/40 flex-shrink-0 p-4 sm:p-5 md:p-8 flex flex-col justify-between hover:border-[var(--accent)] transition-all duration-300 md:hover:shadow-[0_0_20px_var(--accent)] group snap-start md:snap-align-none relative"
-        >
-            <div className="absolute top-0 right-0 p-4 opacity-10 text-4xl font-black text-[var(--foreground)] z-0">
-                {(index + 1).toString().padStart(2, '0')}
-            </div>
-            <div className="z-10 relative flex-1 flex flex-col">
-                <div className="flex items-center justify-between mb-4">
-                    <span className="w-12 h-12 flex items-center justify-center border border-[var(--accent)]/30 text-[var(--accent)] rounded-lg md:group-hover:bg-[var(--accent)] md:group-hover:text-[var(--background)] transition-colors">
-                        <i className="fas fa-briefcase text-lg" aria-hidden="true" />
-                    </span>
-                    <span className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest">
-                        {exp.duration}
-                    </span>
+        <Stop date={exp.duration} accent={current}>
+            <div className="flex items-start gap-3 mb-3">
+                <span className="app-tile w-9 h-9 text-sm" style={{ background: SECTION_APPS.experience.tile }} aria-hidden="true">
+                    <i className="fas fa-briefcase" />
+                </span>
+                <div className="min-w-0">
+                    <h3 className="text-[0.9375rem] font-bold tracking-tight leading-snug">{exp.role}</h3>
+                    <p className="text-body-sm text-[var(--muted)] leading-snug">{exp.company}</p>
                 </div>
-                <h3 className="text-lg md:text-xl font-bold text-[var(--foreground)] uppercase leading-tight mb-2 md:group-hover:text-[var(--accent)] transition-colors">
-                    {exp.role}
-                </h3>
-                <p className="text-xs font-mono text-[var(--foreground)] opacity-85 mb-4">
-                    @ {exp.company}
-                </p>
-                <ul className="space-y-2 flex-1">
-                    {exp.tasks.map((task, ti) => (
-                        <li key={ti} className="text-xs text-[var(--foreground)] opacity-80 flex items-start gap-2">
-                            <span className="text-[var(--accent)] mt-1 text-[0.375rem] shrink-0">
-                                <i className="fas fa-square" aria-hidden="true" />
-                            </span>
-                            <span className="leading-tight">{task}</span>
-                        </li>
-                    ))}
-                </ul>
             </div>
-        </motion.div>
+            <ul className="space-y-1.5">
+                {exp.tasks.map((task, ti) => (
+                    <li key={ti} className="flex items-start gap-2 text-[0.78rem] leading-snug">
+                        <span className="mt-[0.45em] w-1 h-1 rounded-full bg-[var(--accent-brand)] shrink-0" aria-hidden="true" />
+                        <span>{task}</span>
+                    </li>
+                ))}
+            </ul>
+        </Stop>
     )
 }
 
-function EducationCard({ edu, index, verifyLabel, verifyCursor }: { edu: EducationType; index: number; verifyLabel: string; verifyCursor: string }) {
+function EducationCard({ edu, verifyLabel, newTab, marker }: { edu: EducationType; verifyLabel: string; newTab: string; marker?: string }) {
     const featured = Boolean(edu.featured)
-    const icon = edu.icon ?? KIND_ICON[edu.kind ?? 'degree']
+    const icon = uiIcon(edu.icon ?? KIND_ICON[edu.kind ?? 'degree'])
     return (
-        <motion.div
-            data-card="true"
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.1 }}
-            className={`w-[85vw] max-w-95 min-h-85 sm:w-90 md:max-w-none md:min-h-auto md:min-w-100 md:w-100 md:aspect-square bg-[var(--background)] border flex-shrink-0 p-4 sm:p-5 md:p-8 flex flex-col justify-between hover:border-[var(--accent)] transition-all duration-300 group snap-start md:snap-align-none relative overflow-hidden ${featured ? 'border-[var(--accent)]/70 shadow-[0_0_0_1px_var(--glow),0_0_40px_var(--glow)]' : 'border-[var(--foreground)]/20'}`}
-        >
-            {featured && (
-                <div
-                    className="pointer-events-none absolute -top-24 -right-24 w-56 h-56 rounded-full bg-[var(--accent)] opacity-[0.12] blur-3xl"
-                    aria-hidden="true"
-                />
-            )}
-            <div className="flex-1 flex flex-col relative">
-                <div className="flex items-center justify-between mb-4 gap-3">
-                    <span className={`w-12 h-12 shrink-0 flex items-center justify-center border rounded-lg md:group-hover:bg-[var(--accent)] md:group-hover:text-[var(--background)] md:group-hover:border-[var(--accent)] transition-colors ${featured ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-[var(--foreground)]/30 text-[var(--foreground)]'}`}>
-                        <i className={`${icon} text-lg`} aria-hidden="true" />
-                    </span>
-                    <div className="flex items-center gap-2 min-w-0">
-                        {edu.badge && (
-                            <span className={`text-micro font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 border whitespace-nowrap ${featured ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-[var(--foreground)]/40 text-[var(--foreground)] opacity-80'}`}>
-                                {edu.badge}
-                            </span>
-                        )}
-                        <span className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest whitespace-nowrap">
-                            {edu.duration}
-                        </span>
-                    </div>
+        <Stop date={edu.duration} accent={featured} marker={marker}>
+            <div className="flex items-start gap-3 mb-3">
+                <span className="app-tile w-9 h-9 text-sm" style={{ background: featured ? SECTION_APPS.hero.tile : SECTION_APPS.about.tile }} aria-hidden="true">
+                    <i className={icon} />
+                </span>
+                <div className="min-w-0">
+                    {edu.badge && <span className={`os-chip h-5 px-2 text-micro mb-1 ${featured ? 'os-chip--accent' : ''}`}>{edu.badge}</span>}
+                    <h3 className="text-[0.9375rem] font-bold tracking-tight leading-snug">{edu.degree}</h3>
+                    <p className="text-body-sm text-[var(--muted)] leading-snug">{edu.institution}</p>
                 </div>
-                <h3 className="text-lg md:text-xl font-bold text-[var(--foreground)] uppercase leading-tight mb-2 md:group-hover:text-[var(--accent)] transition-colors">
-                    {edu.degree}
-                </h3>
-                <p className="text-xs font-mono text-[var(--foreground)] opacity-85 mb-4">
-                    {edu.institution}
-                </p>
-                {edu.details && (
-                    <div className="space-y-2 mb-4 flex-1">
-                        {edu.details.map((detail, i) => (
-                            <div key={i} className="flex items-start gap-2 text-xs text-[var(--foreground)] opacity-80">
-                                <i className="fas fa-check text-[var(--accent)] text-micro mt-0.5" aria-hidden="true" />
-                                <span>{detail}</span>
-                            </div>
-                        ))}
-                    </div>
-                )}
             </div>
+            <ul className="space-y-1.5 mb-4">
+                {edu.details.map((detail, i) => (
+                    <li key={i} className="flex items-start gap-2 text-[0.78rem] leading-snug">
+                        <i className="fas fa-check text-[var(--accent)] text-[0.6rem] mt-[0.3em] shrink-0" aria-hidden="true" />
+                        <span>{detail}</span>
+                    </li>
+                ))}
+            </ul>
             {edu.link && (
                 <a
                     href={edu.link}
-                    data-cursor={verifyCursor}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`relative inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest border px-4 py-3 transition-all justify-center w-full mt-auto ${featured ? 'border-[var(--accent)] bg-[var(--accent)] text-[var(--background)] hover:shadow-[0_0_24px_var(--glow)]' : 'border-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)]'}`}
+                    aria-label={`${verifyLabel}: ${edu.degree} (${newTab})`}
+                    className={`os-btn mt-auto w-full ${featured ? 'os-btn--primary' : 'os-btn--secondary'}`}
                 >
                     <i className="fas fa-certificate" aria-hidden="true" />
-                    <RollText>{verifyLabel}</RollText>
+                    <span className="caps-gr">{verifyLabel}</span>
                 </a>
             )}
-        </motion.div>
+        </Stop>
     )
 }
 
 export default function Experience() {
     const t = useContent()
-    const { scrollContainerRef, scroll, canScrollLeft, canScrollRight, progress, ratio } = useCardScroll('[data-card="true"]')
-    const expMobileRef = useRef<HTMLDivElement>(null)
-    const eduMobileRef = useRef<HTMLDivElement>(null)
+    const { scrollContainerRef, scroll, canScrollLeft, canScrollRight, progress, ratio } = useCardScroll<HTMLOListElement>('[data-card="true"]')
+    const [inEducation, setInEducation] = useState(false)
 
-    const scrollMobileRow = (containerRef: React.RefObject<HTMLDivElement | null>, direction: 'left' | 'right') => {
-        const el = containerRef.current
-        if (!el) return
-        const maxScroll = el.scrollWidth - el.clientWidth
-        if (maxScroll <= 0) return
-        if (direction === 'right' && el.scrollLeft >= maxScroll - 1) return
-        if (direction === 'left' && el.scrollLeft <= 1) return
-        const card = el.querySelector<HTMLElement>('[data-card="true"]')
-        const gap = parseFloat(getComputedStyle(el).columnGap) || 0
-        const step = (card?.offsetWidth ?? el.clientWidth) + gap
-        const amount = direction === 'right' ? step : -step
-        el.scrollTo({ left: Math.max(0, Math.min(el.scrollLeft + amount, maxScroll)), behavior: 'smooth' })
+    const educationStart = () => scrollContainerRef.current?.querySelector<HTMLElement>('[data-marker="education"]')
+
+    // Which half of the timeline is showing drives the segmented control.
+    useEffect(() => {
+        const container = scrollContainerRef.current
+        if (!container) return
+        const sync = () => {
+            const start = container.querySelector<HTMLElement>('[data-marker="education"]')
+            if (!start) return
+            setInEducation(container.scrollLeft + container.clientWidth / 2 >= start.offsetLeft)
+        }
+        sync()
+        container.addEventListener('scroll', sync, { passive: true })
+        return () => container.removeEventListener('scroll', sync)
+    }, [scrollContainerRef])
+
+    const jump = (to: 'work' | 'education') => {
+        const container = scrollContainerRef.current
+        if (!container) return
+        const first = container.querySelector<HTMLElement>('[data-card="true"]')
+        const target = to === 'education' ? educationStart() : first
+        if (!target || !first) return
+        container.scrollTo({
+            left: target.offsetLeft - first.offsetLeft,
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        })
     }
 
     return (
-        <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-6 md:px-24 py-4 md:py-0 overflow-x-clip overflow-y-visible md:overflow-x-hidden md:overflow-y-auto no-scrollbar relative">
-            <div className="max-w-480 mx-auto w-full h-full flex flex-col justify-center">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 sm:mb-8 md:mb-12 gap-4 md:gap-6">
-                    <SectionHeading id="experience" title={t.experienceSection.title} subtitle={t.experienceSection.subtitle} sizeClass="text-[12vw] md:text-[min(6vw,8vh)]" />
-                    <div className="hidden md:flex gap-2">
-                        <ScrollButton onClick={() => scroll('left')} direction="left" label="Scroll left" disabled={!canScrollLeft} />
-                        <ScrollButton onClick={() => scroll('right')} direction="right" label="Scroll right" disabled={!canScrollRight} />
+        <Window
+            as="section"
+            id="experience"
+            labelledBy="experience-title"
+            title={t.os.windows.experience}
+            app={SECTION_APPS.experience}
+            className="w-full md:max-w-[76rem] md:max-h-full"
+            toolbar={
+                <>
+                    <div className="os-segmented" role="group" aria-label={t.experienceSection.subtitle}>
+                        <button type="button" aria-pressed={!inEducation} onClick={() => jump('work')}>
+                            <i className="fas fa-briefcase text-[0.65rem]" aria-hidden="true" />
+                            <span className="caps-gr">{t.experienceSection.professional}</span>
+                        </button>
+                        <button type="button" aria-pressed={inEducation} onClick={() => jump('education')}>
+                            <i className="fas fa-graduation-cap text-[0.65rem]" aria-hidden="true" />
+                            <span className="caps-gr">{t.experienceSection.education}</span>
+                        </button>
                     </div>
+                    <span className="hidden sm:flex items-center gap-1">
+                        <button type="button" onClick={() => scroll('left')} disabled={!canScrollLeft} aria-label={t.os.aria.prev} className="os-icon-btn w-8 h-8 text-xs">
+                            <i className="fas fa-chevron-left" aria-hidden="true" />
+                        </button>
+                        <button type="button" onClick={() => scroll('right')} disabled={!canScrollRight} aria-label={t.os.aria.next} className="os-icon-btn w-8 h-8 text-xs">
+                            <i className="fas fa-chevron-right" aria-hidden="true" />
+                        </button>
+                    </span>
+                </>
+            }
+        >
+            <div className="pt-4 md:pt-6 pb-4">
+                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-4 md:px-6">
+                    <h2 id="experience-title" className="os-eyebrow">{t.experienceSection.title}</h2>
+                    <p className="text-caption font-medium uppercase tracking-[0.08em] text-[var(--muted)]">{t.experienceSection.subtitle}</p>
                 </div>
 
-                <div className="flex flex-col gap-8 md:hidden">
-                    <div>
-                        <div className="flex items-center justify-between gap-2 mb-3 pl-1">
-                            <span className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest">
-                                {t.experienceSection.professional}
-                            </span>
-                            <div className="flex gap-2">
-                                <ScrollButton onClick={() => scrollMobileRow(expMobileRef, 'left')} direction="left" label="Previous experience" />
-                                <ScrollButton onClick={() => scrollMobileRow(expMobileRef, 'right')} direction="right" label="Next experience" />
-                            </div>
-                        </div>
-                        <div
-                            ref={expMobileRef}
-                            className="flex gap-4 overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 scroll-px-4 scroll-smooth items-stretch"
-                            style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
-                        >
-                            {t.experience.map((exp, idx) => (
-                                <ExperienceCard key={`exp-m-${idx}`} exp={exp} index={idx} />
-                            ))}
-                            <div className="w-4 flex-shrink-0" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="flex items-center justify-between gap-2 mb-3 pl-1">
-                            <span className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest">
-                                {t.experienceSection.education}
-                            </span>
-                            <div className="flex gap-2">
-                                <ScrollButton onClick={() => scrollMobileRow(eduMobileRef, 'left')} direction="left" label="Previous education" />
-                                <ScrollButton onClick={() => scrollMobileRow(eduMobileRef, 'right')} direction="right" label="Next education" />
-                            </div>
-                        </div>
-                        <div
-                            ref={eduMobileRef}
-                            className="flex gap-4 overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 scroll-px-4 scroll-smooth items-stretch"
-                            style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
-                        >
-                            {t.education.map((edu, idx) => (
-                                <EducationCard key={`edu-m-${idx}`} edu={edu} index={idx} verifyLabel={t.experienceSection.verify} verifyCursor={t.cursor.verify} />
-                            ))}
-                            <div className="w-4 flex-shrink-0" />
-                        </div>
-                    </div>
+                <div className="relative mt-2">
+                    {/* The rail the stops sit on. */}
+                    <span className="absolute left-0 right-0 top-4 h-px bg-[var(--hairline-strong)]" aria-hidden="true" />
+                    <ol
+                        ref={scrollContainerRef}
+                        className="relative flex gap-4 overflow-x-auto no-scrollbar px-4 md:px-6 scroll-px-4 md:scroll-px-6 pb-2 items-stretch"
+                        style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
+                    >
+                        {t.experience.map((exp, idx) => (
+                            <ExperienceCard key={`exp-${idx}`} exp={exp} current={idx === 0} />
+                        ))}
+                        {t.education.map((edu, idx) => (
+                            <EducationCard
+                                key={`edu-${idx}`}
+                                edu={edu}
+                                verifyLabel={t.experienceSection.verify}
+                                newTab={t.os.aria.newTab}
+                                marker={idx === 0 ? 'education' : undefined}
+                            />
+                        ))}
+                        <li className="w-px shrink-0" aria-hidden="true" />
+                    </ol>
                 </div>
-
-                <div
-                    ref={scrollContainerRef}
-                    className="hidden md:flex shrink-0 gap-4 md:gap-6 overflow-x-auto no-scrollbar pb-4 md:pb-8 -mx-4 px-4 scroll-smooth items-stretch"
-                    style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
-                    onScroll={(e) => e.stopPropagation()}
-                >
-                    <div className="hidden md:flex flex-shrink-0 items-center justify-center w-12.5 border-r border-[var(--foreground)]/10 mr-2 md:mr-4">
-                        <span className="text-[var(--foreground)] opacity-50 [writing-mode:vertical-rl] rotate-180 uppercase tracking-[0.3em] font-black text-xs md:text-sm">
-                            {t.experienceSection.professional}
-                        </span>
-                    </div>
-                    {t.experience.map((exp, idx) => (
-                        <ExperienceCard key={`exp-${idx}`} exp={exp} index={idx} />
-                    ))}
-                    <div className="hidden md:block w-px bg-[var(--foreground)]/20 mx-2 md:mx-4 flex-shrink-0" />
-                    <div className="hidden md:flex flex-shrink-0 items-center justify-center w-12.5 border-r border-[var(--foreground)]/10 mr-2 md:mr-4">
-                        <span className="text-[var(--foreground)] opacity-50 [writing-mode:vertical-rl] rotate-180 uppercase tracking-[0.3em] font-black text-xs md:text-sm">
-                            {t.experienceSection.education}
-                        </span>
-                    </div>
-                    {t.education.map((edu, idx) => (
-                        <EducationCard key={`edu-${idx}`} edu={edu} index={idx} verifyLabel={t.experienceSection.verify} verifyCursor={t.cursor.verify} />
-                    ))}
-                    <div className="w-4 md:w-12 flex-shrink-0" />
+                <div className="px-4 md:px-6 mt-2">
+                    <ScrollRail progress={progress} ratio={ratio} />
                 </div>
-                <ScrollRail progress={progress} ratio={ratio} className="hidden md:block mt-2" />
             </div>
-        </section>
+        </Window>
     )
 }

@@ -1,34 +1,118 @@
 @import "tailwindcss";
 
+/* Theme is a class on <html> (set before paint), not the media query. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * DESKTOP OS — the portfolio as a computer desktop.
+ * Light: frosted white glass windows on a warm-to-cool gradient wallpaper.
+ * Dark: graphite glass on a deep wallpaper.
+ * Every text colour below is checked for WCAG AA against the surface it sits on
+ * (see STYLE.md for the ratios).
+ */
 :root {
-  --background: #fafafa;
-  --foreground: #0f172a;
-  --accent: #4f46e5;
-  --glow: rgba(79, 70, 229, 0.15);
+  --background: #E9ECF6;          /* page fallback under the wallpaper */
+  --foreground: #1D1D1F;          /* ink */
+  --muted: #55555C;               /* secondary text: 7:1 on window glass */
+  --accent-brand: #0A66FF;        /* system blue — marks, rings, focus, rails */
+  --accent: #0057D9;              /* blue as TEXT: ≥4.6:1 on glass, chips, controls */
+  --accent-fill: #0A66FF;         /* filled buttons (white text 4.8:1) */
+  --on-accent: #FFFFFF;
+  --accent-soft: rgba(10, 102, 255, 0.12);
+  --glow: rgba(10, 102, 255, 0.22);
+  --success: #1E8E3E;
 
-  --font-display: "Inter", sans-serif;
+  --window: rgba(255, 255, 255, 0.74);
+  --window-solid: #FBFBFD;
+  --titlebar: rgba(250, 250, 252, 0.72);
+  --sidebar: rgba(238, 240, 246, 0.72);
+  --card: rgba(255, 255, 255, 0.7);
+  --hairline: rgba(29, 29, 31, 0.1);
+  --hairline-strong: rgba(29, 29, 31, 0.18);
+  --control: rgba(29, 29, 31, 0.06);
+  --control-hover: rgba(29, 29, 31, 0.11);
+  --menubar: rgba(255, 255, 255, 0.6);
+  --dock: rgba(255, 255, 255, 0.42);
+  --label-bg: rgba(255, 255, 255, 0.78);
+  --window-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.14),
+    0 24px 70px -18px rgba(40, 46, 90, 0.38),
+    0 10px 24px -10px rgba(40, 46, 90, 0.2);
 
-  /*
-   * Height of the fixed desktop navigation. Panels reserve this at the top so
-   * vertically-centred content is centred in the *visible* area rather than
-   * behind the bar.
-   */
-  --nav-h: 3.9rem;
+  /* Wallpaper: warm (top left) to cool (bottom right). */
+  --wp-base-1: #FCE3D3;
+  --wp-base-2: #EADFF6;
+  --wp-base-3: #D5E3FB;
+  --wp-base-4: #CBE9EE;
+  --wp-a: #FFC4A3;
+  --wp-b: #F7B3D2;
+  --wp-c: #AFC2FF;
+  --wp-d: #9FDCE3;
+  --wp-ribbon: rgba(255, 255, 255, 0.55);
+
+  --font-display: var(--font-inter), "Inter", system-ui, sans-serif;
+  --font-code: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Top chrome (mobile status bar / desktop menu bar) and the desktop dock. */
+  --nav-h: 3.25rem;
+  --dock-h: 0rem;
+}
+
+@media (min-width: 64rem) {
+  :root {
+    --nav-h: 2rem;
+    --dock-h: 6rem;
+  }
 }
 
 .dark {
-  --background: #030014;
-  --foreground: #e0e7ff;
-  --accent: #a5b4fc;
-  --glow: rgba(165, 180, 252, 0.2);
+  --background: #0C1020;
+  --foreground: #F5F5F7;
+  --muted: #A6A6AD;
+  --accent-brand: #4C8DFF;
+  --accent: #7FAEFF;              /* blue as TEXT: ≥4.5:1 on graphite glass and controls */
+  --accent-fill: #2563EB;
+  --on-accent: #FFFFFF;
+  --accent-soft: rgba(76, 141, 255, 0.16);
+  --glow: rgba(76, 141, 255, 0.28);
+  --success: #3FCF6B;
+
+  --window: rgba(34, 34, 40, 0.74);
+  --window-solid: #232329;
+  --titlebar: rgba(52, 52, 60, 0.6);
+  --sidebar: rgba(26, 26, 32, 0.6);
+  --card: rgba(255, 255, 255, 0.05);
+  --hairline: rgba(255, 255, 255, 0.09);
+  --hairline-strong: rgba(255, 255, 255, 0.17);
+  --control: rgba(255, 255, 255, 0.08);
+  --control-hover: rgba(255, 255, 255, 0.14);
+  --menubar: rgba(20, 20, 26, 0.55);
+  --dock: rgba(44, 44, 52, 0.42);
+  --label-bg: rgba(20, 20, 26, 0.72);
+  --window-shadow:
+    0 0 0 0.5px rgba(255, 255, 255, 0.12),
+    0 28px 80px -16px rgba(0, 0, 0, 0.7),
+    0 10px 24px -10px rgba(0, 0, 0, 0.5);
+
+  --wp-base-1: #1B1236;
+  --wp-base-2: #151A3E;
+  --wp-base-3: #0F1D38;
+  --wp-base-4: #0A1A26;
+  --wp-a: #5B2A8C;
+  --wp-b: #7A2A5E;
+  --wp-c: #1F4FB0;
+  --wp-d: #0E5A68;
+  --wp-ribbon: rgba(140, 160, 255, 0.16);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
+  --color-muted: var(--muted);
 
   --font-sans: var(--font-display);
+  --font-mono: var(--font-code);
 }
 
 /*
@@ -40,25 +124,392 @@
 @theme {
   --breakpoint-md: 64rem;
 
-  /*
-   * Small type sizes below Tailwind's text-xs (0.75rem). In rem, not px, so they
-   * follow the reader's browser font-size setting like the rest of the scale.
-   * No line-height is set: these inherit it, as the px values they replace did.
-   */
-  --text-micro: 0.625rem;    /* 10px at default size — meta labels, badges */
-  --text-caption: 0.6875rem; /* 11px — mono captions, corner meta */
-  --text-body-sm: 0.8125rem; /* 13px — code block, tool pills */
+  --text-micro: 0.625rem;    /* 10px */
+  --text-caption: 0.6875rem; /* 11px */
+  --text-body-sm: 0.8125rem; /* 13px */
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  background-image:
-    radial-gradient(at 0% 0%, var(--glow) 0, transparent 50%),
-    radial-gradient(at 100% 100%, var(--glow) 0, transparent 50%);
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "cv11", "ss01";
 }
+
+/* ─── Wallpaper ─────────────────────────────────────────────────────────── */
+
+.wallpaper {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background:
+    radial-gradient(55% 60% at 8% 12%, var(--wp-a) 0%, transparent 62%),
+    radial-gradient(45% 55% at 38% 96%, var(--wp-b) 0%, transparent 60%),
+    radial-gradient(50% 60% at 92% 18%, var(--wp-c) 0%, transparent 62%),
+    radial-gradient(55% 55% at 88% 92%, var(--wp-d) 0%, transparent 60%),
+    linear-gradient(150deg, var(--wp-base-1) 0%, var(--wp-base-2) 36%, var(--wp-base-3) 68%, var(--wp-base-4) 100%);
+}
+
+/* A soft light ribbon sweeping across — the only "shape" in the wallpaper. */
+.wallpaper::before {
+  content: "";
+  position: absolute;
+  left: -20%;
+  right: -20%;
+  top: 38%;
+  height: 46%;
+  background: radial-gradient(50% 50% at 50% 50%, var(--wp-ribbon) 0%, transparent 70%);
+  transform: rotate(-11deg);
+  filter: blur(18px);
+}
+
+/* Fine grain so the gradient never bands. */
+.wallpaper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* Component classes live in the components layer so Tailwind utilities on the
+   same element (h-10, px-3, text-xs …) can still override them. */
+@layer components {
+/* ─── Windows ───────────────────────────────────────────────────────────── */
+
+.os-glass {
+  background: var(--window);
+  -webkit-backdrop-filter: blur(30px) saturate(170%);
+  backdrop-filter: blur(30px) saturate(170%);
+}
+
+.os-window {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.875rem;
+  box-shadow: var(--window-shadow);
+  overflow: hidden;
+  color: var(--foreground);
+}
+
+.os-titlebar {
+  flex-shrink: 0;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.875rem;
+  background: var(--titlebar);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.os-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.os-lights {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.os-light {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 9999px;
+  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.18);
+  flex-shrink: 0;
+}
+
+.os-light--close { background: #FF5F57; }
+.os-light--min { background: #FEBC2E; }
+.os-light--max { background: #28C840; }
+
+/* Window footer / status bar */
+.os-statusbar {
+  flex-shrink: 0;
+  border-top: 1px solid var(--hairline);
+  background: var(--titlebar);
+}
+
+/* Inner cards, sidebar panes */
+.os-sidebar {
+  background: var(--sidebar);
+}
+
+.os-card {
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: 0.75rem;
+}
+
+/* Section heading inside a window: the h2 is a small, quiet label, like a
+   pane title; the visual weight lives in the content below it. */
+.os-eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* Greek UI labels in the content file are written without accents because they
+   were always displayed in capitals. Keep them in capitals in Greek only;
+   English labels stay in natural case. */
+html[lang="el"] .caps-gr {
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* App tile: gradient square with a white glyph. */
+.app-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #FFFFFF;
+  border-radius: 22.5%;
+  box-shadow:
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 1px 2px rgba(0, 0, 0, 0.18),
+    0 4px 10px -4px rgba(0, 0, 0, 0.3);
+}
+
+/* Buttons */
+.os-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 2.25rem;
+  padding: 0 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.os-btn--primary {
+  background: var(--accent-fill);
+  color: var(--on-accent);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.os-btn--primary:hover {
+  box-shadow: 0 6px 18px -6px var(--glow), 0 1px 2px rgba(0, 0, 0, 0.18);
+  filter: brightness(1.06);
+}
+
+.os-btn--secondary {
+  background: var(--control);
+  color: var(--foreground);
+  box-shadow: inset 0 0 0 1px var(--hairline);
+}
+
+.os-btn--secondary:hover {
+  background: var(--control-hover);
+}
+
+.os-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.5rem;
+  color: var(--foreground);
+  background: var(--control);
+  box-shadow: inset 0 0 0 1px var(--hairline);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.os-icon-btn:hover:not(:disabled) {
+  background: var(--control-hover);
+  color: var(--accent);
+}
+
+.os-icon-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Segmented control (view switchers) */
+.os-segmented {
+  display: inline-flex;
+  padding: 2px;
+  border-radius: 0.5rem;
+  background: var(--control);
+  box-shadow: inset 0 0 0 1px var(--hairline);
+}
+
+.os-segmented button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  height: 1.75rem;
+  padding: 0 0.625rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.os-segmented button:hover {
+  color: var(--foreground);
+}
+
+.os-segmented button[aria-pressed="true"] {
+  background: var(--window-solid);
+  color: var(--foreground);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 0 0 0.5px var(--hairline-strong);
+}
+
+/* Chips (credentials, tags) */
+.os-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  height: 1.625rem;
+  padding: 0 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--control);
+  color: var(--foreground);
+  box-shadow: inset 0 0 0 1px var(--hairline);
+  white-space: nowrap;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+a.os-chip:hover {
+  background: var(--control-hover);
+  color: var(--accent);
+}
+
+.os-chip--accent {
+  background: var(--accent-soft);
+  color: var(--accent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent), transparent 70%);
+}
+
+a.os-chip--accent:hover {
+  background: var(--accent-fill);
+  color: var(--on-accent);
+}
+
+/* Rotated "sticker" pills on the desktop. */
+.os-sticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  background: var(--window-solid);
+  color: var(--foreground);
+  box-shadow: 0 0 0 1px var(--hairline-strong), 0 10px 24px -12px rgba(0, 0, 0, 0.35);
+  white-space: nowrap;
+}
+
+.os-sticker--accent {
+  background: var(--accent-fill);
+  color: var(--on-accent);
+  box-shadow: 0 10px 24px -12px var(--glow);
+}
+
+/* Desktop icon label: macOS-style label pill so it reads on any wallpaper. */
+.os-icon-label {
+  display: inline-block;
+  max-width: 100%;
+  padding: 0.125rem 0.4rem;
+  border-radius: 0.3rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.25;
+  background: var(--label-bg);
+  color: var(--foreground);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+/* The About code pane is a garnish: shown only when the desktop window has the
+   height for it, so the panel never needs an inner scroll. */
+.about-code { display: none; }
+
+@media (min-width: 64rem) and (min-height: 52rem) {
+  .about-code { display: block; }
+}
+
+/* Terminal window: dark in both themes, like a real terminal profile. */
+.os-terminal {
+  --term-bg: rgba(22, 22, 27, 0.9);
+  background: var(--term-bg);
+  color: #E6E6EA;
+}
+
+.os-terminal .os-titlebar {
+  background: rgba(46, 46, 54, 0.9);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+  color: #D6D6DC;
+}
+
+/* Dock */
+.os-dock {
+  background: var(--dock);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
+  box-shadow: 0 0 0 0.5px var(--hairline-strong), inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 18px 40px -16px rgba(0, 0, 0, 0.35);
+}
+
+.os-menubar {
+  background: var(--menubar);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
+  box-shadow: 0 0.5px 0 var(--hairline-strong);
+}
+
+/* Tooltip shown above dock icons. */
+.os-tooltip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 0.75rem);
+  transform: translateX(-50%) translateY(4px);
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  background: var(--window-solid);
+  color: var(--foreground);
+  box-shadow: 0 0 0 0.5px var(--hairline-strong), 0 6px 16px -6px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.group:hover > .os-tooltip,
+.group:focus-visible > .os-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+}
+
+/* ─── Theme transition ──────────────────────────────────────────────────── */
 
 html.theme-transition,
 html.theme-transition *,
@@ -84,23 +535,16 @@ html[data-entered="true"] [data-cinematic] {
   display: none !important;
 }
 
-.glass-panel {
-  background: color-mix(in srgb, var(--background), transparent 30%);
-  backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid color-mix(in srgb, var(--foreground), transparent 90%);
-  border-radius: 1rem;
-}
-
 ::selection {
-  background: var(--accent);
+  background: var(--accent-fill);
   color: #fff;
 }
 
 /* Keyboard users must always be able to see where they are. */
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--accent-brand);
   outline-offset: 2px;
-  border-radius: 2px;
+  border-radius: 4px;
 }
 
 button:not(:disabled),
@@ -135,56 +579,19 @@ a[href],
   scrollbar-width: none;
 }
 
-/* Gradient text accent */
-.gradient-text {
-  background: linear-gradient(135deg, var(--accent), #818cf8, #c084fc);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.dark .gradient-text {
-  background: linear-gradient(135deg, var(--accent), #818cf8, #e879f9);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* SpotlightCard */
-.card-spotlight {
-  position: relative;
-  overflow: hidden;
-  --mouse-x: 50%;
-  --mouse-y: 50%;
-  --spotlight-color: rgba(165, 180, 252, 0.1);
-}
-
-.card-spotlight::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), var(--spotlight-color), transparent 80%);
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.card-spotlight:hover::before,
-.card-spotlight:focus-within::before {
-  opacity: 0.8;
-}
-
-/* LogoLoop marquee */
+@layer components {
+/* ─── LogoLoop marquee ─────────────────────────────────────────────────── */
 .logoloop {
   position: relative;
   overflow-x: hidden;
   --logoloop-gap: 2rem;
   --logoloop-logoHeight: 1.75rem;
-  --logoloop-fadeColorAuto: var(--background);
+}
+
+/* Edges fade with a mask, so the marquee works on any (glass) surface. */
+.logoloop--fade {
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
 }
 
 .logoloop__track {
@@ -225,50 +632,9 @@ a[href],
   pointer-events: none;
 }
 
-/* scale-on-hover transform is applied via React inline style; transition defined here */
 .logoloop--scale-hover .logoloop__item {
   transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
   transform-origin: center center;
-}
-
-.logoloop--fade::before,
-.logoloop--fade::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: clamp(1.5rem, 8%, 7.5rem);
-  pointer-events: none;
-  z-index: 10;
-}
-
-.logoloop--fade::before {
-  left: 0;
-  background: linear-gradient(to right, var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%, rgba(0, 0, 0, 0) 100%);
-}
-
-.logoloop--fade::after {
-  right: 0;
-  background: linear-gradient(to left, var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%, rgba(0, 0, 0, 0) 100%);
-}
-
-/* Rolling label (RollText): the track holds the label twice and slides up one line. */
-.roll-text {
-  display: inline-block;
-  overflow: hidden;
-  height: 1.25em;
-  line-height: 1.25em;
-  vertical-align: middle;
-}
-
-.roll-text__track {
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-:is(a, button):is(:hover, :focus-visible) .roll-text__track {
-  transform: translateY(-50%);
 }
 
 /* Underline that draws in from the left on hover/focus, then retracts to the right. */
@@ -292,22 +658,23 @@ a[href],
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.25rem 0.75rem;
-  border: 1px solid color-mix(in srgb, var(--foreground), transparent 80%);
-  font-family: var(--font-geist-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
-  font-size: var(--text-body-sm);
+  height: 1.75rem;
+  padding: 0 0.75rem;
+  border-radius: 9999px;
+  background: var(--control);
+  box-shadow: inset 0 0 0 1px var(--hairline);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
   color: var(--foreground);
   white-space: nowrap;
-  transition: border-color 0.3s ease, color 0.3s ease;
+  transition: box-shadow 0.3s ease, color 0.3s ease;
 }
 
-/* Height follows the type scale; width comes from each logo's aspect ratio
-   (set inline as `aspect-ratio`), so wide wordmarks need no pixel maths. */
 .tool-logo {
   display: inline-block;
   height: 0.875rem;
   aspect-ratio: 1;
-  /* Very wide wordmarks shrink (mask-size: contain) rather than stretch the pill. */
   max-width: 3rem;
   flex-shrink: 0;
   background-color: currentColor;
@@ -321,16 +688,14 @@ a[href],
 }
 
 .tool-pill:hover {
-  border-color: var(--brand);
+  box-shadow: inset 0 0 0 1px var(--brand);
 }
 
 .tool-pill:hover .tool-logo {
   background-color: var(--brand);
 }
 
-/* Tool tiles (ToolTile): one square per tool, accent mark on a neutral tile. The
-   logo box fits inside the tile by width *and* height, so wide wordmarks (Jamf, Duo)
-   shrink to the same footprint as square marks. */
+/* Tool tiles (ToolTile): one square per tool, accent mark on a neutral tile. */
 .tool-tile {
   --tile: 2rem;
   --mark: 1.125rem;
@@ -341,14 +706,14 @@ a[href],
   flex-shrink: 0;
   width: var(--tile);
   height: var(--tile);
-  border-radius: 0.375rem;
-  background-color: color-mix(in srgb, var(--foreground), transparent 92%);
+  border-radius: 0.5rem;
+  background-color: var(--control);
+  box-shadow: inset 0 0 0 1px var(--hairline);
   color: var(--accent);
 }
 
 .tool-tile__logo {
   display: block;
-  /* Wide wordmarks may use more of the tile's width than square marks do. */
   width: min(var(--mark-wide), calc(var(--mark) * var(--ratio)));
   aspect-ratio: var(--ratio);
   max-height: var(--mark);
@@ -361,16 +726,6 @@ a[href],
   -webkit-mask-size: contain;
 }
 
-/* Text knockout: reveals LetterGlitch only inside letter shapes */
-.text-knockout {
-  background-color: var(--background);
-  mix-blend-mode: screen;
-  color: #000000;
-}
-
-.dark .text-knockout {
-  mix-blend-mode: multiply;
-  color: #ffffff;
 }
 
 @media (prefers-reduced-motion: reduce) {

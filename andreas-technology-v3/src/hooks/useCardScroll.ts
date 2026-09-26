@@ -11,8 +11,8 @@ const EDGE_EPSILON_PX = 2
  * rather than silently doing nothing, plus scroll `progress` (0–1) and the visible
  * `ratio` as motion values for a progress rail — updated without re-rendering.
  */
-export function useCardScroll(cardSelector: string) {
-    const scrollContainerRef = useRef<HTMLDivElement>(null)
+export function useCardScroll<T extends HTMLElement = HTMLDivElement>(cardSelector: string) {
+    const scrollContainerRef = useRef<T>(null)
     const [canScrollLeft, setCanScrollLeft] = useState(false)
     const [canScrollRight, setCanScrollRight] = useState(false)
     const progress = useMotionValue(0)

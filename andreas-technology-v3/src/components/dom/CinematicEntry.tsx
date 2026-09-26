@@ -49,52 +49,72 @@ export default function CinematicEntry() {
 
     if (hasVisited) return null
 
+    // A boot screen: monogram, progress bar, typed boot log, then "Enter System".
+    // Dark in both themes, as boot screens are.
     return (
         <AnimatePresence>
             {!entered && (
                 <motion.div
                     data-cinematic="true"
                     initial={{ opacity: 1 }}
-                    exit={{ y: '-100%', transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } }}
-                    className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[var(--background)] text-[var(--foreground)]"
+                    exit={{ opacity: 0, scale: 1.04, transition: { duration: 0.6, ease: [0.76, 0, 0.24, 1] } }}
+                    className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[#0B0B0F] text-[#F5F5F7] px-6"
                 >
                     <button
                         onClick={handleEnter}
-                        className="absolute top-6 right-6 text-xs font-mono uppercase tracking-[0.2em] text-[var(--foreground)] opacity-60 hover:opacity-100 hover:text-[var(--accent)] transition-all duration-300"
+                        className="absolute top-5 right-5 h-9 px-4 rounded-full text-xs font-semibold text-[#C7C7CC] hover:text-white hover:bg-white/10 transition-colors"
                     >
                         {t.cinematicEntry.skip} →
                     </button>
 
-                    <div className="font-mono text-xl md:text-2xl tracking-widest text-[var(--accent)] mb-8">
+                    <span
+                        className="app-tile w-20 h-20 text-3xl font-black tracking-tight mb-10"
+                        style={{ background: 'linear-gradient(160deg, #5BC0FF 0%, #0A66FF 100%)' }}
+                        aria-hidden="true"
+                    >
+                        AF
+                    </span>
+
+                    <div className="w-56 h-1 rounded-full bg-white/15 overflow-hidden mb-8" aria-hidden="true">
+                        <motion.div
+                            className="h-full bg-white rounded-full origin-left"
+                            initial={{ scaleX: 0 }}
+                            animate={{ scaleX: showButton ? 1 : 0.85 }}
+                            transition={{ duration: showButton ? 0.4 : 3.2, ease: 'easeOut' }}
+                        />
+                    </div>
+
+                    <div className="font-mono text-sm md:text-base tracking-wide text-[#C7C7CC] min-h-[5.5em] text-left mb-8">
                         <Typewriter
                             onInit={(typewriter) => {
                                 typewriter
                                     .typeString(t.cinematicEntry.initializing)
-                                    .pauseFor(1000)
+                                    .pauseFor(700)
                                     .typeString(`<br>${t.cinematicEntry.loading}`)
-                                    .pauseFor(1000)
+                                    .pauseFor(700)
                                     .typeString(`<br>${t.cinematicEntry.ready}`)
                                     .callFunction(() => setShowButton(true))
                                     .start()
                             }}
                             options={{
-                                delay: 50,
-                                cursor: '█'
+                                delay: 40,
+                                cursor: '▍'
                             }}
                         />
                     </div>
 
-                    {showButton && (
-                        <motion.button
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            whileHover={{ scale: 1.1, textShadow: "0 0 8px var(--accent)" }}
-                            onClick={handleEnter}
-                            className="px-8 py-4 border border-[var(--accent)] text-[var(--accent)] font-bold uppercase tracking-[0.2em] hover:bg-[var(--accent)]/10 transition-all duration-300 ease-out"
-                        >
-                            {t.cinematicEntry.enterSystem}
-                        </motion.button>
-                    )}
+                    <div className="h-11">
+                        {showButton && (
+                            <motion.button
+                                initial={{ opacity: 0, y: 8 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                onClick={handleEnter}
+                                className="h-11 px-7 rounded-full bg-white text-[#0B0B0F] text-sm font-semibold hover:bg-[#E5E5EA] transition-colors caps-gr"
+                            >
+                                {t.cinematicEntry.enterSystem}
+                            </motion.button>
+                        )}
+                    </div>
                 </motion.div>
             )}
         </AnimatePresence>

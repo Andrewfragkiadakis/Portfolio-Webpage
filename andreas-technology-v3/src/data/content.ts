@@ -179,7 +179,39 @@ export interface Content {
     }
     contactTitle: string
     copyright: string
+    /** Copy for the desktop-OS interface chrome: menu bar, window titles, dock, Finder views. */
+    os: {
+        /** The name in natural case, with Greek accents (hero/name fields are all caps). */
+        displayName: string
+        greeting: string
+        menus: { hero: string; about: string; services: string; experience: string; projects: string; contact: string }
+        windows: {
+            welcome: string
+            terminal: string
+            about: string
+            services: string
+            experience: string
+            projects: string
+            contact: string
+            quickLook: string
+            widget: string
+        }
+        desktop: { resume: string; credential: string; github: string; linkedin: string }
+        aria: { resume: string; credential: string; newTab: string; menu: string; switchLanguage: string; toLight: string; toDark: string; prev: string; next: string }
+        view: { label: string; icons: string; list: string }
+        table: { name: string; kind: string; year: string; links: string }
+        items: string
+        favorites: string
+        mail: { to: string; subject: string }
+        theme: { light: string; dark: string }
+    }
 }
+
+/** Direct download of the current CV. */
+export const RESUME_URL = "https://drive.google.com/uc?export=download&id=1b-GiyMU1D_6yxr70bmpufj_kIqKgW38A"
+
+/** Subject line pre-filled in the compose links. */
+export const MAIL_SUBJECT = "Project Collaboration // Andreas Technology"
 
 export const SOCIAL_URLS = {
     github: "https://github.com/Andrewfragkiadakis",
@@ -731,7 +763,42 @@ export const content: Record<'en' | 'gr', Content> = {
         ],
 
         contactTitle: "GET IN TOUCH",
-        copyright: "© 2026 Created By Andreas Fragkiadakis. All rights reserved."
+        copyright: "© 2026 Created By Andreas Fragkiadakis. All rights reserved.",
+
+        os: {
+            displayName: "Andreas Fragkiadakis",
+            greeting: "Hi, I'm",
+            menus: { hero: "Desktop", about: "About", services: "What I Do", experience: "Experience", projects: "Projects", contact: "Contact" },
+            windows: {
+                welcome: "Welcome",
+                terminal: "andreas — zsh — 80×24",
+                about: "About.app",
+                services: "Services — Finder",
+                experience: "Experience — Timeline",
+                projects: "Projects — Finder",
+                contact: "Contact — Mail",
+                quickLook: "Quick Look",
+                widget: "Now"
+            },
+            desktop: { resume: "Resume.pdf", credential: "Jamf 200", github: "GitHub", linkedin: "LinkedIn" },
+            aria: {
+                resume: "Download resume (PDF)",
+                credential: "Jamf 200 credential on Credly",
+                newTab: "opens in a new tab",
+                menu: "Open app menu",
+                switchLanguage: "Switch to Greek",
+                toLight: "Switch to light mode",
+                toDark: "Switch to dark mode",
+                prev: "Previous",
+                next: "Next"
+            },
+            view: { label: "View", icons: "Icons", list: "List" },
+            table: { name: "Name", kind: "Kind", year: "Year", links: "Links" },
+            items: "items",
+            favorites: "Favorites",
+            mail: { to: "To", subject: "Subject" },
+            theme: { light: "Light", dark: "Dark" }
+        }
     },
 
     gr: {
@@ -1274,6 +1341,41 @@ export const content: Record<'en' | 'gr', Content> = {
         ],
 
         contactTitle: "ΕΠΙΚΟΙΝΩΝΙΑ",
-        copyright: "© 2026 Created By Ανδρέας Φραγκιαδάκης. All rights reserved."
+        copyright: "© 2026 Created By Ανδρέας Φραγκιαδάκης. All rights reserved.",
+
+        os: {
+            displayName: "Ανδρέας Φραγκιαδάκης",
+            greeting: "Γεια, είμαι ο",
+            menus: { hero: "Επιφάνεια", about: "Σχετικά", services: "Υπηρεσίες", experience: "Εμπειρία", projects: "Projects", contact: "Επικοινωνία" },
+            windows: {
+                welcome: "Καλωσόρισμα",
+                terminal: "andreas — zsh — 80×24",
+                about: "About.app",
+                services: "Υπηρεσίες — Finder",
+                experience: "Εμπειρία — Χρονολόγιο",
+                projects: "Projects — Finder",
+                contact: "Επικοινωνία — Mail",
+                quickLook: "Γρήγορη Προβολή",
+                widget: "Τώρα"
+            },
+            desktop: { resume: "Βιογραφικό.pdf", credential: "Jamf 200", github: "GitHub", linkedin: "LinkedIn" },
+            aria: {
+                resume: "Λήψη βιογραφικού (PDF)",
+                credential: "Πιστοποίηση Jamf 200 στο Credly",
+                newTab: "ανοίγει σε νέα καρτέλα",
+                menu: "Άνοιγμα μενού εφαρμογών",
+                switchLanguage: "Switch to English",
+                toLight: "Αλλαγή σε φωτεινό θέμα",
+                toDark: "Αλλαγή σε σκοτεινό θέμα",
+                prev: "Προηγούμενο",
+                next: "Επόμενο"
+            },
+            view: { label: "Προβολή", icons: "Εικονίδια", list: "Λίστα" },
+            table: { name: "Όνομα", kind: "Είδος", year: "Έτος", links: "Σύνδεσμοι" },
+            items: "στοιχεία",
+            favorites: "Αγαπημένα",
+            mail: { to: "Προς", subject: "Θέμα" },
+            theme: { light: "Φωτεινό", dark: "Σκοτεινό" }
+        }
     }
 }
