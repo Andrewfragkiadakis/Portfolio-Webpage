@@ -1,247 +1,216 @@
 'use client'
 
 import { useContent } from '@/hooks/useContent'
-import { useCardScroll } from '@/hooks/useCardScroll'
-import RollText from '@/components/ui/RollText'
-import ScrollRail from '@/components/ui/ScrollRail'
 import { motion } from 'motion/react'
-import { useRef } from 'react'
-import type { Experience as ExperienceType, Education as EducationType, EducationKind } from '@/data/content'
-
-const KIND_ICON: Record<EducationKind, string> = {
-    degree: 'fas fa-graduation-cap',
-    certification: 'fas fa-award',
-    license: 'fas fa-id-card',
-}
+import { useState } from 'react'
+import type { Experience as ExperienceType, Education as EducationType } from '@/data/content'
 import SectionHeading from '@/components/ui/SectionHeading'
+import Modal from '@/components/ui/Modal'
+import { EASE_OUT } from '@/utils/motion'
+import { shortPeriod } from '@/utils/period'
 
+type Entry =
+    | { type: 'work'; item: ExperienceType; index: number }
+    | { type: 'edu'; item: EducationType; index: number }
 
-function ScrollButton({ onClick, direction, label, disabled = false }: { onClick: () => void; direction: 'left' | 'right'; label: string; disabled?: boolean }) {
+const pad = (n: number) => String(n).padStart(2, '0')
+
+const rowReveal = (index: number) => ({
+    initial: { opacity: 0 },
+    whileInView: { opacity: 1 },
+    viewport: { once: true, amount: 0.4 },
+    transition: { duration: 0.6, ease: EASE_OUT, delay: Math.min(index, 6) * 0.04 },
+})
+
+const WORK_COLS = 'grid-cols-[2.25rem_1fr] md:grid-cols-[2.5rem_minmax(0,1.3fr)_minmax(0,1fr)_8.5rem]'
+const EDU_COLS = 'grid-cols-[2.25rem_1fr_auto] md:grid-cols-[2.5rem_minmax(0,1fr)_8.5rem]'
+
+function TableHead({ label, count, cols, columns }: { label: string; count: number; cols: string; columns: React.ReactNode }) {
     return (
-        <button
-            onClick={onClick}
-            disabled={disabled}
-            className="w-11 h-11 md:w-12 md:h-12 border border-[var(--foreground)]/30 flex items-center justify-center text-[var(--foreground)] transition-all duration-300 cursor-pointer hover:bg-[var(--foreground)] hover:text-[var(--background)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[var(--foreground)] disabled:active:scale-100"
-            aria-label={label}
-        >
-            <i className={`fas fa-chevron-${direction} text-sm md:text-base`} aria-hidden="true" />
-        </button>
-    )
-}
-
-function ExperienceCard({ exp, index }: { exp: ExperienceType; index: number }) {
-    return (
-        <motion.div
-            data-card="true"
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.1 }}
-            className="w-[85vw] max-w-95 min-h-85 sm:w-90 md:max-w-none md:min-h-auto md:min-w-100 md:w-100 md:aspect-square bg-[var(--background)] border border-[var(--foreground)]/40 flex-shrink-0 p-4 sm:p-5 md:p-8 flex flex-col justify-between hover:border-[var(--accent)] transition-all duration-300 md:hover:shadow-[0_0_20px_var(--accent)] group snap-start md:snap-align-none relative"
-        >
-            <div className="absolute top-0 right-0 p-4 opacity-10 text-4xl font-black text-[var(--foreground)] z-0">
-                {(index + 1).toString().padStart(2, '0')}
+        <div>
+            <div className="flex items-baseline justify-between rule-t-strong pt-2.5 pb-3">
+                <span className="text-base font-medium tracking-[-0.01em]">{label}</span>
+                <span className="meta tabular">{pad(count)}</span>
             </div>
-            <div className="z-10 relative flex-1 flex flex-col">
-                <div className="flex items-center justify-between mb-4">
-                    <span className="w-12 h-12 flex items-center justify-center border border-[var(--accent)]/30 text-[var(--accent)] rounded-lg md:group-hover:bg-[var(--accent)] md:group-hover:text-[var(--background)] transition-colors">
-                        <i className="fas fa-briefcase text-lg" aria-hidden="true" />
-                    </span>
-                    <span className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest">
-                        {exp.duration}
-                    </span>
-                </div>
-                <h3 className="text-lg md:text-xl font-bold text-[var(--foreground)] uppercase leading-tight mb-2 md:group-hover:text-[var(--accent)] transition-colors">
-                    {exp.role}
-                </h3>
-                <p className="text-xs font-mono text-[var(--foreground)] opacity-85 mb-4">
-                    @ {exp.company}
-                </p>
-                <ul className="space-y-2 flex-1">
-                    {exp.tasks.map((task, ti) => (
-                        <li key={ti} className="text-xs text-[var(--foreground)] opacity-80 flex items-start gap-2">
-                            <span className="text-[var(--accent)] mt-1 text-[0.375rem] shrink-0">
-                                <i className="fas fa-square" aria-hidden="true" />
-                            </span>
-                            <span className="leading-tight">{task}</span>
-                        </li>
-                    ))}
-                </ul>
+            <div className={`hidden md:grid ${cols} gap-x-3 rule-b pb-1.5 meta`} aria-hidden="true">
+                {columns}
             </div>
-        </motion.div>
-    )
-}
-
-function EducationCard({ edu, index, verifyLabel, verifyCursor }: { edu: EducationType; index: number; verifyLabel: string; verifyCursor: string }) {
-    const featured = Boolean(edu.featured)
-    const icon = edu.icon ?? KIND_ICON[edu.kind ?? 'degree']
-    return (
-        <motion.div
-            data-card="true"
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.1 }}
-            className={`w-[85vw] max-w-95 min-h-85 sm:w-90 md:max-w-none md:min-h-auto md:min-w-100 md:w-100 md:aspect-square bg-[var(--background)] border flex-shrink-0 p-4 sm:p-5 md:p-8 flex flex-col justify-between hover:border-[var(--accent)] transition-all duration-300 group snap-start md:snap-align-none relative overflow-hidden ${featured ? 'border-[var(--accent)]/70 shadow-[0_0_0_1px_var(--glow),0_0_40px_var(--glow)]' : 'border-[var(--foreground)]/20'}`}
-        >
-            {featured && (
-                <div
-                    className="pointer-events-none absolute -top-24 -right-24 w-56 h-56 rounded-full bg-[var(--accent)] opacity-[0.12] blur-3xl"
-                    aria-hidden="true"
-                />
-            )}
-            <div className="flex-1 flex flex-col relative">
-                <div className="flex items-center justify-between mb-4 gap-3">
-                    <span className={`w-12 h-12 shrink-0 flex items-center justify-center border rounded-lg md:group-hover:bg-[var(--accent)] md:group-hover:text-[var(--background)] md:group-hover:border-[var(--accent)] transition-colors ${featured ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-[var(--foreground)]/30 text-[var(--foreground)]'}`}>
-                        <i className={`${icon} text-lg`} aria-hidden="true" />
-                    </span>
-                    <div className="flex items-center gap-2 min-w-0">
-                        {edu.badge && (
-                            <span className={`text-micro font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 border whitespace-nowrap ${featured ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-[var(--foreground)]/40 text-[var(--foreground)] opacity-80'}`}>
-                                {edu.badge}
-                            </span>
-                        )}
-                        <span className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest whitespace-nowrap">
-                            {edu.duration}
-                        </span>
-                    </div>
-                </div>
-                <h3 className="text-lg md:text-xl font-bold text-[var(--foreground)] uppercase leading-tight mb-2 md:group-hover:text-[var(--accent)] transition-colors">
-                    {edu.degree}
-                </h3>
-                <p className="text-xs font-mono text-[var(--foreground)] opacity-85 mb-4">
-                    {edu.institution}
-                </p>
-                {edu.details && (
-                    <div className="space-y-2 mb-4 flex-1">
-                        {edu.details.map((detail, i) => (
-                            <div key={i} className="flex items-start gap-2 text-xs text-[var(--foreground)] opacity-80">
-                                <i className="fas fa-check text-[var(--accent)] text-micro mt-0.5" aria-hidden="true" />
-                                <span>{detail}</span>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
-            {edu.link && (
-                <a
-                    href={edu.link}
-                    data-cursor={verifyCursor}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`relative inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest border px-4 py-3 transition-all justify-center w-full mt-auto ${featured ? 'border-[var(--accent)] bg-[var(--accent)] text-[var(--background)] hover:shadow-[0_0_24px_var(--glow)]' : 'border-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)]'}`}
-                >
-                    <i className="fas fa-certificate" aria-hidden="true" />
-                    <RollText>{verifyLabel}</RollText>
-                </a>
-            )}
-        </motion.div>
+        </div>
     )
 }
 
 export default function Experience() {
     const t = useContent()
-    const { scrollContainerRef, scroll, canScrollLeft, canScrollRight, progress, ratio } = useCardScroll('[data-card="true"]')
-    const expMobileRef = useRef<HTMLDivElement>(null)
-    const eduMobileRef = useRef<HTMLDivElement>(null)
-
-    const scrollMobileRow = (containerRef: React.RefObject<HTMLDivElement | null>, direction: 'left' | 'right') => {
-        const el = containerRef.current
-        if (!el) return
-        const maxScroll = el.scrollWidth - el.clientWidth
-        if (maxScroll <= 0) return
-        if (direction === 'right' && el.scrollLeft >= maxScroll - 1) return
-        if (direction === 'left' && el.scrollLeft <= 1) return
-        const card = el.querySelector<HTMLElement>('[data-card="true"]')
-        const gap = parseFloat(getComputedStyle(el).columnGap) || 0
-        const step = (card?.offsetWidth ?? el.clientWidth) + gap
-        const amount = direction === 'right' ? step : -step
-        el.scrollTo({ left: Math.max(0, Math.min(el.scrollLeft + amount, maxScroll)), behavior: 'smooth' })
-    }
+    const [active, setActive] = useState<Entry | null>(null)
+    const tbl = t.editorial.table
 
     return (
-        <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-6 md:px-24 py-4 md:py-0 overflow-x-clip overflow-y-visible md:overflow-x-hidden md:overflow-y-auto no-scrollbar relative">
-            <div className="max-w-480 mx-auto w-full h-full flex flex-col justify-center">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 sm:mb-8 md:mb-12 gap-4 md:gap-6">
-                    <SectionHeading id="experience" title={t.experienceSection.title} subtitle={t.experienceSection.subtitle} sizeClass="text-[12vw] md:text-[min(6vw,8vh)]" />
-                    <div className="hidden md:flex gap-2">
-                        <ScrollButton onClick={() => scroll('left')} direction="left" label="Scroll left" disabled={!canScrollLeft} />
-                        <ScrollButton onClick={() => scroll('right')} direction="right" label="Scroll right" disabled={!canScrollRight} />
-                    </div>
+        <section className="w-full md:h-full flex flex-col px-4 md:px-10 pt-16 pb-14 md:pt-5 md:pb-6">
+            <SectionHeading id="experience" index={3} label={t.nav.experience} title={t.editorial.sections.experience} subtitle={t.experienceSection.subtitle} />
+
+            <div className="flex-1 min-h-8 md:min-h-4" />
+
+            <div className="grid grid-cols-4 md:grid-cols-12 gap-x-4 md:gap-x-6 gap-y-12">
+                {/* Professional */}
+                <div className="col-span-4 md:col-span-7">
+                    <TableHead
+                        label={t.experienceSection.professional}
+                        count={t.experience.length}
+                        cols={WORK_COLS}
+                        columns={
+                            <>
+                                <span>{tbl.no}</span>
+                                <span>{tbl.role}</span>
+                                <span>{tbl.company}</span>
+                                <span className="text-right">{tbl.period}</span>
+                            </>
+                        }
+                    />
+                    <ul>
+                        {t.experience.map((exp, idx) => (
+                            <motion.li key={`${exp.role}-${idx}`} {...rowReveal(idx)} className="rule-b">
+                                <button
+                                    type="button"
+                                    onClick={() => setActive({ type: 'work', item: exp, index: idx })}
+                                    aria-label={`${exp.role} — ${exp.company}, ${exp.duration}`}
+                                    data-cursor={t.cursor.open}
+                                    className={`index-row w-full text-left grid ${WORK_COLS} gap-x-3 items-start py-2 md:py-[0.55rem]`}
+                                >
+                                    <span className="index text-body-sm">{pad(idx + 1)}</span>
+                                    <span className="row-title text-[0.9375rem] md:text-sm font-medium leading-snug">
+                                        {exp.role}
+                                        <span className="row-arrow ml-1.5 text-[var(--accent-ink)]" aria-hidden="true">→</span>
+                                    </span>
+                                    <span className="col-start-2 md:col-start-auto text-body-sm text-[var(--muted)] leading-snug">{exp.company}</span>
+                                    <span className="col-start-2 md:col-start-auto text-body-sm text-[var(--muted)] tabular md:text-right leading-snug">{shortPeriod(exp.duration)}</span>
+                                </button>
+                            </motion.li>
+                        ))}
+                    </ul>
                 </div>
 
-                <div className="flex flex-col gap-8 md:hidden">
-                    <div>
-                        <div className="flex items-center justify-between gap-2 mb-3 pl-1">
-                            <span className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest">
-                                {t.experienceSection.professional}
-                            </span>
-                            <div className="flex gap-2">
-                                <ScrollButton onClick={() => scrollMobileRow(expMobileRef, 'left')} direction="left" label="Previous experience" />
-                                <ScrollButton onClick={() => scrollMobileRow(expMobileRef, 'right')} direction="right" label="Next experience" />
-                            </div>
-                        </div>
-                        <div
-                            ref={expMobileRef}
-                            className="flex gap-4 overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 scroll-px-4 scroll-smooth items-stretch"
-                            style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
-                        >
-                            {t.experience.map((exp, idx) => (
-                                <ExperienceCard key={`exp-m-${idx}`} exp={exp} index={idx} />
-                            ))}
-                            <div className="w-4 flex-shrink-0" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="flex items-center justify-between gap-2 mb-3 pl-1">
-                            <span className="text-micro font-mono text-[var(--foreground)] opacity-80 uppercase tracking-widest">
-                                {t.experienceSection.education}
-                            </span>
-                            <div className="flex gap-2">
-                                <ScrollButton onClick={() => scrollMobileRow(eduMobileRef, 'left')} direction="left" label="Previous education" />
-                                <ScrollButton onClick={() => scrollMobileRow(eduMobileRef, 'right')} direction="right" label="Next education" />
-                            </div>
-                        </div>
-                        <div
-                            ref={eduMobileRef}
-                            className="flex gap-4 overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 scroll-px-4 scroll-smooth items-stretch"
-                            style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
-                        >
-                            {t.education.map((edu, idx) => (
-                                <EducationCard key={`edu-m-${idx}`} edu={edu} index={idx} verifyLabel={t.experienceSection.verify} verifyCursor={t.cursor.verify} />
-                            ))}
-                            <div className="w-4 flex-shrink-0" />
-                        </div>
-                    </div>
+                {/* Education & credentials */}
+                <div className="col-span-4 md:col-span-5">
+                    <TableHead
+                        label={t.experienceSection.education}
+                        count={t.education.length}
+                        cols={EDU_COLS}
+                        columns={
+                            <>
+                                <span>{tbl.no}</span>
+                                <span>{tbl.credential}</span>
+                                <span className="text-right">{tbl.period}</span>
+                            </>
+                        }
+                    />
+                    <ul>
+                        {t.education.map((edu, idx) => (
+                            <motion.li key={`${edu.degree}-${idx}`} {...rowReveal(idx)} className="rule-b index-row">
+                                <div className={`grid ${EDU_COLS} gap-x-3 items-start py-2 md:py-[0.55rem]`}>
+                                    <span className="index text-body-sm">{pad(idx + 1)}</span>
+                                    <span className="row-title min-w-0">
+                                        <button
+                                            type="button"
+                                            onClick={() => setActive({ type: 'edu', item: edu, index: idx })}
+                                            aria-label={`${edu.degree} — ${edu.institution}, ${edu.duration}`}
+                                            data-cursor={t.cursor.open}
+                                            className="row-cover text-left text-[0.9375rem] md:text-sm font-medium leading-snug"
+                                        >
+                                            {edu.badge && (
+                                                <span className={`inline-block mr-1.5 px-1 py-px text-micro font-semibold uppercase tracking-[0.05em] align-[0.1em] ${edu.featured ? 'bg-[var(--accent)] text-[#111111]' : 'border border-[var(--rule)]'}`}>
+                                                    {edu.badge}
+                                                </span>
+                                            )}
+                                            {edu.degree}
+                                        </button>
+                                        <span className="block text-body-sm text-[var(--muted)] leading-snug">
+                                            {edu.institution}
+                                        </span>
+                                    </span>
+                                    <span className="relative z-10 flex flex-col items-end gap-0.5 text-right">
+                                        <span className="text-body-sm text-[var(--muted)] tabular leading-snug whitespace-nowrap">{shortPeriod(edu.duration)}</span>
+                                        {edu.link && (
+                                            <a
+                                                href={edu.link}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                data-cursor={t.cursor.verify}
+                                                aria-label={`${t.experienceSection.verify}: ${edu.degree}`}
+                                                className="arrow-link text-caption font-semibold uppercase tracking-[0.05em] hover:text-[var(--accent-ink)] transition-colors whitespace-nowrap"
+                                            >
+                                                <span className="link-underline">{t.experienceSection.verify}</span>{' '}
+                                                <span className="arrow arrow-ne" aria-hidden="true">↗</span>
+                                            </a>
+                                        )}
+                                    </span>
+                                </div>
+                            </motion.li>
+                        ))}
+                    </ul>
                 </div>
-
-                <div
-                    ref={scrollContainerRef}
-                    className="hidden md:flex shrink-0 gap-4 md:gap-6 overflow-x-auto no-scrollbar pb-4 md:pb-8 -mx-4 px-4 scroll-smooth items-stretch"
-                    style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
-                    onScroll={(e) => e.stopPropagation()}
-                >
-                    <div className="hidden md:flex flex-shrink-0 items-center justify-center w-12.5 border-r border-[var(--foreground)]/10 mr-2 md:mr-4">
-                        <span className="text-[var(--foreground)] opacity-50 [writing-mode:vertical-rl] rotate-180 uppercase tracking-[0.3em] font-black text-xs md:text-sm">
-                            {t.experienceSection.professional}
-                        </span>
-                    </div>
-                    {t.experience.map((exp, idx) => (
-                        <ExperienceCard key={`exp-${idx}`} exp={exp} index={idx} />
-                    ))}
-                    <div className="hidden md:block w-px bg-[var(--foreground)]/20 mx-2 md:mx-4 flex-shrink-0" />
-                    <div className="hidden md:flex flex-shrink-0 items-center justify-center w-12.5 border-r border-[var(--foreground)]/10 mr-2 md:mr-4">
-                        <span className="text-[var(--foreground)] opacity-50 [writing-mode:vertical-rl] rotate-180 uppercase tracking-[0.3em] font-black text-xs md:text-sm">
-                            {t.experienceSection.education}
-                        </span>
-                    </div>
-                    {t.education.map((edu, idx) => (
-                        <EducationCard key={`edu-${idx}`} edu={edu} index={idx} verifyLabel={t.experienceSection.verify} verifyCursor={t.cursor.verify} />
-                    ))}
-                    <div className="w-4 md:w-12 flex-shrink-0" />
-                </div>
-                <ScrollRail progress={progress} ratio={ratio} className="hidden md:block mt-2" />
             </div>
+
+            <Modal
+                open={Boolean(active)}
+                onClose={() => setActive(null)}
+                labelledBy="career-modal-title"
+                closeLabel={t.projectsSection.close}
+                className="max-w-xl w-full p-6 md:p-8"
+            >
+                {active?.type === 'work' && (
+                    <>
+                        <p className="meta mb-3">
+                            <span className="index">({pad(active.index + 1)})</span> {t.experienceSection.professional}
+                        </p>
+                        <h3 id="career-modal-title" className="display text-3xl md:text-[2.25rem] pr-16 mb-3">{active.item.role}</h3>
+                        <p className="text-sm text-[var(--muted)] mb-5">
+                            {active.item.company} <span aria-hidden="true">·</span> <span className="tabular">{active.item.duration}</span>
+                        </p>
+                        <ol className="text-sm">
+                            {active.item.tasks.map((task, i) => (
+                                <li key={i} className="rule-t grid grid-cols-[2rem_1fr] py-2">
+                                    <span className="index tabular">{pad(i + 1)}</span>
+                                    <span className="leading-relaxed">{task}</span>
+                                </li>
+                            ))}
+                        </ol>
+                    </>
+                )}
+                {active?.type === 'edu' && (
+                    <>
+                        <p className="meta mb-3">
+                            <span className="index">({pad(active.index + 1)})</span> {t.experienceSection.education}
+                            {active.item.badge && <> · {active.item.badge}</>}
+                        </p>
+                        <h3 id="career-modal-title" className="display text-3xl md:text-[2.25rem] pr-16 mb-3">{active.item.degree}</h3>
+                        <p className="text-sm text-[var(--muted)] mb-5">
+                            {active.item.institution} <span aria-hidden="true">·</span> <span className="tabular">{active.item.duration}</span>
+                        </p>
+                        {active.item.details.length > 0 && (
+                            <ol className="text-sm mb-6">
+                                {active.item.details.map((detail, i) => (
+                                    <li key={i} className="rule-t grid grid-cols-[2rem_1fr] py-2">
+                                        <span className="index tabular">{pad(i + 1)}</span>
+                                        <span className="leading-relaxed">{detail}</span>
+                                    </li>
+                                ))}
+                            </ol>
+                        )}
+                        {active.item.link && (
+                            <a
+                                href={active.item.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                data-cursor={t.cursor.verify}
+                                className="arrow-link inline-flex items-center gap-3 bg-[var(--foreground)] text-[var(--background)] px-5 py-3 text-sm font-medium hover:bg-[var(--accent-ink)] transition-colors"
+                            >
+                                {t.experienceSection.verify}
+                                <span className="arrow arrow-ne" aria-hidden="true">↗</span>
+                            </a>
+                        )}
+                    </>
+                )}
+            </Modal>
         </section>
     )
 }

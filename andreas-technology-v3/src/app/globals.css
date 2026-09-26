@@ -1,32 +1,54 @@
 @import "tailwindcss";
 
+/*
+ * SWISS EDITORIAL
+ * Paper and ink, one grotesk, one signal colour. Everything else is a 1px rule.
+ *
+ * --accent      the signal orange. Used for marks that are not body text: index
+ *               numbers, active dots, the progress line, the cursor.
+ * --accent-ink  the same hue darkened until it passes WCAG AA (4.5:1) as text on
+ *               the paper. On the dark theme the bright orange already passes, so
+ *               both tokens are the same colour there.
+ * --muted       secondary text; ≥ 5.8:1 on both backgrounds.
+ * --rule        hairlines between rows, columns and panels.
+ */
 :root {
-  --background: #fafafa;
-  --foreground: #0f172a;
-  --accent: #4f46e5;
-  --glow: rgba(79, 70, 229, 0.15);
+  --background: #F2F1EC;
+  --foreground: #111111;
+  --muted: #5C5B56;
+  --rule: rgba(17, 17, 17, 0.16);
+  --rule-strong: rgba(17, 17, 17, 0.9);
+  --accent: #FF4F00;
+  --accent-ink: #C23A00;
+  --row-hover: rgba(17, 17, 17, 0.045);
 
-  --font-display: "Inter", sans-serif;
+  --font-display: var(--font-inter-tight), "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   /*
    * Height of the fixed desktop navigation. Panels reserve this at the top so
-   * vertically-centred content is centred in the *visible* area rather than
-   * behind the bar.
+   * content never sits behind the bar.
    */
-  --nav-h: 3.9rem;
+  --nav-h: 3rem;
 }
 
 .dark {
-  --background: #030014;
-  --foreground: #e0e7ff;
-  --accent: #a5b4fc;
-  --glow: rgba(165, 180, 252, 0.2);
+  --background: #0E0E0E;
+  --foreground: #EDEDE8;
+  --muted: #9A9A94;
+  --rule: rgba(237, 237, 232, 0.16);
+  --rule-strong: rgba(237, 237, 232, 0.85);
+  --accent: #FF6A26;
+  --accent-ink: #FF6A26;
+  --row-hover: rgba(237, 237, 232, 0.05);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-muted: var(--muted);
+  --color-rule: var(--rule);
 
   --font-sans: var(--font-display);
 }
@@ -43,21 +65,117 @@
   /*
    * Small type sizes below Tailwind's text-xs (0.75rem). In rem, not px, so they
    * follow the reader's browser font-size setting like the rest of the scale.
-   * No line-height is set: these inherit it, as the px values they replace did.
    */
-  --text-micro: 0.625rem;    /* 10px at default size — meta labels, badges */
-  --text-caption: 0.6875rem; /* 11px — mono captions, corner meta */
-  --text-body-sm: 0.8125rem; /* 13px — code block, tool pills */
+  --text-micro: 0.625rem;    /* 10px — rarely; badges */
+  --text-caption: 0.6875rem; /* 11px — meta labels */
+  --text-body-sm: 0.8125rem; /* 13px — table cells, tool pills */
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  background-image:
-    radial-gradient(at 0% 0%, var(--glow) 0, transparent 50%),
-    radial-gradient(at 100% 100%, var(--glow) 0, transparent 50%);
+  font-feature-settings: "ss01" 0, "cv11" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   min-height: 100vh;
+}
+
+/* Hairline rules — as @utility so responsive variants (md:rule-l) work. */
+@utility rule-t { border-top: 1px solid var(--rule); }
+@utility rule-b { border-bottom: 1px solid var(--rule); }
+@utility rule-l { border-left: 1px solid var(--rule); }
+@utility rule-r { border-right: 1px solid var(--rule); }
+@utility rule-t-strong { border-top: 1px solid var(--rule-strong); }
+@utility rule-none { border-width: 0; }
+
+/* ---------- Editorial primitives ----------
+   In the components layer so Tailwind utilities can still override them. */
+@layer components {
+
+  /* Display type: solid, tight, mixed case. */
+  .display {
+    font-weight: 560;
+    letter-spacing: -0.045em;
+    line-height: 0.92;
+  }
+
+  /* Tiny uppercase meta label — the only place letter-spacing opens up. */
+  .meta {
+    font-size: var(--text-caption);
+    line-height: 1.35;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* Section index, e.g. "(02)". Tabular so every index is the same width. */
+  .index {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+    color: var(--accent-ink);
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  /* Index-table rows: the row tints and its arrow slides in. */
+  .index-row {
+    position: relative;
+    transition: background-color 0.35s cubic-bezier(0.22, 1, 0.36, 1), color 0.35s ease;
+  }
+
+  .index-row:is(:hover, :focus-within) {
+    background-color: var(--row-hover);
+  }
+
+  .index-row .row-arrow {
+    display: inline-block;
+    opacity: 0;
+    transform: translateX(-0.5rem);
+    transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .index-row:is(:hover, :focus-within) .row-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .index-row .row-title {
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @media (min-width: 64rem) {
+    .index-row:is(:hover, :focus-within) .row-title {
+      transform: translateX(0.5rem);
+    }
+  }
+
+  /* A full-row hit area for a button inside a row, leaving sibling links clickable above it. */
+  .row-cover::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  /* Arrow link: text + arrow that nudges on hover. */
+  .arrow-link .arrow {
+    display: inline-block;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .arrow-link:is(:hover, :focus-visible) .arrow {
+    transform: translateX(0.25rem);
+  }
+
+  .arrow-link:is(:hover, :focus-visible) .arrow-ne {
+    transform: translate(0.2rem, -0.2rem);
+  }
 }
 
 html.theme-transition,
@@ -84,23 +202,17 @@ html[data-entered="true"] [data-cinematic] {
   display: none !important;
 }
 
-.glass-panel {
-  background: color-mix(in srgb, var(--background), transparent 30%);
-  backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid color-mix(in srgb, var(--foreground), transparent 90%);
-  border-radius: 1rem;
-}
-
 ::selection {
   background: var(--accent);
-  color: #fff;
+  color: #111111;
 }
 
-/* Keyboard users must always be able to see where they are. */
+/* Keyboard users must always be able to see where they are. The text-safe accent
+   keeps the ring above 3:1 against the paper. */
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--accent-ink);
   outline-offset: 2px;
-  border-radius: 2px;
+  border-radius: 0;
 }
 
 button:not(:disabled),
@@ -133,49 +245,6 @@ a[href],
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
-}
-
-/* Gradient text accent */
-.gradient-text {
-  background: linear-gradient(135deg, var(--accent), #818cf8, #c084fc);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.dark .gradient-text {
-  background: linear-gradient(135deg, var(--accent), #818cf8, #e879f9);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* SpotlightCard */
-.card-spotlight {
-  position: relative;
-  overflow: hidden;
-  --mouse-x: 50%;
-  --mouse-y: 50%;
-  --spotlight-color: rgba(165, 180, 252, 0.1);
-}
-
-.card-spotlight::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), var(--spotlight-color), transparent 80%);
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.card-spotlight:hover::before,
-.card-spotlight:focus-within::before {
-  opacity: 0.8;
 }
 
 /* LogoLoop marquee */
@@ -225,7 +294,6 @@ a[href],
   pointer-events: none;
 }
 
-/* scale-on-hover transform is applied via React inline style; transition defined here */
 .logoloop--scale-hover .logoloop__item {
   transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
   transform-origin: center center;
@@ -244,31 +312,12 @@ a[href],
 
 .logoloop--fade::before {
   left: 0;
-  background: linear-gradient(to right, var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(to right, var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%, transparent 100%);
 }
 
 .logoloop--fade::after {
   right: 0;
-  background: linear-gradient(to left, var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%, rgba(0, 0, 0, 0) 100%);
-}
-
-/* Rolling label (RollText): the track holds the label twice and slides up one line. */
-.roll-text {
-  display: inline-block;
-  overflow: hidden;
-  height: 1.25em;
-  line-height: 1.25em;
-  vertical-align: middle;
-}
-
-.roll-text__track {
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-:is(a, button):is(:hover, :focus-visible) .roll-text__track {
-  transform: translateY(-50%);
+  background: linear-gradient(to left, var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%, transparent 100%);
 }
 
 /* Underline that draws in from the left on hover/focus, then retracts to the right. */
@@ -286,28 +335,41 @@ a[href],
   background-size: 100% 1px;
 }
 
+/* Permanent hairline underline that thickens on hover — for inline text links. */
+.link-rule {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: var(--rule-strong);
+  transition: text-decoration-color 0.3s ease, color 0.3s ease;
+}
+
+.link-rule:is(:hover, :focus-visible) {
+  color: var(--accent-ink);
+  text-decoration-color: currentColor;
+}
+
 /* Tool pills: official logos drawn as a mask, so they take the text colour and
    switch to the brand colour on hover. */
 .tool-pill {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.25rem 0.75rem;
-  border: 1px solid color-mix(in srgb, var(--foreground), transparent 80%);
-  font-family: var(--font-geist-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--rule);
+  font-family: var(--font-sans);
   font-size: var(--text-body-sm);
+  font-weight: 500;
+  letter-spacing: -0.01em;
   color: var(--foreground);
   white-space: nowrap;
   transition: border-color 0.3s ease, color 0.3s ease;
 }
 
-/* Height follows the type scale; width comes from each logo's aspect ratio
-   (set inline as `aspect-ratio`), so wide wordmarks need no pixel maths. */
 .tool-logo {
   display: inline-block;
   height: 0.875rem;
   aspect-ratio: 1;
-  /* Very wide wordmarks shrink (mask-size: contain) rather than stretch the pill. */
   max-width: 3rem;
   flex-shrink: 0;
   background-color: currentColor;
@@ -328,9 +390,7 @@ a[href],
   background-color: var(--brand);
 }
 
-/* Tool tiles (ToolTile): one square per tool, accent mark on a neutral tile. The
-   logo box fits inside the tile by width *and* height, so wide wordmarks (Jamf, Duo)
-   shrink to the same footprint as square marks. */
+/* Tool tiles (ToolTile): one square per tool, ink mark on a hairline tile. */
 .tool-tile {
   --tile: 2rem;
   --mark: 1.125rem;
@@ -341,14 +401,12 @@ a[href],
   flex-shrink: 0;
   width: var(--tile);
   height: var(--tile);
-  border-radius: 0.375rem;
-  background-color: color-mix(in srgb, var(--foreground), transparent 92%);
-  color: var(--accent);
+  border: 1px solid var(--rule);
+  color: var(--foreground);
 }
 
 .tool-tile__logo {
   display: block;
-  /* Wide wordmarks may use more of the tile's width than square marks do. */
   width: min(var(--mark-wide), calc(var(--mark) * var(--ratio)));
   aspect-ratio: var(--ratio);
   max-height: var(--mark);
@@ -359,18 +417,6 @@ a[href],
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
   -webkit-mask-size: contain;
-}
-
-/* Text knockout: reveals LetterGlitch only inside letter shapes */
-.text-knockout {
-  background-color: var(--background);
-  mix-blend-mode: screen;
-  color: #000000;
-}
-
-.dark .text-knockout {
-  mix-blend-mode: multiply;
-  color: #ffffff;
 }
 
 @media (prefers-reduced-motion: reduce) {

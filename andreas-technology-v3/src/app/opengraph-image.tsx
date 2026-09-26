@@ -4,16 +4,14 @@ export const alt = 'Andreas Fragkiadakis — M.Eng. Computer Engineer, IT & Secu
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
-const BG = '#030014'
-const FOREGROUND = '#e0e7ff'
-const ACCENT = '#a5b4fc'
-const STROKE = '3px'
-const outlineShadow = [
-  `-${STROKE} -${STROKE} 0 ${BG}`,
-  `${STROKE} -${STROKE} 0 ${BG}`,
-  `-${STROKE} ${STROKE} 0 ${BG}`,
-  `${STROKE} ${STROKE} 0 ${BG}`,
-].join(', ')
+// Swiss editorial palette (see globals.css).
+const PAPER = '#F2F1EC'
+const INK = '#111111'
+const MUTED = '#5C5B56'
+const SIGNAL = '#FF4F00'
+const RULE = 'rgba(17, 17, 17, 0.9)'
+
+const META = { fontSize: 18, letterSpacing: '0.06em', textTransform: 'uppercase' as const, color: MUTED }
 
 export default async function Image() {
   return new ImageResponse(
@@ -22,74 +20,29 @@ export default async function Image() {
         style={{
           width: '100%',
           height: '100%',
-          background: BG,
+          background: PAPER,
+          color: INK,
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: 48,
-          backgroundImage: `radial-gradient(ellipse 80% 50% at 50% 40%, rgba(165, 180, 252, 0.08) 0%, transparent 50%)`,
+          padding: '40px 56px 44px',
         }}
       >
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 8,
-          }}
-        >
-          <div
-            style={{
-              fontSize: 88,
-              fontWeight: 900,
-              letterSpacing: '-0.04em',
-              color: FOREGROUND,
-              textShadow: outlineShadow,
-              lineHeight: 0.85,
-              textAlign: 'center',
-            }}
-          >
-            ANDREAS
-          </div>
-          <div
-            style={{
-              fontSize: 76,
-              fontWeight: 900,
-              letterSpacing: '-0.04em',
-              color: FOREGROUND,
-              textShadow: outlineShadow,
-              lineHeight: 0.85,
-              textAlign: 'center',
-            }}
-          >
-            FRAGKIADAKIS
-          </div>
+        <div style={{ display: 'flex', borderTop: `2px solid ${RULE}`, paddingTop: 14 }}>
+          <div style={{ ...META, display: 'flex', width: '33%' }}>M.Eng. Computer Engineer</div>
+          <div style={{ ...META, display: 'flex', width: '33%' }}>Athens, Greece</div>
+          <div style={{ ...META, display: 'flex', width: '34%', justifyContent: 'flex-end' }}>Jamf 200 · ITIL 4</div>
         </div>
-        <div
-          style={{
-            marginTop: 32,
-            fontSize: 22,
-            fontWeight: 600,
-            letterSpacing: '0.2em',
-            color: ACCENT,
-            textTransform: 'uppercase',
-          }}
-        >
-          M.ENG. COMPUTER ENGINEER
+
+        <div style={{ display: 'flex', flex: 1 }} />
+
+        <div style={{ display: 'flex', fontSize: 28, fontWeight: 500, letterSpacing: '-0.02em', marginBottom: 20 }}>
+          Apple Fleet & IT Automation · Security Engineering
         </div>
-        <div
-          style={{
-            marginTop: 8,
-            fontSize: 16,
-            letterSpacing: '0.15em',
-            color: FOREGROUND,
-            opacity: 0.7,
-            textTransform: 'uppercase',
-          }}
-        >
-          SecOps · Infrastructure · AI
+        <div style={{ display: 'flex', flexDirection: 'column', fontSize: 150, fontWeight: 600, letterSpacing: '-0.055em', lineHeight: 0.88 }}>
+          <div style={{ display: 'flex' }}>Andreas</div>
+          <div style={{ display: 'flex' }}>
+            Fragkiadakis<span style={{ color: SIGNAL, marginLeft: -18 }}>.</span>
+          </div>
         </div>
       </div>
     ),

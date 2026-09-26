@@ -179,6 +179,38 @@ export interface Content {
     }
     contactTitle: string
     copyright: string
+    /**
+     * Display copy for the editorial layout: mixed-case headings (the uppercase
+     * strings above stay for meta labels), table column heads and short labels.
+     */
+    editorial: Editorial
+}
+
+export interface Editorial {
+    firstName: string
+    lastName: string
+    sections: { home: string; about: string; services: string; experience: string; projects: string; contact: string }
+    meta: { role: string; basedIn: string; credentials: string; contact: string; now: string }
+    table: {
+        no: string
+        role: string
+        company: string
+        period: string
+        title: string
+        tags: string
+        year: string
+        links: string
+        credential: string
+        institution: string
+    }
+    profile: { title: string; role: string; company: string; fleet: string; stack: string; certs: string; location: string }
+    skillsLabel: string
+    toolsLabel: string
+    menu: string
+    backToTop: string
+    light: string
+    dark: string
+    hoverHint: string
 }
 
 export const SOCIAL_URLS = {
@@ -731,7 +763,34 @@ export const content: Record<'en' | 'gr', Content> = {
         ],
 
         contactTitle: "GET IN TOUCH",
-        copyright: "© 2026 Created By Andreas Fragkiadakis. All rights reserved."
+        copyright: "© 2026 Created By Andreas Fragkiadakis. All rights reserved.",
+
+        editorial: {
+            firstName: "Andreas",
+            lastName: "Fragkiadakis",
+            sections: { home: "Home", about: "About", services: "What I do", experience: "Career", projects: "Selected work", contact: "Get in touch" },
+            meta: { role: "Role", basedIn: "Based in", credentials: "Credentials", contact: "Contact", now: "Now" },
+            table: {
+                no: "No.",
+                role: "Role",
+                company: "Company",
+                period: "Period",
+                title: "Title",
+                tags: "Tags",
+                year: "Year",
+                links: "Links",
+                credential: "Credential",
+                institution: "Institution"
+            },
+            profile: { title: "Profile", role: "Role", company: "Company", fleet: "Fleet", stack: "Stack", certs: "Certs", location: "Location" },
+            skillsLabel: "Core skills",
+            toolsLabel: "Daily toolkit",
+            menu: "Menu",
+            backToTop: "Back to top",
+            light: "Light",
+            dark: "Dark",
+            hoverHint: "Hover a row to preview"
+        }
     },
 
     gr: {
@@ -1274,6 +1333,33 @@ export const content: Record<'en' | 'gr', Content> = {
         ],
 
         contactTitle: "ΕΠΙΚΟΙΝΩΝΙΑ",
-        copyright: "© 2026 Created By Ανδρέας Φραγκιαδάκης. All rights reserved."
+        copyright: "© 2026 Created By Ανδρέας Φραγκιαδάκης. All rights reserved.",
+
+        editorial: {
+            firstName: "Ανδρέας",
+            lastName: "Φραγκιαδάκης",
+            sections: { home: "Αρχική", about: "Σχετικά", services: "Υπηρεσίες", experience: "Καριέρα", projects: "Επιλεγμένα έργα", contact: "Επικοινωνία" },
+            meta: { role: "Ρόλος", basedIn: "Έδρα", credentials: "Πιστοποιήσεις", contact: "Επικοινωνία", now: "Τώρα" },
+            table: {
+                no: "Αρ.",
+                role: "Ρόλος",
+                company: "Εταιρεία",
+                period: "Περίοδος",
+                title: "Τίτλος",
+                tags: "Ετικέτες",
+                year: "Έτος",
+                links: "Σύνδεσμοι",
+                credential: "Τίτλος",
+                institution: "Φορέας"
+            },
+            profile: { title: "Προφίλ", role: "Ρόλος", company: "Εταιρεία", fleet: "Στόλος", stack: "Εργαλεία", certs: "Πιστοπ.", location: "Τοποθεσία" },
+            skillsLabel: "Βασικές δεξιότητες",
+            toolsLabel: "Καθημερινά εργαλεία",
+            menu: "Μενού",
+            backToTop: "Στην αρχή",
+            light: "Φωτεινό",
+            dark: "Σκούρο",
+            hoverHint: "Περάστε πάνω από μια γραμμή"
+        }
     }
 }
