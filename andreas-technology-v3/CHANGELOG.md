@@ -5,6 +5,7 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 ## [Unreleased]
 
 ### Added
+- `ProjectImage`: project screenshots default to `contain` inside the frame with a blurred copy of the same image as fill (one download), so nothing is ever cut off; `Project.imageFit: 'cover'` and `imagePosition` opt specific images into an art-directed crop
 - What I Do: every card opens a detail dialog (whole card + always-visible plus control that rotates on hover) with a short explanation, three factual "In practice" points and a curated toolkit of official logos; cards preview their toolkit logos in the footer row. EN/GR
 - `Service.detail`, `highlights` and `tools` (typed `ToolLabel[]`, checked against `data/tools.ts` at compile time)
 - `ToolBadge` / `ToolLogo`: shared official-logo pill used by the About marquee and service toolkits
@@ -32,6 +33,9 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 - JSON-LD `hasCredential` and `knowsAbout` on the Person schema; Jamf keywords in metadata
 
 ### Changed
+- Project card media 4:3 → 16:10 (closer to the 1.5–1.8 ratio of the screenshots); cover crops only for images whose subject survives (Signature Craft, Nexus, HappyFox, Raspberry Pi) and a lowered focal point for the square wheelchair render; Plano Plus, Portfolio, Thesis, Silence Hero, Schiller and LLM research now show whole
+- Project dialog image: 16:10, capped at 45vh, same no-crop treatment (was a 2.8:1 strip)
+- Touch devices: the always-on project caption (which covered half the image and repeated the title) is replaced by a small "opens" corner badge; the hover caption stays on desktop
 - Services: replaced the mobile More/Less accordion with the detail dialog, so touch and desktop share one interaction
 - Sizing audit: px layout values converted to Tailwind's rem spacing scale (cards, images, touch targets, containers); breakpoint `--breakpoint-md` is now `64rem`; LogoLoop takes CSS lengths; tool logos size by `aspect-ratio`. Hairlines, borders, focus rings, blur, pointer and scroll thresholds intentionally stay px
 - Removed duplicated magic numbers: nav offset read from `--nav-h`, breakpoint via media query (not `innerWidth`), mobile card step uses measured card width + computed gap

@@ -61,6 +61,14 @@ export interface Project {
     reportLink?: string
     publicationLink?: string
     image?: string
+    /**
+     * How the screenshot fills its 16:10 frame. Defaults to 'contain' (whole image,
+     * blurred fill behind) so nothing is ever cut off; use 'cover' only when the
+     * subject survives the crop.
+     */
+    imageFit?: 'cover' | 'contain'
+    /** CSS object-position for 'cover' crops, e.g. "50% 62%" to keep the subject in frame. */
+    imagePosition?: string
 }
 
 export interface Content {
@@ -565,7 +573,8 @@ export const content: Record<'en' | 'gr', Content> = {
                     "Live preview with one-click copy to clipboard"
                 ],
                 liveSiteLink: "https://signature-craft-tau.vercel.app/",
-                image: "/images/signature-craft/signature-craft.png"
+                image: "/images/signature-craft/signature-craft.png",
+                imageFit: "cover"
             },
             {
                 name: "Portfolio Website",
@@ -631,7 +640,8 @@ export const content: Record<'en' | 'gr', Content> = {
                     "State managed with Zustand; animated with Framer Motion"
                 ],
                 liveSiteLink: "https://nexus-party-app.vercel.app/",
-                image: "/images/NexusPartyApp/nexuspartyapp.png"
+                image: "/images/NexusPartyApp/nexuspartyapp.png",
+                imageFit: "cover"
             },
             {
                 name: "HappyFox 🦊 - Mental Health App",
@@ -647,7 +657,8 @@ export const content: Record<'en' | 'gr', Content> = {
                     "Focus on accessible, non-judgemental interaction design"
                 ],
                 githubLink: "https://github.com/Andrewfragkiadakis/Mental-Health-Project/tree/main",
-                image: "/images/happyfox/happyfox-app.png"
+                image: "/images/happyfox/happyfox-app.png",
+                imageFit: "cover"
             },
             {
                 name: "Schiller Language Centers Website",
@@ -678,7 +689,8 @@ export const content: Record<'en' | 'gr', Content> = {
                     "Runs unattended on low-power hardware",
                     "Hands-on Linux service management and networking"
                 ],
-                image: "/images/Raspberry Pi Adblocker & Streamer/raspberry-pi.png"
+                image: "/images/Raspberry Pi Adblocker & Streamer/raspberry-pi.png",
+                imageFit: "cover"
             },
             {
                 name: "Research: LLMs & Human Knowledge",
@@ -711,7 +723,9 @@ export const content: Record<'en' | 'gr', Content> = {
                     "Scoped against healthcare IT constraints"
                 ],
                 reportLink: "https://drive.google.com/uc?export=download&id=18gqsCB6UYA1wMTBFjkw2jBoYMqK_HsZT",
-                image: "/images/The Friendly Wheelchair (Concept)/friendly-wheelchair.png"
+                image: "/images/The Friendly Wheelchair (Concept)/friendly-wheelchair.png",
+                imageFit: "cover",
+                imagePosition: "50% 62%"
             }
         ],
 
@@ -1102,7 +1116,8 @@ export const content: Record<'en' | 'gr', Content> = {
                     "Ζωντανή προεπισκόπηση με αντιγραφή με ένα κλικ"
                 ],
                 liveSiteLink: "https://signature-craft-tau.vercel.app/",
-                image: "/images/signature-craft/signature-craft.png"
+                image: "/images/signature-craft/signature-craft.png",
+                imageFit: "cover"
             },
             {
                 name: "Προσωπικη Ιστοσελιδα Portfolio",
@@ -1168,7 +1183,8 @@ export const content: Record<'en' | 'gr', Content> = {
                     "Διαχείριση κατάστασης με Zustand, animations με Framer Motion"
                 ],
                 liveSiteLink: "https://nexus-party-app.vercel.app/",
-                image: "/images/NexusPartyApp/nexuspartyapp.png"
+                image: "/images/NexusPartyApp/nexuspartyapp.png",
+                imageFit: "cover"
             },
             {
                 name: "HappyFox 🦊 - Εφαρμογη Ψυχικης Υγειας",
@@ -1184,7 +1200,8 @@ export const content: Record<'en' | 'gr', Content> = {
                     "Έμφαση σε προσβάσιμο και μη επικριτικό σχεδιασμό"
                 ],
                 githubLink: "https://github.com/Andrewfragkiadakis/Mental-Health-Project/tree/main",
-                image: "/images/happyfox/happyfox-app.png"
+                image: "/images/happyfox/happyfox-app.png",
+                imageFit: "cover"
             },
             {
                 name: "Ιστοσελιδα Κεντρων Ξενων Γλωσσων Schiller",
@@ -1215,7 +1232,8 @@ export const content: Record<'en' | 'gr', Content> = {
                     "Λειτουργεί αδιάλειπτα σε υλικό χαμηλής κατανάλωσης",
                     "Πρακτική εμπειρία σε διαχείριση υπηρεσιών Linux και δικτύων"
                 ],
-                image: "/images/Raspberry Pi Adblocker & Streamer/raspberry-pi.png"
+                image: "/images/Raspberry Pi Adblocker & Streamer/raspberry-pi.png",
+                imageFit: "cover"
             },
             {
                 name: "Ερευνα: LLMs & Ανθρωπινη Γνωση",
@@ -1248,7 +1266,9 @@ export const content: Record<'en' | 'gr', Content> = {
                     "Σχεδιασμός εντός περιορισμών healthcare IT"
                 ],
                 reportLink: "https://drive.google.com/uc?export=download&id=18gqsCB6UYA1wMTBFjkw2jBoYMqK_HsZT",
-                image: "/images/The Friendly Wheelchair (Concept)/friendly-wheelchair.png"
+                image: "/images/The Friendly Wheelchair (Concept)/friendly-wheelchair.png",
+                imageFit: "cover",
+                imagePosition: "50% 62%"
             }
         ],
 

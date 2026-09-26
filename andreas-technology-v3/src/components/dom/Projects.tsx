@@ -2,11 +2,11 @@
 
 import { useContent } from '@/hooks/useContent'
 import { useCardScroll } from '@/hooks/useCardScroll'
-import Image from 'next/image'
 import { motion, type Variants } from 'motion/react'
 import { useState } from 'react'
 import type { Project } from '@/data/content'
 import Modal from '@/components/ui/Modal'
+import ProjectImage from '@/components/ui/ProjectImage'
 import RollText from '@/components/ui/RollText'
 import ScrollRail from '@/components/ui/ScrollRail'
 import { EASE_OUT } from '@/utils/motion'
@@ -79,20 +79,24 @@ export default function Projects() {
                                         variants={IMAGE_WIPE}
                                         custom={index}
                                     >
-                                        <Image
-                                            src={project.image}
-                                            alt={project.name}
-                                            fill
+                                        <ProjectImage
+                                            project={project}
                                             sizes="(max-width: 639px) 300px, (max-width: 1023px) 340px, 440px"
-                                            className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
+                                            className="transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
                                         />
                                     </motion.span>
                                 )}
                                 <span className="absolute top-3 left-3 z-10 font-mono text-caption font-bold px-2 py-1 bg-[var(--background)]/85 backdrop-blur text-[var(--foreground)] border border-[var(--foreground)]/15">
                                     {(index + 1).toString().padStart(2, '0')}
                                 </span>
-                                {/* Hover caption, Awwwards-style: rises from the bottom edge. Always shown on touch. */}
-                                <span className="absolute inset-x-0 bottom-0 z-10 flex items-end justify-between gap-3 p-4 pt-16 bg-gradient-to-t from-black/85 via-black/40 to-transparent text-white transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] translate-y-0 opacity-100 md:translate-y-4 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 md:group-focus-within:translate-y-0 md:group-focus-within:opacity-100">
+                                {/* Touch: a small corner badge says "this opens"; the title is printed right below. */}
+                                {project.detail && (
+                                    <span className="md:hidden absolute bottom-3 right-3 z-10 w-8 h-8 rounded-full bg-[var(--background)]/85 backdrop-blur border border-[var(--foreground)]/15 flex items-center justify-center text-[var(--foreground)]" aria-hidden="true">
+                                        <i className="fas fa-arrow-right -rotate-45 text-caption" />
+                                    </span>
+                                )}
+                                {/* Desktop hover caption, Awwwards-style: rises from the bottom edge. */}
+                                <span className="absolute inset-x-0 bottom-0 z-10 hidden md:flex items-end justify-between gap-3 p-4 pt-16 bg-gradient-to-t from-black/85 via-black/40 to-transparent text-white transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:translate-y-4 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 md:group-focus-within:translate-y-0 md:group-focus-within:opacity-100">
                                     <span className="min-w-0 text-left">
                                         <span className="block text-micro font-mono uppercase tracking-[0.2em] opacity-75">{t.projectsSection.caseStudy}</span>
                                         <span className="block text-sm font-semibold truncate">{project.name}</span>
@@ -119,12 +123,12 @@ export default function Projects() {
                                         onClick={openDetail}
                                         aria-label={`${project.name} — ${t.projectsSection.details}`}
                                         data-cursor={t.cursor.view}
-                                        className="relative block w-full aspect-[4/3] overflow-hidden bg-[var(--foreground)]/5 border border-[var(--foreground)]/15 transition-[border-color,box-shadow] duration-500 hover:border-[var(--accent)] hover:shadow-[0_20px_60px_-20px_var(--glow)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+                                        className="relative block w-full aspect-[16/10] overflow-hidden bg-[var(--foreground)]/5 border border-[var(--foreground)]/15 transition-[border-color,box-shadow] duration-500 hover:border-[var(--accent)] hover:shadow-[0_20px_60px_-20px_var(--glow)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
                                     >
                                         {media}
                                     </button>
                                 ) : (
-                                    <div className="relative w-full aspect-[4/3] overflow-hidden bg-[var(--foreground)]/5 border border-[var(--foreground)]/15">
+                                    <div className="relative w-full aspect-[16/10] overflow-hidden bg-[var(--foreground)]/5 border border-[var(--foreground)]/15">
                                         {media}
                                     </div>
                                 )}
@@ -206,14 +210,8 @@ export default function Projects() {
                 {activeProject && (
                     <>
                         {activeProject.image && (
-                            <div className="relative h-50 sm:h-60 w-full overflow-hidden bg-[var(--background)]">
-                                <Image
-                                    src={activeProject.image}
-                                    alt=""
-                                    fill
-                                    sizes="(max-width: 768px) 100vw, 672px"
-                                    className="object-cover"
-                                />
+                            <div className="relative aspect-[16/10] max-h-[45vh] w-full overflow-hidden bg-[var(--foreground)]/5">
+                                <ProjectImage project={activeProject} sizes="(max-width: 767px) 100vw, 672px" />
                             </div>
                         )}
 
