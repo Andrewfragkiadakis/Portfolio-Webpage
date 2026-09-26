@@ -1,4 +1,4 @@
-import { useId, type ReactNode } from 'react'
+import { memo, useId, type ReactNode } from 'react'
 import Icon, { type SymbolName } from '@/components/ui/Icon'
 import type { AppId } from '@/data/apps'
 
@@ -239,7 +239,7 @@ interface AppIconProps {
 }
 
 /** A full-colour app icon. Decorative: the parent carries the accessible name. */
-export default function AppIcon({ app, size = 48, className = '' }: AppIconProps) {
+function AppIcon({ app, size = 48, className = '' }: AppIconProps) {
     const id = useSvgId()
     const [from, to] = TINT[app]
     return (
@@ -264,6 +264,9 @@ export default function AppIcon({ app, size = 48, className = '' }: AppIconProps
     )
 }
 
+/** Pure by its props, so re-rendering a window frame never re-draws its icons. */
+export default memo(AppIcon)
+
 /**
  * A small squircle tile with a white line symbol, for service and skill cards: the
  * same shape language as the app icons, at list-item size.
@@ -280,25 +283,29 @@ export function GlyphTile({ symbol, tint, size = 32, className = '' }: { symbol:
     )
 }
 
-/** The "AF" monogram on a blue squircle: the owner's avatar in the OS chrome. */
-export function MonogramIcon({ size = 56, className = '' }: { size?: number | string; className?: string }) {
-    const id = useSvgId()
+/**
+ * The owner's picture: his memoji peeking over a MacBook, in a circle like a macOS user
+ * picture (login window, Users & Groups). `face` is a tighter crop of the head for small
+ * sizes such as the menu bar. Both crops stop above the laptop's logo.
+ */
+export function Avatar({
+    size = 56,
+    crop = 'peek',
+    alt = 'Andreas Fragkiadakis',
+    className = '',
+}: {
+    size?: number
+    crop?: 'peek' | 'face'
+    /** Empty when a visible name right beside it already says who this is. */
+    alt?: string
+    className?: string
+}) {
+    const src = crop === 'face' ? '/avatar/memoji-face.webp' : '/avatar/memoji-peek.webp'
     return (
-        <svg viewBox="0 0 100 100" width={size} height={size} aria-hidden="true" focusable="false" className={`app-icon shrink-0 ${className}`}>
-            <Squircle from="#6FB9FF" to="#1B5FE6" id={id}>
-                <text
-                    x="50"
-                    y="63"
-                    textAnchor="middle"
-                    fontFamily="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif"
-                    fontWeight="800"
-                    fontSize="38"
-                    letterSpacing="-1.5"
-                    fill="#FFFFFF"
-                >
-                    AF
-                </text>
-            </Squircle>
-        </svg>
+        <span className={`os-avatar ${crop === 'face' ? 'os-avatar--face' : ''} ${className}`} style={{ width: size, height: size }}>
+            {/* A 3 KB / 10 KB pre-cropped WebP at 3x: no optimizer round trip, never blurry. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={src} alt={alt} width={size} height={size} decoding="async" draggable={false} />
+        </span>
     )
 }

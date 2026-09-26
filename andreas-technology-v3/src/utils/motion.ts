@@ -4,8 +4,8 @@
  */
 export const EASE_OUT = [0.22, 1, 0.36, 1] as const
 
-/** Window open: a quick, barely-bouncing spring that settles in about 350ms. */
-export const WINDOW_SPRING = { type: 'spring', visualDuration: 0.35, bounce: 0.14 } as const
+/** Window open: a quick spring with the faintest settle, about 350ms, like a macOS window appearing. */
+export const WINDOW_SPRING = { type: 'spring', visualDuration: 0.35, bounce: 0.08 } as const
 
 /** Menus and popovers: a 120ms fade with a 4px slide. */
 export const MENU_TRANSITION = { duration: 0.12, ease: [0.2, 0, 0, 1] } as const

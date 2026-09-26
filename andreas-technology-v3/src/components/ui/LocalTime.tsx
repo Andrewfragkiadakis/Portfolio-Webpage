@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 
 const TIME_ZONE = 'Europe/Athens'
 
@@ -25,7 +25,7 @@ interface LocalTimeProps {
 }
 
 /** Live Athens clock. Renders nothing until mounted so server and client never disagree. */
-export default function LocalTime({ className = '', showOffset = true, withDate = false, locale = 'en-GB' }: LocalTimeProps) {
+function LocalTime({ className = '', showOffset = true, withDate = false, locale = 'en-GB' }: LocalTimeProps) {
     const [now, setNow] = useState<Date | null>(null)
 
     useEffect(() => {
@@ -54,3 +54,5 @@ export default function LocalTime({ className = '', showOffset = true, withDate 
         </time>
     )
 }
+
+export default memo(LocalTime)

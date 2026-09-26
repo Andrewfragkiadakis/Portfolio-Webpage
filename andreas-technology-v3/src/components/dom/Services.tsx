@@ -1,7 +1,7 @@
 'use client'
 
 import { useContent } from '@/hooks/useContent'
-import { useDesktop } from '@/contexts/DesktopContext'
+import { useDesktopActions } from '@/contexts/DesktopContext'
 import { useState } from 'react'
 import type { Service } from '@/data/content'
 import { TOOL_BY_LABEL, type Tool } from '@/data/tools'
@@ -18,7 +18,7 @@ const toolsFor = (service: Service): Tool[] =>
 
 export default function Services() {
     const t = useContent()
-    const { launch } = useDesktop()
+    const { launch } = useDesktopActions()
     const [active, setActive] = useState<Service | null>(null)
     const activeIndex = active ? t.services.indexOf(active) : -1
 

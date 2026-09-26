@@ -5,6 +5,10 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 ## [Unreleased]
 
 ### Added
+- Desktop OS: Control Center menu extra (Dark Mode, Language, Focus → Mail), replacing the menu-bar appearance button. EN/GR
+- Desktop OS: one-time macOS-style notification banner "Jamf 200 certified" linking to the Credly credential (hover to keep, close button on hover/focus, reduced-motion fade)
+- Desktop OS: Mission Control (Window ▸ Mission Control, F3, ⌃↑): the six spaces zoom out into a live 3 × 2 grid; click/Enter picks a space, Esc returns. Keyboard and screen-reader operable
+- `Avatar`: the owner's memoji (pre-cropped WebP, cut above the laptop logo) as a macOS user picture in the menu bar, Welcome, About, Mail and the boot screen; the Open Graph image now shows it too. Replaces the "AF" monogram (`MonogramIcon` removed)
 - `ToolTile`: uniform square tool tile (accent mark on a neutral tile); wide wordmarks fit the same footprint. Used for the structured 2–3 column toolkit grid (tile + name) in the service dialog
 - `ProjectImage`: project screenshots default to `contain` inside the frame with a blurred copy of the same image as fill (one download), so nothing is ever cut off; `Project.imageFit: 'cover'` and `imagePosition` opt specific images into an art-directed crop
 - What I Do: every card opens a detail dialog (whole card + always-visible plus control that rotates on hover) with a short explanation, three factual "In practice" points and a curated toolkit of official logos; cards preview their toolkit logos in the footer row. EN/GR
@@ -34,6 +38,8 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 - JSON-LD `hasCredential` and `knowsAbout` on the Person schema; Jamf keywords in metadata
 
 ### Changed
+- Desktop OS performance: window-manager state moved from one context into a selector store, so focusing a window, crossing a space or minimising re-renders tens of components instead of 1,100–3,800; drag no longer toggles a class on `<html>` (full-page restyle); key-window shadow fades a pseudo-element's opacity instead of transitioning a 64 px `box-shadow`; Dock magnification no longer reads layout per pointer move (cosine falloff, critically damped spring); the Terminal typing loop pauses off-space; dialogs drop their full-screen backdrop blur
+- Desktop OS polish: the whole compact title bar drags (the lights' cell used to block it); the next window on a space becomes key when one is hidden; macOS selection colours; inner scroll areas keep overlay scrollbars; calmer window-open spring
 - What I Do cards decluttered: the logo-tile preview row is replaced by a quiet "N tools" caption beside the plus; the full toolkit lives in the dialog. Tool tiles lose their border
 - Tightened the viewBox of Simple Icons wordmarks padded inside a 24×24 canvas (macOS 4.26:1, VMware 6.32:1, Cisco 1.9:1) so they render at their real size; marquee logos cap at 3rem wide
 - Project card media 4:3 → 16:10 (closer to the 1.5–1.8 ratio of the screenshots); cover crops only for images whose subject survives (Signature Craft, Nexus, HappyFox, Raspberry Pi) and a lowered focal point for the square wheelchair render; Plano Plus, Portfolio, Thesis, Silence Hero, Schiller and LLM research now show whole

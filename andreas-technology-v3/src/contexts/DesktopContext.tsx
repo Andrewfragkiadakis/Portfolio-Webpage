@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from 'react'
 import { WINDOW_IDS, sectionOf, type AppId, type WindowId } from '@/data/apps'
 import { sectionIndex, type SectionId } from '@/data/sections'
 import { useIsDesktop } from '@/hooks/useIsDesktop'
@@ -13,6 +13,11 @@ import { scrollToSection } from '@/utils/smooth-scroll'
  * own handlers so that menu items and Dock clicks run the same animated code paths as
  * the traffic lights. Nothing is ever lost: every hidden window can be restored from
  * its Dock icon, from Window ▸ Restore All, or from the hint left in its place.
+ *
+ * Performance: the state lives in a small external store, not in context. Components
+ * subscribe to exactly the slice they draw (`useDesktopState(s => s.status.about)`), so
+ * focusing a window re-renders that window's frame and the menu bar, not the whole
+ * page. The actions are a stable object in context and never cause a render.
  */
 
 export type WindowStatus = 'open' | 'minimized' | 'closed'
@@ -25,7 +30,7 @@ export interface WindowHandlers {
     toggleZoom: () => void
 }
 
-interface DesktopValue {
+export interface DesktopState {
     isDesktop: boolean | null
     /** The section (space) currently in front. */
     active: SectionId
@@ -40,6 +45,11 @@ interface DesktopValue {
     layoutEpoch: number
     bounce: { app: AppId; n: number } | null
     projectsView: ProjectsView
+    /** Mission Control: every space laid out side by side. */
+    overview: boolean
+}
+
+export interface DesktopActions {
     setProjectsView: (view: ProjectsView) => void
     focus: (id: WindowId | null) => void
     setStatus: (id: WindowId, status: WindowStatus) => void
@@ -52,167 +62,194 @@ interface DesktopValue {
     /** Bring a window forward the way a Dock click does: restore, travel to its space, bounce, focus. */
     launch: (id: WindowId) => void
     bounceApp: (app: AppId) => void
+    setOverview: (open: boolean) => void
+    getState: () => DesktopState
 }
-
-const DesktopContext = createContext<DesktopValue | undefined>(undefined)
 
 const allOpen = () => Object.fromEntries(WINDOW_IDS.map((id) => [id, 'open'])) as Record<WindowId, WindowStatus>
 const allZero = () => Object.fromEntries(WINDOW_IDS.map((id) => [id, 0])) as Record<WindowId, number>
 const noneZoomed = () => Object.fromEntries(WINDOW_IDS.map((id) => [id, false])) as Record<WindowId, boolean>
 
+const INITIAL: DesktopState = {
+    isDesktop: null,
+    active: 'hero',
+    stack: ['terminal', 'about', 'services', 'experience', 'projects', 'contact', 'hero'],
+    keyId: 'hero',
+    status: allOpen(),
+    statusCount: allZero(),
+    zoomed: noneZoomed(),
+    layoutEpoch: 0,
+    bounce: null,
+    projectsView: 'icons',
+    overview: false,
+}
+
 /** Time for the horizontal journey to arrive before a restored window flies out of the Dock. */
 const RESTORE_AFTER_TRAVEL_MS = 620
 
+function createStore() {
+    let state = INITIAL
+    const listeners = new Set<() => void>()
+    return {
+        get: () => state,
+        set(update: (s: DesktopState) => Partial<DesktopState> | null) {
+            const patch = update(state)
+            if (!patch) return
+            let changed = false
+            for (const k in patch) {
+                if (patch[k as keyof DesktopState] !== state[k as keyof DesktopState]) { changed = true; break }
+            }
+            if (!changed) return
+            state = { ...state, ...patch }
+            listeners.forEach((l) => l())
+        },
+        subscribe(listener: () => void) {
+            listeners.add(listener)
+            return () => { listeners.delete(listener) }
+        },
+    }
+}
+
+type Store = ReturnType<typeof createStore>
+
+const StoreContext = createContext<Store | undefined>(undefined)
+const ActionsContext = createContext<DesktopActions | undefined>(undefined)
+
 export function DesktopProvider({ children }: { children: ReactNode }) {
+    const [store] = useState(createStore)
+    const handlers = useRef(new Map<WindowId, WindowHandlers>())
+
     const isDesktop = useIsDesktop()
     const active = useActiveSection()
-    const [stack, setStack] = useState<WindowId[]>(['terminal', 'about', 'services', 'experience', 'projects', 'contact', 'hero'])
-    const [keyId, setKeyId] = useState<WindowId | null>('hero')
-    const [status, setStatusMap] = useState(allOpen)
-    const [statusCount, setStatusCount] = useState(allZero)
-    const [zoomed, setZoomedMap] = useState(noneZoomed)
-    const [layoutEpoch, setLayoutEpoch] = useState(0)
-    const [bounce, setBounce] = useState<{ app: AppId; n: number } | null>(null)
-    const [projectsView, setProjectsView] = useState<ProjectsView>('icons')
-    const handlers = useRef(new Map<WindowId, WindowHandlers>())
-    const statusRef = useRef(status)
-    useEffect(() => {
-        statusRef.current = status
-    }, [status])
 
-    const focus = useCallback((id: WindowId | null) => {
-        setKeyId(id)
-        if (id) setStack((s) => (s[s.length - 1] === id ? s : [...s.filter((w) => w !== id), id]))
-    }, [])
+    const actions = useMemo<DesktopActions>(() => {
+        const focus = (id: WindowId | null) =>
+            store.set((s) => ({ keyId: id, stack: !id || s.stack[s.stack.length - 1] === id ? s.stack : [...s.stack.filter((w) => w !== id), id] }))
 
-    const setStatus = useCallback((id: WindowId, next: WindowStatus) => {
-        setStatusMap((s) => (s[id] === next ? s : { ...s, [id]: next }))
-        setStatusCount((c) => ({ ...c, [id]: c[id] + 1 }))
-        if (next !== 'open') {
-            // The next open window on the same space becomes key, like macOS.
-            setKeyId((k) => (k === id ? null : k))
+        const setStatus = (id: WindowId, next: WindowStatus) =>
+            store.set((s) => ({
+                status: s.status[id] === next ? s.status : { ...s.status, [id]: next },
+                statusCount: { ...s.statusCount, [id]: s.statusCount[id] + 1 },
+                // The frontmost open window left on the same space becomes key, like macOS.
+                keyId:
+                    next !== 'open' && s.keyId === id
+                        ? ([...s.stack].reverse().find((w) => w !== id && sectionOf(w) === sectionOf(id) && s.status[w] === 'open') ?? null)
+                        : s.keyId,
+            }))
+
+        const setZoomed = (id: WindowId, value: boolean) =>
+            store.set((s) => (s.zoomed[id] === value ? null : { zoomed: { ...s.zoomed, [id]: value } }))
+
+        const bounceApp = (app: AppId) => store.set((s) => ({ bounce: { app, n: (s.bounce?.n ?? 0) + 1 } }))
+
+        const minimize = (id: WindowId) => {
+            const h = handlers.current.get(id)
+            if (h) h.minimize()
+            else setStatus(id, 'minimized')
         }
-    }, [])
-
-    const setZoomed = useCallback((id: WindowId, value: boolean) => {
-        setZoomedMap((z) => (z[id] === value ? z : { ...z, [id]: value }))
-    }, [])
-
-    const register = useCallback((id: WindowId, h: WindowHandlers) => {
-        handlers.current.set(id, h)
-        return () => {
-            if (handlers.current.get(id) === h) handlers.current.delete(id)
+        const close = (id: WindowId) => {
+            const h = handlers.current.get(id)
+            if (h) h.close()
+            else setStatus(id, 'closed')
         }
-    }, [])
-
-    const bounceApp = useCallback((app: AppId) => setBounce((b) => ({ app, n: (b?.n ?? 0) + 1 })), [])
-
-    const minimize = useCallback((id: WindowId) => {
-        const h = handlers.current.get(id)
-        if (h) h.minimize()
-        else setStatus(id, 'minimized')
-    }, [setStatus])
-
-    const close = useCallback((id: WindowId) => {
-        const h = handlers.current.get(id)
-        if (h) h.close()
-        else setStatus(id, 'closed')
-    }, [setStatus])
-
-    const toggleZoom = useCallback((id: WindowId) => handlers.current.get(id)?.toggleZoom(), [])
-
-    const restore = useCallback((id: WindowId) => {
-        const h = handlers.current.get(id)
-        if (h) h.restore()
-        else setStatus(id, 'open')
-    }, [setStatus])
-
-    const restoreAll = useCallback(() => {
-        const current = readActiveSection()
-        for (const id of WINDOW_IDS) {
-            if (statusRef.current[id] === 'open') continue
-            // Windows on the visible space animate out of the Dock; the rest simply reopen.
-            if (sectionOf(id) === current) restore(id)
+        const restore = (id: WindowId) => {
+            const h = handlers.current.get(id)
+            if (h) h.restore()
             else setStatus(id, 'open')
         }
-    }, [restore, setStatus])
-
-    const launch = useCallback((id: WindowId) => {
-        const section = sectionOf(id)
-        const current = readActiveSection()
-        const travel = section !== current
-        const hidden = statusRef.current[id] !== 'open'
-        if (travel || hidden) bounceApp(id)
-        if (travel) scrollToSection(sectionIndex(section), section)
-        if (hidden) {
-            if (travel) window.setTimeout(() => restore(id), RESTORE_AFTER_TRAVEL_MS)
-            else restore(id)
+        const restoreAll = () => {
+            const current = readActiveSection()
+            for (const id of WINDOW_IDS) {
+                if (store.get().status[id] === 'open') continue
+                // Windows on the visible space animate out of the Dock; the rest simply reopen.
+                if (sectionOf(id) === current) restore(id)
+                else setStatus(id, 'open')
+            }
         }
-        focus(id)
-    }, [bounceApp, focus, restore])
+        const launch = (id: WindowId) => {
+            const section = sectionOf(id)
+            const current = readActiveSection()
+            const travel = section !== current
+            const hidden = store.get().status[id] !== 'open'
+            if (store.get().overview) store.set(() => ({ overview: false }))
+            if (travel || hidden) bounceApp(id)
+            if (travel) scrollToSection(sectionIndex(section), section)
+            if (hidden) {
+                if (travel) window.setTimeout(() => restore(id), RESTORE_AFTER_TRAVEL_MS)
+                else restore(id)
+            }
+            focus(id)
+        }
+
+        return {
+            setProjectsView: (view) => store.set(() => ({ projectsView: view })),
+            focus,
+            setStatus,
+            setZoomed,
+            register: (id, h) => {
+                handlers.current.set(id, h)
+                return () => {
+                    if (handlers.current.get(id) === h) handlers.current.delete(id)
+                }
+            },
+            minimize,
+            close,
+            toggleZoom: (id) => handlers.current.get(id)?.toggleZoom(),
+            restoreAll,
+            launch,
+            bounceApp,
+            setOverview: (open) => store.set(() => ({ overview: open })),
+            getState: store.get,
+        }
+    }, [store])
 
     // The window on the space in front becomes key when the visitor travels there.
     useEffect(() => {
-        // Derived from scroll position, which only exists in the browser.
-        setKeyId((k) => {
-            if (k && sectionOf(k) === active && statusRef.current[k] === 'open') return k
-            return statusRef.current[active] === 'open' ? active : null
-        })
-    }, [active])
+        store.set((s) => ({
+            active,
+            keyId: s.keyId && sectionOf(s.keyId) === active && s.status[s.keyId] === 'open' ? s.keyId : s.status[active] === 'open' ? active : null,
+        }))
+    }, [active, store])
 
-    // Resizing resets positions (and zoom); leaving the desktop layout reopens everything,
-    // because phones have no Dock to restore from.
+    // Phones have no Dock, so nothing may stay hidden there.
+    useEffect(() => {
+        store.set(() => (isDesktop === false ? { isDesktop, status: allOpen(), zoomed: noneZoomed(), overview: false } : { isDesktop }))
+    }, [isDesktop, store])
+
+    // Resizing resets positions (and zoom).
     useEffect(() => {
         let timer: ReturnType<typeof setTimeout>
         const onResize = () => {
             clearTimeout(timer)
-            timer = setTimeout(() => setLayoutEpoch((e) => e + 1), 150)
+            timer = setTimeout(() => store.set((s) => ({ layoutEpoch: s.layoutEpoch + 1 })), 150)
         }
         window.addEventListener('resize', onResize)
         return () => {
             window.removeEventListener('resize', onResize)
             clearTimeout(timer)
         }
-    }, [])
+    }, [store])
 
-    useEffect(() => {
-        if (isDesktop !== false) return
-        // Phones have no Dock, so nothing may stay hidden there.
-        /* eslint-disable react-hooks/set-state-in-effect */
-        setStatusMap(allOpen())
-        setZoomedMap(noneZoomed())
-        /* eslint-enable react-hooks/set-state-in-effect */
-    }, [isDesktop])
-
-    const value = useMemo<DesktopValue>(() => ({
-        isDesktop,
-        active,
-        stack,
-        keyId,
-        status,
-        statusCount,
-        zoomed,
-        layoutEpoch,
-        bounce,
-        projectsView,
-        setProjectsView,
-        focus,
-        setStatus,
-        setZoomed,
-        register,
-        minimize,
-        close,
-        toggleZoom,
-        restoreAll,
-        launch,
-        bounceApp,
-    }), [isDesktop, active, stack, keyId, status, statusCount, zoomed, layoutEpoch, bounce, projectsView, focus, setStatus, setZoomed, register, minimize, close, toggleZoom, restoreAll, launch, bounceApp])
-
-    return <DesktopContext.Provider value={value}>{children}</DesktopContext.Provider>
+    return (
+        <StoreContext.Provider value={store}>
+            <ActionsContext.Provider value={actions}>{children}</ActionsContext.Provider>
+        </StoreContext.Provider>
+    )
 }
 
-export function useDesktop(): DesktopValue {
-    const ctx = useContext(DesktopContext)
-    if (!ctx) throw new Error('useDesktop must be used within a DesktopProvider')
+/** Stable window-manager actions. Never causes a re-render. */
+export function useDesktopActions(): DesktopActions {
+    const ctx = useContext(ActionsContext)
+    if (!ctx) throw new Error('useDesktopActions must be used within a DesktopProvider')
     return ctx
+}
+
+/**
+ * Subscribe to one slice of the window-manager state. The selector must return a
+ * primitive or a reference that already lives in the state (never a new object).
+ */
+export function useDesktopState<T>(selector: (s: DesktopState) => T): T {
+    const store = useContext(StoreContext)
+    if (!store) throw new Error('useDesktopState must be used within a DesktopProvider')
+    return useSyncExternalStore(store.subscribe, () => selector(store.get()), () => selector(INITIAL))
 }

@@ -11,7 +11,7 @@ import { TOOLS, type Tool } from '@/data/tools'
 import ToolBadge from '@/components/ui/ToolBadge'
 import Window from '@/components/ui/Window'
 import CredentialChips from '@/components/ui/CredentialChips'
-import { MonogramIcon, GlyphTile } from '@/components/ui/AppIcon'
+import { Avatar, GlyphTile } from '@/components/ui/AppIcon'
 import Icon, { symbolFor } from '@/components/ui/Icon'
 import { SERVICE_TINTS } from '@/data/apps'
 
@@ -72,7 +72,7 @@ export default function About() {
     const sidebar = (
         <div className="px-4 pt-4 md:pt-1 pb-4 md:pb-5 flex flex-col gap-4 md:h-[calc(100%-3.25rem)]">
             <div className="flex items-center gap-3">
-                <MonogramIcon size={52} />
+                <Avatar size={52} />
                 <div className="min-w-0">
                     <p className="text-[0.9375rem] font-bold tracking-[-0.01em] leading-tight">{t.os.displayName}</p>
                     <p className="text-caption text-[var(--muted)] leading-snug mt-0.5">{t.title}</p>

@@ -225,6 +225,7 @@ export interface Content {
             minimize: string
             zoom: string
             restoreAll: string
+            missionControl: string
             bar: string
         }
         /** Traffic-light button names; the window title is appended. */
@@ -233,6 +234,12 @@ export interface Content {
         hidden: { minimized: string; closed: string; reopen: string }
         apps: { terminal: string; finder: string }
         clock: string
+        /** Control Center menu extra: appearance, language and the owner's Focus status. */
+        controlCenter: { label: string; darkMode: string; on: string; off: string; language: string; languageName: string; focus: string }
+        /** One-time notification banner. */
+        notification: { app: string; title: string; body: string; now: string; close: string }
+        /** Mission Control: every space at once. `{space}` is the space's name. */
+        missionControl: { label: string; goTo: string; hint: string }
     }
 }
 
@@ -847,12 +854,16 @@ export const content: Record<'en' | 'gr', Content> = {
                 minimize: "Minimize",
                 zoom: "Zoom",
                 restoreAll: "Restore All",
+                missionControl: "Mission Control",
                 bar: "Menu bar"
             },
             windowActions: { close: "Close", minimize: "Minimize", zoom: "Zoom" },
             hidden: { minimized: "{app} is minimized in the Dock", closed: "{app} is closed", reopen: "Reopen" },
             apps: { terminal: "Terminal", finder: "Finder" },
-            clock: "Time in Athens"
+            clock: "Time in Athens",
+            controlCenter: { label: "Control Center", darkMode: "Dark Mode", on: "On", off: "Off", language: "Language", languageName: "English", focus: "Focus" },
+            notification: { app: "Credentials", title: "Jamf 200 certified", body: "Jamf Certified Tech — Jamf Pro. Verify on Credly.", now: "now", close: "Close notification" },
+            missionControl: { label: "Mission Control", goTo: "Go to {space}", hint: "Choose a space · Esc to exit" }
         }
     },
 
@@ -1451,12 +1462,16 @@ export const content: Record<'en' | 'gr', Content> = {
                 minimize: "Ελαχιστοποίηση",
                 zoom: "Ζουμ",
                 restoreAll: "Επαναφορά όλων",
+                missionControl: "Mission Control",
                 bar: "Γραμμή μενού"
             },
             windowActions: { close: "Κλείσιμο", minimize: "Ελαχιστοποίηση", zoom: "Ζουμ" },
             hidden: { minimized: "Το {app} είναι ελαχιστοποιημένο στο Dock", closed: "Το {app} είναι κλειστό", reopen: "Άνοιγμα ξανά" },
             apps: { terminal: "Terminal", finder: "Finder" },
-            clock: "Ώρα Αθήνας"
+            clock: "Ώρα Αθήνας",
+            controlCenter: { label: "Κέντρο ελέγχου", darkMode: "Σκοτεινό θέμα", on: "Ενεργό", off: "Ανενεργό", language: "Γλώσσα", languageName: "Ελληνικά", focus: "Εστίαση" },
+            notification: { app: "Πιστοποιήσεις", title: "Πιστοποίηση Jamf 200", body: "Jamf Certified Tech — Jamf Pro. Επαλήθευση στο Credly.", now: "τώρα", close: "Κλείσιμο ειδοποίησης" },
+            missionControl: { label: "Mission Control", goTo: "Μετάβαση: {space}", hint: "Επιλέξτε χώρο · Esc για έξοδο" }
         }
     }
 }

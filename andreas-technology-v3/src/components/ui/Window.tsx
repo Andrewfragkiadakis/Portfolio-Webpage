@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react'
 import { animate, motion, useInView, useMotionValue, useReducedMotion, type AnimationPlaybackControls, type Variants } from 'motion/react'
-import { useDesktop, type WindowStatus } from '@/contexts/DesktopContext'
+import { useDesktopActions, useDesktopState, type WindowStatus } from '@/contexts/DesktopContext'
 import { useContent } from '@/hooks/useContent'
 import AppIcon from '@/components/ui/AppIcon'
 import type { AppId, WindowId } from '@/data/apps'
@@ -87,6 +87,8 @@ interface Genie { dx: number; dy: number; sx: number; sy: number; from: 'none' |
 type VariantInput = Genie & { delay: number; reduce: boolean }
 
 const INSTANT = { duration: 0 } as const
+
+const preventSelect = (e: Event) => e.preventDefault()
 
 function genieTo(frame: HTMLElement, app: AppId): Omit<Genie, 'from'> {
     const r = frame.getBoundingClientRect()
@@ -197,11 +199,16 @@ export default function Window({
     play,
 }: WindowProps) {
     const t = useContent()
-    const desk = useDesktop()
-    const { isDesktop, keyId, stack, register, focus, setStatus, setZoomed, layoutEpoch } = desk
-    const status: WindowStatus = desk.status[wid]
-    const statusN = desk.statusCount[wid]
-    const zoomed = desk.zoomed[wid]
+    // Only this window's slice of the window manager: focusing another window re-renders
+    // two frames (the old and the new key window), never the content inside them.
+    const { register, focus, setStatus, setZoomed } = useDesktopActions()
+    const isDesktop = useDesktopState((s) => s.isDesktop)
+    const isKey = useDesktopState((s) => s.keyId === wid)
+    const z = useDesktopState((s) => 10 + Math.max(0, s.stack.indexOf(wid)))
+    const layoutEpoch = useDesktopState((s) => s.layoutEpoch)
+    const status: WindowStatus = useDesktopState((s) => s.status[wid])
+    const statusN = useDesktopState((s) => s.statusCount[wid])
+    const zoomed = useDesktopState((s) => s.zoomed[wid])
     const reduceMotion = useReducedMotion()
 
     const frameRef = useRef<HTMLDivElement>(null)
@@ -220,8 +227,6 @@ export default function Window({
     const preZoom = useRef({ x: 0, y: 0 })
     const drag = useRef<{ id: number; sx: number; sy: number; ox: number; oy: number; minX: number; maxX: number; minY: number; maxY: number } | null>(null)
 
-    const isKey = keyId === wid
-    const z = 10 + Math.max(0, stack.indexOf(wid))
     const managed = isDesktop === true
 
     /* Frame size helpers for zoom. */
@@ -350,7 +355,12 @@ export default function Window({
         const maxY = Math.max(oy + (a.bottom - r.bottom), oy)
         drag.current = { id: e.pointerId, sx: e.clientX, sy: e.clientY, ox, oy, minX, maxX, minY, maxY }
         e.currentTarget.setPointerCapture(e.pointerId)
-        document.documentElement.classList.add('is-dragging-window')
+        // Promote the window to its own compositor layer for the drag only: moving it is
+        // then a transform on the GPU, with no repaint of the window or its shadow.
+        el.classList.add('is-dragging')
+        // No text selection may start mid-drag. A listener, not a class on <html>: a
+        // root class would restyle all ~3000 elements at the start and end of each drag.
+        document.addEventListener('selectstart', preventSelect)
         e.preventDefault()
     }
 
@@ -366,7 +376,8 @@ export default function Window({
         if (!d || d.id !== e.pointerId) return
         drag.current = null
         if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId)
-        document.documentElement.classList.remove('is-dragging-window')
+        frameRef.current?.classList.remove('is-dragging')
+        document.removeEventListener('selectstart', preventSelect)
     }
 
     const onDoubleClick = (e: React.MouseEvent<HTMLElement>) => {
@@ -431,7 +442,7 @@ export default function Window({
             style={{ x, y, zIndex: managed ? z : undefined }}
             // A hidden window never becomes key, even when its "Reopen" hint takes focus.
             onPointerDownCapture={managed && status === 'open' ? () => focus(wid) : undefined}
-            onFocusCapture={managed && status === 'open' ? () => { if (keyId !== wid) focus(wid) } : undefined}
+            onFocusCapture={managed && status === 'open' ? () => { if (!isKey) focus(wid) } : undefined}
         >
             <Root
                 ref={windowRef as React.RefObject<HTMLDivElement>}
@@ -448,8 +459,11 @@ export default function Window({
                 }}
                 inert={hiddenSettled || undefined}
                 style={{ transformOrigin: '50% 100%', visibility: hiddenSettled ? 'hidden' : undefined }}
-                className={`os-window ${variant === 'terminal' ? 'os-window--terminal' : ''} ${managed ? (isKey ? 'is-key' : 'is-inactive') : 'is-key'} ${zoomed ? 'is-zoomed' : ''} flex-1 min-h-0 outline-none`}
+                className={`os-win ${managed ? (isKey ? 'is-key' : 'is-inactive') : 'is-key'} ${zoomed ? 'is-zoomed' : ''} flex flex-col flex-1 min-h-0 outline-none`}
             >
+                {/* The surface clips the content; the frame around it carries the key-window
+                    shadow on a pseudo-element that only fades its opacity (no shadow repaint). */}
+                <div className={`os-window ${variant === 'terminal' ? 'os-window--terminal' : ''} flex-1 min-h-0`}>
                 {sidebar ? (
                     <div className="os-split flex-1 min-h-0" style={{ '--sidebar-w': sidebarWidth } as React.CSSProperties}>
                         <div className="os-split__title">{titlebar}</div>
@@ -467,6 +481,7 @@ export default function Window({
                         {footer && <div className="os-statusbar">{footer}</div>}
                     </>
                 )}
+                </div>
             </Root>
 
             {hiddenSettled && (

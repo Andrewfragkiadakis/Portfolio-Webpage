@@ -1,7 +1,7 @@
 'use client'
 
 import { useContent } from '@/hooks/useContent'
-import { useDesktop } from '@/contexts/DesktopContext'
+import { useDesktopState } from '@/contexts/DesktopContext'
 import { useState, useEffect, useRef } from 'react'
 import { smoothScrollToElement } from '@/utils/smooth-scroll'
 import type { SectionId } from '@/data/sections'
@@ -15,7 +15,7 @@ const DOCK_APPS: SectionId[] = ['hero', 'about', 'projects', 'contact']
 /** Phone-style dock: four apps in a frosted tray that tucks away while reading. */
 export default function MobileNav() {
     const t = useContent()
-    const { active } = useDesktop()
+    const active = useDesktopState((s) => s.active)
     const [isVisible, setIsVisible] = useState(true)
     const lastScrollY = useRef(0)
 

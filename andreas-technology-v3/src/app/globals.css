@@ -50,6 +50,12 @@
   --dock-bg: rgba(255, 255, 255, 0.3);
   --dock-rim: rgba(255, 255, 255, 0.5);
   --hud: rgba(252, 252, 254, 0.78);
+  --cc-module: rgba(255, 255, 255, 0.55);
+  --scroll-thumb: rgba(0, 0, 0, 0.32);
+  --space-thumb:
+    radial-gradient(80% 60% at 80% 12%, rgba(255, 255, 255, 0.55), transparent 60%),
+    linear-gradient(168deg, #FBDCCD 0%, #F4C3D8 30%, #D6C4F6 55%, #B7D2F8 80%, #A6DBF1 100%);
+  --cc-module-hover: rgba(255, 255, 255, 0.8);
   --desk-ink: #1D1D1F;
   --desk-shadow: 0 1px 2px rgba(255, 255, 255, 0.55);
 
@@ -64,6 +70,11 @@
     0 0 0 0.5px rgba(0, 0, 0, 0.16),
     0 12px 32px 0 rgba(20, 22, 60, 0.15),
     0 3px 8px 0 rgba(20, 22, 60, 0.07);
+  /* Added on top of the inactive shadow for the key window (faded in by opacity). */
+  --shadow-key-extra:
+    0 0 0 0.5px rgba(0, 0, 0, 0.06),
+    0 22px 56px 0 rgba(20, 22, 60, 0.2),
+    0 6px 14px 0 rgba(20, 22, 60, 0.08);
 
   --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", var(--font-inter), "Inter", sans-serif;
   --font-mono-stack: ui-monospace, "SF Mono", SFMono-Regular, Menlo, var(--font-jetbrains), monospace;
@@ -118,6 +129,12 @@
   --dock-bg: rgba(36, 36, 44, 0.38);
   --dock-rim: rgba(255, 255, 255, 0.16);
   --hud: rgba(34, 34, 40, 0.78);
+  --cc-module: rgba(255, 255, 255, 0.07);
+  --scroll-thumb: rgba(255, 255, 255, 0.34);
+  --space-thumb:
+    radial-gradient(80% 60% at 80% 12%, rgba(140, 156, 255, 0.2), transparent 60%),
+    linear-gradient(168deg, #2E1654 0%, #3B1C6F 30%, #1D2A7A 60%, #0B3452 100%);
+  --cc-module-hover: rgba(255, 255, 255, 0.12);
   --desk-ink: #FFFFFF;
   --desk-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
 
@@ -131,6 +148,10 @@
   --shadow-inactive:
     0 0 0 0.5px rgba(0, 0, 0, 0.7),
     0 14px 36px 0 rgba(0, 0, 0, 0.4);
+  --shadow-key-extra:
+    0 0 0 0.5px rgba(0, 0, 0, 0.3),
+    0 26px 64px 0 rgba(0, 0, 0, 0.36),
+    0 8px 18px 0 rgba(0, 0, 0, 0.2);
 }
 
 @theme inline {
@@ -213,6 +234,41 @@ body {
 
 .app-icon--doc { filter: none; }
 
+/* ─── User picture ──────────────────────────────────────────────────────── */
+
+/* The memoji in a circle on a soft neutral plate, like a macOS user picture. */
+.os-avatar {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: radial-gradient(120% 90% at 50% 20%, #F2F4F8 0%, #C9D1DE 100%);
+  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.14), 0 1px 2px rgba(0, 0, 0, 0.12);
+}
+
+.dark .os-avatar {
+  background: radial-gradient(120% 90% at 50% 20%, #767E8E 0%, #474D5A 100%);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.16), 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.os-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Menu bar: the head only, a little larger than the circle so it reads at 18px. */
+.os-avatar--face img { transform: scale(1.12) translateY(4%); }
+
+.os-avatar.os-avatar--boot,
+.dark .os-avatar.os-avatar--boot {
+  background: radial-gradient(120% 90% at 50% 20%, #5B6272 0%, #2E323B 100%);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.2), 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
 /* ─── Windows ───────────────────────────────────────────────────────────── */
 
 .os-window {
@@ -224,10 +280,36 @@ body {
   box-shadow: var(--shadow-inactive);
   overflow: hidden;
   color: var(--foreground);
-  transition: box-shadow 0.28s ease;
 }
 
+/* Dialogs (Quick Look) are always key. */
 .os-window.is-key { box-shadow: var(--shadow-key); }
+
+/* A managed window: the surface inside clips the content, this frame carries the extra
+   key-window depth on a pseudo-element. Focus changes only fade its opacity, so the
+   large blurred shadow is painted once instead of on every frame of a transition. */
+.os-win {
+  position: relative;
+  border-radius: 0.75rem;
+  isolation: isolate;
+}
+
+.os-win::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  box-shadow: var(--shadow-key-extra);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+
+.os-win.is-key::before { opacity: 1; }
+
+/* Only while dragged: its own compositor layer, so the move never repaints it. */
+.os-frame.is-dragging { will-change: transform; }
 
 /* The light inner rim dark-mode windows have, drawn above the content. */
 .os-window::after {
@@ -296,7 +378,7 @@ body {
   white-space: nowrap;
 }
 
-.os-window.is-inactive .os-title { color: var(--muted); }
+.is-inactive .os-title { color: var(--muted); }
 
 /* Split window: full-height sidebar on desktop, stacked on phones. */
 .os-split {
@@ -389,6 +471,10 @@ body {
   display: flex;
   align-items: center;
   flex-shrink: 0;
+  /* Only the three buttons are "no drag": in a compact title bar the grid cell is wider,
+     and the rest of it must still move the window, as on macOS. */
+  width: max-content;
+  justify-self: start;
   margin-left: -0.25rem;
 }
 
@@ -438,7 +524,7 @@ body {
 }
 
 /* Inactive windows grey their lights until the pointer reaches them, like macOS. */
-.os-window.is-inactive .os-lights:not(:hover):not(:focus-within) .os-light {
+.is-inactive .os-lights:not(:hover):not(:focus-within) .os-light {
   background: var(--light-inactive);
   box-shadow: inset 0 0 0 0.5px var(--light-inactive-ring);
 }
@@ -692,6 +778,10 @@ a.os-chip--accent:hover { background: var(--accent-fill); color: var(--on-accent
   box-shadow: 0 0 0 2px #38383E, 0 0 0 4px var(--focus-ring);
 }
 
+/* Terminal block cursor: a hard on/off blink, as in Terminal.app. */
+.term-cursor { animation: term-blink 1.1s steps(1, end) infinite; }
+@keyframes term-blink { 50% { opacity: 0; } }
+
 /* ─── Menu bar and menus ─────────────────────────────────────────────── */
 
 /* The blur lives on a pseudo-element: a backdrop-filter on the bar itself would become
@@ -727,6 +817,9 @@ a.os-chip--accent:hover { background: var(--accent-fill); color: var(--on-accent
 .os-menubar__item[aria-expanded="true"] { background: var(--control-hover); }
 
 .os-menubar__item:focus-visible { outline-offset: -1px; }
+
+/* The owner's picture where the Apple menu sits. */
+.os-menubar__item--avatar { padding: 0 0.5rem 0 0.625rem; }
 
 .os-menu {
   position: absolute;
@@ -792,13 +885,184 @@ a.os-chip--accent:hover { background: var(--accent-fill); color: var(--on-accent
   background: var(--hairline-strong);
 }
 
+/* ─── Control Center ─────────────────────────────────────────────────── */
+
+.os-cc {
+  position: absolute;
+  top: calc(100% + 0.3125rem);
+  right: -0.25rem;
+  width: 20rem;
+  padding: 0.625rem;
+  border-radius: 1.125rem;
+  background: var(--menu-bg);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  backdrop-filter: blur(40px) saturate(180%);
+  box-shadow:
+    0 0 0 0.5px var(--hairline-strong),
+    inset 0 0 0 0.5px var(--menu-rim),
+    0 18px 44px -8px rgba(0, 0, 0, 0.32),
+    0 4px 10px -2px rgba(0, 0, 0, 0.12);
+  color: var(--foreground);
+  transform-origin: top right;
+  z-index: 60;
+}
+
+/* A module: a rounded plate on the vibrancy, like the tiles in Control Center. */
+.os-cc-module {
+  border-radius: 0.875rem;
+  background: var(--cc-module);
+  box-shadow: inset 0 0 0 0.5px var(--hairline);
+  transition: background-color 0.15s ease;
+}
+
+.os-cc-module:hover { background: var(--cc-module-hover); }
+
+.os-cc-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-height: 3.5rem;
+  padding: 0.5rem 0.625rem;
+  font-size: 0.8125rem;
+}
+
+.os-cc-toggle__knob {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.875rem;
+  height: 1.875rem;
+  border-radius: 9999px;
+  font-size: 1rem;
+  background: var(--control-hover);
+  color: var(--foreground);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.os-cc-toggle__knob.is-on { background: var(--accent-fill); color: #FFFFFF; }
+.os-cc-toggle__knob.is-focus { background: #6E5BD9; color: #FFFFFF; }
+
+/* ─── Notification banner ────────────────────────────────────────────── */
+
+.os-notification {
+  position: relative;
+  pointer-events: auto;
+  border-radius: 1.125rem;
+  background: var(--menu-bg);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  backdrop-filter: blur(40px) saturate(180%);
+  box-shadow:
+    0 0 0 0.5px var(--hairline-strong),
+    inset 0 0 0 0.5px var(--menu-rim),
+    0 12px 32px -10px rgba(0, 0, 0, 0.3);
+  color: var(--foreground);
+}
+
+.os-notification__close {
+  position: absolute;
+  top: -0.375rem;
+  left: -0.375rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+  background: var(--window-bg);
+  color: var(--muted);
+  box-shadow: 0 0 0 0.5px var(--hairline-strong), 0 1px 3px rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.os-notification:hover .os-notification__close,
+.os-notification:focus-within .os-notification__close { opacity: 1; }
+
+/* ─── Mission Control ────────────────────────────────────────────────── */
+
+/* Behind each space while it is a thumbnail: a miniature of the wallpaper. */
+.os-space-plate {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--space-thumb);
+  box-shadow: 0 0 0 var(--plate-ring, 1px) rgba(255, 255, 255, 0.35);
+}
+
+/* The desktop dims behind the thumbnails (no blur: it would re-render every frame). */
+.os-mc-dim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: rgba(8, 10, 24, 0.4);
+}
+
+.os-mc-hint {
+  position: absolute;
+  inset-inline: 0;
+  text-align: center;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.86);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+.os-mc-space {
+  display: block;
+  width: 100%;
+  border-radius: 0.75rem;
+  transition: box-shadow 0.15s ease;
+}
+
+.os-mc-space:hover { box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.55); }
+.os-mc-space.is-current { box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85); }
+.os-mc-space:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--focus-ring), 0 0 0 5px rgba(255, 255, 255, 0.7); }
+
+.os-mc-label {
+  margin-top: 0.5rem;
+  text-align: center;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #FFFFFF;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+}
+
+.os-mc-label.is-current { font-weight: 700; }
+
 /* ─── Dock ───────────────────────────────────────────────────────────── */
 
 /* Same trick as the menu bar, so the Dock's labels keep their own blur. */
 .os-dock {
   position: relative;
   isolation: isolate;
+  border-radius: 1.375rem;
 }
+
+.os-dock-divider {
+  align-self: center;
+  width: 1px;
+  height: 2.625rem;
+  margin: 0 0.3125rem;
+  background: var(--hairline-strong);
+}
+
+/* Running-app indicator: a small dot under the icon. */
+.os-dock-dot {
+  position: absolute;
+  bottom: -0.3125rem;
+  width: 0.25rem;
+  height: 0.25rem;
+  border-radius: 9999px;
+  background: var(--foreground);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.os-dock-dot.is-running { opacity: 0.55; }
 
 .os-dock::before {
   content: "";
@@ -873,9 +1137,9 @@ html[data-entered="true"] [data-cinematic] {
   display: none !important;
 }
 
-::selection {
-  background: color-mix(in srgb, var(--accent-brand), transparent 70%);
-}
+/* Text selection in the macOS highlight colours (blue accent). */
+::selection { background: #B3D7FF; }
+.dark ::selection { background: #3F638B; }
 
 /* macOS focus ring: a 3px system-blue halo that follows the control's shape. */
 :focus-visible {
@@ -887,13 +1151,6 @@ button:not(:disabled),
 a[href],
 [role="button"] {
   cursor: pointer;
-}
-
-/* While a window is dragged nothing may start a text selection. */
-html.is-dragging-window,
-html.is-dragging-window * {
-  user-select: none !important;
-  -webkit-user-select: none !important;
 }
 
 /* Honour the OS "reduce motion" setting without ever hiding content. */
@@ -908,9 +1165,15 @@ html.is-dragging-window * {
   }
 }
 
-::-webkit-scrollbar {
-  display: none;
-  width: 0px;
+/* Scrollbars: the page's own scrollbar is hidden (on desktop the vertical scroll drives
+   the horizontal journey, so a vertical bar would mislead). Inner scroll areas keep the
+   platform's overlay scrollbars on macOS, and get a thin, quiet thumb elsewhere. */
+html { scrollbar-width: none; }
+html::-webkit-scrollbar { display: none; }
+
+.os-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-thumb) transparent;
 }
 
 .no-scrollbar::-webkit-scrollbar {

@@ -1,18 +1,65 @@
-import { useEffect, useRef, Suspense, useCallback } from 'react'
+import { useEffect, useRef, Suspense, useCallback, type ReactNode } from 'react'
 import dynamic from 'next/dynamic'
-import { motion, useScroll, useTransform, useVelocity, useMotionValue, animate, useReducedMotion } from 'motion/react'
+import { motion, useScroll, useTransform, useVelocity, useMotionValue, animate, useReducedMotion, type MotionValue } from 'motion/react'
 import HeroOverlay from '@/components/dom/HeroOverlay'
 import About from '@/components/dom/About'
 import Services from '@/components/dom/Services'
 import { useIsDesktop } from '@/hooks/useIsDesktop'
 import { SECTION_IDS, SECTION_STEPS, TRACK_HEIGHT_VH, TRACK_TRAVEL_VW } from '@/data/sections'
-import { useDesktop } from '@/contexts/DesktopContext'
+import { useDesktopActions, useDesktopState } from '@/contexts/DesktopContext'
+import MissionControl, { useOverviewGeometry, type SpaceSlot } from '@/components/ui/MissionControl'
 import { readActiveSection } from '@/hooks/useActiveSection'
 import { scrollToSection } from '@/utils/smooth-scroll'
 
 const Experience = dynamic(() => import('@/components/dom/Experience'), { ssr: false })
 const Projects = dynamic(() => import('@/components/dom/Projects'), { ssr: false })
 const Contact = dynamic(() => import('@/components/dom/Contact'), { ssr: false })
+
+/**
+ * One space of the journey. In Mission Control it scales down into its slot of the
+ * overview grid; `ov` (0 → 1) drives that, so the zoom is one spring for all six.
+ * The transforms are written straight to motion values: no React render per frame.
+ */
+function Space({ index, ov, slot, children, onDesktopPointerDown }: { index: number; ov: MotionValue<number>; slot: SpaceSlot | null; children: ReactNode; onDesktopPointerDown: () => void }) {
+    const x = useMotionValue(0)
+    const y = useMotionValue(0)
+    const scale = useMotionValue(1)
+    const plate = useMotionValue(0)
+
+    useEffect(() => {
+        const apply = (o: number) => {
+            if (!slot) {
+                x.set(0); y.set(0); scale.set(1); plate.set(0)
+                return
+            }
+            x.set(o * (slot.left - index * slot.W))
+            y.set(o * slot.top)
+            scale.set(1 - o * (1 - slot.s))
+            plate.set(o)
+        }
+        apply(ov.get())
+        return ov.on('change', apply)
+    }, [ov, slot, index, x, y, scale, plate])
+
+    return (
+        <motion.div
+            data-panel={index}
+            // Clicking the bare desktop leaves no window key, like clicking the macOS desktop.
+            onPointerDown={(e) => { if (e.target === e.currentTarget) onDesktopPointerDown() }}
+            style={{ x, y, scale, transformOrigin: '0 0' }}
+            className="relative isolate w-full max-w-2xl mx-auto overflow-x-clip md:max-w-none md:mx-0 md:h-screen md:w-screen md:flex-shrink-0 md:flex md:items-center md:justify-center md:overflow-hidden md:pt-[calc(var(--nav-h)+1rem)] md:pb-[calc(var(--dock-h)+0.25rem)] md:px-10 lg:px-14"
+        >
+            {slot && (
+                <motion.div
+                    aria-hidden="true"
+                    className="os-space-plate"
+                    style={{ opacity: plate, borderRadius: 12 / slot.s, '--plate-ring': `${1.5 / slot.s}px` } as React.ComponentProps<typeof motion.div>['style']}
+                />
+            )}
+            {children}
+        </motion.div>
+    )
+}
 
 function SectionFallback() {
     return <div className="min-h-screen w-full flex items-center justify-center bg-transparent" aria-hidden />
@@ -29,8 +76,17 @@ export default function HorizontalLayout() {
     const targetRef = useRef<HTMLDivElement>(null)
     const viewportRef = useRef<HTMLDivElement>(null)
     const isDesktop = useIsDesktop()
-    const { focus } = useDesktop()
+    const { focus } = useDesktopActions()
+    const overview = useDesktopState((s) => s.overview)
     const prefersReducedMotion = useReducedMotion()
+    const geo = useOverviewGeometry(isDesktop === true)
+
+    // Mission Control: 0 = the journey, 1 = every space in its overview slot.
+    const ov = useMotionValue(0)
+    useEffect(() => {
+        const controls = animate(ov, overview ? 1 : 0, prefersReducedMotion ? { duration: 0 } : { type: 'spring', visualDuration: 0.42, bounce: 0.08 })
+        return () => controls.stop()
+    }, [overview, ov, prefersReducedMotion])
 
     const { scrollYProgress } = useScroll({ target: targetRef })
 
@@ -45,10 +101,15 @@ export default function HorizontalLayout() {
         trackGate.set(isDesktop ? 1 : 0)
     }, [isDesktop, trackGate])
 
+    // In Mission Control the track returns to its origin (ov → 1) so the spaces can lay
+    // themselves out in a grid from known positions.
     const x = useTransform(
-        [scrollYProgress, trackGate],
-        ([progress, gate]: number[]) => `${-progress * gate * TRACK_TRAVEL_VW}vw`
+        [scrollYProgress, trackGate, ov],
+        ([progress, gate, o]: number[]) => `${-progress * gate * (1 - o) * TRACK_TRAVEL_VW}vw`
     )
+
+
+    const clearFocus = useCallback(() => focus(null), [focus])
 
     const velocity = useVelocity(scrollYProgress)
     // A ref, not state: the snap guard is read inside listeners and must never
@@ -158,7 +219,8 @@ export default function HorizontalLayout() {
               between desktop spaces. Mobile: a stack of app cards, clear of the status
               bar at the top and the dock at the bottom.
             */}
-            <div ref={viewportRef} className="md:sticky md:top-0 md:left-0 md:flex md:h-screen md:w-full md:items-center md:overflow-hidden">
+            <div ref={viewportRef} inert={overview || undefined} className="md:sticky md:top-0 md:left-0 md:flex md:h-screen md:w-full md:items-center md:overflow-hidden">
+                {geo && <motion.div aria-hidden="true" className="os-mc-dim" style={{ opacity: ov }} />}
                 <motion.div
                     style={{ x }}
                     className="flex flex-col gap-5 px-3 sm:px-6 pt-[calc(var(--nav-h)+0.75rem)] pb-32 md:p-0 md:flex-row md:gap-0 md:h-screen md:items-center md:will-change-transform"
@@ -169,18 +231,13 @@ export default function HorizontalLayout() {
                       the sticky positioning the desktop track relies on.
                     */}
                     {sections.map((section, index) => (
-                        <div
-                            key={index}
-                            data-panel={index}
-                            // Clicking the bare desktop leaves no window key, like clicking the macOS desktop.
-                            onPointerDown={(e) => { if (e.target === e.currentTarget) focus(null) }}
-                            className="relative w-full max-w-2xl mx-auto overflow-x-clip md:max-w-none md:mx-0 md:h-screen md:w-screen md:flex-shrink-0 md:flex md:items-center md:justify-center md:overflow-hidden md:pt-[calc(var(--nav-h)+1rem)] md:pb-[calc(var(--dock-h)+0.25rem)] md:px-10 lg:px-14"
-                        >
+                        <Space key={index} index={index} ov={ov} slot={geo?.[index] ?? null} onDesktopPointerDown={clearFocus}>
                             {section}
-                        </div>
+                        </Space>
                     ))}
                 </motion.div>
             </div>
+            <MissionControl geo={geo} />
         </div>
     )
 }

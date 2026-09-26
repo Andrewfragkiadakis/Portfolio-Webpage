@@ -15,6 +15,78 @@ The horizontal journey is kept: each section is a desktop space. Phones still ge
 
 Nothing is Apple artwork. There is no Apple logo, and no Apple app icon is copied. All app icons, glyphs and the wallpaper are drawn from scratch in this repo. Tool logos in the toolkit marquee are left alone, because they name tools.
 
+## Round 4: polish, performance, macOS extras
+
+Asked for: "more polishing, more performance fixes, and visual enhancements", and the memoji instead of an "AF" logo.
+
+### Performance (measured, then fixed, then re-measured)
+
+Method: `next build` + `next start` on port 3191 (the untouched round-3 commit built from a `git archive` copy on 3192 for the baseline), Chrome via Playwright at 1440×900, **CPU throttled 4×** to make main-thread cost visible. Load = median of 5 cold loads. Interactions = rAF frame sampler + CDP `Performance.getMetrics`, average of two passes per build and two runs per side. Component renders are counted with a React DevTools-style commit hook. Scripts: `scratchpad/cap/perf-r4.js`, `renders-r4.js`, `trace-r4.js`, `recalc-r4.js`, `paintflash-r4.js`.
+
+| Scenario (4× CPU) | Before | After |
+| --- | --- | --- |
+| **Scroll across the spaces**: frames > 25 ms / p95 frame / script | 32 / 33 ms / 0.49 s | **14 / 17 ms / 0.21 s** |
+| Scroll: React components re-rendered | 3,762 | **178** (−95%) |
+| **Drag a window**: first-frame stall / janky frames | ~96 ms / 3 | **~62 ms / 1** |
+| Drag: components re-rendered on grab | 372 | **34** |
+| Drag: style recalc from the grab/release class | 30 / 22 ms (4×); 7.6 ms per toggle unthrottled | **0 ms** (no root class) |
+| **Minimise + restore**: worst frame / janky frames | ~54 ms / 1.8 | **17 ms / 0** |
+| Minimise + restore: components re-rendered | 1,124 | **57** |
+| Dock hover sweep: janky frames / layouts | 0 / 200 | 0 / **179** (no layout reads per move) |
+| Idle on the Desktop space | 0 commits | 0 commits (typing loop now pauses off-space) |
+| Load: JS transferred (gzip) | 280.0 KB | 282.6 KB (+2.6 KB: Control Center, Mission Control, notification) |
+| Load: images | 32.1 KB | 45.2 KB (+13 KB memoji, two pre-cropped WebPs) |
+| Load: TBT (4×) / LCP (4×) | 115–121 ms / 0.71–1.08 s | 104–130 ms / 0.72–0.74 s (noise-level) |
+
+What was wrong, and the fix:
+
+1. **Every window-manager change re-rendered the whole page.** `DesktopContext` was one context value holding `active`, `keyId`, `stack`, `status`…; every section consumed it, so focusing a window or crossing a space re-rendered ~1,100 components (every icon, card and chip). It is now a tiny external store (`useSyncExternalStore`) with **selectors** (`useDesktopState(s => s.status.about)`) plus a **stable actions context** (`useDesktopActions()`). Focusing a window re-renders the window frames and the menu bar, never the content. `AppIcon`, `Icon` and `LocalTime` are `memo`ised.
+2. **A class on `<html>` for the whole drag.** `html.is-dragging-window *{user-select:none}` restyled all ~3,000 elements at grab and release (30 ms + 22 ms at 4×). Replaced by a `selectstart` listener for the duration of the drag.
+3. **The key-window shadow animated a 64 px blur.** `box-shadow` transitioned on every focus change (repaint of the full window area for 280 ms). The extra depth now lives on a pseudo-element of the new `.os-win` frame and only fades its **opacity**; the window is promoted to its own layer (`will-change: transform`) only while dragged.
+4. **Dock magnification read layout on every pointer move** (`getBoundingClientRect()` ×10 per move, interleaved with the springs' size writes). Resting icon centres are now measured once when the pointer enters; the falloff is a cosine curve and the spring is critically damped (no overshoot), 48 → 72 px.
+5. **Off-screen work.** The Terminal's typing loop kept re-laying out a translucent window on other spaces; it now runs only while the Desktop space is in front. The `animate-ping` status dot (a style recalc every frame) is a still dot, and the terminal cursor blinks in hard steps like Terminal.app.
+6. **A full-screen `backdrop-filter` behind dialogs** (Quick Look, service sheets) re-blurred the page on every frame of the fade. It is now a light scrim with no blur.
+
+Not changed, deliberately: Inter/JetBrains are still not preloaded (Apple devices use SF, 0 KB of fonts on the Mac). Greek content still ships in the main bundle (~14 KB gzip); lazy-loading it is possible but would move the Greek copy out of `content.ts`, which every branch shares.
+
+### Polish
+
+- **Traffic lights:** only the three buttons are "no-drag" now. In compact title bars the lights' grid cell used to swallow the left third of the bar, so grabbing a window there did nothing.
+- **Key window:** when a window is hidden, the frontmost open window on the same space becomes key (it used to leave none).
+- **Window open spring** settles with less bounce (`bounce .08`), closer to a macOS window appearing.
+- **Selection colour** is the macOS highlight (`#B3D7FF` light, `#3F638B` dark).
+- **Scrollbars:** only the page's own (journey-driving) scrollbar is hidden. Inner scroll areas keep the platform's overlay scrollbars on macOS, with a thin quiet thumb elsewhere (`.os-scroll`). Before, every scrollbar on the site was removed.
+- **Dock:** larger plate radius, running dots as a component style, divider as a token.
+
+### Visual enhancements (three, kept quiet)
+
+- **Control Center** menu extra (two-switch glyph) replaces the loose sun/moon button: Dark Mode and Language toggles as round knobs on vibrancy modules, and a wide **Focus** module ("Open to Opportunities") that opens Mail. Esc or a click outside closes it; EN/GR.
+- **Notification banner**, once per browser: "Jamf 200 certified", sliding in from the right edge under the menu bar (spring), the certificate icon, "now", a close button on hover/focus as on macOS, auto-dismiss after 9 s unless hovered. Links to the Credly credential. Announced politely to screen readers.
+- **Mission Control** (Window ▸ Mission Control, **F3** or **⌃↑**): the journey zooms out into a 3 × 2 grid of the six spaces. The thumbnails are the live panels themselves, scaled on one spring (`ov` 0 → 1, written straight to motion values: no React render per frame), each on a miniature of the wallpaper, over a dimmed desktop. Click, Enter or Space picks a space and it zooms back in; arrows move between spaces; Esc or a click on the background returns. The page cannot scroll underneath; the track is `inert` while it is open. Desktop only; instant under reduced motion.
+
+### Logo: the memoji replaces "AF"
+
+`public/avatar/memoji-peek.webp` (288 px, 10 KB) and `memoji-face.webp` (72 px, 3 KB) are crops of the existing `favicons/android-chrome-512x512.png`, **cut above the laptop so its Apple logo never shows**. `Avatar` (in `AppIcon.tsx`) draws them in a circle on a soft neutral plate, like a macOS user picture, with `alt="Andreas Fragkiadakis"`.
+
+- **Menu bar:** the head crop at 18 px where the Apple menu sits (the owner menu: About Andreas, Résumé, LinkedIn, GitHub).
+- **Welcome window** 64 px, **About sidebar** 52 px, **Mail contact card** 48 px.
+- **Boot screen:** a login-window-style 96 px picture with the name under it, instead of the "AF" wordmark.
+- **Open Graph image:** redrawn in the site's language (wallpaper gradient, white card, the memoji as a data URL read at build time, name, role, "Jamf 200 · Apple fleet of 550+ Macs · Athens"). `MonogramIcon` is gone; no "AF" logo remains anywhere.
+
+### Keyboard
+
+Esc closes menus, Control Center, Mission Control and dialogs. F3 / ⌃↑ toggles Mission Control. **⌘W and ⌘M are not bound:** Chrome and Safari reserve them (close tab, minimise the browser) and a page cannot intercept them, so the menus do not advertise shortcuts that would not work.
+
+### Round 4 files
+
+- **New:** `src/components/ui/ControlCenter.tsx`, `src/components/ui/Notification.tsx`, `src/components/ui/MissionControl.tsx`, `public/avatar/memoji-peek.{webp,png}` and `memoji-face.webp` (the PNG crop feeds the OG image).
+- **Rewritten:** `src/contexts/DesktopContext.tsx` (store + selectors + stable actions, `overview`), `src/components/dom/Dock.tsx`, `src/app/opengraph-image.tsx`.
+- **Adjusted:** `Window.tsx` (selectors, `.os-win` shadow frame, drag layer, `selectstart`), `HorizontalLayout.tsx` (`Space` panels with the overview transform, dim layer), `Navigation.tsx` (memoji owner menu, Control Center, Mission Control item), `HeroOverlay.tsx`, `About.tsx`, `Contact.tsx`, `CinematicEntry.tsx`, `Projects.tsx`, `Services.tsx`, `Finder.tsx`, `MobileNav.tsx`, `Modal.tsx`, `AppIcon.tsx` (`Avatar`), `Icon.tsx`, `LocalTime.tsx`, `utils/motion.ts`, `globals.css`, `content.ts` (`os.controlCenter`, `os.notification`, `os.missionControl`, `os.menu.missionControl`, EN and GR).
+
+### Round 4 previews
+
+In `scratchpad/r4/desktop-os-v2/` (`light/`, `dark/`, `extra/`): Mission Control (mid-zoom and settled, both themes, and the space picked), Control Center (EN/GR, both themes), the notification (and its hover close), the owner and Window menus, a dragged Terminal overlapping the inactive Welcome window, traffic-light glyphs, Dock magnification, genie mid-flight and the minimised hint, Quick Look, the boot screen, Greek hero/About, and phones (EN/GR; no horizontal overflow at 390 px).
+
 ## Owner feedback → what changed
 
 | Asked for | v2 |
@@ -97,7 +169,7 @@ State lives in `DesktopContext` (`stack`, `keyId`, `status`, `zoomed`, `layoutEp
   - Press on the title bar, or the sidebar's top strip, and drag. It uses pointer events with `setPointerCapture`.
   - The window is clamped so the whole window stays on the visible desktop of its space: inside its panel, below the menu bar and above the Dock.
   - Buttons, links and segmented controls inside the title bar never start a drag (`data-no-drag`).
-  - While dragging, `html.is-dragging-window` blocks text selection. Content text stays selectable.
+  - While dragging, a `selectstart` listener blocks text selection (Round 4: no class on `<html>`, which restyled the whole page). Content text stays selectable.
   - Wheel and trackpad scrolling of the horizontal journey is untouched.
 - **Z-order and key window:** pressing or focusing anything in a window raises it (`zIndex = 10 + stack index`) and makes it **key**. The menu bar's bold item names the key window's app ("Terminal", "Finder", "Mail", "Timeline"…).
   - Inactive windows grey their lights (they colour again on hover) and cast the lighter shadow.
@@ -115,7 +187,7 @@ State lives in `DesktopContext` (`stack`, `keyId`, `status`, `zoomed`, `layoutEp
   - Hidden windows are `inert` and `visibility: hidden`. They stay in the DOM (and in SSR HTML), so their state is kept.
   - Resizing the viewport resets positions and zoom (`layoutEpoch`). Leaving the desktop layout reopens everything, because phones have no Dock.
 - **Menus.** The menu bar has these menus:
-  - **AF:** About Andreas, Download Résumé…, LinkedIn ↗, GitHub ↗
+  - **Owner menu** (the memoji, where the Apple menu sits): About Andreas, Download Résumé…, LinkedIn ↗, GitHub ↗
   - **App (bold):** About This Portfolio, Hide *App*, Quit *App*
   - **File:** New Message…, Download Résumé…, Close Window
   - **View:** as Icons / as List (drives the Projects view), Toggle Appearance, Switch to Greek or English
@@ -123,7 +195,7 @@ State lives in `DesktopContext` (`stack`, `keyId`, `status`, `zoomed`, `layoutEp
   - **Window:** Minimize, Zoom, Restore All, and the window list
 
   A menu opens on click. While one is open, hovering another title switches to it, as on macOS. Keyboard support follows the ARIA menubar pattern: ↓ / Enter / Space open a menu and focus its first item, ↑ ↓ Home End move within it, ← → move between menus, and Esc closes the menu and returns focus to its title. Menu items are 24px tall.
-- **Status items:** an input-source badge (EN/ΕΛ), an appearance toggle (sun/moon), and the clock in macOS format ("Sat 26 Sep 18:45", Athens time, localised in Greek).
+- **Status items:** an input-source badge (EN/ΕΛ), **Control Center** (Round 4; it replaces the sun/moon toggle), and the clock in macOS format ("Sat 26 Sep 18:45", Athens time, localised in Greek).
 - **Keyboard.** Windows are reached in DOM order. In split windows the traffic lights come first in the DOM but are drawn on the sidebar. The order is lights → title → toolbar → sidebar → content.
   - Tabbing into a window on another space brings that space to the front. It never scrolls the clipped track sideways.
   - Traffic lights are real `<button>`s named "Close — About.app", "Minimize — Welcome", and so on. Each light's focus ring hugs its circle.
@@ -148,8 +220,8 @@ State lives in `DesktopContext` (`stack`, `keyId`, `status`, `zoomed`, `layoutEp
 | Section | v2 |
 | --- | --- |
 | Chrome | 24px translucent **menu bar** with real menus, replacing v1's list of section buttons. Status items as above. **Dock:** 7 apps (the six spaces plus Terminal), a divider, then GitHub, LinkedIn and a PDF document for the Résumé. It has running dots, labels, magnification and bounce. The blur on the menu bar and the Dock sits on a `::before`, so their menus and labels can blur the page themselves. Nested `backdrop-filter`s otherwise lose their blur. |
-| Boot | A black startup screen with a large white **AF** monogram, a thin progress bar, the same typed log (small, grey, mono) and a white "Enter System" capsule. |
-| Hero | The Welcome window (compact title bar) has the AF avatar squircle, the status token, the name as a large title, the role, the tagline, credential tokens, capsule CTAs and round social buttons. The **Terminal** is a dark "Pro"-profile window, now draggable and not rotated. The **Now** widget is a Sonoma-style HUD. **Desktop icons** are a PDF document, a certificate and two app tiles, with labels that turn into the blue selection pill on focus. The **stickers are removed**. |
+| Boot | A black startup screen with the owner's **memoji user picture and name** (Round 4; was an AF monogram), a thin progress bar, the same typed log (small, grey, mono) and a white "Enter System" capsule. |
+| Hero | The Welcome window (compact title bar) has the memoji user picture (Round 4; was an AF squircle), the status token, the name as a large title, the role, the tagline, credential tokens, capsule CTAs and round social buttons. The **Terminal** is a dark "Pro"-profile window, now draggable and not rotated. The **Now** widget is a Sonoma-style HUD. **Desktop icons** are a PDF document, a certificate and two app tiles, with labels that turn into the blue selection pill on focus. The **stickers are removed**. |
 | About | A split window. The vibrancy sidebar holds the identity, the current focus, "Get Info" key/value rows and the `engineer.ts` pane (tall viewports only). The main pane has the large-title tagline, paragraphs, credential tokens and four skill cards with squircle glyph tiles. Skill detail is now actually clamped: v1's `md:block` overrode the clamp. The status strip keeps the tools marquee. |
 | What I Do | A Finder window with a Favorites source list (blue line glyphs), unified title "Services — Finder / 6 items", six service cards with squircle tiles, and a path bar with the "Let's Talk" CTA. |
 | Experience | A Timeline window. The toolbar has a segmented control (Professional / Education) and borderless ‹ › buttons. The rail, dots, date tokens and Verify Credential buttons are kept. |
@@ -161,7 +233,7 @@ State lives in `DesktopContext` (`stack`, `keyId`, `status`, `zoomed`, `layoutEp
 
 - **New:**
   - `src/contexts/DesktopContext.tsx` (window manager)
-  - `src/components/ui/AppIcon.tsx` (squircle app icons, `GlyphTile`, `MonogramIcon`, PDF and certificate art)
+  - `src/components/ui/AppIcon.tsx` (squircle app icons, `GlyphTile`, `Avatar` (Round 4, replaces `MonogramIcon`), PDF and certificate art)
   - `src/components/ui/Icon.tsx` (line-icon set, plus `symbolFor()` mapping the content file's legacy glyph names)
   - `src/components/ui/Finder.tsx` (source list, path bar)
   - `src/components/ui/Wallpaper.tsx`
@@ -236,7 +308,7 @@ Menus, dialogs, Greek, boot:
 
 | | |
 | --- | --- |
-| ![Go menu (dark)](style-preview/extra/menu-go-dark.jpg) | ![AF menu (dark)](style-preview/extra/menu-af-dark.jpg) |
+| ![Go menu (dark)](style-preview/extra/menu-go-dark.jpg) | ![Owner menu (dark, round 2 capture)](style-preview/extra/menu-af-dark.jpg) |
 | ![Quick Look (dark)](style-preview/extra/quicklook-dark.jpg) | ![Service dialog](style-preview/extra/service-dialog-light.jpg) |
 | ![Projects list view](style-preview/extra/projects-list-light.jpg) | ![Restore All result](style-preview/extra/restore-all-light.jpg) |
 | ![Greek hero](style-preview/extra/greek-hero-light.jpg) | ![Greek Window menu](style-preview/extra/greek-menu-window-light.jpg) |

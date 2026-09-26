@@ -100,7 +100,9 @@ export default function Modal({
                     className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
                     onClick={onClose}
                 >
-                    <div className="absolute inset-0 bg-black/40 backdrop-blur-[3px]" />
+                    {/* A light scrim and no backdrop blur: Quick Look floats over the desktop, and a
+                        full-screen blur would re-render the whole page on every frame of the fade. */}
+                    <div className="absolute inset-0 bg-black/20 dark:bg-black/40" />
                     <motion.div
                         ref={panelRef}
                         role="dialog"
@@ -124,7 +126,7 @@ export default function Modal({
                                 {closeLabel}
                             </button>
                         </div>
-                        <div className="min-h-0 overflow-y-auto overscroll-contain">
+                        <div className="os-scroll min-h-0 overflow-y-auto overscroll-contain">
                             {children}
                         </div>
                     </motion.div>

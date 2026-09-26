@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'motion/react'
 import Typewriter from 'typewriter-effect'
 import { useContent } from '@/hooks/useContent'
 import { SITE_ENTERED_EVENT } from '@/utils/motion'
+import { Avatar } from '@/components/ui/AppIcon'
 
 export default function CinematicEntry() {
     const t = useContent()
@@ -49,7 +50,7 @@ export default function CinematicEntry() {
 
     if (hasVisited) return null
 
-    // A boot screen: monogram, progress bar, typed boot log, then "Enter System".
+    // A boot screen: user picture, progress bar, typed boot log, then "Enter System".
     // Dark in both themes, as boot screens are.
     return (
         <AnimatePresence>
@@ -67,10 +68,11 @@ export default function CinematicEntry() {
                         {t.cinematicEntry.skip} →
                     </button>
 
-                    {/* The boot mark: the owner's monogram, never a vendor logo. */}
-                    <span className="text-[4.5rem] leading-none font-extrabold tracking-[-0.06em] text-white mb-12 select-none" aria-hidden="true">
-                        AF
-                    </span>
+                    {/* Like the login window: the owner's picture and name, never a vendor logo. */}
+                    <div className="flex flex-col items-center gap-3 mb-10 select-none">
+                        <Avatar size={96} className="os-avatar--boot" />
+                        <p className="text-[0.9375rem] font-semibold tracking-[-0.01em] text-white">{t.os.displayName}</p>
+                    </div>
 
                     <div className="w-48 h-[5px] rounded-full bg-white/20 overflow-hidden mb-10" aria-hidden="true">
                         <motion.div

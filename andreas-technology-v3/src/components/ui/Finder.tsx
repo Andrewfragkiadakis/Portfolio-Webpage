@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react'
 import { useContent } from '@/hooks/useContent'
-import { useDesktop } from '@/contexts/DesktopContext'
+import { useDesktopActions } from '@/contexts/DesktopContext'
 import { SECTION_IDS, type SectionId } from '@/data/sections'
 import Icon, { type SymbolName } from '@/components/ui/Icon'
 
@@ -18,7 +18,7 @@ export const SECTION_SYMBOL: Record<SectionId, SymbolName> = {
 /** Finder source list: every window as a favourite, the current one selected. */
 export function FinderSidebar({ current }: { current: SectionId }) {
     const t = useContent()
-    const { launch } = useDesktop()
+    const { launch } = useDesktopActions()
     return (
         <nav aria-label={t.os.favorites} className="px-2.5 pt-3 md:pt-0 pb-3">
             <p className="os-source-heading">{t.os.favorites}</p>

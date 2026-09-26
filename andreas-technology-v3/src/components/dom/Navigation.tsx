@@ -2,7 +2,7 @@
 
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useContent } from '@/hooks/useContent'
-import { useDesktop } from '@/contexts/DesktopContext'
+import { useDesktopActions, useDesktopState } from '@/contexts/DesktopContext'
 import { useState, useEffect, useRef, useCallback, type ReactNode, type KeyboardEvent as ReactKeyboardEvent } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { SECTION_IDS, type SectionId } from '@/data/sections'
@@ -12,8 +12,9 @@ import { gmailComposeUrl } from '@/utils/links'
 import { MENU_TRANSITION } from '@/utils/motion'
 import LocalTime from '@/components/ui/LocalTime'
 import ThemeToggle, { useToggleAppearance } from '@/components/ui/ThemeToggle'
-import AppIcon from '@/components/ui/AppIcon'
+import AppIcon, { Avatar } from '@/components/ui/AppIcon'
 import Icon, { type SymbolName } from '@/components/ui/Icon'
+import ControlCenter from '@/components/ui/ControlCenter'
 import { SECTION_SYMBOL } from '@/components/ui/Finder'
 
 /* ─── Menu model ─────────────────────────────────────────────────────── */
@@ -251,8 +252,11 @@ function MenuItem({ entry, onDone }: { entry: Extract<MenuEntry, { kind: 'item' 
 export default function Navigation() {
     const { language, setLanguage } = useLanguage()
     const t = useContent()
-    const desk = useDesktop()
-    const { active, keyId, status, launch, minimize, close, toggleZoom, restoreAll, projectsView, setProjectsView } = desk
+    const { launch, minimize, close, toggleZoom, restoreAll, setProjectsView, setOverview } = useDesktopActions()
+    const active = useDesktopState((s) => s.active)
+    const keyId = useDesktopState((s) => s.keyId)
+    const status = useDesktopState((s) => s.status)
+    const projectsView = useDesktopState((s) => s.projectsView)
     const toggleAppearance = useToggleAppearance()
     const [launcherOpen, setLauncherOpen] = useState(false)
     const closeRef = useRef<HTMLButtonElement>(null)
@@ -286,9 +290,10 @@ export default function Navigation() {
     const menus: MenuDef[] = [
         {
             id: 'af',
-            label: <span className="font-extrabold tracking-[-0.04em] text-[0.875rem]">AF</span>,
-            ariaLabel: t.os.menu.logo,
-            className: 'px-2.5',
+            // Where the Apple menu sits on a Mac: the owner's memoji, never a vendor logo.
+            label: <Avatar crop="face" size={18} />,
+            ariaLabel: t.os.displayName,
+            className: 'os-menubar__item--avatar',
             entries: [
                 { kind: 'item', label: t.os.menu.aboutMe, onSelect: () => launch('about') },
                 { kind: 'item', label: t.os.menu.resume, href: RESUME_URL, download: true },
@@ -348,6 +353,7 @@ export default function Navigation() {
                 { kind: 'item', label: t.os.menu.zoom, disabled: !keyId, onSelect: () => keyId && toggleZoom(keyId) },
                 { kind: 'sep' },
                 { kind: 'item', label: t.os.menu.restoreAll, disabled: !anyHidden, onSelect: restoreAll },
+                { kind: 'item', label: t.os.menu.missionControl, onSelect: () => setOverview(true), meta: <kbd className="font-sans">⌃↑</kbd> },
                 { kind: 'sep' },
                 ...WINDOW_IDS.map((id) => ({
                     kind: 'item' as const,
@@ -380,7 +386,7 @@ export default function Navigation() {
                             {language === 'en' ? 'EN' : 'ΕΛ'}
                         </span>
                     </button>
-                    <ThemeToggle className="os-menubar__item w-8 text-[0.9375rem]" />
+                    <ControlCenter />
                     <span className="os-menubar__item hover:bg-transparent tabular-nums" title={`${t.os.clock} · ${t.location}`}>
                         <span className="sr-only">{t.os.clock}: </span>
                         <LocalTime showOffset={false} withDate locale={language === 'gr' ? 'el-GR' : 'en-GB'} />

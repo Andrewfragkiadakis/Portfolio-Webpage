@@ -1,4 +1,4 @@
-import type { ReactNode, SVGProps } from 'react'
+import { memo, type ReactNode, type SVGProps } from 'react'
 
 /**
  * A small set of original line icons drawn in the spirit of SF Symbols: 24-unit grid,
@@ -298,7 +298,7 @@ interface IconProps extends Omit<SVGProps<SVGSVGElement>, 'name'> {
 }
 
 /** Decorative by default (`aria-hidden`); give the parent the accessible name. */
-export default function Icon({ name, weight = 1.5, className = '', ...rest }: IconProps) {
+function Icon({ name, weight = 1.5, className = '', ...rest }: IconProps) {
     const filled = name in FILLED
     return (
         <svg
@@ -317,3 +317,5 @@ export default function Icon({ name, weight = 1.5, className = '', ...rest }: Ic
         </svg>
     )
 }
+
+export default memo(Icon)

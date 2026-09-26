@@ -9,7 +9,7 @@ import ProjectImage from '@/components/ui/ProjectImage'
 import Window from '@/components/ui/Window'
 import Icon, { type SymbolName } from '@/components/ui/Icon'
 import { FinderSidebar, PathBar } from '@/components/ui/Finder'
-import { useDesktop } from '@/contexts/DesktopContext'
+import { useDesktopActions, useDesktopState } from '@/contexts/DesktopContext'
 import { EASE_OUT } from '@/utils/motion'
 
 const ICON_POP: Variants = {
@@ -78,7 +78,8 @@ export default function Projects() {
     const t = useContent()
     const reduceMotion = useReducedMotion()
     const [activeProject, setActiveProject] = useState<Project | null>(null)
-    const { projectsView: view, setProjectsView: setView } = useDesktop()
+    const view = useDesktopState((s) => s.projectsView)
+    const { setProjectsView: setView } = useDesktopActions()
 
     return (
         <Window

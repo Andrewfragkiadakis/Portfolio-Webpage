@@ -4,7 +4,7 @@ import { useContent } from '@/hooks/useContent'
 import LocalTime from '@/components/ui/LocalTime'
 import CopyButton from '@/components/ui/CopyButton'
 import Window from '@/components/ui/Window'
-import { MonogramIcon } from '@/components/ui/AppIcon'
+import { Avatar } from '@/components/ui/AppIcon'
 import Icon, { type SymbolName } from '@/components/ui/Icon'
 import { MAIL_SUBJECT, RESUME_URL } from '@/data/content'
 import { gmailComposeUrl } from '@/utils/links'
@@ -102,7 +102,7 @@ export default function Contact() {
             {/* Contact card */}
             <aside className="bg-[var(--window-chrome)] md:w-[20rem] shrink-0 border-t-[0.5px] md:border-t-0 md:border-l-[0.5px] border-[var(--hairline-strong)] p-5 md:p-6">
                 <div className="flex items-center gap-3 mb-4">
-                    <MonogramIcon size={48} />
+                    <Avatar size={48} />
                     <div className="min-w-0">
                         <p className="text-[0.9375rem] font-bold tracking-[-0.01em] leading-tight">{t.os.displayName}</p>
                         <p className="text-caption text-[var(--muted)] leading-snug">{t.title}</p>

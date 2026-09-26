@@ -6,10 +6,10 @@ import Typewriter from 'typewriter-effect'
 import { gmailComposeUrl } from '@/utils/links'
 import { WINDOW_SPRING } from '@/utils/motion'
 import { useSiteEntered } from '@/hooks/useSiteEntered'
-import { useDesktop } from '@/contexts/DesktopContext'
+import { useDesktopActions, useDesktopState } from '@/contexts/DesktopContext'
 import LocalTime from '@/components/ui/LocalTime'
 import Window from '@/components/ui/Window'
-import AppIcon, { MonogramIcon } from '@/components/ui/AppIcon'
+import AppIcon, { Avatar } from '@/components/ui/AppIcon'
 import Icon from '@/components/ui/Icon'
 import CredentialChips from '@/components/ui/CredentialChips'
 import type { AppId } from '@/data/apps'
@@ -42,7 +42,10 @@ export default function HeroOverlay() {
     const t = useContent()
     const entered = useSiteEntered()
     const reduceMotion = useReducedMotion()
-    const { launch } = useDesktop()
+    const { launch } = useDesktopActions()
+    // The typing loop only runs while its space is in front: off-screen it would keep
+    // relaying out and repainting the translucent Terminal for nobody.
+    const onDesktopSpace = useDesktopState((s) => s.active === 'hero')
 
     const [first, ...rest] = t.os.displayName.split(' ')
     const credentials = t.education.filter((e) => e.badge && e.kind && e.kind !== 'degree')
@@ -88,12 +91,9 @@ export default function HeroOverlay() {
             >
                 <div className="px-5 py-6 sm:p-8 lg:px-10 lg:py-9">
                     <div className="flex flex-wrap items-center gap-3 mb-5 md:mb-6">
-                        <MonogramIcon size={56} />
+                        <Avatar size={64} />
                         <span className="os-chip">
-                            <span className="relative flex w-2 h-2" aria-hidden="true">
-                                <span className="absolute inset-0 rounded-full bg-[var(--success)] motion-safe:animate-ping opacity-50" />
-                                <span className="relative w-2 h-2 rounded-full bg-[var(--success)]" />
-                            </span>
+                            <span className="w-2 h-2 rounded-full bg-[var(--success)] shadow-[inset_0_0_0_0.5px_rgba(0,0,0,0.15)]" aria-hidden="true" />
                             <span className="caps-gr">{t.contact.opportunitiesTitle}</span>
                         </span>
                     </div>
@@ -151,7 +151,7 @@ export default function HeroOverlay() {
                         <div className="text-[#FFD37A] min-h-[1.7em]" role="status" aria-live="polite">
                             <span className="sr-only">{t.hero.typewriter.join(' | ')}</span>
                             <span aria-hidden="true">
-                                {entered && (
+                                {entered && onDesktopSpace && (
                                     <Typewriter
                                         options={{ strings: t.hero.typewriter, autoStart: true, loop: true, delay: 45, deleteSpeed: 25, cursor: '▍' }}
                                     />
@@ -168,7 +168,7 @@ export default function HeroOverlay() {
                         <p className="text-[#C9C9D1]">{credentials.map((c) => c.badge).join(' · ')}</p>
                         <p className="mt-1.5">
                             {PROMPT}{' '}
-                            <span className="inline-block w-[0.55em] h-[1.1em] align-[-0.2em] bg-[#E6E6EA] motion-safe:animate-pulse" aria-hidden="true" />
+                            <span className="term-cursor inline-block w-[0.55em] h-[1.1em] align-[-0.2em] bg-[#E6E6EA]" aria-hidden="true" />
                         </p>
                     </div>
                 </Window>
