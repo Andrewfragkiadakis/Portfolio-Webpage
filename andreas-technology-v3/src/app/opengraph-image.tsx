@@ -1,100 +1,60 @@
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 import { ImageResponse } from 'next/og'
 
-export const alt = 'Andreas Fragkiadakis — M.Eng. Computer Engineer, IT & Security'
+export const alt = 'Andreas Fragkiadakis — Apple fleets. Automated.'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
-const BG = '#030014'
-const FOREGROUND = '#e0e7ff'
-const ACCENT = '#a5b4fc'
-const STROKE = '3px'
-const outlineShadow = [
-  `-${STROKE} -${STROKE} 0 ${BG}`,
-  `${STROKE} -${STROKE} 0 ${BG}`,
-  `-${STROKE} ${STROKE} 0 ${BG}`,
-  `${STROKE} ${STROKE} 0 ${BG}`,
-].join(', ')
+const NAME = 'Andreas Fragkiadakis'
+const HEADLINE = 'Apple fleets. Automated.'
+const SUB = 'Team Lead, Apple Fleet & IT Automation · Jamf 200 · 550+ Macs'
 
+/**
+ * Inter SemiBold, subset to the characters on the card. Fetched at build time; if the
+ * network is unavailable the card still renders in the default font.
+ */
+async function loadInter(text: string): Promise<ArrayBuffer | null> {
+  try {
+    const css = await (await fetch(`https://fonts.googleapis.com/css2?family=Inter:wght@600&text=${encodeURIComponent(text)}`)).text()
+    const url = css.match(/src: url\((.+?)\) format\('(opentype|truetype)'\)/)?.[1]
+    if (!url) return null
+    const res = await fetch(url)
+    return res.ok ? await res.arrayBuffer() : null
+  } catch {
+    return null
+  }
+}
+
+/** Social card in the site's apple.com style: white, the memoji mark, one headline. */
 export default async function Image() {
+  const mark = await readFile(join(process.cwd(), 'public/favicons/android-chrome-512x512.png'))
+  const markSrc = `data:image/png;base64,${mark.toString('base64')}`
+  const inter = await loadInter(NAME + HEADLINE + SUB)
+
   return new ImageResponse(
     (
       <div
         style={{
           width: '100%',
           height: '100%',
-          background: BG,
+          background: '#ffffff',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          padding: 48,
-          backgroundImage: `radial-gradient(ellipse 80% 50% at 50% 40%, rgba(165, 180, 252, 0.08) 0%, transparent 50%)`,
+          fontFamily: inter ? 'Inter' : undefined,
         }}
       >
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 8,
-          }}
-        >
-          <div
-            style={{
-              fontSize: 88,
-              fontWeight: 900,
-              letterSpacing: '-0.04em',
-              color: FOREGROUND,
-              textShadow: outlineShadow,
-              lineHeight: 0.85,
-              textAlign: 'center',
-            }}
-          >
-            ANDREAS
-          </div>
-          <div
-            style={{
-              fontSize: 76,
-              fontWeight: 900,
-              letterSpacing: '-0.04em',
-              color: FOREGROUND,
-              textShadow: outlineShadow,
-              lineHeight: 0.85,
-              textAlign: 'center',
-            }}
-          >
-            FRAGKIADAKIS
-          </div>
-        </div>
-        <div
-          style={{
-            marginTop: 32,
-            fontSize: 22,
-            fontWeight: 600,
-            letterSpacing: '0.2em',
-            color: ACCENT,
-            textTransform: 'uppercase',
-          }}
-        >
-          M.ENG. COMPUTER ENGINEER
-        </div>
-        <div
-          style={{
-            marginTop: 8,
-            fontSize: 16,
-            letterSpacing: '0.15em',
-            color: FOREGROUND,
-            opacity: 0.7,
-            textTransform: 'uppercase',
-          }}
-        >
-          SecOps · Infrastructure · AI
-        </div>
+        <img src={markSrc} width={168} height={168} alt="" />
+        <div style={{ marginTop: 18, fontSize: 34, fontWeight: 600, color: '#1d1d1f', letterSpacing: '0.004em' }}>{NAME}</div>
+        <div style={{ marginTop: 10, fontSize: 92, fontWeight: 600, color: '#1d1d1f', letterSpacing: '-0.02em', lineHeight: 1.05 }}>{HEADLINE}</div>
+        <div style={{ marginTop: 26, fontSize: 28, fontWeight: 600, color: '#6e6e73', letterSpacing: '0.004em' }}>{SUB}</div>
       </div>
     ),
     {
       ...size,
+      fonts: inter ? [{ name: 'Inter', data: inter, weight: 600, style: 'normal' }] : undefined,
     }
   )
 }

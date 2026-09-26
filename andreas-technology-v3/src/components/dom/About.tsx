@@ -4,12 +4,13 @@ import { useState } from 'react'
 import { useContent } from '@/hooks/useContent'
 import type { Skill } from '@/data/content'
 import Modal from '@/components/ui/Modal'
-import { ArrowOut, Chevron, CountUp, Headline, Parallax, Rich, Rise } from '@/components/ui/keynote'
+import { Glyph } from '@/components/ui/Glyph'
+import { ArrowOut, Chevron, CountUp, Headline, Rich, Rise } from '@/components/ui/keynote'
 
 /**
- * Slide 2 — "Meet Andreas." A short bio on the left; on the right, four huge stat
- * callouts that count up, with the gradient reserved for the headline number.
- * The full bio and the four focus areas open as dialogs.
+ * Slide 2 — "Meet Andreas." A short bio on the left; on the right, four big plain stats
+ * that count up once. Credentials are quiet pills, focus areas are "›" links, and the
+ * full bio and each focus area open as sheets.
  */
 export default function About() {
     const t = useContent()
@@ -21,56 +22,54 @@ export default function About() {
     const credentials = t.education.filter((e) => e.badge && e.kind && e.kind !== 'degree')
 
     const stats = [
-        { value: 550, suffix: '+', unit: '', grad: true },
-        { value: 70, suffix: '%', unit: '', grad: false },
-        { value: 7, suffix: '+', unit: k.about.yearsUnit, grad: false },
-        { value: certifications.length, suffix: '', unit: '', grad: false },
+        { value: 550, suffix: '+', unit: '' },
+        { value: 70, suffix: '%', unit: '' },
+        { value: 7, suffix: '+', unit: k.about.yearsUnit },
+        { value: certifications.length, suffix: '', unit: '' },
     ]
 
     return (
         <section
             id="about"
             aria-labelledby="about-title"
-            className="relative w-full md:h-full flex items-center px-5 sm:px-10 md:px-[max(3rem,6vw)] py-20 md:py-0"
+            className="relative w-full md:h-full flex items-center px-6 sm:px-10 md:px-[max(3rem,7vw)] py-24 md:py-0"
         >
-            <div className="mx-auto w-full max-w-[76rem] grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-x-[4vw] items-center">
-                <Parallax depth={-0.05} className="md:col-span-6">
+            <div className="mx-auto w-full max-w-[71rem] grid grid-cols-1 md:grid-cols-12 gap-14 md:gap-x-[5vw] items-center">
+                <div className="md:col-span-6">
                     <Rise>
-                        <p className="kn-eyebrow">{k.about.eyebrow}</p>
+                        <p className="t-eyebrow">{k.about.eyebrow}</p>
                     </Rise>
                     <Headline
                         id="about-title"
                         text={k.about.headline}
-                        className="mt-3 text-[clamp(2.5rem,11vw,4.5rem)] md:text-[min(6.2vw,10vh)]"
+                        className="t-headline mt-2 text-[2.5rem] md:text-[min(4.4vw,7.2vh)]"
                     />
-                    <Rise delay={0.3}>
-                        <p className="kn-lede mt-6 text-[1.125rem] md:text-[min(1.45vw,2.6vh)] max-w-[34rem]">
+                    <Rise delay={0.15}>
+                        <p className="t-lede mt-5 md:mt-6 text-[1.0625rem] leading-[1.4] md:text-[min(1.3125rem,2.4vh)] max-w-[33rem]">
                             <Rich text={k.about.bio} />
                         </p>
-                        <button type="button" onClick={() => setBioOpen(true)} className="kn-link mt-4 text-[1.0625rem]">
+                        <button type="button" onClick={() => setBioOpen(true)} className="kn-link t-body mt-4">
                             {k.about.fullStory}
                             <Chevron />
                         </button>
                     </Rise>
 
-                    <Rise delay={0.45} className="mt-8 md:mt-[min(4.5vh,2.5rem)] grid gap-6 sm:grid-cols-2">
+                    <Rise delay={0.3} className="mt-9 md:mt-[min(3rem,5vh)] grid gap-8 sm:grid-cols-2">
                         <div>
-                            <h3 className="text-caption font-semibold text-[var(--muted)] mb-3">{k.about.credentials}</h3>
+                            <h3 className="t-small font-semibold text-[var(--foreground)] mb-3">{k.about.credentials}</h3>
                             <ul className="flex flex-wrap gap-2">
                                 {credentials.map((item) => {
                                     const body = (
                                         <>
                                             {item.badge}
-                                            {item.link && <ArrowOut className="opacity-70" />}
+                                            {item.link && <ArrowOut className="text-[var(--muted)]" />}
                                         </>
                                     )
-                                    const cls = `inline-flex items-center gap-1.5 h-8 px-3.5 rounded-full text-body-sm font-medium transition-colors duration-300 ${item.featured
-                                        ? 'bg-[var(--accent-fill)] text-white hover:bg-[var(--accent-fill-hover)]'
-                                        : 'bg-[var(--surface)] text-[var(--foreground)] hover:bg-[var(--surface-2)]'}`
+                                    const cls = 'inline-flex items-center gap-1 h-8 px-3.5 rounded-full bg-[var(--surface)] t-small text-[var(--foreground)] transition-colors duration-300'
                                     return (
                                         <li key={item.badge}>
                                             {item.link ? (
-                                                <a href={item.link} target="_blank" rel="noopener noreferrer" className={cls} aria-label={`${item.degree} — ${item.institution} (${k.common.newTab})`}>
+                                                <a href={item.link} target="_blank" rel="noopener noreferrer" className={`${cls} hover:bg-[var(--surface-2)]`} aria-label={`${item.degree} — ${item.institution} (${k.common.newTab})`}>
                                                     {body}
                                                 </a>
                                             ) : (
@@ -82,11 +81,11 @@ export default function About() {
                             </ul>
                         </div>
                         <div>
-                            <h3 className="text-caption font-semibold text-[var(--muted)] mb-3">{k.about.focus}</h3>
+                            <h3 className="t-small font-semibold text-[var(--foreground)] mb-2.5">{k.about.focus}</h3>
                             <ul className="flex flex-col gap-1.5">
                                 {t.skills.map((skill) => (
                                     <li key={skill.label}>
-                                        <button type="button" onClick={() => setActiveSkill(skill)} className="kn-link text-body-sm text-left">
+                                        <button type="button" onClick={() => setActiveSkill(skill)} className="kn-link t-small text-left">
                                             {skill.label}
                                             <Chevron />
                                         </button>
@@ -95,36 +94,32 @@ export default function About() {
                             </ul>
                         </div>
                     </Rise>
-                </Parallax>
+                </div>
 
-                <Parallax depth={0.07} className="md:col-span-6">
-                    <dl className="grid grid-cols-2 gap-x-6 sm:gap-x-10 gap-y-10 md:gap-y-[min(6vh,3.5rem)]">
-                        {stats.map((stat, i) => (
-                            <Rise key={i} delay={0.15 + i * 0.1} className="border-t border-[var(--line)] pt-5 flex flex-col-reverse justify-end">
-                                {/* dt precedes dd in the DOM (valid <dl>); flex-col-reverse puts the number on top. */}
-                                <dt className="mt-3 text-body-sm md:text-[min(1.15vw,2vh)] font-semibold leading-snug text-[var(--foreground)] max-w-[15rem]">
-                                    {k.about.stats[i]}
-                                </dt>
-                                <dd className="kn-numeral text-[clamp(3rem,15vw,5rem)] md:text-[min(7.2vw,12vh)]">
-                                    <span className={stat.grad ? 'kn-grad' : undefined}>
-                                        <CountUp value={stat.value} suffix={stat.suffix} />
-                                    </span>
-                                    {stat.unit && (
-                                        <span className="ml-1.5 text-[0.36em] font-semibold tracking-[-0.01em] text-[var(--muted)]">{stat.unit}</span>
-                                    )}
-                                </dd>
-                            </Rise>
-                        ))}
-                    </dl>
-                </Parallax>
+                <dl className="md:col-span-6 grid grid-cols-2 gap-x-8 sm:gap-x-12 gap-y-10 md:gap-y-[min(3.5rem,6vh)]">
+                    {stats.map((stat, i) => (
+                        <Rise key={i} delay={0.1 + i * 0.08} className="flex flex-col-reverse justify-end">
+                            {/* dt precedes dd in the DOM (valid <dl>); flex-col-reverse puts the number on top. */}
+                            <dt className="mt-2 md:mt-3 t-body md:text-[min(1.0625rem,1.9vh)] text-[var(--muted)] max-w-[15rem]">
+                                {k.about.stats[i]}
+                            </dt>
+                            <dd className="t-stat text-[3.25rem] md:text-[min(5.5vw,9.4vh)]">
+                                <CountUp value={stat.value} suffix={stat.suffix} />
+                                {stat.unit && (
+                                    <span className="ml-1.5 text-[0.4em] tracking-[0.004em]">{stat.unit}</span>
+                                )}
+                            </dd>
+                        </Rise>
+                    ))}
+                </dl>
             </div>
 
-            <Modal open={bioOpen} onClose={() => setBioOpen(false)} labelledBy="bio-modal-title" closeLabel={k.common.close} className="max-w-2xl w-full p-7 sm:p-10">
-                <p className="kn-eyebrow text-body-sm">{k.about.eyebrow}</p>
-                <h3 id="bio-modal-title" className="kn-title text-[1.75rem] sm:text-[2rem] mt-1 mb-6 pr-10">{k.about.dialogTitle}</h3>
-                <div className="space-y-4 text-[1.0625rem] leading-relaxed text-[var(--foreground)]">
+            <Modal open={bioOpen} onClose={() => setBioOpen(false)} labelledBy="bio-modal-title" closeLabel={k.common.close} className="max-w-[43rem] w-full px-7 py-10 sm:px-14 sm:py-14">
+                <p className="t-eyebrow">{k.about.eyebrow}</p>
+                <h3 id="bio-modal-title" className="t-headline text-[2rem] sm:text-[2.5rem] mt-1 mb-7 pr-10">{k.about.dialogTitle}</h3>
+                <div className="space-y-4 t-body text-[var(--foreground)]">
                     {t.about.description.map((paragraph, i) => (
-                        <p key={i} className={i === t.about.description.length - 1 ? 'text-body-sm text-[var(--muted)] pt-2 border-t border-[var(--line)]' : undefined}>
+                        <p key={i} className={i === t.about.description.length - 1 ? 't-small text-[var(--muted)] pt-4 border-t border-[var(--line)]' : undefined}>
                             {paragraph}
                         </p>
                     ))}
@@ -136,15 +131,13 @@ export default function About() {
                 onClose={() => setActiveSkill(null)}
                 labelledBy="skill-modal-title"
                 closeLabel={k.common.close}
-                className="p-7 sm:p-9 max-w-md w-full"
+                className="max-w-md w-full px-7 py-10 sm:px-10"
             >
                 {activeSkill && (
                     <>
-                        <span className="w-12 h-12 rounded-2xl bg-[var(--surface)] flex items-center justify-center text-[var(--accent)] mb-5" aria-hidden="true">
-                            <i className={`${activeSkill.icon} text-xl`} />
-                        </span>
-                        <h3 id="skill-modal-title" className="kn-title text-[1.5rem] mb-3 pr-10">{activeSkill.label}</h3>
-                        <p className="text-[1.0625rem] leading-relaxed text-[var(--muted)]">{activeSkill.detail}</p>
+                        <Glyph name={activeSkill.icon} className="w-9 h-9 mb-5 text-[var(--foreground)]" strokeWidth={1.4} />
+                        <h3 id="skill-modal-title" className="t-title text-[1.75rem] mb-3 pr-10">{activeSkill.label}</h3>
+                        <p className="t-body text-[var(--muted)]">{activeSkill.detail}</p>
                     </>
                 )}
             </Modal>

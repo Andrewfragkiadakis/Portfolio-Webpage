@@ -82,12 +82,12 @@ export interface Project {
 export interface KeynoteCopy {
     common: { name: string; close: string; newTab: string }
     nav: {
-        home: string; about: string; services: string; experience: string; projects: string; contact: string
+        home: string; about: string; services: string; specs: string; experience: string; projects: string; contact: string
         cta: string; openMenu: string; closeMenu: string; switchLanguage: string
         toLight: string; toDark: string; appearance: string; language: string; light: string; dark: string
     }
     intro: { headline: string; enter: string; skip: string }
-    hero: { eyebrow: string; headline: string; sub: string; viewWork: string; contact: string; scroll: string }
+    hero: { headline: string; sub: string; viewWork: string; contact: string }
     about: {
         eyebrow: string; headline: string; bio: string; fullStory: string; dialogTitle: string
         credentials: string; focus: string; yearsUnit: string
@@ -95,9 +95,12 @@ export interface KeynoteCopy {
         stats: [string, string, string, string]
     }
     services: {
-        eyebrow: string; headline: string; learnMore: string; specsTitle: string; specsNote: string
-        groups: Record<'apple' | 'security' | 'infra' | 'code' | 'ai' | 'collab', string>
+        eyebrow: string; headline: string; learnMore: string
         ctaLead: string; ctaLink: string; highlights: string; toolkit: string
+    }
+    specs: {
+        eyebrow: string; headline: string; sub: string
+        groups: Record<'apple' | 'security' | 'infra' | 'code' | 'ai' | 'collab', string>
     }
     experience: {
         eyebrow: string; headline: string; now: string; then: string; education: string
@@ -784,18 +787,16 @@ export const content: Record<'en' | 'gr', Content> = {
         keynote: {
             common: { name: "Andreas Fragkiadakis", close: "Close", newTab: "opens in a new tab" },
             nav: {
-                home: "Home", about: "About", services: "What I do", experience: "Career", projects: "Projects", contact: "Contact",
+                home: "Overview", about: "About", services: "What I do", specs: "Tech specs", experience: "Career", projects: "Projects", contact: "Contact",
                 cta: "Let's talk", openMenu: "Open menu", closeMenu: "Close menu", switchLanguage: "Switch to Greek",
                 toLight: "Switch to light theme", toDark: "Switch to dark theme", appearance: "Appearance", language: "Language", light: "Light", dark: "Dark"
             },
             intro: { headline: "Hello.", enter: "Enter", skip: "Skip intro" },
             hero: {
-                eyebrow: "Apple Fleet & IT Automation",
                 headline: "Apple fleets.\n*Automated.*",
-                sub: "I'm **Andreas Fragkiadakis**. I lead Apple Fleet & IT Automation at Omilia: **550+ Macs** on Jamf Pro, enrolled **zero-touch** and hardened to CIS Benchmarks.",
+                sub: "I lead Apple Fleet & IT Automation at Omilia: **550+ Macs** on Jamf Pro, enrolled **zero-touch** and hardened to CIS Benchmarks.",
                 viewWork: "View work",
-                contact: "Contact",
-                scroll: "Scroll to explore"
+                contact: "Contact"
             },
             about: {
                 eyebrow: "About",
@@ -810,19 +811,22 @@ export const content: Record<'en' | 'gr', Content> = {
             },
             services: {
                 eyebrow: "What I do",
-                headline: "Happens twice?\nIt becomes a *script.*",
+                headline: "Happens twice?\nIt becomes a script.",
                 learnMore: "Learn more",
-                specsTitle: "Tech specs",
-                specsNote: "Tools in day-to-day use",
-                groups: { apple: "Apple fleet", security: "Security & identity", infra: "Infrastructure", code: "Code", ai: "AI", collab: "Collaboration & ITSM" },
                 ctaLead: "Have a unique project in mind?",
                 ctaLink: "Let's talk",
                 highlights: "In practice",
                 toolkit: "Toolkit"
             },
+            specs: {
+                eyebrow: "Tech specs",
+                headline: "The toolkit.",
+                sub: "Tools in day-to-day use, by area.",
+                groups: { apple: "Apple fleet", security: "Security & identity", infra: "Infrastructure", code: "Code", ai: "AI", collab: "Collaboration & ITSM" }
+            },
             experience: {
                 eyebrow: "Career",
-                headline: "Then. *Now.*",
+                headline: "Then. Now.",
                 now: "Now",
                 then: "Then",
                 education: "Education & credentials",
@@ -846,7 +850,7 @@ export const content: Record<'en' | 'gr', Content> = {
             },
             contact: {
                 eyebrow: "Contact",
-                headline: "Let's build\n*something.*",
+                headline: "Let's build\nsomething.",
                 sub: "Open to **full-time roles**, **freelance projects** and interesting collaborations.",
                 send: "Send a message",
                 resume: "Download résumé",
@@ -1414,18 +1418,16 @@ export const content: Record<'en' | 'gr', Content> = {
         keynote: {
             common: { name: "Ανδρέας Φραγκιαδάκης", close: "Κλείσιμο", newTab: "ανοίγει σε νέα καρτέλα" },
             nav: {
-                home: "Αρχική", about: "Σχετικά", services: "Υπηρεσίες", experience: "Καριέρα", projects: "Projects", contact: "Επικοινωνία",
+                home: "Επισκόπηση", about: "Σχετικά", services: "Υπηρεσίες", specs: "Εργαλεία", experience: "Καριέρα", projects: "Projects", contact: "Επικοινωνία",
                 cta: "Ας μιλήσουμε", openMenu: "Άνοιγμα μενού", closeMenu: "Κλείσιμο μενού", switchLanguage: "Switch to English",
                 toLight: "Φωτεινό θέμα", toDark: "Σκοτεινό θέμα", appearance: "Εμφάνιση", language: "Γλώσσα", light: "Φωτεινό", dark: "Σκοτεινό"
             },
             intro: { headline: "Γεια σας.", enter: "Είσοδος", skip: "Παράλειψη" },
             hero: {
-                eyebrow: "Apple Fleet & IT Automation",
                 headline: "Στόλοι Apple.\n*Αυτοματοποιημένοι.*",
-                sub: "Είμαι ο **Ανδρέας Φραγκιαδάκης**. Ηγούμαι του Apple Fleet & IT Automation στην Omilia: **550+ Mac** στο Jamf Pro, με **zero-touch** enrollment και θωράκιση κατά CIS Benchmarks.",
+                sub: "Ηγούμαι του Apple Fleet & IT Automation στην Omilia: **550+ Mac** στο Jamf Pro, με **zero-touch** enrollment και θωράκιση κατά CIS Benchmarks.",
                 viewWork: "Δείτε τη δουλειά μου",
-                contact: "Επικοινωνία",
-                scroll: "Κάντε scroll"
+                contact: "Επικοινωνία"
             },
             about: {
                 eyebrow: "Σχετικά",
@@ -1440,19 +1442,22 @@ export const content: Record<'en' | 'gr', Content> = {
             },
             services: {
                 eyebrow: "Υπηρεσίες",
-                headline: "Συμβαίνει δύο φορές;\nΓίνεται *script.*",
+                headline: "Συμβαίνει δύο φορές;\nΓίνεται script.",
                 learnMore: "Μάθετε περισσότερα",
-                specsTitle: "Τεχνικά χαρακτηριστικά",
-                specsNote: "Εργαλεία καθημερινής χρήσης",
-                groups: { apple: "Στόλος Apple", security: "Ασφάλεια & ταυτότητα", infra: "Υποδομές", code: "Κώδικας", ai: "AI", collab: "Συνεργασία & ITSM" },
                 ctaLead: "Έχετε ένα συγκεκριμένο project στο μυαλό σας;",
                 ctaLink: "Ας μιλήσουμε",
                 highlights: "Στην πράξη",
                 toolkit: "Εργαλεία"
             },
+            specs: {
+                eyebrow: "Τεχνικά χαρακτηριστικά",
+                headline: "Η εργαλειοθήκη.",
+                sub: "Εργαλεία καθημερινής χρήσης, ανά τομέα.",
+                groups: { apple: "Στόλος Apple", security: "Ασφάλεια & ταυτότητα", infra: "Υποδομές", code: "Κώδικας", ai: "AI", collab: "Συνεργασία & ITSM" }
+            },
             experience: {
                 eyebrow: "Καριέρα",
-                headline: "Τότε. *Τώρα.*",
+                headline: "Τότε. Τώρα.",
                 now: "Τώρα",
                 then: "Τότε",
                 education: "Εκπαίδευση & πιστοποιήσεις",
@@ -1476,7 +1481,7 @@ export const content: Record<'en' | 'gr', Content> = {
             },
             contact: {
                 eyebrow: "Επικοινωνία",
-                headline: "Ας φτιάξουμε\nκάτι *μαζί.*",
+                headline: "Ας φτιάξουμε\nκάτι μαζί.",
                 sub: "Διαθέσιμος για **freelance projects** και ενδιαφέρουσες συνεργασίες.",
                 send: "Αποστολή μηνύματος",
                 resume: "Λήψη βιογραφικού",

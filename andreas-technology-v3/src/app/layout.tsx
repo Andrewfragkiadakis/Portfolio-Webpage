@@ -9,9 +9,10 @@ import CinematicEntry from '@/components/dom/CinematicEntry'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { SOCIAL_URLS, content } from '@/data/content'
 
-// Inter is the non-Apple fallback in the system stack (see --font-display). Greek is
-// loaded too, so Greek headings keep their weights on Windows and Android.
-const inter = Inter({ subsets: ['latin', 'greek'], display: 'swap', variable: '--font-inter' })
+// Inter is the non-Apple fallback in the system stack (see --font-display / --font-text).
+// Greek is loaded too, so Greek keeps its weights on Windows and Android, and the optical
+// size axis lets Inter tighten for display sizes the way San Francisco does.
+const inter = Inter({ subsets: ['latin', 'greek'], display: 'swap', variable: '--font-inter', axes: ['opsz'] })
 
 const SITE_URL = 'https://andreas.technology'
 
@@ -75,26 +76,6 @@ export default function RootLayout({
             <head>
                 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
                 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-                <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
-                <link
-                    rel="preload"
-                    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-                    as="style"
-                    crossOrigin="anonymous"
-                />
-                <script
-                    dangerouslySetInnerHTML={{
-                        __html: `(function(){var l=document.createElement('link');l.rel='stylesheet';l.href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';l.crossOrigin='anonymous';l.referrerPolicy='no-referrer';document.head.appendChild(l);})();`,
-                    }}
-                />
-                <noscript>
-                    <link
-                        rel="stylesheet"
-                        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-                        crossOrigin="anonymous"
-                    />
-                </noscript>
                 <script
                     dangerouslySetInnerHTML={{
                         __html: `(function(){try{var t=localStorage.getItem('theme');if(!t){var mq=window.matchMedia('(prefers-color-scheme:dark)');var ml=window.matchMedia('(prefers-color-scheme:light)');if(mq.matches||ml.matches){t=mq.matches?'dark':'light';}else{var h=new Date().getHours();t=(h>=7&&h<20)?'light':'dark';}}document.documentElement.classList.add(t);}catch(e){}})();`,

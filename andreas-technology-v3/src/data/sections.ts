@@ -7,7 +7,7 @@
  *
  * Change SECTION_IDS and everything else follows.
  */
-export const SECTION_IDS = ['hero', 'about', 'services', 'experience', 'projects', 'contact'] as const
+export const SECTION_IDS = ['hero', 'about', 'services', 'specs', 'experience', 'projects', 'contact'] as const
 
 export type SectionId = (typeof SECTION_IDS)[number]
 

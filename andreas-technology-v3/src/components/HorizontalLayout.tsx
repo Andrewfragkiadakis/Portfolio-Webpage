@@ -4,6 +4,8 @@ import { motion, useScroll, useTransform, useVelocity, useMotionValue, animate, 
 import HeroOverlay from '@/components/dom/HeroOverlay'
 import About from '@/components/dom/About'
 import Services from '@/components/dom/Services'
+import TechSpecs from '@/components/dom/TechSpecs'
+import DotNav from '@/components/dom/DotNav'
 import { useIsDesktop } from '@/hooks/useIsDesktop'
 import { SECTION_STEPS, TRACK_HEIGHT_VH, TRACK_TRAVEL_VW } from '@/data/sections'
 import { SlideIndexContext, TrackContext } from '@/components/ui/keynote'
@@ -125,6 +127,7 @@ export default function HorizontalLayout() {
         <HeroOverlay key="hero" />,
         <About key="about" />,
         <Services key="services" />,
+        <TechSpecs key="specs" />,
         <Suspense key="experience" fallback={<SectionFallback />}><Experience /></Suspense>,
         <Suspense key="projects" fallback={<SectionFallback />}><Projects /></Suspense>,
         <Suspense key="contact" fallback={<SectionFallback />}><Contact /></Suspense>,
@@ -143,8 +146,9 @@ export default function HorizontalLayout() {
                         className="flex flex-col md:flex-row md:h-screen md:items-center md:will-change-transform"
                     >
                         {/*
-                          Each panel is a keynote slide. Slides alternate tone; the theme only
-                          decides which tone opens the show (see [data-tone] in globals.css).
+                          Each panel is a keynote slide. Slides alternate between the theme's two
+                          neutral tones, like apple.com's white and #F5F5F7 sections (see
+                          [data-tone] in globals.css).
                           Panels use overflow-x-clip rather than overflow-hidden: it contains the
                           sideways entry animations without creating a scroll container, which
                           would break the sticky positioning the desktop track relies on.
@@ -152,8 +156,8 @@ export default function HorizontalLayout() {
                         {sections.map((section, index) => (
                             <div
                                 key={index}
-                                data-tone={index % 2 === 0 ? 'primary' : 'inverse'}
-                                className="slide relative w-full overflow-x-clip md:h-screen md:w-screen md:flex-shrink-0 md:flex md:items-center md:justify-center md:overflow-hidden md:pt-[var(--nav-h)]"
+                                data-tone={index % 2 === 0 ? 'primary' : 'alt'}
+                                className="slide relative w-full overflow-x-clip md:h-screen md:w-screen md:flex-shrink-0 md:flex md:items-center md:justify-center md:overflow-hidden md:pt-[var(--nav-h)] md:pb-[3.75rem]"
                             >
                                 <SlideIndexContext.Provider value={index}>{section}</SlideIndexContext.Provider>
                             </div>
@@ -161,11 +165,7 @@ export default function HorizontalLayout() {
                     </motion.div>
                 </div>
 
-                <motion.div
-                    className="hidden md:block fixed bottom-0 left-0 h-[2px] z-50 origin-left w-full"
-                    style={{ scaleX: scrollYProgress, backgroundImage: 'var(--grad)' }}
-                    aria-hidden="true"
-                />
+                <DotNav progress={scrollYProgress} />
             </div>
         </TrackContext.Provider>
     )

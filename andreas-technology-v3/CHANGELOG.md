@@ -4,6 +4,25 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 
 ## [Unreleased]
 
+### Changed (Apple Keynote style, round 4)
+- Restrained the Apple Keynote design to apple.com's product-page language (see `STYLE.md`): neutral slides that alternate white / #F5F5F7 (black / #101011 in dark) instead of black and white, one interactive blue, and a single colour moment (the hero's second line, in Apple blues). Removed the blue-to-violet gradient words, stage glows, gradient progress line and gradient card outline
+- Type: San Francisco system stack with Inter (`latin` + `greek`, `opsz` axis) as fallback; Display/Text stacks; Apple's scale and tracking as `.t-hero`, `.t-headline`, `.t-title`, `.t-eyebrow`, `.t-lede`, `.t-body`, `.t-small`, `.t-caption`, `.t-stat` (headlines at weight 600, −0.015em / −0.009em)
+- Components: 52px frosted local nav with the memoji mark, pills without chevrons (17px regular), borderless tiles with apple.com's (+) disclosure, plain stats, hairline lists, cleaner silver / space-black device frames, borderless dialogs
+- Tech specs moved from the services slide to its own slide ("The toolkit."), laid out like an apple.com specs page; nav gains "Tech specs" and "Home" becomes "Overview" (EN/GR)
+- Motion: whole-block fade-and-rise on apple.com's curve replaces per-word masks and parallax drift; the product shot scale-in stays as the one scroll-driven moment
+- Intro follows the current theme (memoji, "Hello.", Enter)
+- OG image redrawn in the same style with the memoji embedded as a data URL
+
+### Added (Apple Keynote style, round 4)
+- `ui/Mark.tsx`: the memoji technologist as the site mark (nav, hero, intro)
+- `ui/Glyph.tsx`: SF-Symbols-style line icons replacing Font Awesome
+- `dom/DotNav.tsx`: apple.com gallery dots for the desktop track
+- `dom/TechSpecs.tsx` and `hooks/useSectionLabels.ts`
+
+### Removed (Apple Keynote style, round 4)
+- Font Awesome stylesheet (no longer loaded)
+- Mobile floating tab bar (`MobileNav`)
+
 ### Added
 - `ToolTile`: uniform square tool tile (accent mark on a neutral tile); wide wordmarks fit the same footprint. Used for the structured 2–3 column toolkit grid (tile + name) in the service dialog
 - `ProjectImage`: project screenshots default to `contain` inside the frame with a blurred copy of the same image as fill (one download), so nothing is ever cut off; `Project.imageFit: 'cover'` and `imagePosition` opt specific images into an art-directed crop

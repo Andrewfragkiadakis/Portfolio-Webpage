@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { EASE_OUT } from '@/utils/motion'
+import { Glyph } from '@/components/ui/Glyph'
 
 type CopyState = 'idle' | 'copied' | 'failed'
 
@@ -58,7 +59,7 @@ export default function CopyButton({ value, label, copiedLabel, failedLabel }: C
         setState(ok ? 'copied' : 'failed')
     }
 
-    const icon = state === 'copied' ? 'fa-check text-[var(--accent)]' : state === 'failed' ? 'fa-xmark' : 'fa-copy'
+    const icon = state === 'copied' ? 'check' : state === 'failed' ? 'xmark' : 'copy'
     const text = state === 'copied' ? copiedLabel : state === 'failed' ? failedLabel : label
 
     return (
@@ -66,9 +67,9 @@ export default function CopyButton({ value, label, copiedLabel, failedLabel }: C
             type="button"
             onClick={copy}
             aria-label={`${label}: ${value}`}
-            className="relative shrink-0 inline-flex items-center gap-1.5 h-7 px-3 rounded-full bg-[var(--surface)] text-caption font-medium text-[var(--foreground)] hover:bg-[var(--surface-2)] transition-colors duration-300"
+            className="relative shrink-0 inline-flex items-center gap-1.5 h-7 px-3 rounded-full bg-[var(--surface)] t-caption text-[var(--foreground)] hover:bg-[var(--surface-2)] transition-colors duration-300"
         >
-            <i className={`fas ${icon}`} aria-hidden="true" />
+            <Glyph name={icon} className="w-3.5 h-3.5" strokeWidth={1.8} />
             <span aria-live="polite" className="relative inline-flex items-center overflow-hidden h-[1.25em] leading-[1.25em]">
                 <AnimatePresence mode="popLayout" initial={false}>
                     <motion.span

@@ -3,12 +3,13 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { useContent } from '@/hooks/useContent'
-import { SITE_ENTERED_EVENT } from '@/utils/motion'
-import { Chevron, Headline } from '@/components/ui/keynote'
+import { EASE_APPLE, SITE_ENTERED_EVENT } from '@/utils/motion'
+import { Headline } from '@/components/ui/keynote'
+import { Mark } from '@/components/ui/Mark'
 
 /**
- * First-visit intro: the house lights go down. A black stage, one gradient word and
- * an "Enter" pill; the stage lifts away to reveal the title slide. Shown once.
+ * First-visit intro, in the current theme: the mark, a quiet "Hello." and an "Enter"
+ * pill. It fades away to reveal the title slide. Shown once.
  */
 export default function CinematicEntry() {
     const k = useContent().keynote
@@ -53,31 +54,36 @@ export default function CinematicEntry() {
                 <motion.div
                     data-cinematic="true"
                     initial={{ opacity: 1 }}
-                    exit={{ y: '-100%', transition: { duration: 0.9, ease: [0.76, 0, 0.24, 1] } }}
-                    className="tone-dark fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[var(--background)] text-[var(--foreground)]"
+                    exit={{ opacity: 0, transition: { duration: 0.7, ease: EASE_APPLE } }}
+                    className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[var(--background)] text-[var(--foreground)] px-6 text-center"
                 >
                     <button
                         type="button"
                         onClick={handleEnter}
-                        className="absolute top-5 right-6 text-caption text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
+                        className="absolute top-4 right-5 t-caption text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
                     >
                         {k.intro.skip}
                     </button>
 
-                    <div className="kn-glow absolute inset-[15%] pointer-events-none" aria-hidden="true" />
+                    <motion.div
+                        initial={{ opacity: 0, y: 16 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 1, ease: EASE_APPLE }}
+                    >
+                        <Mark size={128} priority alt="Andreas Fragkiadakis" className="w-28 h-28 md:w-32 md:h-32" />
+                    </motion.div>
 
-                    <Headline as="p" text={`*${k.intro.headline}*`} play className="relative text-[clamp(3.5rem,16vw,11rem)]" />
+                    <Headline as="p" text={k.intro.headline} play className="t-hero mt-4 text-[clamp(3.5rem,14vw,7rem)]" />
 
                     <motion.button
                         type="button"
-                        initial={{ opacity: 0, y: 12 }}
+                        initial={{ opacity: 0, y: 16 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                        transition={{ duration: 1, delay: 0.5, ease: EASE_APPLE }}
                         onClick={handleEnter}
-                        className="relative mt-10 kn-pill kn-pill--fill"
+                        className="mt-9 kn-pill kn-pill--fill"
                     >
                         {k.intro.enter}
-                        <Chevron />
                     </motion.button>
                 </motion.div>
             )}
