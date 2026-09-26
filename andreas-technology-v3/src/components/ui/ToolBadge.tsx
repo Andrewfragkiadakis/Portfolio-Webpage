@@ -35,3 +35,20 @@ export default function ToolBadge({ tool }: { tool: Tool }) {
         </span>
     )
 }
+
+/**
+ * Logo in a uniform square tile: accent-coloured mark on a neutral tile, so every
+ * tool reads at the same size whether its logo is a square mark or a wide wordmark.
+ */
+export function ToolTile({ tool, className = '' }: { tool: Tool; className?: string }) {
+    const url = `url(/logos/${tool.logo}.svg)`
+    return (
+        <span className={`tool-tile ${className}`} title={tool.label}>
+            <span
+                className="tool-tile__logo"
+                aria-hidden="true"
+                style={{ '--ratio': tool.ratio ?? 1, maskImage: url, WebkitMaskImage: url } as CSSProperties}
+            />
+        </span>
+    )
+}

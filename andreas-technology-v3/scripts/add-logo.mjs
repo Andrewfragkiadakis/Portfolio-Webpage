@@ -6,6 +6,10 @@
  *
  *   node scripts/add-logo.mjs python swift claude
  *
+ * Simple Icons draws every logo on a square 24×24 canvas. For a wordmark (e.g. macOS,
+ * VMware) that leaves most of the box empty: tighten the file's viewBox to the drawn
+ * bounds (svgElement.getBBox() in a browser console) and set `ratio` to width ÷ height.
+ *
  * Brands that Simple Icons does not carry (Jamf, Microsoft, Slack, Duo, Check Point)
  * live in public/logos as files taken from each vendor's own brand/press kit.
  */

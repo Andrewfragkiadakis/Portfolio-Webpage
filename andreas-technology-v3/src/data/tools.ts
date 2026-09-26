@@ -23,7 +23,7 @@ export const TOOLS = [
     // Apple fleet & endpoint
     { label: 'Jamf Pro', logo: 'jamf', ratio: 2.875, brand: '#000000', row: 'ops' },
     { label: 'Apple Business Manager', logo: 'apple', brand: '#000000', row: 'ops' },
-    { label: 'macOS', logo: 'macos', brand: '#000000', row: 'ops' },
+    { label: 'macOS', logo: 'macos', ratio: 4.26, brand: '#000000', row: 'ops' },
     { label: 'Checkpoint Harmony EDR', logo: 'checkpoint', ratio: 1.05, brand: '#EE0C5D', row: 'ops' },
     { label: 'Microsoft Sentinel', logo: 'microsoft-sentinel', brand: '#0078D4', row: 'ops' },
     // Identity & access
@@ -32,9 +32,9 @@ export const TOOLS = [
     { label: '1Password', logo: '1password', brand: '#145FE4', row: 'ops' },
     { label: 'Active Directory', logo: 'active-directory', brand: '#0078D4', row: 'ops' },
     // Infrastructure
-    { label: 'Cisco ISE', logo: 'cisco', brand: '#1BA0D7', row: 'ops' },
+    { label: 'Cisco ISE', logo: 'cisco', ratio: 1.9, brand: '#1BA0D7', row: 'ops' },
     { label: 'Proxmox', logo: 'proxmox', brand: '#E57000', row: 'ops' },
-    { label: 'VMware ESXi', logo: 'vmware', brand: '#607078', row: 'ops' },
+    { label: 'VMware ESXi', logo: 'vmware', ratio: 6.32, brand: '#607078', row: 'ops' },
     { label: 'Linux', logo: 'linux', brand: '#FCC624', row: 'ops' },
     { label: "acme.sh / Let's Encrypt", logo: 'letsencrypt', brand: '#003A70', row: 'ops' },
 

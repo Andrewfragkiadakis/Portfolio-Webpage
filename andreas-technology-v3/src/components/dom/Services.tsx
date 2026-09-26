@@ -12,7 +12,7 @@ import SpotlightCard from '@/components/ui/SpotlightCard'
 import SectionHeading from '@/components/ui/SectionHeading'
 import RollText from '@/components/ui/RollText'
 import Modal from '@/components/ui/Modal'
-import ToolBadge, { ToolLogo } from '@/components/ui/ToolBadge'
+import { ToolTile } from '@/components/ui/ToolBadge'
 
 /** Logos previewed on a card before it is opened. */
 const PREVIEW_TOOLS = 5
@@ -62,10 +62,13 @@ export default function Services() {
 
                                 {/* Footer: toolkit preview on the left, the "open" affordance on the right. */}
                                 <div className="relative z-10 mt-4 flex items-center justify-between gap-3">
-                                    <span className="flex items-center gap-2.5 text-[var(--foreground)] opacity-60 group-hover:opacity-90 transition-opacity" aria-hidden="true">
+                                    <span className="flex items-center gap-1.5" aria-hidden="true">
                                         {toolsFor(service).slice(0, PREVIEW_TOOLS).map((tool) => (
-                                            <ToolLogo key={tool.label} tool={tool} />
+                                            <ToolTile key={tool.label} tool={tool} />
                                         ))}
+                                        {service.tools.length > PREVIEW_TOOLS && (
+                                            <span className="tool-tile tool-tile--count">+{service.tools.length - PREVIEW_TOOLS}</span>
+                                        )}
                                     </span>
                                     <span
                                         className="w-9 h-9 shrink-0 rounded-full border border-[var(--accent)]/60 flex items-center justify-center text-[var(--accent)] transition-[transform,background-color,color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:rotate-90 group-hover:bg-[var(--accent)] group-hover:text-[var(--background)] group-focus-visible:rotate-90"
@@ -134,10 +137,11 @@ export default function Services() {
                         <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--accent)] mb-3">
                             {t.servicesLabels.toolkit}
                         </h4>
-                        <ul className="flex flex-wrap gap-2">
+                        <ul className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-3">
                             {toolsFor(active).map((tool) => (
-                                <li key={tool.label}>
-                                    <ToolBadge tool={tool} />
+                                <li key={tool.label} className="flex items-center gap-2.5 min-w-0">
+                                    <ToolTile tool={tool} />
+                                    <span className="text-body-sm text-[var(--foreground)] leading-tight">{tool.label}</span>
                                 </li>
                             ))}
                         </ul>
