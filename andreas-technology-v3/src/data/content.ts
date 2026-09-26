@@ -104,6 +104,9 @@ export interface Content {
         emailLabel: string
         locationLabel: string
         localTimeLabel: string
+        copyEmail: string
+        copied: string
+        copyFailed: string
     }
     cursor: {
         view: string
@@ -230,7 +233,10 @@ export const content: Record<'en' | 'gr', Content> = {
             downloadResume: "Download Resume",
             emailLabel: "Email",
             locationLabel: "Location",
-            localTimeLabel: "Local time"
+            localTimeLabel: "Local time",
+            copyEmail: "Copy",
+            copied: "Copied",
+            copyFailed: "Copy failed"
         },
 
         cursor: {
@@ -723,7 +729,10 @@ export const content: Record<'en' | 'gr', Content> = {
             downloadResume: "Ληψη Βιογραφικου",
             emailLabel: "Email",
             locationLabel: "Τοποθεσια",
-            localTimeLabel: "Τοπικη ωρα"
+            localTimeLabel: "Τοπικη ωρα",
+            copyEmail: "Αντιγραφη",
+            copied: "Αντιγραφηκε",
+            copyFailed: "Αποτυχια"
         },
 
         cursor: {

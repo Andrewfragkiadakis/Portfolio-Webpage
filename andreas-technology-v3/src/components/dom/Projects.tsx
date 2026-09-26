@@ -3,16 +3,32 @@
 import { useContent } from '@/hooks/useContent'
 import { useCardScroll } from '@/hooks/useCardScroll'
 import Image from 'next/image'
-import { motion } from 'motion/react'
+import { motion, type Variants } from 'motion/react'
 import { useState } from 'react'
 import type { Project } from '@/data/content'
 import Modal from '@/components/ui/Modal'
+import RollText from '@/components/ui/RollText'
+import ScrollRail from '@/components/ui/ScrollRail'
+import { EASE_OUT } from '@/utils/motion'
 import SectionHeading from '@/components/ui/SectionHeading'
+
+/** Stagger only the first screenful; cards scrolled into view later reveal at once. */
+const staggerDelay = (index: number) => Math.min(index, 3) * 0.08
+
+const CARD_RISE: Variants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: (index: number) => ({ opacity: 1, y: 0, transition: { delay: staggerDelay(index), duration: 0.7, ease: EASE_OUT } }),
+}
+
+const IMAGE_WIPE: Variants = {
+    hidden: { clipPath: 'inset(100% 0% 0% 0%)' },
+    visible: (index: number) => ({ clipPath: 'inset(0% 0% 0% 0%)', transition: { delay: 0.15 + staggerDelay(index), duration: 1.1, ease: EASE_OUT } }),
+}
 
 export default function Projects() {
     const t = useContent()
     const [activeProject, setActiveProject] = useState<Project | null>(null)
-    const { scrollContainerRef, scroll: scrollProjects, canScrollLeft, canScrollRight } = useCardScroll('[data-project-card]')
+    const { scrollContainerRef, scroll: scrollProjects, canScrollLeft, canScrollRight, progress, ratio } = useCardScroll('[data-project-card]')
     const arrowClass = "w-11 h-11 md:w-12 md:h-12 border border-[var(--foreground)]/30 flex items-center justify-center text-[var(--foreground)] transition-all duration-300 cursor-pointer hover:bg-[var(--foreground)] hover:text-[var(--background)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[var(--foreground)] disabled:active:scale-100"
 
     return (
@@ -55,13 +71,22 @@ export default function Projects() {
                         const media = (
                             <>
                                 {project.image && (
-                                    <Image
-                                        src={project.image}
-                                        alt={project.name}
-                                        fill
-                                        sizes="(max-width: 640px) 300px, (max-width: 1024px) 360px, 440px"
-                                        className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
-                                    />
+                                    // Wipe the image in from the bottom as the card scrolls into view.
+                                    // Driven by the card's in-view state: an element clipped to nothing
+                                    // never registers as intersecting, so it can't trigger itself.
+                                    <motion.span
+                                        className="absolute inset-0 block"
+                                        variants={IMAGE_WIPE}
+                                        custom={index}
+                                    >
+                                        <Image
+                                            src={project.image}
+                                            alt={project.name}
+                                            fill
+                                            sizes="(max-width: 640px) 300px, (max-width: 1024px) 360px, 440px"
+                                            className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
+                                        />
+                                    </motion.span>
                                 )}
                                 <span className="absolute top-3 left-3 z-10 font-mono text-[11px] font-bold px-2 py-1 bg-[var(--background)]/85 backdrop-blur text-[var(--foreground)] border border-[var(--foreground)]/15">
                                     {(index + 1).toString().padStart(2, '0')}
@@ -81,10 +106,11 @@ export default function Projects() {
                             <motion.article
                                 key={project.name}
                                 data-project-card
-                                initial={{ opacity: 0, y: 40 }}
-                                whileInView={{ opacity: 1, y: 0 }}
+                                initial="hidden"
+                                whileInView="visible"
                                 viewport={{ once: true, amount: 0.3 }}
-                                transition={{ delay: index * 0.08, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                                variants={CARD_RISE}
+                                custom={index}
                                 className="w-[300px] sm:w-[340px] md:w-[400px] lg:w-[440px] flex-shrink-0 group flex flex-col scroll-snap-align-start"
                             >
                                 {openDetail ? (
@@ -135,12 +161,12 @@ export default function Projects() {
                                     <span className="ml-auto flex items-center gap-3">
                                         {project.liveSiteLink && (
                                             <a href={project.liveSiteLink} target="_blank" rel="noopener noreferrer" aria-label={`${project.name} — ${t.projectsSection.live}`} className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)] hover:text-[var(--accent)] flex items-center gap-1 transition-colors">
-                                                <i className="fas fa-external-link-alt" aria-hidden="true" /> {t.projectsSection.live}
+                                                <i className="fas fa-external-link-alt" aria-hidden="true" /> <span className="link-underline">{t.projectsSection.live}</span>
                                             </a>
                                         )}
                                         {project.githubLink && (
                                             <a href={project.githubLink} target="_blank" rel="noopener noreferrer" aria-label={`${project.name} — ${t.projectsSection.code}`} className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)] hover:text-[var(--accent)] flex items-center gap-1 transition-colors">
-                                                <i className="fab fa-github" aria-hidden="true" /> {t.projectsSection.code}
+                                                <i className="fab fa-github" aria-hidden="true" /> <span className="link-underline">{t.projectsSection.code}</span>
                                             </a>
                                         )}
                                     </span>
@@ -149,6 +175,7 @@ export default function Projects() {
                         )
                     })}
                 </div>
+                <ScrollRail progress={progress} ratio={ratio} className="mt-1" />
 
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -164,7 +191,7 @@ export default function Projects() {
                         className="inline-flex items-center gap-3 px-8 py-4 border border-[var(--foreground)] text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 ease-out font-bold uppercase tracking-widest hover:shadow-[0_0_20px_var(--accent)]"
                     >
                         <i className="fab fa-github text-xl" aria-hidden="true" />
-                        {t.projectsSection.githubCta}
+                        <RollText>{t.projectsSection.githubCta}</RollText>
                     </a>
                 </motion.div>
             </div>

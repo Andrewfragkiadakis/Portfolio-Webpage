@@ -5,10 +5,15 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 ## [Unreleased]
 
 ### Added
+- `RollText`: button labels roll up on hover/focus with a copy rolling in (CSS only; duplicate hidden from assistive tech) — hero, Services, Projects, Experience and Contact CTAs
+- `ScrambleText`: desktop nav labels decode from random glyphs on hover/focus; real text keeps its layout slot and is what screen readers read; skipped under reduced motion
+- Project images wipe in from the bottom as each card enters view (driven by the card, since a fully clipped element never registers as intersecting); stagger capped to the first screenful
+- `ScrollRail`: progress rail under the Experience and Projects carousels (`useCardScroll` now exposes `progress` and `ratio` motion values)
+- `CopyButton`: copy email with animated "Copied" confirmation; Clipboard API with a 1 s deadline, `execCommand` fallback, and an explicit "Copy failed" state
+- `.link-underline`: underline that draws in on hover for inline links
 - Motion system: shared easing/stagger tokens (`utils/motion.ts`) used by every reveal
 - Hero: outlined name rises letter-by-letter from a mask, then role, socials and CTAs in sequence; held until the intro overlay clears (`useSiteEntered` + `site:entered` event) so the reveal is never played underneath it
 - Hero corner meta: Athens location and live local time; one-shot line-draw scroll cue replaces the infinite pulse
-- `Magnetic`: spring-follow wrapper for primary CTAs (mouse only, inert under reduced motion)
 - Contextual cursor: grows into a labelled bubble over `data-cursor` targets (project images "View", credentials "Verify", skill cards "Open"; EN/GR)
 - Theme switch reveals the new theme as a circle from the toggle via the View Transitions API; fade fallback elsewhere and under reduced motion
 - Navigation: rolling "02 / 06 — Section" counter on desktop
@@ -22,6 +27,7 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 - JSON-LD `hasCredential` and `knowsAbout` on the Person schema; Jamf keywords in metadata
 
 ### Changed
+- Removed the magnetic pointer-follow effect from buttons
 - CustomCursor attaches its listeners once instead of on every hover change
 - Services cards use the shared rise-and-ease reveal instead of scaling from 90%
 - Fleet size updated to 550+ Macs wherever it describes the current fleet (stat, tagline, About copy, skill card, current role); past-achievement bullets keep the 400+ figure from when that work shipped

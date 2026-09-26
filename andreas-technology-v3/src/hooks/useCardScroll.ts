@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState, useCallback } from 'react'
+import { useMotionValue } from 'motion/react'
 
 /** Ignore sub-pixel rounding when deciding whether we are at an edge. */
 const EDGE_EPSILON_PX = 2
@@ -7,20 +8,25 @@ const EDGE_EPSILON_PX = 2
  * Card-by-card horizontal scrolling for a snap container.
  *
  * Also reports whether either end has been reached so the arrows can be disabled
- * rather than silently doing nothing.
+ * rather than silently doing nothing, plus scroll `progress` (0–1) and the visible
+ * `ratio` as motion values for a progress rail — updated without re-rendering.
  */
 export function useCardScroll(cardSelector: string) {
     const scrollContainerRef = useRef<HTMLDivElement>(null)
     const [canScrollLeft, setCanScrollLeft] = useState(false)
     const [canScrollRight, setCanScrollRight] = useState(false)
+    const progress = useMotionValue(0)
+    const ratio = useMotionValue(1)
 
     const syncEdges = useCallback(() => {
         const container = scrollContainerRef.current
         if (!container) return
         const maxScroll = container.scrollWidth - container.clientWidth
+        progress.set(maxScroll > 0 ? container.scrollLeft / maxScroll : 0)
+        ratio.set(container.scrollWidth > 0 ? container.clientWidth / container.scrollWidth : 1)
         setCanScrollLeft(container.scrollLeft > EDGE_EPSILON_PX)
         setCanScrollRight(maxScroll > EDGE_EPSILON_PX && container.scrollLeft < maxScroll - EDGE_EPSILON_PX)
-    }, [])
+    }, [progress, ratio])
 
     useEffect(() => {
         const container = scrollContainerRef.current
@@ -77,5 +83,5 @@ export function useCardScroll(cardSelector: string) {
         })
     }, [cardSelector])
 
-    return { scrollContainerRef, scroll, canScrollLeft, canScrollRight }
+    return { scrollContainerRef, scroll, canScrollLeft, canScrollRight, progress, ratio }
 }

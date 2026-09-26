@@ -7,6 +7,7 @@ import { centreOf } from '@/utils/dom'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { EASE_OUT } from '@/utils/motion'
+import ScrambleText from '@/components/ui/ScrambleText'
 import { scrollToSection as smoothScrollToSection } from '@/utils/smooth-scroll'
 import { SECTION_IDS, SECTION_STEPS } from '@/data/sections'
 
@@ -104,7 +105,7 @@ export default function Navigation() {
                                     : 'text-[var(--foreground)] opacity-90 hover:opacity-100 hover:text-[var(--accent)]'
                                     }`}
                             >
-                                {item.label}
+                                <ScrambleText text={item.label} />
                                 {isActive && (
                                     <motion.span
                                         layoutId="nav-active-underline"

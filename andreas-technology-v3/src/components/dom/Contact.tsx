@@ -3,7 +3,8 @@
 import { useContent } from '@/hooks/useContent'
 import { motion } from 'motion/react'
 import LocalTime from '@/components/ui/LocalTime'
-import Magnetic from '@/components/ui/Magnetic'
+import RollText from '@/components/ui/RollText'
+import CopyButton from '@/components/ui/CopyButton'
 import SectionHeading from '@/components/ui/SectionHeading'
 
 export default function Contact() {
@@ -27,15 +28,18 @@ export default function Contact() {
                             {t.contact.infoTitle}
                         </h3>
 
-                        <a href={gmailComposeUrl} target="_blank" rel="noopener noreferrer" className="flex items-start sm:items-center gap-3 sm:gap-4 group" aria-label="Contact via email">
-                            <div className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-[var(--background)] transition-all duration-300 ease-out flex-shrink-0">
-                                <i className="fas fa-envelope text-xl" aria-hidden="true" />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                                <div className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase">{t.contact.emailLabel}</div>
-                                <div className="text-sm sm:text-lg font-bold text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors break-all">{t.email}</div>
-                            </div>
-                        </a>
+                        <div className="flex items-start sm:items-center gap-3">
+                            <a href={gmailComposeUrl} target="_blank" rel="noopener noreferrer" className="flex flex-1 min-w-0 items-start sm:items-center gap-3 sm:gap-4 group" aria-label="Contact via email">
+                                <div className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-[var(--background)] transition-all duration-300 ease-out flex-shrink-0">
+                                    <i className="fas fa-envelope text-xl" aria-hidden="true" />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <div className="text-[10px] font-mono text-[var(--foreground)] opacity-80 uppercase">{t.contact.emailLabel}</div>
+                                    <div className="text-sm sm:text-lg font-bold text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors break-all"><span className="link-underline">{t.email}</span></div>
+                                </div>
+                            </a>
+                            <CopyButton value={t.email} label={t.contact.copyEmail} copiedLabel={t.contact.copied} failedLabel={t.contact.copyFailed} />
+                        </div>
 
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-12 border border-[var(--foreground)] flex items-center justify-center text-[var(--accent)]">
@@ -102,18 +106,16 @@ export default function Contact() {
                         </div>
 
                         <div className="space-y-3">
-                            <Magnetic strength={0.12} className="block">
-                                <a
-                                    href={gmailComposeUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    aria-label="Contact via email"
-                                    className="group w-full flex items-center justify-center gap-2 px-6 py-4 bg-[var(--accent)] text-[var(--background)] font-bold uppercase tracking-widest hover:shadow-[0_0_30px_var(--accent)] transition-shadow duration-300 ease-out"
-                                >
-                                    <i className="fas fa-paper-plane transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1 group-hover:-translate-y-1" aria-hidden="true" />
-                                    {t.contact.sendMessage}
-                                </a>
-                            </Magnetic>
+                            <a
+                                href={gmailComposeUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Contact via email"
+                                className="group w-full flex items-center justify-center gap-2 px-6 py-4 bg-[var(--accent)] text-[var(--background)] font-bold uppercase tracking-widest hover:shadow-[0_0_30px_var(--accent)] transition-shadow duration-300 ease-out"
+                            >
+                                <i className="fas fa-paper-plane transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1 group-hover:-translate-y-1" aria-hidden="true" />
+                                <RollText>{t.contact.sendMessage}</RollText>
+                            </a>
 
                             <a
                                 href={cvLink}
@@ -121,7 +123,7 @@ export default function Contact() {
                                 className="w-full flex items-center justify-center gap-2 px-6 py-4 border border-[var(--foreground)] text-[var(--foreground)] font-bold uppercase tracking-widest hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 ease-out"
                             >
                                 <i className="fas fa-download" aria-hidden="true" />
-                                {t.contact.downloadResume}
+                                <RollText>{t.contact.downloadResume}</RollText>
                             </a>
                         </div>
                     </motion.div>

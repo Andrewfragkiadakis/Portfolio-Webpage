@@ -243,6 +243,40 @@ a[href],
   background: linear-gradient(to left, var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%, rgba(0, 0, 0, 0) 100%);
 }
 
+/* Rolling label (RollText): the track holds the label twice and slides up one line. */
+.roll-text {
+  display: inline-block;
+  overflow: hidden;
+  height: 1.25em;
+  line-height: 1.25em;
+  vertical-align: middle;
+}
+
+.roll-text__track {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:is(a, button):is(:hover, :focus-visible) .roll-text__track {
+  transform: translateY(-50%);
+}
+
+/* Underline that draws in from the left on hover/focus, then retracts to the right. */
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+  background-size: 0% 1px;
+  transition: background-size 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.link-underline:is(:hover, :focus-visible),
+:is(a, button):is(:hover, :focus-visible) .link-underline {
+  background-position: 0% 100%;
+  background-size: 100% 1px;
+}
+
 /* Tool pills: official logos drawn as a mask, so they take the text colour and
    switch to the brand colour on hover. */
 .tool-pill {

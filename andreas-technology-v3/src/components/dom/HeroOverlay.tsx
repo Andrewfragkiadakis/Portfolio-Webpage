@@ -8,8 +8,8 @@ import Typewriter from 'typewriter-effect'
 import { scrollToSection as smoothScrollToSection } from '@/utils/smooth-scroll'
 import { EASE_OUT, LETTER_STAGGER } from '@/utils/motion'
 import { useSiteEntered } from '@/hooks/useSiteEntered'
-import Magnetic from '@/components/ui/Magnetic'
 import LocalTime from '@/components/ui/LocalTime'
+import RollText from '@/components/ui/RollText'
 import { sectionIndex, type SectionId } from '@/data/sections'
 
 const LetterGlitch = dynamic(() => import('@/components/ui/LetterGlitch'), { ssr: false })
@@ -186,21 +186,15 @@ export default function HeroOverlay() {
             </motion.div>
 
             <motion.div {...rise(1.05)} className="flex gap-4 mt-12 pointer-events-auto">
-                <Magnetic>
-                    <a href={t.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" className={SOCIAL_BTN}>
-                        <i className="fab fa-linkedin text-xl" aria-hidden="true" />
-                    </a>
-                </Magnetic>
-                <Magnetic>
-                    <a href={t.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub profile" className={SOCIAL_BTN}>
-                        <i className="fab fa-github text-xl" aria-hidden="true" />
-                    </a>
-                </Magnetic>
-                <Magnetic>
-                    <a href={gmailComposeUrl} target="_blank" rel="noopener noreferrer" aria-label="Contact via email" className={SOCIAL_BTN}>
-                        <i className="fas fa-envelope text-xl" aria-hidden="true" />
-                    </a>
-                </Magnetic>
+                <a href={t.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" className={SOCIAL_BTN}>
+                    <i className="fab fa-linkedin text-xl" aria-hidden="true" />
+                </a>
+                <a href={t.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub profile" className={SOCIAL_BTN}>
+                    <i className="fab fa-github text-xl" aria-hidden="true" />
+                </a>
+                <a href={gmailComposeUrl} target="_blank" rel="noopener noreferrer" aria-label="Contact via email" className={SOCIAL_BTN}>
+                    <i className="fas fa-envelope text-xl" aria-hidden="true" />
+                </a>
             </motion.div>
 
             <motion.div
@@ -208,16 +202,14 @@ export default function HeroOverlay() {
                 className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8 pointer-events-auto w-full sm:w-auto max-w-xs sm:max-w-none"
             >
                 {([['projects', t.hero.viewWork], ['contact', t.hero.getInTouch]] as const).map(([id, label]) => (
-                    <Magnetic key={id} strength={0.2} className="w-full sm:w-auto">
-                        <button onClick={() => scrollToSection(id)} className={CTA_BTN}>
-                            <span className="relative z-10 flex items-center justify-center gap-2 font-bold uppercase tracking-widest text-xs text-foreground group-hover:text-background transition-colors duration-300 ease-out whitespace-nowrap">
-                                {label}
-                                <i className="fas fa-arrow-right text-[10px] transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
-                            </span>
-                            <span className="absolute inset-0 bg-foreground scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] origin-left" aria-hidden="true" />
-                            <span className="absolute inset-0 border border-foreground" aria-hidden="true" />
-                        </button>
-                    </Magnetic>
+                    <button key={id} onClick={() => scrollToSection(id)} className={CTA_BTN}>
+                        <span className="relative z-10 flex items-center justify-center gap-2 font-bold uppercase tracking-widest text-xs text-foreground group-hover:text-background transition-colors duration-300 ease-out whitespace-nowrap">
+                            <RollText>{label}</RollText>
+                            <i className="fas fa-arrow-right text-[10px] transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
+                        </span>
+                        <span className="absolute inset-0 bg-foreground scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] origin-left" aria-hidden="true" />
+                        <span className="absolute inset-0 border border-foreground" aria-hidden="true" />
+                    </button>
                 ))}
             </motion.div>
 

@@ -2,6 +2,8 @@
 
 import { useContent } from '@/hooks/useContent'
 import { useCardScroll } from '@/hooks/useCardScroll'
+import RollText from '@/components/ui/RollText'
+import ScrollRail from '@/components/ui/ScrollRail'
 import { motion } from 'motion/react'
 import { useRef } from 'react'
 import type { Experience as ExperienceType, Education as EducationType, EducationKind } from '@/data/content'
@@ -131,7 +133,7 @@ function EducationCard({ edu, index, verifyLabel, verifyCursor }: { edu: Educati
                     className={`relative inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest border px-4 py-3 transition-all justify-center w-full mt-auto ${featured ? 'border-[var(--accent)] bg-[var(--accent)] text-[var(--background)] hover:shadow-[0_0_24px_var(--glow)]' : 'border-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)]'}`}
                 >
                     <i className="fas fa-certificate" aria-hidden="true" />
-                    {verifyLabel}
+                    <RollText>{verifyLabel}</RollText>
                 </a>
             )}
         </motion.div>
@@ -140,7 +142,7 @@ function EducationCard({ edu, index, verifyLabel, verifyCursor }: { edu: Educati
 
 export default function Experience() {
     const t = useContent()
-    const { scrollContainerRef, scroll, canScrollLeft, canScrollRight } = useCardScroll('[data-card="true"]')
+    const { scrollContainerRef, scroll, canScrollLeft, canScrollRight, progress, ratio } = useCardScroll('[data-card="true"]')
     const expMobileRef = useRef<HTMLDivElement>(null)
     const eduMobileRef = useRef<HTMLDivElement>(null)
 
@@ -236,6 +238,7 @@ export default function Experience() {
                     ))}
                     <div className="w-4 md:w-12 flex-shrink-0" />
                 </div>
+                <ScrollRail progress={progress} ratio={ratio} className="hidden md:block mt-2" />
             </div>
         </section>
     )
