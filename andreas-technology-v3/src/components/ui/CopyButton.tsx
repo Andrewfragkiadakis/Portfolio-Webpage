@@ -58,7 +58,7 @@ export default function CopyButton({ value, label, copiedLabel, failedLabel }: C
         setState(ok ? 'copied' : 'failed')
     }
 
-    const icon = state === 'copied' ? 'fa-check text-[var(--accent)]' : state === 'failed' ? 'fa-xmark' : 'fa-copy'
+    const icon = state === 'copied' ? 'fa-check text-[var(--accent-ink)]' : state === 'failed' ? 'fa-xmark' : 'fa-copy'
     const text = state === 'copied' ? copiedLabel : state === 'failed' ? failedLabel : label
 
     return (
@@ -66,9 +66,9 @@ export default function CopyButton({ value, label, copiedLabel, failedLabel }: C
             type="button"
             onClick={copy}
             aria-label={`${label}: ${value}`}
-            className="relative shrink-0 inline-flex items-center gap-2 h-9 px-3 border border-[var(--foreground)]/30 text-micro font-mono uppercase tracking-widest text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors duration-300"
+            className="relative shrink-0 inline-flex items-center gap-2 h-10 px-3.5 border border-[var(--rule-strong)] text-caption font-medium uppercase tracking-[0.06em] text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-colors duration-300"
         >
-            <i className={`fas ${icon}`} aria-hidden="true" />
+            <i className={`fas ${icon} text-[0.7rem]`} aria-hidden="true" />
             <span aria-live="polite" className="relative inline-flex overflow-hidden h-[1.2em]">
                 <AnimatePresence mode="popLayout" initial={false}>
                     <motion.span

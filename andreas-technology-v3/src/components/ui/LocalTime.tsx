@@ -36,7 +36,7 @@ export default function LocalTime({ className = '' }: { className?: string }) {
     const { time, offset } = format(now)
     return (
         <time className={className} dateTime={now.toISOString()}>
-            {time} <span className="opacity-60">{offset}</span>
+            {time} <span className="font-normal">{offset}</span>
         </time>
     )
 }

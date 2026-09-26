@@ -1,11 +1,17 @@
 'use client'
 
 import { useTheme } from '@/contexts/ThemeContext'
+import { useContent } from '@/hooks/useContent'
 import { centreOf } from '@/utils/dom'
 import { useEffect, useState } from 'react'
 
-export default function ThemeToggle() {
+/**
+ * Light/dark switch as a text control: a half-filled square plus the name of the
+ * current theme. Lives in the top bar on every screen size.
+ */
+export default function ThemeToggle({ className = '' }: { className?: string }) {
     const { theme, setTheme } = useTheme()
+    const t = useContent()
     const [mounted, setMounted] = useState(false)
 
     // Theme is only knowable after hydration; render nothing until then to avoid a flash.
@@ -14,19 +20,22 @@ export default function ThemeToggle() {
 
     if (!mounted) return null
 
-    const isKernel = theme === 'dark'
+    const isDark = theme === 'dark'
 
     return (
         <button
             type="button"
-            onClick={(e) => setTheme(isKernel ? 'light' : 'dark', centreOf(e.currentTarget))}
-            aria-label={isKernel ? 'Switch to light mode' : 'Switch to dark mode'}
-            className="fixed right-4 md:right-8 z-50 flex items-center gap-3 px-4 py-2 bg-[var(--background)]/80 backdrop-blur border border-[var(--foreground)] rounded-full hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-colors bottom-[7rem] md:bottom-8"
+            onClick={(e) => setTheme(isDark ? 'light' : 'dark', centreOf(e.currentTarget))}
+            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+            className={`group inline-flex items-center gap-2 text-caption font-medium uppercase tracking-[0.06em] hover:text-[var(--accent-ink)] transition-colors min-h-11 md:min-h-8 ${className}`}
         >
-            <span className="text-xs font-mono uppercase tracking-widest hidden sm:block">
-                {isKernel ? 'DARK_MODE' : 'LIGHT_MODE'}
+            <span
+                className="relative block w-2.5 h-2.5 border border-current overflow-hidden transition-transform duration-500 group-hover:rotate-180"
+                aria-hidden="true"
+            >
+                <span className="absolute inset-y-0 left-0 w-1/2 bg-current" />
             </span>
-            <div className={`w-3 h-3 rounded-full bg-[var(--accent)]`} />
+            <span suppressHydrationWarning>{isDark ? t.editorial.dark : t.editorial.light}</span>
         </button>
     )
 }

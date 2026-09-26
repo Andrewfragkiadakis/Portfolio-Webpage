@@ -40,8 +40,10 @@ export default function MobileNav() {
             for (const section of SECTION_IDS) {
                 const element = document.getElementById(section)
                 if (!element) continue
-                const top = element.offsetTop
-                if (midpoint >= top && midpoint < top + element.offsetHeight) {
+                const top = element.getBoundingClientRect().top + currentScrollY
+                const host = element.closest('[data-panel]') as HTMLElement | null
+                const height = host?.offsetHeight ?? element.offsetHeight
+                if (midpoint >= top && midpoint < top + height) {
                     setActiveSection(section)
                     break
                 }
@@ -60,39 +62,33 @@ export default function MobileNav() {
     }, [])
 
     const navItems = [
-        { id: 'hero', icon: 'fas fa-home', label: t.nav.home },
-        { id: 'about', icon: 'fas fa-user', label: t.nav.about },
-        { id: 'projects', icon: 'fas fa-code', label: t.nav.projects },
-        { id: 'contact', icon: 'fas fa-envelope', label: t.nav.contact },
+        { id: 'hero', label: t.nav.home },
+        { id: 'about', label: t.nav.about },
+        { id: 'projects', label: t.nav.projects },
+        { id: 'contact', label: t.nav.contact },
     ]
 
     return (
         <div
-            className={`md:hidden fixed left-4 right-4 z-50 transition-all duration-300 ease-out ${isVisible ? 'bottom-5 opacity-100 translate-y-0' : 'bottom-0 opacity-0 translate-y-4 pointer-events-none'}`}
+            className={`md:hidden fixed inset-x-0 bottom-0 z-50 transition-transform duration-300 ease-out ${isVisible ? 'translate-y-0' : 'translate-y-full pointer-events-none'}`}
         >
             <nav
-                className="mx-auto max-w-md rounded-2xl border border-[var(--foreground)]/20 bg-[var(--background)]/95 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.12)] py-3 px-4 flex items-center justify-around gap-1"
+                className="grid grid-cols-4 bg-[var(--background)] rule-t pb-[env(safe-area-inset-bottom)]"
                 aria-label="Mobile navigation"
             >
-                {navItems.map((item) => {
+                {navItems.map((item, i) => {
                     const isActive = activeSection === item.id
                     return (
                         <button
                             key={item.id}
+                            type="button"
                             onClick={() => scrollToSection(item.id)}
                             aria-current={isActive ? 'true' : undefined}
-                            className={`relative flex flex-1 cursor-pointer flex-col items-center justify-center gap-1.5 min-h-13 min-w-0 py-2 px-2 rounded-xl transition-colors duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] ${isActive
-                                ? 'text-[var(--accent)] bg-[var(--foreground)]/10'
-                                : 'text-[var(--foreground)] opacity-85 hover:opacity-100 hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10'
-                                }`}
+                            className={`relative min-h-14 min-w-0 px-2 flex flex-col items-start justify-center gap-0.5 text-left transition-colors duration-300 ${i > 0 ? 'rule-l' : ''} ${isActive ? 'text-[var(--foreground)]' : 'text-[var(--muted)]'}`}
                         >
-                            <i className={`${item.icon} text-lg`} aria-hidden="true" />
-                            <span className="text-micro font-semibold uppercase tracking-widest truncate w-full text-center">
-                                {item.label}
-                            </span>
-                            {isActive && (
-                                <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-0.5 rounded-full bg-[var(--accent)]" aria-hidden="true" />
-                            )}
+                            <span className={`text-micro tabular font-medium ${isActive ? 'text-[var(--accent-ink)]' : ''}`}>{String(i + 1).padStart(2, '0')}</span>
+                            <span className="text-caption font-medium uppercase tracking-[0.05em] truncate w-full">{item.label}</span>
+                            {isActive && <span className="absolute top-0 left-0 right-0 h-[2px] bg-[var(--accent-ink)]" aria-hidden="true" />}
                         </button>
                     )
                 })}

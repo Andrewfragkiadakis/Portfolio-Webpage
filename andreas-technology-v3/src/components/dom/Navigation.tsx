@@ -2,18 +2,31 @@
 
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useContent } from '@/hooks/useContent'
-import { useTheme } from '@/contexts/ThemeContext'
-import { centreOf } from '@/utils/dom'
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
-import { EASE_OUT } from '@/utils/motion'
-import ScrambleText from '@/components/ui/ScrambleText'
+import { motion } from 'motion/react'
 import { scrollToSection as smoothScrollToSection } from '@/utils/smooth-scroll'
 import { SECTION_IDS, SECTION_STEPS } from '@/data/sections'
+import ThemeToggle from '@/components/ui/ThemeToggle'
+
+const pad = (n: number) => String(n).padStart(2, '0')
+
+function LanguageSwitch({ className = '' }: { className?: string }) {
+    const { language, setLanguage } = useLanguage()
+    return (
+        <button
+            type="button"
+            onClick={() => setLanguage(language === 'en' ? 'gr' : 'en')}
+            aria-label={language === 'en' ? 'Switch to Greek' : 'Switch to English'}
+            className={`inline-flex items-center gap-1 text-caption font-medium uppercase tracking-[0.06em] ${className}`}
+        >
+            <span className={language === 'en' ? 'text-[var(--foreground)]' : 'text-[var(--muted)] hover:text-[var(--foreground)]'}>EN</span>
+            <span className="text-[var(--muted)]" aria-hidden="true">/</span>
+            <span className={language === 'gr' ? 'text-[var(--foreground)]' : 'text-[var(--muted)] hover:text-[var(--foreground)]'}>GR</span>
+        </button>
+    )
+}
 
 export default function Navigation() {
-    const { language, setLanguage } = useLanguage()
-    const { theme, setTheme } = useTheme()
     const t = useContent()
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const [activeIndex, setActiveIndex] = useState(0)
@@ -67,163 +80,105 @@ export default function Navigation() {
     const navItems = SECTION_IDS.map((section, i) => ({ section, i, label: navLabels[section] }))
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-[var(--background)] border-b border-[var(--foreground)]/20 transition-all duration-300" aria-label="Main navigation">
-            <div className="max-w-7xl mx-auto px-4 sm:px-8 py-4 sm:py-4 min-h-14 flex justify-center items-center relative">
-                {/* Section counter: the number rolls as the horizontal track moves. */}
-                <div className="hidden md:flex absolute left-8 top-1/2 -translate-y-1/2 items-center gap-3 font-mono text-caption uppercase tracking-[0.2em] text-[var(--foreground)]" aria-hidden="true">
-                    <span className="relative inline-flex h-[1.2em] overflow-hidden text-[var(--accent)] font-bold">
-                        {/* Invisible sizer: the box always fits two digits at this letter-spacing. */}
-                        <span className="invisible">00</span>
-                        <AnimatePresence mode="popLayout" initial={false}>
-                            <motion.span
-                                key={activeIndex}
-                                className="absolute inset-0"
-                                initial={{ y: '100%' }}
-                                animate={{ y: '0%' }}
-                                exit={{ y: '-100%' }}
-                                transition={{ duration: 0.45, ease: EASE_OUT }}
-                            >
-                                {String(activeIndex + 1).padStart(2, '0')}
-                            </motion.span>
-                        </AnimatePresence>
-                    </span>
-                    <span className="opacity-50">/ {String(SECTION_IDS.length).padStart(2, '0')}</span>
-                    <span className="h-px w-6 bg-[var(--foreground)]/30" />
-                    <span className="opacity-70 hidden xl:inline">{navItems[activeIndex]?.label}</span>
-                </div>
+        <nav className="fixed top-0 left-0 right-0 z-[60] bg-[var(--background)] rule-b md:border-b-0" aria-label="Main navigation">
+            <div className="h-[var(--nav-h)] px-4 md:px-10 grid grid-cols-[1fr_auto_auto] md:grid-cols-12 gap-x-5 md:gap-x-6 items-center">
+                <button
+                    type="button"
+                    onClick={() => scrollToSection('hero', 0)}
+                    aria-label={`${t.editorial.firstName} ${t.editorial.lastName} — ${t.nav.home}`}
+                    className="md:col-span-3 justify-self-start text-sm font-semibold tracking-[-0.01em] hover:text-[var(--accent-ink)] transition-colors"
+                >
+                    {t.editorial.firstName} {t.editorial.lastName}
+                    <span className="stop" aria-hidden="true" />
+                </button>
 
-                <div className="hidden md:flex gap-6 lg:gap-8 items-center">
-                    {navItems.map((item) => {
+                {/* Desktop index */}
+                <ul className="hidden md:flex md:col-span-7 items-center gap-x-6 lg:gap-x-7">
+                    {navItems.slice(1).map((item) => {
                         const isActive = activeIndex === item.i
                         return (
-                            <button
-                                key={item.section}
-                                onClick={() => scrollToSection(item.section, item.i)}
-                                aria-current={isActive ? 'true' : undefined}
-                                className={`relative text-sm uppercase tracking-widest cursor-pointer transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] rounded-sm px-0.5 ${isActive
-                                    ? 'text-[var(--accent)] opacity-100'
-                                    : 'text-[var(--foreground)] opacity-90 hover:opacity-100 hover:text-[var(--accent)]'
-                                    }`}
-                            >
-                                <ScrambleText text={item.label} />
-                                {isActive && (
-                                    <motion.span
-                                        layoutId="nav-active-underline"
-                                        className="absolute -bottom-1.5 left-0 right-0 h-0.5 bg-[var(--accent)]"
-                                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                                        aria-hidden="true"
-                                    />
-                                )}
-                            </button>
+                            <li key={item.section}>
+                                <button
+                                    type="button"
+                                    onClick={() => scrollToSection(item.section, item.i)}
+                                    aria-current={isActive ? 'true' : undefined}
+                                    className={`group relative inline-flex items-baseline gap-1.5 py-1 text-caption font-medium uppercase tracking-[0.06em] transition-colors duration-300 ${isActive ? 'text-[var(--foreground)]' : 'text-[var(--muted)] hover:text-[var(--foreground)]'}`}
+                                >
+                                    <span className={`tabular transition-colors ${isActive ? 'text-[var(--accent-ink)]' : ''}`}>{pad(item.i)}</span>
+                                    <span className="whitespace-nowrap">{item.label}</span>
+                                    {isActive && (
+                                        <motion.span
+                                            layoutId="nav-active-rule"
+                                            className="absolute -bottom-[0.9rem] left-0 right-0 h-[2px] bg-[var(--accent-ink)]"
+                                            transition={{ type: 'spring', stiffness: 380, damping: 34 }}
+                                            aria-hidden="true"
+                                        />
+                                    )}
+                                </button>
+                            </li>
                         )
                     })}
-                    <button
-                        onClick={() => setLanguage(language === 'en' ? 'gr' : 'en')}
-                        aria-label={language === 'en' ? 'Switch to Greek' : 'Switch to English'}
-                        className="ml-4 px-3 py-1 bg-[var(--foreground)]/10 hover:bg-[var(--foreground)]/20 text-[var(--foreground)] rounded transition-all duration-300 ease-out text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
-                    >
-                        {language === 'en' ? 'GR' : 'EN'}
-                    </button>
+                </ul>
+
+                <div className="hidden md:flex md:col-span-2 items-center justify-end gap-5">
+                    <LanguageSwitch />
+                    <ThemeToggle />
                 </div>
 
+                {/* Mobile */}
+                <ThemeToggle className="md:hidden" />
                 <button
+                    type="button"
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                    className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 text-[var(--foreground)] p-3 min-w-11 min-h-11 flex items-center justify-center rounded-lg hover:bg-[var(--foreground)]/10 active:bg-[var(--foreground)]/15 transition-colors duration-300 ease-out"
+                    className="md:hidden -mr-2 px-2 min-h-11 inline-flex items-center gap-2 text-caption font-medium uppercase tracking-[0.06em]"
                     aria-label="Toggle menu"
                     aria-expanded={mobileMenuOpen}
                 >
-                    <motion.span
-                        className="relative w-7 h-5 flex flex-col justify-center"
-                        initial={false}
-                        animate={mobileMenuOpen ? 'open' : 'closed'}
-                    >
-                        <motion.span
-                            className="absolute left-0 right-0 h-0.5 bg-current rounded-full origin-center"
-                            style={{ y: -6 }}
-                            variants={{ closed: { rotate: 0, y: -6 }, open: { rotate: 45, y: 0 } }}
-                            transition={{ duration: 0.2, ease: 'easeInOut' }}
-                        />
-                        <motion.span
-                            className="absolute left-0 right-0 h-0.5 bg-current rounded-full"
-                            variants={{ closed: { opacity: 1, scaleX: 1 }, open: { opacity: 0, scaleX: 0 } }}
-                            transition={{ duration: 0.15 }}
-                        />
-                        <motion.span
-                            className="absolute left-0 right-0 h-0.5 bg-current rounded-full origin-center"
-                            style={{ y: 6 }}
-                            variants={{ closed: { rotate: 0, y: 6 }, open: { rotate: -45, y: 0 } }}
-                            transition={{ duration: 0.2, ease: 'easeInOut' }}
-                        />
-                    </motion.span>
+                    {mobileMenuOpen ? t.nav.close : t.editorial.menu}
+                    <span className="relative w-4 h-2.5" aria-hidden="true">
+                        <span className={`absolute left-0 right-0 h-px bg-current transition-transform duration-300 ${mobileMenuOpen ? 'top-1/2 rotate-45' : 'top-0'}`} />
+                        <span className={`absolute left-0 right-0 h-px bg-current transition-transform duration-300 ${mobileMenuOpen ? 'top-1/2 -rotate-45' : 'bottom-0'}`} />
+                    </span>
                 </button>
             </div>
 
             <div
-                className={`md:hidden fixed inset-0 z-[100] flex flex-col bg-[var(--background)] transition-all duration-300 ease-in-out ${mobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}
+                className={`md:hidden fixed inset-x-0 top-[var(--nav-h)] bottom-0 z-[100] flex flex-col bg-[var(--background)] transition-[opacity,visibility] duration-300 ease-out ${mobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}
                 aria-hidden={!mobileMenuOpen}
             >
-                <div className="flex justify-between items-center px-6 pt-8 pb-4 border-b border-[var(--foreground)]/10">
-                    <button
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="px-5 py-3 border border-[var(--foreground)] text-[var(--foreground)] font-mono text-sm uppercase tracking-widest hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 ease-out"
-                        aria-label="Close menu"
-                    >
-                        {t.nav.close}
-                    </button>
-                    <div className="flex items-center gap-3">
-                        <button
-                            onClick={(e) => setTheme(theme === 'dark' ? 'light' : 'dark', centreOf(e.currentTarget))}
-                            className="flex items-center gap-2 px-4 py-2 border border-[var(--foreground)] rounded-full hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-colors duration-300 ease-out"
-                            aria-label="Toggle theme"
-                        >
-                            <span className="text-xs font-mono uppercase tracking-widest" suppressHydrationWarning>
-                                {theme === 'dark' ? 'DARK_MODE' : 'LIGHT_MODE'}
-                            </span>
-                            <div className="w-2.5 h-2.5 rounded-full bg-[var(--accent)]" />
-                        </button>
-                        <button
-                            onClick={() => setLanguage(language === 'en' ? 'gr' : 'en')}
-                            className="px-4 py-2 text-[var(--foreground)] font-mono text-xs uppercase tracking-widest border border-[var(--foreground)]/30 hover:border-[var(--foreground)] hover:bg-[var(--foreground)]/5 transition-all duration-300 ease-out"
-                        >
-                            {language === 'en' ? 'GR' : 'EN'}
-                        </button>
-                    </div>
-                </div>
-
-                <nav className="flex-1 flex flex-col justify-start pt-6 pb-8 overflow-y-auto px-6" aria-label="Mobile menu">
-                    <motion.div
-                        className="flex flex-col gap-0"
+                <nav className="flex-1 overflow-y-auto px-4 pt-4" aria-label="Mobile menu">
+                    <motion.ul
                         initial="closed"
                         animate={mobileMenuOpen ? 'open' : 'closed'}
                         variants={{
-                            open: { transition: { staggerChildren: 0.04, delayChildren: 0.06 } },
+                            open: { transition: { staggerChildren: 0.04, delayChildren: 0.05 } },
                             closed: { transition: { staggerChildren: 0.02, staggerDirection: -1 } },
                         }}
                     >
-                        {navItems.map((item, idx) => (
-                            <motion.div
+                        {navItems.map((item) => (
+                            <motion.li
                                 key={item.section}
-                                className="flex items-center gap-4 py-3 px-4 border-b border-[var(--foreground)]/15"
-                                variants={{ open: { opacity: 1, x: 0 }, closed: { opacity: 0, x: -12 } }}
-                                transition={{ duration: 0.2, ease: 'easeOut' }}
+                                className="rule-b first:rule-t-strong"
+                                variants={{ open: { opacity: 1, y: 0 }, closed: { opacity: 0, y: 8 } }}
+                                transition={{ duration: 0.25, ease: 'easeOut' }}
                             >
-                                <span className="text-micro font-mono text-[var(--foreground)] opacity-75 uppercase tracking-[0.2em]">
-                                    {(idx + 1).toString().padStart(2, '0')}
-                                </span>
                                 <button
+                                    type="button"
                                     onClick={() => scrollToSection(item.section, item.i)}
-                                    className="flex-1 text-left py-2 px-2 min-h-12 flex items-center text-[var(--foreground)] hover:text-[var(--accent)] hover:bg-[var(--foreground)]/5 active:bg-[var(--foreground)]/10 transition-colors duration-300 ease-out text-xl sm:text-2xl font-bold uppercase tracking-tight rounded border border-transparent hover:border-[var(--foreground)]/20"
+                                    tabIndex={mobileMenuOpen ? 0 : -1}
+                                    className="w-full grid grid-cols-[2.5rem_1fr] items-baseline py-3 text-left hover:text-[var(--accent-ink)] transition-colors"
                                 >
-                                    {item.label}
+                                    <span className="index text-sm tabular">{pad(item.i)}</span>
+                                    <span className="display text-[2.5rem] leading-none">{t.editorial.sections[item.section === 'hero' ? 'home' : item.section]}</span>
                                 </button>
-                            </motion.div>
+                            </motion.li>
                         ))}
-                    </motion.div>
+                    </motion.ul>
                 </nav>
 
-                <div className="px-6 py-6 border-t border-[var(--foreground)]/10 flex justify-between items-center text-[var(--foreground)] opacity-80 text-sm font-mono uppercase tracking-widest">
-                    <span>{t.nav.languageLabel}</span>
-                    <span>{t.location}</span>
+                <div className="px-4 py-5 rule-t flex justify-between items-center">
+                    <LanguageSwitch className="min-h-11" />
+                    <span className="meta">{t.location}</span>
                 </div>
             </div>
         </nav>

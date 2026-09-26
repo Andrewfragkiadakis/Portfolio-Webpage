@@ -1,203 +1,166 @@
 'use client'
 
 import { useContent } from '@/hooks/useContent'
-import { useCardScroll } from '@/hooks/useCardScroll'
-import { motion, type Variants } from 'motion/react'
+import { motion, AnimatePresence } from 'motion/react'
 import { useState } from 'react'
 import type { Project } from '@/data/content'
 import Modal from '@/components/ui/Modal'
 import ProjectImage from '@/components/ui/ProjectImage'
-import RollText from '@/components/ui/RollText'
-import ScrollRail from '@/components/ui/ScrollRail'
-import { EASE_OUT } from '@/utils/motion'
 import SectionHeading from '@/components/ui/SectionHeading'
+import { EASE_OUT } from '@/utils/motion'
 
-/** Stagger only the first screenful; cards scrolled into view later reveal at once. */
-const staggerDelay = (index: number) => Math.min(index, 3) * 0.08
+const pad = (n: number) => String(n).padStart(2, '0')
 
-const CARD_RISE: Variants = {
-    hidden: { opacity: 0, y: 40 },
-    visible: (index: number) => ({ opacity: 1, y: 0, transition: { delay: staggerDelay(index), duration: 0.7, ease: EASE_OUT } }),
-}
+const COLS = 'grid-cols-[4.75rem_1fr] md:grid-cols-[2.5rem_minmax(0,1.35fr)_minmax(0,1fr)_3rem_6.5rem]'
 
-const IMAGE_WIPE: Variants = {
-    hidden: { clipPath: 'inset(100% 0% 0% 0%)' },
-    visible: (index: number) => ({ clipPath: 'inset(0% 0% 0% 0%)', transition: { delay: 0.15 + staggerDelay(index), duration: 1.1, ease: EASE_OUT } }),
+const LINK = 'arrow-link inline-flex items-center gap-1 text-caption font-semibold uppercase tracking-[0.05em] hover:text-[var(--accent-ink)] transition-colors'
+
+function RowLinks({ project, t }: { project: Project; t: ReturnType<typeof useContent> }) {
+    return (
+        <>
+            {project.liveSiteLink && (
+                <a href={project.liveSiteLink} target="_blank" rel="noopener noreferrer" aria-label={`${project.name} — ${t.projectsSection.live}`} className={LINK}>
+                    <span className="link-underline">{t.projectsSection.live}</span>
+                    <span className="arrow arrow-ne" aria-hidden="true">↗</span>
+                </a>
+            )}
+            {project.githubLink && (
+                <a href={project.githubLink} target="_blank" rel="noopener noreferrer" aria-label={`${project.name} — ${t.projectsSection.code}`} className={LINK}>
+                    <span className="link-underline">{t.projectsSection.code}</span>
+                    <span className="arrow arrow-ne" aria-hidden="true">↗</span>
+                </a>
+            )}
+        </>
+    )
 }
 
 export default function Projects() {
     const t = useContent()
     const [activeProject, setActiveProject] = useState<Project | null>(null)
-    const { scrollContainerRef, scroll: scrollProjects, canScrollLeft, canScrollRight, progress, ratio } = useCardScroll('[data-project-card]')
-    const arrowClass = "w-11 h-11 md:w-12 md:h-12 border border-[var(--foreground)]/30 flex items-center justify-center text-[var(--foreground)] transition-all duration-300 cursor-pointer hover:bg-[var(--foreground)] hover:text-[var(--background)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[var(--foreground)] disabled:active:scale-100"
+    const [previewIndex, setPreviewIndex] = useState(0)
+    const preview = t.projects[previewIndex] ?? t.projects[0]
+    const tbl = t.editorial.table
 
     return (
-        <section className="w-full h-auto md:h-full flex flex-col justify-center px-4 sm:px-12 md:px-24 py-4 md:py-0 overflow-x-clip overflow-y-visible md:overflow-x-hidden md:overflow-y-auto no-scrollbar">
-            <div className="max-w-480 mx-auto w-full max-h-[calc(100vh-8rem)] md:max-h-none overflow-y-auto md:overflow-visible">
-                <SectionHeading id="projects" title={t.projectsSection.title} subtitle={t.projectsSection.subtitle} align="end" className="mb-6 sm:mb-8" />
+        <section className="w-full md:h-full flex flex-col px-4 md:px-10 pt-16 pb-14 md:pt-5 md:pb-6">
+            <SectionHeading id="projects" index={4} label={t.nav.projects} title={t.editorial.sections.projects} subtitle={t.projectsSection.subtitle} />
 
-                <div className="flex justify-end gap-2 mb-4">
-                    <button
-                        onClick={() => scrollProjects('left')}
-                        disabled={!canScrollLeft}
-                        className={arrowClass}
-                        aria-label="Previous project"
-                    >
-                        <i className="fas fa-chevron-left text-sm md:text-base" aria-hidden="true" />
-                    </button>
-                    <button
-                        onClick={() => scrollProjects('right')}
-                        disabled={!canScrollRight}
-                        className={arrowClass}
-                        aria-label="Next project"
-                    >
-                        <i className="fas fa-chevron-right text-sm md:text-base" aria-hidden="true" />
-                    </button>
-                </div>
+            <div className="flex-1 min-h-8 md:min-h-4" />
 
-                <div
-                    ref={scrollContainerRef}
-                    className="flex gap-4 md:gap-6 overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 scroll-px-4 md:-mx-0 md:px-0 md:scroll-px-0 scroll-smooth items-stretch"
-                    style={{ scrollSnapType: 'x mandatory', overscrollBehaviorX: 'contain' }}
-                >
-                    {t.projects.map((project: Project, index: number) => {
-                        const openDetail = project.detail ? () => setActiveProject(project) : undefined
-                        const statuses = [
-                            project.liveSiteLink && { label: 'LIVE', accent: true },
-                            project.githubLink && { label: 'OSS', accent: false },
-                            (project.reportLink || project.publicationLink) && { label: 'PAPER', accent: false },
-                        ].filter(Boolean) as { label: string; accent: boolean }[]
+            <div className="grid grid-cols-4 md:grid-cols-12 gap-x-4 md:gap-x-6">
+                {/* Index table */}
+                <div className="col-span-4 md:col-span-8">
+                    <div className="flex items-baseline justify-between rule-t-strong pt-2.5 pb-3">
+                        <span className="text-base font-medium tracking-[-0.01em]">{t.projectsTitle.charAt(0) + t.projectsTitle.slice(1).toLowerCase()}</span>
+                        <span className="meta tabular">{pad(t.projects.length)}</span>
+                    </div>
+                    <div className={`hidden md:grid ${COLS} gap-x-3 rule-b pb-1.5 meta`} aria-hidden="true">
+                        <span>{tbl.no}</span>
+                        <span>{tbl.title}</span>
+                        <span>{tbl.tags}</span>
+                        <span className="text-right">{tbl.year}</span>
+                        <span className="text-right">{tbl.links}</span>
+                    </div>
 
-                        const media = (
-                            <>
-                                {project.image && (
-                                    // Wipe the image in from the bottom as the card scrolls into view.
-                                    // Driven by the card's in-view state: an element clipped to nothing
-                                    // never registers as intersecting, so it can't trigger itself.
-                                    <motion.span
-                                        className="absolute inset-0 block"
-                                        variants={IMAGE_WIPE}
-                                        custom={index}
-                                    >
-                                        <ProjectImage
-                                            project={project}
-                                            sizes="(max-width: 639px) 300px, (max-width: 1023px) 340px, 440px"
-                                            className="transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
-                                        />
-                                    </motion.span>
-                                )}
-                                <span className="absolute top-3 left-3 z-10 font-mono text-caption font-bold px-2 py-1 bg-[var(--background)]/85 backdrop-blur text-[var(--foreground)] border border-[var(--foreground)]/15">
-                                    {(index + 1).toString().padStart(2, '0')}
-                                </span>
-                                {/* Touch: a small corner badge says "this opens"; the title is printed right below. */}
-                                {project.detail && (
-                                    <span className="md:hidden absolute bottom-3 right-3 z-10 w-8 h-8 rounded-full bg-[var(--background)]/85 backdrop-blur border border-[var(--foreground)]/15 flex items-center justify-center text-[var(--foreground)]" aria-hidden="true">
-                                        <i className="fas fa-arrow-right -rotate-45 text-caption" />
-                                    </span>
-                                )}
-                                {/* Desktop hover caption, Awwwards-style: rises from the bottom edge. */}
-                                <span className="absolute inset-x-0 bottom-0 z-10 hidden md:flex items-end justify-between gap-3 p-4 pt-16 bg-gradient-to-t from-black/85 via-black/40 to-transparent text-white transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:translate-y-4 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 md:group-focus-within:translate-y-0 md:group-focus-within:opacity-100">
-                                    <span className="min-w-0 text-left">
-                                        <span className="block text-micro font-mono uppercase tracking-[0.2em] opacity-75">{t.projectsSection.caseStudy}</span>
-                                        <span className="block text-sm font-semibold truncate">{project.name}</span>
-                                    </span>
-                                    <i className="fas fa-arrow-right text-sm shrink-0 -rotate-45 transition-transform duration-500 group-hover:rotate-0" aria-hidden="true" />
-                                </span>
-                            </>
-                        )
+                    <ul>
+                        {t.projects.map((project: Project, index: number) => {
+                            const isPreview = index === previewIndex
+                            return (
+                                <motion.li
+                                    key={project.name}
+                                    initial={{ opacity: 0 }}
+                                    whileInView={{ opacity: 1 }}
+                                    viewport={{ once: true, amount: 0.4 }}
+                                    transition={{ duration: 0.6, ease: EASE_OUT, delay: Math.min(index, 8) * 0.035 }}
+                                    onMouseEnter={() => setPreviewIndex(index)}
+                                    onFocus={() => setPreviewIndex(index)}
+                                    data-active={isPreview ? 'true' : undefined}
+                                    className="index-row rule-b"
+                                >
+                                    <div className={`grid ${COLS} gap-x-3 items-center md:items-baseline py-2.5 md:py-[0.5rem]`}>
+                                        <span className="hidden md:block text-body-sm tabular index">{pad(index + 1)}</span>
 
-                        return (
-                            <motion.article
-                                key={project.name}
-                                data-project-card
-                                initial="hidden"
-                                whileInView="visible"
-                                viewport={{ once: true, amount: 0.3 }}
-                                variants={CARD_RISE}
-                                custom={index}
-                                className="w-75 sm:w-85 md:w-110 flex-shrink-0 group flex flex-col snap-start"
-                            >
-                                {openDetail ? (
-                                    <button
-                                        type="button"
-                                        onClick={openDetail}
-                                        aria-label={`${project.name} — ${t.projectsSection.details}`}
-                                        data-cursor={t.cursor.view}
-                                        className="relative block w-full aspect-[16/10] overflow-hidden bg-[var(--foreground)]/5 border border-[var(--foreground)]/15 transition-[border-color,box-shadow] duration-500 hover:border-[var(--accent)] hover:shadow-[0_20px_60px_-20px_var(--glow)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
-                                    >
-                                        {media}
-                                    </button>
-                                ) : (
-                                    <div className="relative w-full aspect-[16/10] overflow-hidden bg-[var(--foreground)]/5 border border-[var(--foreground)]/15">
-                                        {media}
-                                    </div>
-                                )}
+                                        {/* Touch: a small thumbnail stands in for the hover preview. */}
+                                        <span className="md:hidden relative block w-full aspect-[16/10] overflow-hidden bg-[var(--rule)] self-start">
+                                            <ProjectImage project={project} sizes="96px" />
+                                        </span>
 
-                                <div className="flex items-start justify-between gap-3 pt-4">
-                                    <h3 className="text-base md:text-lg font-bold text-[var(--foreground)] leading-tight line-clamp-2 group-hover:text-[var(--accent)] transition-colors">
-                                        {project.name}
-                                        {project.year && (
-                                            <sup className="ml-1 text-micro font-mono font-bold tracking-wider opacity-60 align-super">{project.year}</sup>
-                                        )}
-                                    </h3>
-                                    {statuses.length > 0 && (
-                                        <div className="flex gap-1.5 shrink-0 pt-0.5">
-                                            {statuses.map((st) => (
-                                                <span
-                                                    key={st.label}
-                                                    className={`text-micro font-mono font-bold tracking-wider px-1.5 py-0.5 border ${st.accent ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-[var(--foreground)]/30 text-[var(--foreground)] opacity-75'}`}
+                                        <span className="row-title min-w-0">
+                                            {project.detail ? (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setActiveProject(project)}
+                                                    aria-label={`${project.name} — ${t.projectsSection.details}`}
+                                                   
+                                                    className="row-cover text-left text-[0.9375rem] md:text-sm font-medium leading-snug"
                                                 >
-                                                    {st.label}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
+                                                    {project.name}
+                                                    <span className="row-arrow ml-1.5 text-[var(--accent-ink)]" aria-hidden="true">→</span>
+                                                </button>
+                                            ) : (
+                                                <span className="text-[0.9375rem] md:text-sm font-medium leading-snug">{project.name}</span>
+                                            )}
+                                            <span className="md:hidden block mt-0.5 text-body-sm text-[var(--muted)] leading-snug truncate">
+                                                <span className="tabular">{pad(index + 1)}</span>
+                                                {project.year && <> · <span className="tabular">{project.year}</span></>}
+                                                {' · '}{project.tags.slice(0, 2).join(', ')}
+                                            </span>
+                                            <span className="md:hidden relative z-10 mt-1 flex gap-4">
+                                                <RowLinks project={project} t={t} />
+                                            </span>
+                                        </span>
 
-                                <p className="text-xs text-[var(--foreground)] opacity-70 leading-relaxed line-clamp-2 mt-2">
-                                    {project.description}
-                                </p>
+                                        <span className="hidden md:block text-body-sm text-[var(--muted)] truncate">{project.tags.slice(0, 3).join(', ')}</span>
+                                        <span className="hidden md:block text-body-sm text-[var(--muted)] tabular text-right">{project.year}</span>
+                                        <span className="hidden md:flex relative z-10 justify-end gap-3">
+                                            <RowLinks project={project} t={t} />
+                                        </span>
+                                    </div>
+                                </motion.li>
+                            )
+                        })}
+                    </ul>
 
-                                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-3">
-                                    <span className="text-micro font-mono text-[var(--foreground)] opacity-60 truncate">
-                                        {project.tags.slice(0, 3).join(' · ')}
-                                    </span>
-                                    <span className="ml-auto flex items-center gap-3">
-                                        {project.liveSiteLink && (
-                                            <a href={project.liveSiteLink} target="_blank" rel="noopener noreferrer" aria-label={`${project.name} — ${t.projectsSection.live}`} className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)] hover:text-[var(--accent)] flex items-center gap-1 transition-colors">
-                                                <i className="fas fa-external-link-alt" aria-hidden="true" /> <span className="link-underline">{t.projectsSection.live}</span>
-                                            </a>
-                                        )}
-                                        {project.githubLink && (
-                                            <a href={project.githubLink} target="_blank" rel="noopener noreferrer" aria-label={`${project.name} — ${t.projectsSection.code}`} className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)] hover:text-[var(--accent)] flex items-center gap-1 transition-colors">
-                                                <i className="fab fa-github" aria-hidden="true" /> <span className="link-underline">{t.projectsSection.code}</span>
-                                            </a>
-                                        )}
-                                    </span>
-                                </div>
-                            </motion.article>
-                        )
-                    })}
+                    <div className="mt-4 md:mt-3">
+                        <a
+                            href="https://github.com/Andrewfragkiadakis"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="GitHub profile"
+                            className="arrow-link inline-flex items-center gap-2 text-sm font-medium border-b border-[var(--foreground)] pb-0.5 hover:text-[var(--accent-ink)] hover:border-[var(--accent-ink)] transition-colors"
+                        >
+                            {t.projectsSection.githubCta}
+                            <span className="arrow arrow-ne" aria-hidden="true">↗</span>
+                        </a>
+                    </div>
                 </div>
-                <ScrollRail progress={progress} ratio={ratio} className="mt-1" />
 
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="mt-8 text-center"
-                >
-                    <a
-                        href="https://github.com/Andrewfragkiadakis"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="GitHub profile"
-                        className="inline-flex items-center gap-3 px-8 py-4 border border-[var(--foreground)] text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300 ease-out font-bold uppercase tracking-widest hover:shadow-[0_0_20px_var(--accent)]"
-                    >
-                        <i className="fab fa-github text-xl" aria-hidden="true" />
-                        <RollText>{t.projectsSection.githubCta}</RollText>
-                    </a>
-                </motion.div>
+                {/* Fixed preview column (desktop): follows the hovered or focused row. */}
+                <aside className="hidden md:block md:col-span-4" aria-hidden="true">
+                    <div className="flex items-baseline justify-between rule-t-strong pt-2.5 pb-3">
+                        <span className="meta">{t.editorial.hoverHint}</span>
+                        <span className="meta tabular index">({pad(previewIndex + 1)})</span>
+                    </div>
+                    <div className="relative w-full aspect-[16/10] overflow-hidden bg-[var(--rule)]">
+                        <AnimatePresence initial={false}>
+                            <motion.div
+                                key={preview.name}
+                                className="absolute inset-0"
+                                initial={{ clipPath: 'inset(0% 0% 100% 0%)' }}
+                                animate={{ clipPath: 'inset(0% 0% 0% 0%)' }}
+                                exit={{ opacity: 0, transition: { duration: 0.2, delay: 0.3 } }}
+                                transition={{ duration: 0.55, ease: EASE_OUT }}
+                            >
+                                <ProjectImage project={preview} sizes="(max-width: 1439px) 30vw, 440px" />
+                            </motion.div>
+                        </AnimatePresence>
+                    </div>
+                    <div className="mt-3">
+                        <p className="text-base font-medium leading-tight tracking-[-0.01em]">{preview.name}</p>
+                        {preview.role && <p className="meta mt-1.5">{preview.role}</p>}
+                        <p className="mt-2 text-body-sm text-[var(--muted)] leading-snug line-clamp-4">{preview.description}</p>
+                    </div>
+                </aside>
             </div>
 
             <Modal
@@ -210,76 +173,67 @@ export default function Projects() {
                 {activeProject && (
                     <>
                         {activeProject.image && (
-                            <div className="relative aspect-[16/10] max-h-[45vh] w-full overflow-hidden bg-[var(--foreground)]/5">
+                            <div className="relative aspect-[16/10] max-h-[45vh] w-full overflow-hidden bg-[var(--rule)]">
                                 <ProjectImage project={activeProject} sizes="(max-width: 767px) 100vw, 672px" />
                             </div>
                         )}
 
-                        <div className="p-6 sm:p-8">
-                            <div className="flex items-baseline justify-between gap-4 mb-3">
-                                <h3 id="project-modal-title" className="text-xl sm:text-2xl font-black text-[var(--accent)] uppercase tracking-tight">
-                                    {activeProject.name}
-                                </h3>
-                                {activeProject.year && (
-                                    <span className="font-mono text-sm text-[var(--foreground)] opacity-60 shrink-0">
-                                        {activeProject.year}
-                                    </span>
-                                )}
-                            </div>
+                        <div className="p-6 md:p-8">
+                            <p className="meta mb-3">
+                                <span className="index">({pad(t.projects.indexOf(activeProject) + 1)})</span> {t.projectsSection.caseStudy}
+                                {activeProject.year && <> · <span className="tabular">{activeProject.year}</span></>}
+                            </p>
+                            <h3 id="project-modal-title" className="display text-3xl md:text-[2.5rem] mb-3">
+                                {activeProject.name}
+                            </h3>
 
                             {activeProject.role && (
-                                <p className="text-xs font-mono uppercase tracking-widest text-[var(--foreground)] opacity-70 mb-5">
+                                <p className="text-sm text-[var(--muted)] mb-4">
                                     {t.projectsSection.roleLabel}: {activeProject.role}
                                 </p>
                             )}
 
-                            <div className="flex flex-wrap gap-1.5 mb-5">
-                                {activeProject.tags.map((tag, i) => (
-                                    <span key={i} className="text-micro font-mono border border-[var(--foreground)]/40 px-2 py-0.5 text-[var(--foreground)]">
-                                        {tag}
-                                    </span>
-                                ))}
-                            </div>
+                            <p className="text-sm text-[var(--muted)] mb-5">
+                                {activeProject.tags.join(' · ')}
+                            </p>
 
-                            <p className="text-sm text-[var(--foreground)] opacity-85 leading-relaxed mb-6">
+                            <p className="text-sm leading-relaxed rule-t pt-4 mb-6">
                                 {activeProject.detail}
                             </p>
 
                             {activeProject.highlights && activeProject.highlights.length > 0 && (
                                 <div className="mb-6">
-                                    <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--accent)] mb-3">
-                                        {t.projectsSection.highlightsLabel}
-                                    </h4>
-                                    <ul className="space-y-2">
+                                    <h4 className="meta mb-2">{t.projectsSection.highlightsLabel}</h4>
+                                    <ol className="text-sm">
                                         {activeProject.highlights.map((item, i) => (
-                                            <li key={i} className="flex items-start gap-2.5 text-sm text-[var(--foreground)] opacity-85">
-                                                <i className="fas fa-check text-[var(--accent)] text-caption mt-1 shrink-0" aria-hidden="true" />
+                                            <li key={i} className="rule-t grid grid-cols-[2rem_1fr] py-2">
+                                                <span className="index tabular">{pad(i + 1)}</span>
                                                 <span className="leading-relaxed">{item}</span>
                                             </li>
                                         ))}
-                                    </ul>
+                                    </ol>
                                 </div>
                             )}
 
-                            <div className="flex flex-wrap gap-3 pt-4 border-t border-[var(--foreground)]/15">
+                            <div className="flex flex-wrap gap-2 pt-4 rule-t">
                                 {activeProject.liveSiteLink && (
-                                    <a href={activeProject.liveSiteLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2.5 bg-[var(--accent)] text-[var(--background)] text-xs font-bold uppercase tracking-widest hover:shadow-[0_0_20px_var(--glow)] transition-all">
-                                        <i className="fas fa-external-link-alt" aria-hidden="true" /> {t.projectsSection.live}
+                                    <a href={activeProject.liveSiteLink} target="_blank" rel="noopener noreferrer" className="arrow-link inline-flex items-center gap-2 px-4 py-2.5 bg-[var(--cobalt)] text-white text-sm font-medium hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-colors">
+                                        {t.projectsSection.live} <span className="arrow arrow-ne" aria-hidden="true">↗</span>
                                     </a>
                                 )}
                                 {activeProject.githubLink && (
-                                    <a href={activeProject.githubLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2.5 border border-[var(--foreground)] text-[var(--foreground)] text-xs font-bold uppercase tracking-widest hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all">
-                                        <i className="fab fa-github" aria-hidden="true" /> {t.projectsSection.code}
+                                    <a href={activeProject.githubLink} target="_blank" rel="noopener noreferrer" className="arrow-link inline-flex items-center gap-2 px-4 py-2.5 border border-[var(--foreground)] text-sm font-medium hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-colors">
+                                        {t.projectsSection.code} <span className="arrow arrow-ne" aria-hidden="true">↗</span>
                                     </a>
                                 )}
                                 {activeProject.reportLink && (
-                                    <a href={activeProject.reportLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2.5 border border-[var(--foreground)] text-[var(--foreground)] text-xs font-bold uppercase tracking-widest hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all">
-                                        <i className="fas fa-file-lines" aria-hidden="true" /> {t.projectsSection.report}
+                                    <a href={activeProject.reportLink} target="_blank" rel="noopener noreferrer" className="arrow-link inline-flex items-center gap-2 px-4 py-2.5 border border-[var(--foreground)] text-sm font-medium hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-colors">
+                                        {t.projectsSection.report} <span className="arrow arrow-ne" aria-hidden="true">↗</span>
                                     </a>
                                 )}
                                 {activeProject.publicationLink && (
-                                    <a href={activeProject.publicationLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2.5 border border-[var(--foreground)] text-[var(--foreground)] text-xs font-bold uppercase tracking-widest hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all">
-                                        <i className="fas fa-book-open" aria-hidden="true" /> {t.projectsSection.publication}
+                                    <a href={activeProject.publicationLink} target="_blank" rel="noopener noreferrer" className="arrow-link inline-flex items-center gap-2 px-4 py-2.5 border border-[var(--foreground)] text-sm font-medium hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-colors">
+                                        {t.projectsSection.publication} <span className="arrow arrow-ne" aria-hidden="true">↗</span>
                                     </a>
                                 )}
                             </div>
