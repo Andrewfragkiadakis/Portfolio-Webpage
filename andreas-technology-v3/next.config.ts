@@ -26,6 +26,8 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // Review branch only: the branch preview opens straight on the design-review page.
+      { source: '/', destination: '/review.html', permanent: false },
       {
         source: '/thesis-presentation',
         destination: '/thesis-presentation.html',
