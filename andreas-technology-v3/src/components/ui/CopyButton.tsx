@@ -66,7 +66,7 @@ export default function CopyButton({ value, label, copiedLabel, failedLabel }: C
             type="button"
             onClick={copy}
             aria-label={`${label}: ${value}`}
-            className="relative shrink-0 inline-flex items-center gap-2 h-10 px-3.5 border border-[var(--rule)] text-caption font-medium uppercase tracking-[0.06em] text-[var(--foreground)] hover:border-[var(--foreground)] transition-colors duration-300"
+            className="relative shrink-0 inline-flex items-center gap-2 h-10 px-4 rounded-full border border-[var(--rule-strong)] text-sm font-medium text-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-colors duration-300"
         >
             <i className={`fas ${icon} text-[0.7rem]`} aria-hidden="true" />
             <span aria-live="polite" className="relative inline-flex overflow-hidden h-[1.2em]">

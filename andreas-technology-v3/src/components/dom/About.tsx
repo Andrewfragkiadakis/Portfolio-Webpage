@@ -89,7 +89,7 @@ export default function About() {
 
             {/* Lead + body + profile */}
             <div className={`${GRID} gap-y-8`}>
-                <motion.div {...fadeUp()} className="col-span-4 md:col-span-5">
+                <motion.div {...fadeUp()} className="col-span-4 md:col-span-5 md:pr-8">
                     <p className="text-[1.5rem] md:text-[clamp(1.5rem,2.3vw,2.25rem)] font-medium leading-[1.06] tracking-[-0.03em] text-balance">
                         {t.about.tagline}
                     </p>
@@ -97,27 +97,19 @@ export default function About() {
                     {/* Figures */}
                     <dl className="mt-6 md:mt-8 grid grid-cols-2 md:grid-cols-4 rule-t">
                         {stats.map((stat, index) => (
-                            <div key={index} className={`flex flex-col-reverse justify-end pt-2.5 pb-3 pr-3 ${index % 2 === 1 ? 'rule-l pl-3' : ''} ${index === 2 ? 'md:rule-l md:pl-3' : ''} ${index >= 2 ? 'max-md:rule-t' : ''}`}>
-                                <dt className="meta mt-2 leading-tight">{t.about.statsLabels[index]}</dt>
+                            <div key={index} className={`flex flex-col-reverse justify-end pt-3 pb-3 pr-3 ${index >= 2 ? 'max-md:pt-4' : ''}`}>
+                                <dt className="meta mt-1.5 leading-tight">{t.about.statsLabels[index]}</dt>
                                 <dd className="display tabular text-[2.25rem] md:text-[clamp(2rem,2.8vw,2.75rem)] leading-none">
                                     <AnimatedCounter value={stat.value} suffix={stat.suffix} duration={1.4} />
                                 </dd>
                             </div>
                         ))}
                     </dl>
-                </motion.div>
-
-                <motion.div {...fadeUp(0.1)} className="col-span-4 md:col-start-7 md:col-span-3 text-[0.9375rem] md:text-sm leading-relaxed">
-                    <div className="space-y-3 text-[var(--foreground)]">
-                        {t.about.description.slice(0, 2).map((paragraph, index) => (
-                            <p key={index} className={index === 0 ? '' : 'text-[var(--muted)]'}>{paragraph}</p>
-                        ))}
-                    </div>
-                    <div className="mt-5">
+                    <div className="mt-5 md:mt-6">
                         <p className="meta mb-2">{t.about.credentialsLabel}</p>
                         <ul className="flex flex-wrap gap-1.5">
                             {credentials.map((item) => {
-                                const cls = `inline-flex items-center gap-1.5 px-2 py-1 border text-caption font-semibold uppercase tracking-[0.05em] transition-colors duration-300 ${item.featured ? 'border-[var(--foreground)] bg-[var(--foreground)] text-[var(--background)] hover:bg-transparent hover:text-[var(--foreground)]' : 'border-[var(--rule)] hover:border-[var(--foreground)]'}`
+                                const cls = `inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-semibold tracking-[0.02em] transition-colors duration-300 ${item.featured ? 'border-[var(--foreground)] bg-[var(--foreground)] text-[var(--background)] hover:bg-transparent hover:text-[var(--foreground)]' : 'border-[var(--rule)] hover:border-[var(--foreground)]'}`
                                 return (
                                     <li key={item.badge}>
                                         {item.link ? (
@@ -132,6 +124,14 @@ export default function About() {
                                 )
                             })}
                         </ul>
+                    </div>
+                </motion.div>
+
+                <motion.div {...fadeUp(0.1)} className="col-span-4 md:col-start-6 md:col-span-4 text-base md:text-[0.9375rem] leading-relaxed md:max-w-[34rem]">
+                    <div className="space-y-3 text-[var(--foreground)]">
+                        {t.about.description.slice(0, 2).map((paragraph, index) => (
+                            <p key={index} className={index === 0 ? '' : 'text-[var(--muted)]'}>{paragraph}</p>
+                        ))}
                     </div>
                 </motion.div>
 

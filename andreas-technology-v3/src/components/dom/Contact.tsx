@@ -50,7 +50,7 @@ export default function Contact() {
             </motion.div>
 
             {/* Facts in columns */}
-            <motion.dl {...fadeUp(0.1)} className="mt-8 md:mt-10 grid grid-cols-2 md:grid-cols-12 gap-x-4 md:gap-x-6 gap-y-6 rule-t pt-3 text-sm">
+            <motion.dl {...fadeUp(0.1)} className="mt-8 md:mt-10 grid grid-cols-2 md:grid-cols-12 gap-x-4 md:gap-x-6 gap-y-6 rule-t pt-4 text-[0.9375rem]">
                 <div className="md:col-span-3">
                     <dt className="meta mb-1.5">{t.contact.locationLabel}</dt>
                     <dd className="font-medium">{t.location}</dd>
@@ -75,13 +75,13 @@ export default function Contact() {
                 </div>
             </motion.dl>
 
-            <motion.div {...fadeUp(0.2)} className="mt-6 md:mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-x-4 md:gap-x-6 gap-y-2">
+            <motion.div {...fadeUp(0.2)} className="mt-7 md:mt-9 flex flex-col sm:flex-row sm:flex-wrap gap-3">
                 <a
                     href={gmailComposeUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Contact via email"
-                    className="arrow-link md:col-span-3 flex items-center justify-between gap-3 bg-[var(--foreground)] text-[var(--background)] px-5 py-3.5 text-sm font-medium hover:bg-[var(--accent-ink)] transition-colors duration-300"
+                    className="arrow-link pill sm:min-w-[14rem]"
                 >
                     {t.contact.sendMessage}
                     <span className="arrow" aria-hidden="true">→</span>
@@ -89,19 +89,19 @@ export default function Contact() {
                 <a
                     href={cvLink}
                     download
-                    className="arrow-link md:col-span-3 flex items-center justify-between gap-3 border border-[var(--foreground)] px-5 py-3.5 text-sm font-medium hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-colors duration-300"
+                    className="arrow-link pill pill-outline sm:min-w-[14rem]"
                 >
                     {t.contact.downloadResume}
                     <span className="arrow rotate-90" aria-hidden="true">→</span>
                 </a>
             </motion.div>
 
-            <div className="mt-10 md:mt-8 rule-t pt-2.5 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 meta">
+            <div className="mt-10 md:mt-8 rule-t pt-3 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 meta">
                 <p>{t.copyright}</p>
                 <button
                     type="button"
                     onClick={() => scrollToSection(0, 'hero')}
-                    className="arrow-link inline-flex items-center gap-1.5 uppercase hover:text-[var(--foreground)] transition-colors"
+                    className="arrow-link inline-flex items-center gap-1.5 hover:text-[var(--foreground)] transition-colors"
                 >
                     {t.editorial.backToTop}
                     <span className="arrow -rotate-90" aria-hidden="true">→</span>

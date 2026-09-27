@@ -4,6 +4,22 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 
 ## [Unreleased]
 
+### Changed (Swiss Editorial, Round 5: less newspaper, more modern)
+- Palette: the paper moves from warm newsprint `#F2F1EC` to neutral `#F4F4F2`, with crisper ink `#0D0D0D`, cool muted grey `#5B5C60`, lighter hairlines (11%) and a new `--surface` token. The dark theme moves to a neutral `#0C0C0D` / `#F2F2F0`. Mark orange `#FF4D0D`, text orange `#C23600` (AA on paper and on the row tint)
+- Labels: `.meta` is now 13px sentence case. A new `.eyebrow` keeps uppercase only for section heads, the nav, the hero foot row and the ticker. Parenthesised indices and the right-hand section subtitles are removed
+- Rules: section, table and hero heads open on a light hairline instead of the strong ink rule. The stats strip loses its vertical rules
+- Larger body and table type (15–16px body, 14–15px cells)
+- Index numbers are muted at rest and turn orange only on the hovered, focused or previewed row
+- Pill buttons (`.pill`, `.pill-outline`), pill chips, the copy button and dialog actions. Rounded dialogs with a soft shadow. A round theme-toggle dot (icon-only on phones)
+- The Projects preview is a rounded image frame that cross-fades and settles from a slight zoom, with a fading caption and a `NN / 11` counter. Rounded mobile thumbnails
+- About: a wider body column, with the credential chips moved under the figures (fixes the Greek panel overflow at 1440×900)
+- `short:` custom variant tightens row spacing on desktop viewports up to 800px tall
+- Greek labels "Επαγγελματική", "Εκπαίδευση" and "Επαλήθευση" are now sentence case
+
+### Fixed
+- Services cells no longer flash a grey block while fading in
+- The Greek mobile nav wordmark no longer wraps to two lines
+
 ### Added
 - Greek type: TikTok Sans Greek (OFL, variable opsz/wght, self-hosted via `next/font/local`) is a Greek-only `unicode-range` face placed ahead of Inter Tight, so Greek letters use a straight neo-grotesk that matches Inter Tight's colour and x-height while all Latin, digits and punctuation stay in Inter Tight. It fixes the hooked Inter Greek iota that collided at display tracking (κια, τικ)
 - Nav wordmark leads with the memoji technologist as a 28px byline mark

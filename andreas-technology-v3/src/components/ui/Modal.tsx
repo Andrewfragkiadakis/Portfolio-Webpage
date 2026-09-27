@@ -91,7 +91,7 @@ export default function Modal({
                     className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
                     onClick={onClose}
                 >
-                    <div className="absolute inset-0 bg-[#0E0E0E]/60" />
+                    <div className="absolute inset-0 bg-[#0C0C0D]/55 md:backdrop-blur-[2px]" />
                     <motion.div
                         ref={panelRef}
                         role="dialog"
@@ -101,7 +101,7 @@ export default function Modal({
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 12 }}
                         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                        className={`relative z-10 bg-[var(--background)] text-[var(--foreground)] border border-[var(--rule)] border-t-2 border-t-[var(--foreground)] max-h-[85vh] overflow-y-auto overscroll-contain ${className}`}
+                        className={`relative z-10 bg-[var(--background)] text-[var(--foreground)] border border-[var(--rule)] rounded-2xl shadow-[0_24px_64px_-16px_rgba(0,0,0,0.35)] max-h-[85vh] overflow-y-auto overscroll-contain ${className}`}
                         onClick={e => e.stopPropagation()}
                     >
                         <button
@@ -109,7 +109,7 @@ export default function Modal({
                             type="button"
                             onClick={onClose}
                             aria-label={closeLabel}
-                            className="absolute top-3 right-3 z-20 h-11 px-3 inline-flex items-center gap-2 cursor-pointer bg-[var(--background)] text-caption font-medium uppercase tracking-[0.06em] hover:text-[var(--accent-ink)] transition-colors"
+                            className="absolute top-3 right-3 z-20 h-10 px-4 inline-flex items-center gap-2 cursor-pointer rounded-full bg-[var(--background)] border border-[var(--rule)] text-sm font-medium hover:border-[var(--foreground)] transition-colors"
                         >
                             <span>{closeLabel}</span>
                             <span aria-hidden="true" className="text-base leading-none">×</span>

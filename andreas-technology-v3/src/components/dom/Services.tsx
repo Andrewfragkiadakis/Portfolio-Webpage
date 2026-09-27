@@ -29,37 +29,36 @@ export default function Services() {
             {/* 3 × 2 text blocks. The 1px gap over a rule-coloured ground draws the hairlines. */}
             <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-px bg-[var(--rule)] border-y border-[var(--rule)]">
                 {t.services.map((service: Service, index: number) => (
-                    <motion.li
-                        key={service.title}
-                        className="bg-[var(--background)]"
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        viewport={{ once: true, amount: 0.3 }}
-                        transition={{ duration: 0.8, ease: EASE_OUT, delay: index * 0.06 }}
-                    >
-                        <button
+                    <li key={service.title} className="bg-[var(--background)]">
+                        {/* The fade sits on the button, not the cell, so the rule-coloured
+                            ground never shows through as a grey block while it runs. */}
+                        <motion.button
                             type="button"
                             onClick={() => setActive(service)}
                             aria-label={`${service.title} — ${t.servicesLabels.details}`}
                             data-cursor={t.cursor.open}
-                            className="index-row group w-full h-full text-left flex flex-col px-0 sm:px-5 md:px-6 py-5 md:py-5"
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: true, amount: 0.3 }}
+                            transition={{ duration: 0.8, ease: EASE_OUT, delay: index * 0.06 }}
+                            className="index-row group w-full h-full text-left flex flex-col px-0 sm:px-5 md:px-6 py-5 md:py-5 short:py-3"
                         >
                             <span className="flex items-baseline justify-between gap-3">
                                 <span className="index text-sm font-medium">{String(index + 1).padStart(2, '0')}</span>
                                 <span className="meta">{service.tools.length} {t.servicesLabels.tools}</span>
                             </span>
-                            <span className="row-title block mt-5 md:mt-6 text-[1.375rem] md:text-[clamp(1.25rem,1.65vw,1.625rem)] font-medium leading-[1.08] tracking-[-0.03em] text-balance">
+                            <span className="row-title block mt-5 md:mt-6 short:mt-3 text-[1.375rem] md:text-[clamp(1.25rem,1.65vw,1.625rem)] font-medium leading-[1.08] tracking-[-0.03em] text-balance">
                                 {service.title}
                             </span>
-                            <span className="block mt-2.5 text-sm text-[var(--muted)] leading-snug line-clamp-3">
+                            <span className="block mt-3 text-[0.9375rem] text-[var(--muted)] leading-normal line-clamp-3 short:line-clamp-2">
                                 {service.description}
                             </span>
-                            <span className="mt-auto pt-4 flex items-center gap-2 text-caption font-medium uppercase tracking-[0.06em]">
+                            <span className="mt-auto pt-5 short:pt-2.5 flex items-center gap-2 text-sm font-medium">
                                 <span className="link-underline">{t.servicesLabels.details}</span>
                                 <span className="inline-block transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:rotate-90 group-focus-visible:rotate-90" aria-hidden="true">+</span>
                             </span>
-                        </button>
-                    </motion.li>
+                        </motion.button>
+                    </li>
                 ))}
             </ul>
 
@@ -76,7 +75,7 @@ export default function Services() {
                     <button
                         type="button"
                         onClick={() => scrollToSection(sectionIndex('contact'), 'contact')}
-                        className="arrow-link inline-flex items-center gap-3 bg-[var(--foreground)] text-[var(--background)] px-5 py-3 text-sm font-medium hover:bg-[var(--accent-ink)] transition-colors duration-300"
+                        className="arrow-link pill"
                     >
                         {t.servicesCtaButton}
                         <span className="arrow" aria-hidden="true">→</span>
@@ -94,7 +93,7 @@ export default function Services() {
                 {active && (
                     <>
                         <p className="meta mb-3">
-                            <span className="index">({String(activeIndex + 1).padStart(2, '0')})</span> {t.nav.services}
+                            <span className="index-accent tabular">{String(activeIndex + 1).padStart(2, '0')}</span>&ensp;{t.editorial.sections.services}
                         </p>
                         <h3 id="service-modal-title" className="display text-3xl md:text-4xl pr-16 mb-5">
                             {active.title}

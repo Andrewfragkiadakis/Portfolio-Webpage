@@ -4,7 +4,7 @@
 
 ## Concept
 
-The portfolio is set like a printed index. It uses warm paper and near-black ink, one grotesk (Inter Tight, with TikTok Sans for Greek letters only), a strict 12-column grid, and 1px rules in place of cards. The name is set very large at the bottom left of the hero. Every other section is a numbered spread: "(01) About", "(02) What I do", and so on. Experience and projects read as index tables. International orange is the only colour, used for index numbers, active states and the full stop after the name.
+The portfolio is set like a printed index. It uses a neutral off-white paper (warm beige until Round 5) and near-black ink, one grotesk (Inter Tight, with TikTok Sans for Greek letters only), a strict 12-column grid, and 1px rules in place of cards. The name is set very large at the bottom left of the hero. Every other section is a numbered spread: "01 About", "02 What I do", and so on. Experience and projects read as index tables. International orange is the only colour, used sparingly: the full stop after the name, the section number, active and hovered rows, and the progress line.
 
 ## Inspirations
 
@@ -21,28 +21,31 @@ The portfolio is set like a printed index. It uses warm paper and near-black ink
 
 | Token | Light | Dark | Use |
 | --- | --- | --- | --- |
-| `--background` | `#F2F1EC` (paper) | `#0E0E0E` | page |
-| `--foreground` | `#111111` (ink) | `#EDEDE8` | text, strong rules, filled buttons |
-| `--muted` | `#5C5B56` | `#9A9A94` | secondary text, meta labels |
-| `--rule` | `rgba(17,17,17,.16)` | `rgba(237,237,232,.16)` | 1px hairlines |
-| `--rule-strong` | `rgba(17,17,17,.9)` | `rgba(237,237,232,.85)` | section-opening rules |
-| `--accent` | `#FF4F00` | `#FF6A26` | signal marks that are not text (dots, progress line, active nav rule, cursor, full stop) |
-| `--accent-ink` | `#C23A00` | `#FF6A26` | orange used as **text** (index numbers, hovers, focus ring) |
-| `--row-hover` | ink @ 4.5% | paper @ 5% | table-row hover tint |
+| `--background` | `#F4F4F2` (neutral paper; was `#F2F1EC`) | `#0C0C0D` (was `#0E0E0E`) | page |
+| `--foreground` | `#0D0D0D` (ink) | `#F2F2F0` | text, strong rules, filled buttons |
+| `--muted` | `#5B5C60` (cool grey; was `#5C5B56`) | `#9B9CA0` | secondary text, meta labels, index numbers at rest |
+| `--rule` | ink @ 11% (was 16%) | paper @ 12% | 1px hairlines |
+| `--rule-strong` | ink @ 85% | paper @ 80% | outlined pills, link underlines on hover |
+| `--accent` | `#FF4D0D` | `#FF6A2B` | signal marks that are not text (full stop, dots, progress line, active nav rule, cursor) |
+| `--accent-ink` | `#C23600` | `#FF6A2B` | orange used as **text** (section number, hovered/previewed row number and arrow, focus ring, filled-button hover) |
+| `--row-hover` | ink @ 3.5% | paper @ 4.5% | table-row hover tint |
+| `--surface` | `#E9E9E6` | `#19191B` | image frames (new in Round 5) |
 
 **Contrast (WCAG 2.x):**
 
 | Text / mark | On | Ratio | Result |
 | --- | --- | --- | --- |
-| ink `#111111` | paper | ≈ 17 : 1 | AAA |
-| muted `#5C5B56` | paper | ≈ 5.8 : 1 | AA |
-| `--accent-ink` `#C23A00` | paper | ≈ 4.8 : 1 | AA |
-| paper `#EDEDE8` | dark `#0E0E0E` | ≈ 16 : 1 | AAA |
-| muted `#9A9A94` | dark | ≈ 6.8 : 1 | AA |
-| `#FF6A26` | dark | ≈ 6.7 : 1 | AA |
-| orange badge text `#111` | `#FF4F00` / `#FF6A26` | ≥ 5.7 : 1 | AA |
+| ink `#0D0D0D` | paper `#F4F4F2` | ≈ 17.7 : 1 | AAA |
+| muted `#5B5C60` | paper | ≈ 6.1 : 1 | AA |
+| `--accent-ink` `#C23600` | paper / row tint `#ECECEA` | ≈ 5.0 / 4.65 : 1 | AA |
+| paper `#F2F2F0` | dark `#0C0C0D` | ≈ 17.4 : 1 | AAA |
+| muted `#9B9CA0` | dark | ≈ 7.1 : 1 | AA |
+| `#FF6A2B` | dark | ≈ 6.8 : 1 | AA |
+| ink text `#0D0D0D` | `#FF4D0D` / `#FF6A2B` | ≥ 5.8 : 1 | AA |
 
-Pure `#FF4F00` on paper is only about 2.9 : 1, which fails even the large-text threshold. On the light theme it is therefore used only for non-text marks, and a darker "ink" orange carries any orange text. On the dark theme the brief's `#FF6A26` passes, so the two tokens are the same colour there.
+Round 5 re-ran a text-contrast scan over every visible text node (both themes, EN and GR): nothing below AA except the decorative, `aria-hidden` full stop in the nav wordmark, which is a mark rather than text.
+
+Pure signal orange on paper is only about 3 : 1, which fails even the large-text threshold. On the light theme it is therefore used only for non-text marks, and a darker "ink" orange carries any orange text. On the dark theme the brief's `#FF6A26` passes, so the two tokens are the same colour there.
 
 ### Type
 
@@ -52,20 +55,21 @@ Pure `#FF4F00` on paper is only about 2.9 : 1, which fails even the large-text t
   - *Compared* (`style-preview/states/greek-font-finalists.jpg`): Inter Tight Greek (current), Inter Display, Roboto Flex, Noto Sans Display, Commissioner, Geologica, Manrope, Sofia Sans, IBM Plex Sans, TikTok Sans, Google Sans, Ubuntu Sans, Open Sans, Roboto, Arimo, GFS Neohellenic and Advent Pro. Wix Madefor has no Greek subset on Google Fonts. The runners-up were IBM Plex Sans (crisp, but its spurred α and angled κ are more "technical" than Swiss) and Roboto (neutral, but narrower and more mechanical). Humanist faces (Open Sans, Ubuntu, Noto, Commissioner, Google Sans, GFS Neohellenic) broke the neo-grotesk voice.
   - *Uppercase:* `.meta` labels and the nav use `text-transform: uppercase`. `LanguageContext` sets `<html lang="el">` in Greek, so the browser drops the tonos (ΣΧΕΤΙΚΑ, not ΣΧΕΤΙΚΆ). This was verified with the EN/GR toggle in both directions.
 - **Display** (`.display`): weight 560, tracking −0.045em (−0.055em on the hero name), line-height 0.86–0.92. Always solid and mixed case. The outlined headings are gone.
-- **Meta** (`.meta`): 11px, uppercase, +0.06em, weight 500, muted colour.
+- **Meta** (`.meta`): 13px, sentence case, weight 500, muted colour (Round 5; it was 11px uppercase +0.06em).
+- **Eyebrow** (`.eyebrow`): 11px uppercase +0.07em. The only caps voice left: section-head rows, the nav index, the hero foot row and the role ticker.
 - **Numerals:** `.tabular` / `.index` switch on `tnum`, so index numbers, dates and years line up down the columns.
 - **Scale:**
   - hero name: `min(17.2vw, 27vh)`, shrunk only when a line would overflow (see Trade-offs)
   - section titles: `min(8.4vw, 14vh)`; Contact `min(12vw, 19vh)`
   - lead: 24–36px
-  - body: 14–15px
-  - table cells: 13–14px
+  - body: 15–16px (was 14–15px)
+  - table cells: 14–15px (was 13–14px)
 
 ### Grid and spacing
 
 - 12 columns with a 24px gutter on desktop, 4 columns with a 16px gutter on mobile.
 - Page margins are 40px (desktop) and 16px (mobile). The nav is 48px (`--nav-h: 3rem`).
-- Every section opens with a strong 1px rule carrying `(NN) LABEL ··· subtitle`, then the display title. Body content is pushed to the bottom of the panel, so the whitespace sits between title and content, as on a poster.
+- Every section opens with a light hairline carrying `NN  LABEL`, then the display title (Round 5 dropped the strong ink rule, the parentheses and the right-hand subtitle). Body content is pushed to the bottom of the panel, so the whitespace sits between title and content, as on a poster.
 - On desktop, panels in the horizontal track are separated by a vertical hairline. The scroll progress line is 2px orange.
 - Hairline helpers are Tailwind `@utility` classes (`rule-t`, `rule-b`, `rule-l`, `rule-r`, `rule-t-strong`), so they work with responsive variants (`md:rule-l`).
 
@@ -74,7 +78,7 @@ Pure `#FF4F00` on paper is only about 2.9 : 1, which fails even the large-text t
 - Section titles rise word by word from a mask when they scroll into view. Titles are keyed by language, so switching EN/GR replays the reveal instead of leaving blank words.
 - The hero name rises line by line after the intro.
 - Table rows tint on hover or focus, their title shifts 8px, and a `→` slides in.
-- The Projects preview wipes in from the top.
+- The Projects preview cross-fades and settles from a 4% zoom inside a rounded frame; its caption fades up with it.
 - A one-line role ticker replaces the typewriter. It rolls one title at a time and holds still under reduced motion.
 - There is no glitch, scramble, spotlight, noise or "breathing" track scale.
 - `MotionConfig reducedMotion="user"` is still in place, along with the CSS reduced-motion guard. Under `prefers-reduced-motion` the custom cursor is disabled.
@@ -110,12 +114,51 @@ Pure `#FF4F00` on paper is only about 2.9 : 1, which fails even the large-text t
 - **Greek copy:** 40+ mixed-case Greek strings had lost their accents, because the originals were written for all-caps display (for example "Δειτε τη Δουλεια μου", "Αποστολη Μηνυματος", "Δικτυα & Υποδομες", and the project titles). They now carry proper tonos, and phrases use Greek sentence case. Uppercase labels still drop the accents through `lang="el"`. The About paragraph now says "άνω των 550 συσκευών" (it said 400).
 - **Mark:** No "AF" monogram existed in this branch. The nav wordmark now opens with the memoji technologist (`/favicons/android-chrome-512x512.png`, via `next/image`), cropped to a 28px byline portrait with the laptop resting on the square's bottom edge. It reads like an author photo on a masthead and leaves the name and the orange full stop as the main mark. The OG image is type-only and is unchanged.
 
+## Round 5 — less newspaper, more modern
+
+Feedback: "5/5, favourite" and "4/5, reminds me a bit of an old newspaper, but solid styling". So this round refines rather than redesigns. The huge name, the orange full stop, the index tables, the type pairing and the restraint are unchanged.
+
+### What read as "old newspaper" (diagnosed from 1440×900 light/dark, 390×844, EN/GR captures)
+
+1. **Newsprint paper.** `#F2F1EC` has a yellow cast, and the olive-grey muted text (`#5C5B56`) sat on it at low perceived contrast.
+2. **Broadsheet rules.** A strong black rule opened every section, every table and the hero, and 16%-ink hairlines ran under every row. The stats strip had vertical column rules.
+3. **Folio furniture.** Parenthesised numbers `(01)` / `(NOW)`, right-hand folio subtitles ("// ABOUT ME", "TIMELINE: WORK & EDUCATION") and about 40 tiny 11px letter-spaced uppercase labels (column heads, meta, LIVE/CODE, DETAILS, VERIFY CREDENTIAL, COPY, CLOSE).
+4. **Small type.** Body and table text were 13–14px.
+5. **Orange everywhere as rust text.** Every row number in every table was burnt-orange text, which read vintage rather than signal.
+6. **Hard-edged everything.** Square buttons, square chips, a square flat image frame and a dialog with a 2px ink "masthead" rule.
+7. **Static preview.** The Projects preview wiped down like a printed plate.
+
+### What changed
+
+| Area | Change |
+| --- | --- |
+| Palette | Neutral off-white paper `#F4F4F2`, crisper ink `#0D0D0D`, cool greys, hairlines at 11% instead of 16%. The dark theme moved to a neutral `#0C0C0D` with `#F2F2F0` ink. A new `--surface` token frames images |
+| Rules | Section heads, table heads and the hero meta row now open on a light hairline instead of the strong ink rule. The stats strip lost its vertical rules. Row hairlines stay (they are the index), just lighter |
+| Labels | `.meta` is now 13px sentence case. Uppercase survives only as `.eyebrow` (section number and label, nav, hero foot row, role ticker). The parentheses are gone (`01`, "• Now"), and so is the right-hand section subtitle |
+| Type size | About body 15–16px, services descriptions 15px, table titles 15px, table cells 14px, hero meta 15px, table titles ("Projects", "Professional") 18px |
+| Orange | Row numbers are muted at rest and turn orange only on the hovered, focused or previewed row. The section number, the full stop, "Now", active nav and the progress line keep it. The mark orange is `#FF4D0D` (a touch brighter than `#FF4F00`) |
+| Shapes | Filled and outlined **pill** buttons (`.pill`, `.pill-outline`) for hero "View my work", "Let's talk", "Send message", "Download resume" and the dialog actions. Pill credential chips, tool pills and the copy button. Tool tiles get a small radius. The theme toggle is a round half-filled dot (icon-only on phones) |
+| Image moment | The Projects preview sits in a 12px-radius frame with an inset hairline. It cross-fades and settles from a slight zoom; the caption fades up with it, and the counter reads `05 / 11`. Mobile thumbnails are rounded too |
+| Links | Permanent underlines are now a 28% ink hairline with more offset, and turn orange on hover. The hero's "Get in touch" and the GitHub CTA use this instead of a heavy ink border |
+| Dialogs | 16px radius, a soft shadow, a light 2px backdrop blur on desktop and a pill "Close ×". The 2px ink top rule is gone |
+| About | The body column is wider (4 columns) and the credential chips moved under the figures. This also fixes a pre-existing Greek overflow, where the tagline touched the title and the toolkit was clipped at 1440×900 |
+| Fit | A `short:` custom variant (desktop, height ≤ 800px) tightens row padding, so the larger type does not regress 1280×720. Every panel there is now equal to or better than Round 4, and every panel fits 1440×900 in EN and GR |
+| Small fixes | Services cells fade on the button, not the cell, so the rule-coloured ground no longer flashes as a grey block. The Greek mobile wordmark no longer wraps to two lines. The Greek "Επαγγελματική", "Εκπαίδευση" and "Επαλήθευση" labels are sentence case to match the new label voice |
+
+### Kept on purpose
+
+The hero composition, the name size and fitting, the orange full stop, the memoji mark, the 12-column grid, the index tables and their hover (the row tint, the 8px title shift and the arrow), the masked title reveals, the role ticker and TikTok Sans for Greek.
+
+Before/after (hero, about, projects; light): `style-preview/states/before-after-r5.jpg`
+
 ## Trade-offs
 
 - **Tables vs. rich cards:** Experience rows no longer show tasks inline. They open in a dialog instead, which keeps both tables on one 1440×900 screen. Education periods are shortened to numeric dates in the table; the full wording is still in the dialog and in the aria label.
 - **Hero name fitting:** The Greek surname (Φραγκιαδάκης) is wider than the Latin one. A small `ResizeObserver` hook scales the name down only when a line would overflow. English keeps the full CSS size.
 - **Whitespace:** Section content sits at the bottom of each panel, which leaves a deliberate empty band under the title (most visible on Services and Contact). This is the editorial look, but it is less "full" than the old centred cards.
-- **Orange on paper:** The brief's `#FF4F00` cannot carry text on `#F2F1EC`. Orange text on the light theme is therefore a darker `#C23A00`, so it reads as burnt orange rather than signal orange.
+- **Orange on paper:** Signal orange cannot carry text on the light paper. Orange text on the light theme is therefore a darker `#C23600`, which reads as burnt orange. Round 5 limits that to a few places (the section number and the active row), so it no longer sets the tone.
+- **Pills in a Swiss layout:** Rounded buttons and chips are a contemporary touch rather than strict Swiss. They are confined to controls; the grid, the tables and the type stay square.
+- **1280×720:** About and Projects still need a little more than a 720px-tall viewport. This was already the case in Round 4, and both are now shorter than they were.
 - **Portfolio project copy:** The "Portfolio Website" project description still mentions the Canvas glitch effect. That is content, so it was left unchanged.
 - **Font Awesome:** Font Awesome is still loaded, because the copy button and the content's icon fields reference it. It is barely used visually now and could be dropped in a follow-up.
 - **`typewriter-effect`:** This dependency is now unused. It was left in `package.json` to keep the lockfile untouched on this comparison branch.
@@ -125,7 +168,8 @@ Pure `#FF4F00` on paper is only about 2.9 : 1, which fails even the large-text t
 
 - `npm run build` passes, and `npx eslint src` reports 0 errors (1 existing `<img>` warning in `LogoLoop`).
 - Mobile horizontal overflow at 390px is **0px** in both themes and in Greek.
-- Every desktop panel fits 1440×900 with no inner scrolling.
+- Every desktop panel fits 1440×900 with no inner scrolling, in EN and GR (Round 5 measured each panel's lowest content edge).
+- `npm run lint`: 0 errors (1 existing `<img>` warning in `LogoLoop`).
 
 ## Previews
 
@@ -155,8 +199,10 @@ Pure `#FF4F00` on paper is only about 2.9 : 1, which fails even the large-text t
 
 ### States
 
-| Projects row hover + preview | Career dialog (dark) |
+| Before / after (Round 5) | |
 | --- | --- |
+| ![](style-preview/states/before-after-r5.jpg) | |
+| **Projects row hover + preview** | **Career dialog (dark)** |
 | ![](style-preview/states/projects-row-hover-light.jpg) | ![](style-preview/states/career-dialog-dark.jpg) |
 | **Greek hero (TikTok Sans Greek, fitted surname)** | **Keyboard focus** |
 | ![](style-preview/states/greek-hero-dark.jpg) | ![](style-preview/states/keyboard-focus-light.jpg) |

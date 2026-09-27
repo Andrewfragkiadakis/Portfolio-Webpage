@@ -74,7 +74,7 @@ export default function CinematicEntry() {
                     exit={{ y: '-100%', transition: { duration: 0.8, ease: EASE_IN_OUT } }}
                     className="fixed inset-0 z-[99999] flex flex-col bg-[var(--background)] text-[var(--foreground)] px-4 md:px-10 py-4 md:py-6"
                 >
-                    <div className="flex items-baseline justify-between rule-t-strong pt-2.5">
+                    <div className="flex items-baseline justify-between rule-t pt-3">
                         <span className="text-sm font-semibold tracking-[-0.01em]">
                             {t.editorial.firstName} {t.editorial.lastName}<span className="text-[var(--accent)]">.</span>
                         </span>

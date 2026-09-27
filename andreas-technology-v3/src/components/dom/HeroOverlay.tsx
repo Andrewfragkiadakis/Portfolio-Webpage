@@ -124,7 +124,7 @@ export default function HeroOverlay() {
             {/* Meta row: four columns of facts, like a colophon. */}
             <motion.dl
                 {...rise(0.5)}
-                className="rule-t-strong grid grid-cols-2 md:grid-cols-12 gap-x-4 md:gap-x-6 gap-y-5 pt-2.5 text-sm leading-snug"
+                className="rule-t grid grid-cols-2 md:grid-cols-12 gap-x-4 md:gap-x-6 gap-y-5 pt-3 text-sm md:text-[0.9375rem] short:text-sm leading-snug"
             >
                 <div className="md:col-span-3">
                     <dt className="meta mb-1.5">{t.editorial.meta.role}</dt>
@@ -184,22 +184,26 @@ export default function HeroOverlay() {
                     <p className="text-[1.375rem] md:text-[clamp(1.5rem,2.1vw,2.125rem)] font-medium leading-[1.08] tracking-[-0.025em] text-balance">
                         {t.about.tagline}
                     </p>
-                    <div className="mt-4 md:mt-5 grid grid-cols-[auto_1fr] items-baseline gap-x-3 text-caption font-medium uppercase tracking-[0.06em]">
-                        <span className="text-[var(--accent-ink)] tabular">({t.editorial.meta.now})</span>
+                    <div className="mt-4 md:mt-5 short:mt-3 grid grid-cols-[auto_1fr] items-baseline gap-x-3 text-caption font-medium uppercase tracking-[0.07em]">
+                        <span className="inline-flex items-center gap-1.5 text-[var(--accent-ink)]">
+                            <span className="block size-1.5 rounded-full bg-[var(--accent)] self-center" aria-hidden="true" />
+                            {t.editorial.meta.now}
+                        </span>
                         <RoleTicker roles={t.hero.typewriter} play={entered} />
                     </div>
-                    <div className="mt-5 md:mt-6 flex flex-wrap gap-x-6 gap-y-2 text-base font-medium">
-                        {([['projects', t.hero.viewWork], ['contact', t.hero.getInTouch]] as const).map(([id, label]) => (
-                            <button
-                                key={id}
-                                type="button"
-                                onClick={() => scrollToSection(id)}
-                                className="arrow-link group inline-flex items-center gap-2 border-b border-[var(--foreground)] pb-0.5 hover:text-[var(--accent-ink)] hover:border-[var(--accent-ink)] transition-colors"
-                            >
-                                <span>{label}</span>
-                                <span className="arrow" aria-hidden="true">→</span>
-                            </button>
-                        ))}
+                    <div className="mt-5 md:mt-7 short:mt-4 flex flex-wrap items-center gap-x-6 gap-y-3">
+                        <button type="button" onClick={() => scrollToSection('projects')} className="arrow-link pill short:min-h-9 short:py-1.5">
+                            <span>{t.hero.viewWork}</span>
+                            <span className="arrow" aria-hidden="true">→</span>
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => scrollToSection('contact')}
+                            className="arrow-link group inline-flex items-center gap-2 text-[0.9375rem] font-medium hover:text-[var(--accent-ink)] transition-colors"
+                        >
+                            <span className="link-rule">{t.hero.getInTouch}</span>
+                            <span className="arrow" aria-hidden="true">→</span>
+                        </button>
                     </div>
                 </motion.div>
             </div>
@@ -221,7 +225,7 @@ export default function HeroOverlay() {
 
             <motion.div
                 {...rise(0.9)}
-                className="rule-t mt-3 md:mt-4 pt-2 hidden md:grid grid-cols-12 gap-x-6 meta"
+                className="rule-t mt-3 md:mt-4 pt-2.5 hidden md:grid grid-cols-12 gap-x-6 eyebrow"
             >
                 <span className="col-span-3">Portfolio — 2026</span>
                 <span className="col-span-3">{t.nav.languageLabel}</span>

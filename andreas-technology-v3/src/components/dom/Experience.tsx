@@ -28,11 +28,11 @@ const EDU_COLS = 'grid-cols-[2.25rem_1fr_auto] md:grid-cols-[2.5rem_minmax(0,1fr
 function TableHead({ label, count, cols, columns }: { label: string; count: number; cols: string; columns: React.ReactNode }) {
     return (
         <div>
-            <div className="flex items-baseline justify-between rule-t-strong pt-2.5 pb-3">
-                <span className="text-base font-medium tracking-[-0.01em]">{label}</span>
+            <div className="flex items-baseline justify-between pb-4 short:pb-2">
+                <span className="text-lg font-medium tracking-[-0.015em]">{label}</span>
                 <span className="meta tabular">{pad(count)}</span>
             </div>
-            <div className={`hidden md:grid ${cols} gap-x-3 rule-b pb-1.5 meta`} aria-hidden="true">
+            <div className={`hidden md:grid ${cols} gap-x-3 rule-b pb-2 meta`} aria-hidden="true">
                 {columns}
             </div>
         </div>
@@ -74,10 +74,10 @@ export default function Experience() {
                                     onClick={() => setActive({ type: 'work', item: exp, index: idx })}
                                     aria-label={`${exp.role} — ${exp.company}, ${exp.duration}`}
                                     data-cursor={t.cursor.open}
-                                    className={`index-row w-full text-left grid ${WORK_COLS} gap-x-3 items-start py-2 md:py-[0.55rem]`}
+                                    className={`index-row w-full text-left grid ${WORK_COLS} gap-x-3 items-start py-2.5 md:py-[0.6rem] short:py-[0.3rem]`}
                                 >
                                     <span className="index text-body-sm">{pad(idx + 1)}</span>
-                                    <span className="row-title text-[0.9375rem] md:text-sm font-medium leading-snug">
+                                    <span className="row-title text-[0.9375rem] font-medium leading-snug">
                                         {exp.role}
                                         <span className="row-arrow ml-1.5 text-[var(--accent-ink)]" aria-hidden="true">→</span>
                                     </span>
@@ -106,7 +106,7 @@ export default function Experience() {
                     <ul>
                         {t.education.map((edu, idx) => (
                             <motion.li key={`${edu.degree}-${idx}`} {...rowReveal(idx)} className="rule-b index-row">
-                                <div className={`grid ${EDU_COLS} gap-x-3 items-start py-2 md:py-[0.55rem]`}>
+                                <div className={`grid ${EDU_COLS} gap-x-3 items-start py-2.5 md:py-[0.6rem] short:py-[0.3rem]`}>
                                     <span className="index text-body-sm">{pad(idx + 1)}</span>
                                     <span className="row-title min-w-0">
                                         <button
@@ -114,10 +114,10 @@ export default function Experience() {
                                             onClick={() => setActive({ type: 'edu', item: edu, index: idx })}
                                             aria-label={`${edu.degree} — ${edu.institution}, ${edu.duration}`}
                                             data-cursor={t.cursor.open}
-                                            className="row-cover text-left text-[0.9375rem] md:text-sm font-medium leading-snug"
+                                            className="row-cover text-left text-[0.9375rem] font-medium leading-snug"
                                         >
                                             {edu.badge && (
-                                                <span className={`inline-block mr-1.5 px-1 py-px text-micro font-semibold uppercase tracking-[0.05em] align-[0.1em] ${edu.featured ? 'bg-[var(--accent)] text-[#111111]' : 'border border-[var(--rule)]'}`}>
+                                                <span className={`inline-block mr-1.5 px-1.5 py-px rounded-full text-micro font-semibold uppercase tracking-[0.05em] align-[0.1em] ${edu.featured ? 'bg-[var(--accent)] text-[#0D0D0D]' : 'border border-[var(--rule)]'}`}>
                                                     {edu.badge}
                                                 </span>
                                             )}
@@ -136,7 +136,7 @@ export default function Experience() {
                                                 rel="noopener noreferrer"
                                                 data-cursor={t.cursor.verify}
                                                 aria-label={`${t.experienceSection.verify}: ${edu.degree}`}
-                                                className="arrow-link text-caption font-semibold uppercase tracking-[0.05em] hover:text-[var(--accent-ink)] transition-colors whitespace-nowrap"
+                                                className="arrow-link text-body-sm font-medium hover:text-[var(--accent-ink)] transition-colors whitespace-nowrap"
                                             >
                                                 <span className="link-underline">{t.experienceSection.verify}</span>{' '}
                                                 <span className="arrow arrow-ne" aria-hidden="true">↗</span>
@@ -160,7 +160,7 @@ export default function Experience() {
                 {active?.type === 'work' && (
                     <>
                         <p className="meta mb-3">
-                            <span className="index">({pad(active.index + 1)})</span> {t.experienceSection.professional}
+                            <span className="index-accent tabular">{pad(active.index + 1)}</span>&ensp;{t.experienceSection.professional}
                         </p>
                         <h3 id="career-modal-title" className="display text-3xl md:text-[2.25rem] pr-16 mb-3">{active.item.role}</h3>
                         <p className="text-sm text-[var(--muted)] mb-5">
@@ -179,7 +179,7 @@ export default function Experience() {
                 {active?.type === 'edu' && (
                     <>
                         <p className="meta mb-3">
-                            <span className="index">({pad(active.index + 1)})</span> {t.experienceSection.education}
+                            <span className="index-accent tabular">{pad(active.index + 1)}</span>&ensp;{t.experienceSection.education}
                             {active.item.badge && <> · {active.item.badge}</>}
                         </p>
                         <h3 id="career-modal-title" className="display text-3xl md:text-[2.25rem] pr-16 mb-3">{active.item.degree}</h3>
@@ -202,7 +202,7 @@ export default function Experience() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 data-cursor={t.cursor.verify}
-                                className="arrow-link inline-flex items-center gap-3 bg-[var(--foreground)] text-[var(--background)] px-5 py-3 text-sm font-medium hover:bg-[var(--accent-ink)] transition-colors"
+                                className="arrow-link pill"
                             >
                                 {t.experienceSection.verify}
                                 <span className="arrow arrow-ne" aria-hidden="true">↗</span>

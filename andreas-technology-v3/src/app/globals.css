@@ -2,25 +2,31 @@
 
 /*
  * SWISS EDITORIAL
- * Paper and ink, one grotesk, one signal colour. Everything else is a 1px rule.
+ * Paper and ink, one grotesk, one signal colour. Hairlines only where they carry structure.
  *
- * --accent      the signal orange. Used for marks that are not body text: index
- *               numbers, active dots, the progress line, the cursor.
+ * Round 5: the paper moved from a warm newsprint beige (#F2F1EC) to a neutral
+ * off-white, the ink and greys got cooler and crisper, and the hairlines got
+ * lighter, so the page reads as a modern index rather than a broadsheet.
+ *
+ * --accent      the signal orange. Used for marks that are not body text: the
+ *               full stop, active dots, the progress line, the cursor.
  * --accent-ink  the same hue darkened until it passes WCAG AA (4.5:1) as text on
  *               the paper. On the dark theme the bright orange already passes, so
  *               both tokens are the same colour there.
- * --muted       secondary text; ≥ 5.8:1 on both backgrounds.
+ * --muted       secondary text; >= 6:1 on both backgrounds.
  * --rule        hairlines between rows, columns and panels.
+ * --surface     a quiet tint for image frames and filled chips.
  */
 :root {
-  --background: #F2F1EC;
-  --foreground: #111111;
-  --muted: #5C5B56;
-  --rule: rgba(17, 17, 17, 0.16);
-  --rule-strong: rgba(17, 17, 17, 0.9);
-  --accent: #FF4F00;
-  --accent-ink: #C23A00;
-  --row-hover: rgba(17, 17, 17, 0.045);
+  --background: #F4F4F2;
+  --foreground: #0D0D0D;
+  --muted: #5B5C60;
+  --rule: rgba(13, 13, 13, 0.11);
+  --rule-strong: rgba(13, 13, 13, 0.85);
+  --accent: #FF4D0D;
+  --accent-ink: #C23600;
+  --row-hover: rgba(13, 13, 13, 0.035);
+  --surface: #E9E9E6;
 
   /* Greek-only face first (unicode-range), so Greek letters take TikTok Sans and
      everything else falls through to Inter Tight. See layout.tsx. */
@@ -31,18 +37,25 @@
    * content never sits behind the bar.
    */
   --nav-h: 3rem;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .dark {
-  --background: #0E0E0E;
-  --foreground: #EDEDE8;
-  --muted: #9A9A94;
-  --rule: rgba(237, 237, 232, 0.16);
-  --rule-strong: rgba(237, 237, 232, 0.85);
-  --accent: #FF6A26;
-  --accent-ink: #FF6A26;
-  --row-hover: rgba(237, 237, 232, 0.05);
+  --background: #0C0C0D;
+  --foreground: #F2F2F0;
+  --muted: #9B9CA0;
+  --rule: rgba(242, 242, 240, 0.12);
+  --rule-strong: rgba(242, 242, 240, 0.8);
+  --accent: #FF6A2B;
+  --accent-ink: #FF6A2B;
+  --row-hover: rgba(242, 242, 240, 0.045);
+  --surface: #19191B;
 }
+
+/* Short desktop viewports (e.g. 1280x720): tighten row padding so every panel
+   still fits without inner scrolling. */
+@custom-variant short (@media (min-width: 64rem) and (max-height: 50rem));
 
 @theme inline {
   --color-background: var(--background);
@@ -51,6 +64,7 @@
   --color-accent-ink: var(--accent-ink);
   --color-muted: var(--muted);
   --color-rule: var(--rule);
+  --color-surface: var(--surface);
 
   --font-sans: var(--font-display);
 }
@@ -69,8 +83,9 @@
    * follow the reader's browser font-size setting like the rest of the scale.
    */
   --text-micro: 0.625rem;    /* 10px — rarely; badges */
-  --text-caption: 0.6875rem; /* 11px — meta labels */
-  --text-body-sm: 0.8125rem; /* 13px — table cells, tool pills */
+  --text-caption: 0.6875rem; /* 11px — uppercase eyebrows */
+  --text-label: 0.8125rem;   /* 13px — sentence-case meta labels */
+  --text-body-sm: 0.875rem;  /* 14px — table cells, tool pills (was 13px) */
 }
 
 body {
@@ -103,21 +118,82 @@ body {
     line-height: 0.92;
   }
 
-  /* Tiny uppercase meta label — the only place letter-spacing opens up. */
+  /* Meta label: small, sentence case, muted. Round 5 dropped the uppercase and
+     letter-spacing here; only the section eyebrow and the nav stay in caps. */
   .meta {
+    font-size: var(--text-label);
+    line-height: 1.35;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    color: var(--muted);
+  }
+
+  /* Eyebrow: the one uppercase voice left (section heads, nav index, hero foot). */
+  .eyebrow {
     font-size: var(--text-caption);
     line-height: 1.35;
     font-weight: 500;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
     color: var(--muted);
   }
 
-  /* Section index, e.g. "(02)". Tabular so every index is the same width. */
+  /* Index numbers, e.g. "02". Tabular so every index is the same width. Muted by
+     default; they turn orange only on the row being hovered, focused or previewed. */
   .index {
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum" 1;
+    color: var(--muted);
+    transition: color 0.3s ease;
+  }
+
+  .index-accent,
+  .index-row:is(:hover, :focus-within) .index,
+  .group:is(:hover, :focus-visible) .index {
     color: var(--accent-ink);
+  }
+
+  /* Pill button: filled ink by default, outlined with .pill-outline. */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-height: 2.75rem;
+    padding: 0.625rem 1.25rem;
+    border-radius: 999px;
+    border: 1px solid var(--foreground);
+    background-color: var(--foreground);
+    color: var(--background);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  }
+
+  .pill:is(:hover, :focus-visible) {
+    background-color: var(--accent-ink);
+    border-color: var(--accent-ink);
+  }
+
+  .dark .pill:is(:hover, :focus-visible) {
+    color: #0D0D0D;
+  }
+
+  .pill-outline {
+    background-color: transparent;
+    color: var(--foreground);
+    border-color: var(--rule-strong);
+  }
+
+  .pill-outline:is(:hover, :focus-visible) {
+    background-color: var(--foreground);
+    border-color: var(--foreground);
+    color: var(--background);
+  }
+
+  .dark .pill-outline:is(:hover, :focus-visible) {
+    color: var(--background);
   }
 
   .tabular {
@@ -214,7 +290,6 @@ html[data-entered="true"] [data-cinematic] {
 :focus-visible {
   outline: 2px solid var(--accent-ink);
   outline-offset: 2px;
-  border-radius: 0;
 }
 
 button:not(:disabled),
@@ -341,8 +416,8 @@ a[href],
 .link-rule {
   text-decoration: underline;
   text-decoration-thickness: 1px;
-  text-underline-offset: 0.2em;
-  text-decoration-color: var(--rule-strong);
+  text-underline-offset: 0.25em;
+  text-decoration-color: color-mix(in srgb, var(--foreground) 28%, transparent);
   transition: text-decoration-color 0.3s ease, color 0.3s ease;
 }
 
@@ -357,10 +432,11 @@ a[href],
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.3rem 0.7rem;
+  padding: 0.3rem 0.8rem;
   border: 1px solid var(--rule);
+  border-radius: 999px;
   font-family: var(--font-sans);
-  font-size: var(--text-body-sm);
+  font-size: var(--text-label);
   font-weight: 500;
   letter-spacing: -0.01em;
   color: var(--foreground);
@@ -404,6 +480,7 @@ a[href],
   width: var(--tile);
   height: var(--tile);
   border: 1px solid var(--rule);
+  border-radius: 0.5rem;
   color: var(--foreground);
 }
 

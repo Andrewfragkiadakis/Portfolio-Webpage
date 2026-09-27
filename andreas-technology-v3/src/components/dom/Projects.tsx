@@ -13,7 +13,7 @@ const pad = (n: number) => String(n).padStart(2, '0')
 
 const COLS = 'grid-cols-[4.75rem_1fr] md:grid-cols-[2.5rem_minmax(0,1.35fr)_minmax(0,1fr)_3rem_6.5rem]'
 
-const LINK = 'arrow-link inline-flex items-center gap-1 text-caption font-semibold uppercase tracking-[0.05em] hover:text-[var(--accent-ink)] transition-colors'
+const LINK = 'arrow-link inline-flex items-center gap-1 text-body-sm font-medium hover:text-[var(--accent-ink)] transition-colors'
 
 function RowLinks({ project, t }: { project: Project; t: ReturnType<typeof useContent> }) {
     return (
@@ -50,11 +50,11 @@ export default function Projects() {
             <div className="grid grid-cols-4 md:grid-cols-12 gap-x-4 md:gap-x-6">
                 {/* Index table */}
                 <div className="col-span-4 md:col-span-8">
-                    <div className="flex items-baseline justify-between rule-t-strong pt-2.5 pb-3">
-                        <span className="text-base font-medium tracking-[-0.01em]">{t.projectsTitle.charAt(0) + t.projectsTitle.slice(1).toLowerCase()}</span>
+                    <div className="flex items-baseline justify-between pb-4 short:pb-2">
+                        <span className="text-lg font-medium tracking-[-0.015em]">{t.projectsTitle.charAt(0) + t.projectsTitle.slice(1).toLowerCase()}</span>
                         <span className="meta tabular">{pad(t.projects.length)}</span>
                     </div>
-                    <div className={`hidden md:grid ${COLS} gap-x-3 rule-b pb-1.5 meta`} aria-hidden="true">
+                    <div className={`hidden md:grid ${COLS} gap-x-3 rule-b pb-2 meta`} aria-hidden="true">
                         <span>{tbl.no}</span>
                         <span>{tbl.title}</span>
                         <span>{tbl.tags}</span>
@@ -76,11 +76,11 @@ export default function Projects() {
                                     onFocus={() => setPreviewIndex(index)}
                                     className={`index-row rule-b ${isPreview ? 'md:bg-[var(--row-hover)]' : ''}`}
                                 >
-                                    <div className={`grid ${COLS} gap-x-3 items-center md:items-baseline py-2.5 md:py-[0.5rem]`}>
+                                    <div className={`grid ${COLS} gap-x-3 items-center md:items-baseline py-3 md:py-[0.55rem] short:py-[0.3rem]`}>
                                         <span className={`hidden md:block text-body-sm tabular ${isPreview ? 'text-[var(--accent-ink)]' : 'text-[var(--muted)]'} transition-colors`}>{pad(index + 1)}</span>
 
                                         {/* Touch: a small thumbnail stands in for the hover preview. */}
-                                        <span className="md:hidden relative block w-full aspect-[16/10] overflow-hidden bg-[var(--rule)] self-start">
+                                        <span className="md:hidden relative block w-full aspect-[16/10] overflow-hidden rounded-md bg-[var(--surface)] self-start">
                                             <ProjectImage project={project} sizes="96px" />
                                         </span>
 
@@ -91,13 +91,13 @@ export default function Projects() {
                                                     onClick={() => setActiveProject(project)}
                                                     aria-label={`${project.name} — ${t.projectsSection.details}`}
                                                     data-cursor={t.cursor.view}
-                                                    className="row-cover text-left text-[0.9375rem] md:text-sm font-medium leading-snug"
+                                                    className="row-cover text-left text-[0.9375rem] font-medium leading-snug"
                                                 >
                                                     {project.name}
                                                     <span className="row-arrow ml-1.5 text-[var(--accent-ink)]" aria-hidden="true">→</span>
                                                 </button>
                                             ) : (
-                                                <span className="text-[0.9375rem] md:text-sm font-medium leading-snug">{project.name}</span>
+                                                <span className="text-[0.9375rem] font-medium leading-snug">{project.name}</span>
                                             )}
                                             <span className="md:hidden block mt-0.5 text-body-sm text-[var(--muted)] leading-snug truncate">
                                                 <span className="tabular">{pad(index + 1)}</span>
@@ -126,9 +126,9 @@ export default function Projects() {
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="GitHub profile"
-                            className="arrow-link inline-flex items-center gap-2 text-sm font-medium border-b border-[var(--foreground)] pb-0.5 hover:text-[var(--accent-ink)] hover:border-[var(--accent-ink)] transition-colors"
+                            className="arrow-link inline-flex items-center gap-2 text-[0.9375rem] font-medium hover:text-[var(--accent-ink)] transition-colors"
                         >
-                            {t.projectsSection.githubCta}
+                            <span className="link-rule">{t.projectsSection.githubCta}</span>
                             <span className="arrow arrow-ne" aria-hidden="true">↗</span>
                         </a>
                     </div>
@@ -136,29 +136,40 @@ export default function Projects() {
 
                 {/* Fixed preview column (desktop): follows the hovered or focused row. */}
                 <aside className="hidden md:block md:col-span-4" aria-hidden="true">
-                    <div className="flex items-baseline justify-between rule-t-strong pt-2.5 pb-3">
+                    <div className="flex items-baseline justify-between pb-4 short:pb-2">
                         <span className="meta">{t.editorial.hoverHint}</span>
-                        <span className="meta tabular index">({pad(previewIndex + 1)})</span>
+                        <span className="meta tabular index-accent">{pad(previewIndex + 1)} / {pad(t.projects.length)}</span>
                     </div>
-                    <div className="relative w-full aspect-[16/10] overflow-hidden bg-[var(--rule)]">
+                    {/* The image moment: a rounded frame that cross-fades and settles from a
+                        slight zoom as the hovered row changes. */}
+                    <div className="relative w-full aspect-[16/10] overflow-hidden rounded-xl bg-[var(--surface)] ring-1 ring-inset ring-[var(--rule)]">
                         <AnimatePresence initial={false}>
                             <motion.div
                                 key={preview.name}
                                 className="absolute inset-0"
-                                initial={{ clipPath: 'inset(0% 0% 100% 0%)' }}
-                                animate={{ clipPath: 'inset(0% 0% 0% 0%)' }}
-                                exit={{ opacity: 0, transition: { duration: 0.2, delay: 0.3 } }}
-                                transition={{ duration: 0.55, ease: EASE_OUT }}
+                                initial={{ opacity: 0, scale: 1.04 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, transition: { duration: 0.35, delay: 0.15 } }}
+                                transition={{ duration: 0.6, ease: EASE_OUT }}
                             >
                                 <ProjectImage project={preview} sizes="(max-width: 1439px) 30vw, 440px" />
                             </motion.div>
                         </AnimatePresence>
                     </div>
-                    <div className="mt-3">
-                        <p className="text-base font-medium leading-tight tracking-[-0.01em]">{preview.name}</p>
-                        {preview.role && <p className="meta mt-1.5">{preview.role}</p>}
-                        <p className="mt-2 text-body-sm text-[var(--muted)] leading-snug line-clamp-4">{preview.description}</p>
-                    </div>
+                    <AnimatePresence mode="wait" initial={false}>
+                        <motion.div
+                            key={preview.name}
+                            className="mt-4"
+                            initial={{ opacity: 0, y: 6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, transition: { duration: 0.12 } }}
+                            transition={{ duration: 0.4, ease: EASE_OUT }}
+                        >
+                            <p className="text-lg font-medium leading-tight tracking-[-0.015em]">{preview.name}</p>
+                            {preview.role && <p className="meta mt-1.5">{preview.role}</p>}
+                            <p className="mt-2.5 text-sm text-[var(--muted)] leading-normal line-clamp-4">{preview.description}</p>
+                        </motion.div>
+                    </AnimatePresence>
                 </aside>
             </div>
 
@@ -172,14 +183,14 @@ export default function Projects() {
                 {activeProject && (
                     <>
                         {activeProject.image && (
-                            <div className="relative aspect-[16/10] max-h-[45vh] w-full overflow-hidden bg-[var(--rule)]">
+                            <div className="relative aspect-[16/10] max-h-[45vh] w-full overflow-hidden bg-[var(--surface)]">
                                 <ProjectImage project={activeProject} sizes="(max-width: 767px) 100vw, 672px" />
                             </div>
                         )}
 
                         <div className="p-6 md:p-8">
                             <p className="meta mb-3">
-                                <span className="index">({pad(t.projects.indexOf(activeProject) + 1)})</span> {t.projectsSection.caseStudy}
+                                <span className="index-accent tabular">{pad(t.projects.indexOf(activeProject) + 1)}</span>&ensp;{t.projectsSection.caseStudy}
                                 {activeProject.year && <> · <span className="tabular">{activeProject.year}</span></>}
                             </p>
                             <h3 id="project-modal-title" className="display text-3xl md:text-[2.5rem] mb-3">
@@ -216,22 +227,22 @@ export default function Projects() {
 
                             <div className="flex flex-wrap gap-2 pt-4 rule-t">
                                 {activeProject.liveSiteLink && (
-                                    <a href={activeProject.liveSiteLink} target="_blank" rel="noopener noreferrer" className="arrow-link inline-flex items-center gap-2 px-4 py-2.5 bg-[var(--foreground)] text-[var(--background)] text-sm font-medium hover:bg-[var(--accent-ink)] transition-colors">
+                                    <a href={activeProject.liveSiteLink} target="_blank" rel="noopener noreferrer" className="arrow-link pill">
                                         {t.projectsSection.live} <span className="arrow arrow-ne" aria-hidden="true">↗</span>
                                     </a>
                                 )}
                                 {activeProject.githubLink && (
-                                    <a href={activeProject.githubLink} target="_blank" rel="noopener noreferrer" className="arrow-link inline-flex items-center gap-2 px-4 py-2.5 border border-[var(--foreground)] text-sm font-medium hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-colors">
+                                    <a href={activeProject.githubLink} target="_blank" rel="noopener noreferrer" className="arrow-link pill pill-outline">
                                         {t.projectsSection.code} <span className="arrow arrow-ne" aria-hidden="true">↗</span>
                                     </a>
                                 )}
                                 {activeProject.reportLink && (
-                                    <a href={activeProject.reportLink} target="_blank" rel="noopener noreferrer" className="arrow-link inline-flex items-center gap-2 px-4 py-2.5 border border-[var(--foreground)] text-sm font-medium hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-colors">
+                                    <a href={activeProject.reportLink} target="_blank" rel="noopener noreferrer" className="arrow-link pill pill-outline">
                                         {t.projectsSection.report} <span className="arrow arrow-ne" aria-hidden="true">↗</span>
                                     </a>
                                 )}
                                 {activeProject.publicationLink && (
-                                    <a href={activeProject.publicationLink} target="_blank" rel="noopener noreferrer" className="arrow-link inline-flex items-center gap-2 px-4 py-2.5 border border-[var(--foreground)] text-sm font-medium hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-colors">
+                                    <a href={activeProject.publicationLink} target="_blank" rel="noopener noreferrer" className="arrow-link pill pill-outline">
                                         {t.projectsSection.publication} <span className="arrow arrow-ne" aria-hidden="true">↗</span>
                                     </a>
                                 )}

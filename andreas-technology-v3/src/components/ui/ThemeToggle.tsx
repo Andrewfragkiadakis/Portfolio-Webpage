@@ -27,15 +27,15 @@ export default function ThemeToggle({ className = '' }: { className?: string }) 
             type="button"
             onClick={(e) => setTheme(isDark ? 'light' : 'dark', centreOf(e.currentTarget))}
             aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-            className={`group inline-flex items-center gap-2 text-caption font-medium uppercase tracking-[0.06em] hover:text-[var(--accent-ink)] transition-colors min-h-11 md:min-h-8 ${className}`}
+            className={`group inline-flex items-center gap-2 text-caption font-medium uppercase tracking-[0.06em] hover:text-[var(--accent-ink)] transition-colors min-h-11 min-w-11 md:min-w-0 justify-center md:min-h-8 ${className}`}
         >
             <span
-                className="relative block w-2.5 h-2.5 border border-current overflow-hidden transition-transform duration-500 group-hover:rotate-180"
+                className="relative block w-3 h-3 rounded-full border border-current overflow-hidden transition-transform duration-500 group-hover:rotate-180"
                 aria-hidden="true"
             >
                 <span className="absolute inset-y-0 left-0 w-1/2 bg-current" />
             </span>
-            <span suppressHydrationWarning>{isDark ? t.editorial.dark : t.editorial.light}</span>
+            <span className="hidden md:inline" suppressHydrationWarning>{isDark ? t.editorial.dark : t.editorial.light}</span>
         </button>
     )
 }

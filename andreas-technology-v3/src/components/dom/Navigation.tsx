@@ -82,12 +82,12 @@ export default function Navigation() {
 
     return (
         <nav className="fixed top-0 left-0 right-0 z-[60] bg-[var(--background)] rule-b md:border-b-0" aria-label="Main navigation">
-            <div className="h-[var(--nav-h)] px-4 md:px-10 grid grid-cols-[1fr_auto_auto] md:grid-cols-12 gap-x-5 md:gap-x-6 items-center">
+            <div className="h-[var(--nav-h)] px-4 md:px-10 grid grid-cols-[1fr_auto_auto] md:grid-cols-12 gap-x-2 md:gap-x-6 items-center">
                 <button
                     type="button"
                     onClick={() => scrollToSection('hero', 0)}
                     aria-label={`${t.editorial.firstName} ${t.editorial.lastName} — ${t.nav.home}`}
-                    className="md:col-span-3 justify-self-start inline-flex items-center gap-2 text-sm font-semibold tracking-[-0.01em] hover:text-[var(--accent-ink)] transition-colors"
+                    className="md:col-span-3 min-w-0 justify-self-start inline-flex items-center gap-2 text-sm font-semibold tracking-[-0.01em] whitespace-nowrap hover:text-[var(--accent-ink)] transition-colors"
                 >
                     {/* The memoji is the mark: cropped to the head and laptop, like a byline portrait. */}
                     <span className="relative block size-7 shrink-0 overflow-hidden" aria-hidden="true">
@@ -171,7 +171,7 @@ export default function Navigation() {
                         {navItems.map((item) => (
                             <motion.li
                                 key={item.section}
-                                className="rule-b first:rule-t-strong"
+                                className="rule-b first:rule-t"
                                 variants={{ open: { opacity: 1, y: 0 }, closed: { opacity: 0, y: 8 } }}
                                 transition={{ duration: 0.25, ease: 'easeOut' }}
                             >

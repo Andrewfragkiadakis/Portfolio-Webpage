@@ -1116,9 +1116,9 @@ export const content: Record<'en' | 'gr', Content> = {
         experienceSection: {
             title: "ΚΑΡΙΕΡΑ",
             subtitle: "ΧΡΟΝΟΛΟΓΙΟ: ΕΡΓΑΣΙΑ & ΕΚΠΑΙΔΕΥΣΗ",
-            professional: "ΕΠΑΓΓΕΛΜΑΤΙΚΗ",
-            education: "ΕΚΠΑΙΔΕΥΣΗ",
-            verify: "ΠΙΣΤΟΠΟΙΗΣΗ"
+            professional: "Επαγγελματική",
+            education: "Εκπαίδευση",
+            verify: "Επαλήθευση"
         },
 
         projectsSection: {
