@@ -4,7 +4,7 @@ import { useContent } from '@/hooks/useContent'
 import { useState } from 'react'
 import type { Experience as ExperienceType, Education as EducationType, EducationKind } from '@/data/content'
 import Modal from '@/components/ui/Modal'
-import { Bento, SectionTile, Tile, type Tone } from '@/components/ui/Bento'
+import { Bento, SectionTile, Tile, TileHead } from '@/components/ui/Bento'
 
 const KIND_ICON: Record<EducationKind, string> = {
     degree: 'fas fa-graduation-cap',
@@ -50,16 +50,16 @@ function CareerChart({ roles, label }: { roles: ExperienceType[]; label: string 
 
     return (
         <>
-            <div className="flex items-baseline justify-between gap-3">
-                <p className="eyebrow el-caps">{label}</p>
-                <p className="eyebrow tabular-nums">{first} — {last - 1}</p>
+            <div className="tile-head">
+                <p className="t-label el-caps">{label}</p>
+                <p className="t-label tabular-nums">{first} — {last - 1}</p>
             </div>
             <div className="flex-1 flex flex-col justify-center gap-[min(0.55vh,0.35rem)] min-h-0 py-2" aria-hidden="true">
                 {spans.map(([s, e], i) => (
                     <div key={i} className="flex items-center" title={`${roles[i].role} · ${roles[i].duration}`}>
                         <div className="relative flex-1 h-[min(1.1vh,0.625rem)] min-h-1.5 rounded-full bg-[var(--fill)]">
                             <div
-                                className={`absolute inset-y-0 rounded-full ${i === 0 ? 'bg-[linear-gradient(90deg,#0a5cd6,#5835c6)] dark:bg-[linear-gradient(90deg,#2f7bff,#9d7bff)] shadow-[0_0_12px_rgba(58,68,212,0.45)]' : 'bg-[var(--foreground)] opacity-30'}`}
+                                className={`absolute inset-y-0 rounded-full ${i === 0 ? 'bg-[var(--accent)]' : 'bg-[var(--foreground)] opacity-25'}`}
                                 style={{ left: `${((s - first) / range) * 100}%`, width: `${((e + 1 - s) / range) * 100}%` }}
                             />
                         </div>
@@ -98,27 +98,23 @@ export default function Experience() {
 
                 {/* The current role: title and its first line; the full list opens from the tile. */}
                 {current && (
-                    <Tile as="article" index={1} tone="fleet" interactive className="col-span-2 md:col-[1/5] md:row-[2/5] gap-3 short:gap-2">
+                    <Tile as="article" index={1} interactive className="col-span-2 md:col-[1/5] md:row-[2/5] gap-3 short:gap-2 min-h-[15rem] md:min-h-0">
                         <button
                             type="button"
                             className="tile-stretch"
                             onClick={() => setActive({ type: 'role', item: current, index: 1 })}
                             aria-label={`${current.role} — ${current.company} — ${t.bento.spot.role}`}
                         />
-                        <div className="flex items-center justify-between gap-3">
-                            <span className="chip bg-white/15">
-                                <span className="live-dot" aria-hidden="true" />
-                                <span className="el-caps">{current.duration}</span>
-                            </span>
+                        <TileHead label={<span className="flex items-center gap-2"><span className="live-dot" aria-hidden="true" /><span className="el-caps">{current.duration}</span></span>}>
                             <span className="tile-affordance" aria-hidden="true">
                                 <i className="fas fa-plus" />
                             </span>
-                        </div>
+                        </TileHead>
                         <div className="mt-auto">
                             <h3 className="text-xl md:text-[min(1.75vw,3.1vh)] font-bold tracking-[-0.025em] leading-tight">{current.role}</h3>
-                            <p className="mt-1 text-sm font-medium text-[var(--muted)]">{current.company}</p>
+                            <p className="mt-1 t-caption font-medium">{current.company}</p>
                             {current.tasks[0] && (
-                                <p className="mt-4 short:mt-2 text-[0.875rem] md:text-[min(0.95vw,1.7vh)] leading-snug line-clamp-3">{current.tasks[0]}</p>
+                                <p className="mt-4 short:mt-2 pt-4 short:pt-2 border-t border-[var(--line)] t-caption !text-[var(--foreground)] line-clamp-3">{current.tasks[0]}</p>
                             )}
                         </div>
                     </Tile>
@@ -130,92 +126,85 @@ export default function Experience() {
 
                 {/* Earlier roles — each opens its full list of responsibilities. */}
                 {earlier.map((exp, i) => (
-                    <Tile key={`${exp.role}-${i}`} as="article" index={3 + i} interactive className={`col-span-2 ${ROLE_AREAS[i] ?? ''} justify-center gap-1`}>
+                    <Tile key={`${exp.role}-${i}`} as="article" index={3 + i} interactive className={`col-span-2 ${ROLE_AREAS[i] ?? ''} row-tile`}>
                         <button
                             type="button"
                             className="tile-stretch"
                             onClick={() => setActive({ type: 'role', item: exp, index: i + 2 })}
                             aria-label={`${exp.role} — ${exp.company} — ${t.projectsSection.details}`}
                         />
-                        <p className="text-caption font-semibold tabular-nums text-[var(--muted)]">{yearRange(exp.duration)}</p>
-                        <div className="flex items-end justify-between gap-3">
-                            <div className="min-w-0">
-                                <h3 className="text-[0.9375rem] md:text-[min(1.02vw,1.8vh)] font-semibold leading-tight tracking-[-0.01em] line-clamp-2 short:line-clamp-1" title={exp.role}>{exp.role}</h3>
-                                <p className="text-caption text-[var(--muted)] truncate mt-0.5">{exp.company}</p>
-                            </div>
-                            <span className="tile-affordance !w-7 !h-7" aria-hidden="true">
-                                <i className="fas fa-plus text-[0.625rem]" />
-                            </span>
+                        <div className="min-w-0 flex-1">
+                            <h3 className="t-title line-clamp-2 short:line-clamp-1" title={exp.role}>{exp.role}</h3>
+                            <p className="t-caption truncate mt-1"><span className="tabular-nums">{yearRange(exp.duration)}</span> · {exp.company}</p>
                         </div>
+                        <span className="tile-affordance" aria-hidden="true">
+                            <i className="fas fa-plus" />
+                        </span>
                     </Tile>
                 ))}
 
                 {/* Degrees */}
                 {degrees.map((edu, i) => (
-                    <Tile key={edu.degree} as="article" index={9 + i} interactive className={`col-span-2 ${DEGREE_AREAS[i] ?? ''} flex-row items-center gap-3`}>
+                    <Tile key={edu.degree} as="article" index={9 + i} interactive className={`col-span-2 ${DEGREE_AREAS[i] ?? ''} row-tile`}>
                         <button
                             type="button"
                             className="tile-stretch"
                             onClick={() => setActive({ type: 'edu', item: edu })}
                             aria-label={`${edu.degree} — ${edu.institution} — ${t.projectsSection.details}`}
                         />
-                        <span className="tile-icon tile-mark" aria-hidden="true">
-                            <i className={`${iconFor(edu)} text-base`} />
+                        <span className="icon-well" aria-hidden="true">
+                            <i className={`${iconFor(edu)} text-sm`} />
                         </span>
                         <div className="min-w-0 flex-1">
-                            <h3 className="text-[0.875rem] md:text-[min(0.95vw,1.7vh)] font-semibold leading-tight line-clamp-2">{edu.degree}</h3>
-                            <p className="text-caption text-[var(--muted)] tabular-nums mt-0.5">{yearRange(edu.duration)}</p>
+                            <h3 className="t-title line-clamp-2 short:line-clamp-1" title={edu.degree}>{edu.degree}</h3>
+                            <p className="t-caption tabular-nums mt-1">{yearRange(edu.duration)}</p>
                         </div>
+                        <span className="tile-affordance" aria-hidden="true">
+                            <i className="fas fa-plus" />
+                        </span>
                     </Tile>
                 ))}
 
                 {/* Certifications and licence */}
-                {credentials.map((edu, i) => {
-                    const tone: Tone = edu.featured ? 'fleet' : 'plain'
-                    return (
-                        <Tile key={edu.degree} as="article" index={11 + i} tone={tone} interactive className={`col-span-1 ${CERT_AREAS[i] ?? ''} gap-2 min-h-[12rem] md:min-h-0`}>
-                            <button
-                                type="button"
-                                className="tile-stretch"
-                                onClick={() => setActive({ type: 'edu', item: edu })}
-                                aria-label={`${edu.degree} — ${edu.institution} — ${t.projectsSection.details}`}
-                            />
-                            <div className="flex items-center justify-between gap-2">
-                                <span className="tile-icon tile-mark !w-9 !h-9 !rounded-xl" aria-hidden="true">
-                                    {edu.featured ? (
-                                        <span className="block w-6 aspect-[2.875] bg-current [mask:url(/logos/jamf.svg)_no-repeat_center/contain] [-webkit-mask:url(/logos/jamf.svg)_no-repeat_center/contain]" />
-                                    ) : (
-                                        <i className={`${iconFor(edu)} text-sm`} />
-                                    )}
-                                </span>
-                                <span className="text-caption font-semibold tabular-nums text-[var(--muted)]">{edu.duration}</span>
-                            </div>
-                            <div className="min-w-0 mt-auto">
-                                {edu.badge ? (
-                                    <h3 className="text-[0.9375rem] md:text-[min(1.05vw,1.85vh)] font-bold tracking-tight tile-mark leading-tight">
-                                        {edu.badge}<span className="sr-only"> — {edu.degree}</span>
-                                    </h3>
-                                ) : (
-                                    <h3 className="text-[0.875rem] md:text-[min(0.95vw,1.7vh)] font-semibold leading-tight line-clamp-3">{edu.degree}</h3>
-                                )}
-                            </div>
-                            {edu.link && (
-                                <div className="tile-above self-start">
-                                    <a
-                                        href={edu.link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        aria-label={`${t.experienceSection.verify}: ${edu.degree} (opens credential)`}
-                                        className={`pill !min-h-8 !px-3 !text-caption ${edu.featured ? 'pill--white' : 'pill--quiet'}`}
-                                    >
-                                        <i className="fas fa-certificate" aria-hidden="true" />
-                                        <span className="el-caps">{t.cursor.verify}</span>
-                                    </a>
-                                </div>
+                {credentials.map((edu, i) => (
+                    <Tile key={edu.degree} as="article" index={11 + i} interactive className={`col-span-1 ${CERT_AREAS[i] ?? ''} gap-2 min-h-[10rem] md:min-h-0`}>
+                        <button
+                            type="button"
+                            className="tile-stretch"
+                            onClick={() => setActive({ type: 'edu', item: edu })}
+                            aria-label={`${edu.degree} — ${edu.institution} — ${t.projectsSection.details}`}
+                        />
+                        <TileHead label={<span className="tabular-nums">{edu.duration}</span>}>
+                            <span className="tile-affordance" aria-hidden="true">
+                                <i className="fas fa-plus" />
+                            </span>
+                        </TileHead>
+                        <div className="min-w-0 mt-auto">
+                            {edu.badge ? (
+                                <h3 className="t-title !font-bold">
+                                    {edu.badge}<span className="sr-only"> — {edu.degree}</span>
+                                </h3>
+                            ) : (
+                                <h3 className="t-title line-clamp-2">{edu.degree}</h3>
                             )}
-                        </Tile>
-                    )
-                })}
+                            <p className="t-caption truncate mt-0.5">{edu.institution}</p>
+                        </div>
+                        {edu.link ? (
+                            <a
+                                href={edu.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label={`${t.experienceSection.verify}: ${edu.degree} (opens credential)`}
+                                className="tile-above self-start inline-flex items-center gap-1.5 text-body-sm font-semibold text-[var(--accent)] hover:underline"
+                            >
+                                <span className="el-caps">{t.cursor.verify}</span>
+                                <i className="fas fa-arrow-right -rotate-45 text-[0.625rem]" aria-hidden="true" />
+                            </a>
+                        ) : (
+                            <span className="text-body-sm invisible" aria-hidden="true">·</span>
+                        )}
+                    </Tile>
+                ))}
             </Bento>
 
             <Modal
@@ -243,7 +232,7 @@ export default function Experience() {
                 {active?.type === 'edu' && (
                     <>
                         <div className="flex items-center gap-3 mb-5 pr-10">
-                            <span className="tile-icon !w-12 !h-12 text-[var(--accent)]" aria-hidden="true">
+                            <span className="icon-well !w-12 !h-12" aria-hidden="true">
                                 <i className={`${iconFor(active.item)} text-lg`} />
                             </span>
                             {active.item.badge && <span className="chip text-[var(--accent)]">{active.item.badge}</span>}

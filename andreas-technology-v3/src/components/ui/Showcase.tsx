@@ -15,10 +15,8 @@ const INTERVAL_MS = 4200
  * stay mounted for the cross-fade. The cycle runs only while the tile is on screen and
  * not hovered; with reduced motion it rests on the first screenshot.
  */
-export default function Showcase({ projects, label, play = true }: {
+export default function Showcase({ projects, play = true }: {
     projects: Project[]
-    /** Eyebrow over the caption, e.g. "Selected work". */
-    label: string
     play?: boolean
 }) {
     const ref = useRef<HTMLDivElement>(null)
@@ -49,8 +47,8 @@ export default function Showcase({ projects, label, play = true }: {
             onPointerEnter={() => setHovered(true)}
             onPointerLeave={() => setHovered(false)}
         >
-            {/* Soft light pooled under the machine. */}
-            <span className="absolute left-1/2 top-[58%] -translate-x-1/2 -translate-y-1/2 w-[80%] h-[70%] rounded-full bg-[radial-gradient(closest-side,rgba(64,120,255,0.28),transparent)] dark:bg-[radial-gradient(closest-side,rgba(64,120,255,0.6),transparent)]" aria-hidden="true" />
+            {/* A soft neutral shadow pooled under the machine. */}
+            <span className="absolute left-1/2 top-[88%] -translate-x-1/2 -translate-y-1/2 w-[70%] h-[14%] rounded-full bg-[radial-gradient(closest-side,rgba(0,0,0,0.14),transparent)] dark:bg-[radial-gradient(closest-side,rgba(0,0,0,0.6),transparent)]" aria-hidden="true" />
 
             <div className="relative w-[min(88cqw,calc((100cqh-1.25rem)*1.6*0.97))]">
                 {/* Lid: bezel, then a 16:10 display. */}
@@ -80,10 +78,9 @@ export default function Showcase({ projects, label, play = true }: {
         </div>
 
         {/* Caption bar: what is on screen, and where it sits in the reel. */}
-        <div className="relative flex items-end justify-between gap-3 pt-3 short:pt-2">
+        <div className="relative flex items-end justify-between gap-3">
             <div className="min-w-0">
-                <p className="eyebrow el-caps">{label}</p>
-                <div className="relative h-[1.35em] mt-1 text-[0.9375rem] md:text-[min(1.1vw,1.95vh)] font-semibold tracking-[-0.01em] overflow-hidden">
+                <div className="relative h-[1.3em] t-title overflow-hidden">
                     <AnimatePresence mode="popLayout" initial={false}>
                         <motion.p
                             key={current?.name}
@@ -102,7 +99,7 @@ export default function Showcase({ projects, label, play = true }: {
                 {projects.map((project, i) => (
                     <span
                         key={project.name}
-                        className={`h-1.5 rounded-full transition-all duration-500 ${i === index ? 'w-4 bg-[var(--foreground)]' : 'w-1.5 bg-[var(--foreground)] opacity-25'}`}
+                        className={`h-1.5 rounded-full transition-all duration-500 ${i === index ? 'w-4 bg-[var(--accent)]' : 'w-1.5 bg-[var(--foreground)] opacity-20'}`}
                     />
                 ))}
             </span>

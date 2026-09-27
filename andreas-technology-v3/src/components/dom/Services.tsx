@@ -8,7 +8,7 @@ import type { Service } from '@/data/content'
 import { TOOL_BY_LABEL, type Tool } from '@/data/tools'
 import Modal from '@/components/ui/Modal'
 import { LogoCluster, ToolTile, brandInks } from '@/components/ui/ToolBadge'
-import { Bento, SectionTile, TileButton, type Tone } from '@/components/ui/Bento'
+import { Bento, SectionTile, TileButton } from '@/components/ui/Bento'
 
 /** Logos previewed on a tile; the dialog lists the whole toolkit by name. */
 const CLUSTER_MAX = 4
@@ -17,17 +17,17 @@ const toolsFor = (service: Service): Tool[] =>
     service.tools.map((label) => TOOL_BY_LABEL.get(label)).filter((tool): tool is Tool => Boolean(tool))
 
 /**
- * Placement per service, in content order:
- * Endpoint Security · Apple Fleet (the large tile) · Automation · AI · ITSM · Networks.
+ * Round 5: eight equal tiles on a four-module grid (3 columns × 3 rows each):
+ *   row 1–3  heading · Apple fleet · endpoint security · automation
+ *   row 4–6  AI · service management · networks · let's talk
+ * Apple fleet leads because it is the flagship, not because it is bigger.
  */
-const LAYOUT: { area: string; tone: Tone; size: 'lg' | 'md' | 'sm' }[] = [
-    { area: 'md:col-[9/13] md:row-[1/3]', tone: 'security', size: 'md' },
-    { area: 'md:col-[5/9] md:row-[1/5]', tone: 'fleet', size: 'lg' },
-    { area: 'md:col-[9/13] md:row-[3/5]', tone: 'automation', size: 'md' },
-    { area: 'md:col-[1/5] md:row-[3/5]', tone: 'ai', size: 'md' },
-    { area: 'md:col-[1/4] md:row-[5/7]', tone: 'itsm', size: 'sm' },
-    { area: 'md:col-[4/9] md:row-[5/7]', tone: 'graphite', size: 'md' },
+const AREAS = [
+    'md:col-[4/7] md:row-[1/4]', 'md:col-[7/10] md:row-[1/4]', 'md:col-[10/13] md:row-[1/4]',
+    'md:col-[1/4] md:row-[4/7]', 'md:col-[4/7] md:row-[4/7]', 'md:col-[7/10] md:row-[4/7]',
 ]
+/** Content order is Endpoint Security, Apple Fleet, …; show Apple Fleet first. */
+const ORDER = [1, 0, 2, 3, 4, 5]
 
 function ServiceTile({ service, index, onOpen, detailsLabel }: {
     service: Service
@@ -35,41 +35,30 @@ function ServiceTile({ service, index, onOpen, detailsLabel }: {
     onOpen: () => void
     detailsLabel: string
 }) {
-    const { area, tone, size } = LAYOUT[index] ?? LAYOUT[0]
     const tools = toolsFor(service)
-    const large = size === 'lg'
 
     return (
         <TileButton
             index={index + 1}
-            tone={tone}
             onClick={onOpen}
             label={`${service.title} — ${detailsLabel}`}
-            className={`col-span-2 ${area} gap-3 short:gap-2 ${large ? 'md:gap-4' : ''}`}
+            className={`col-span-2 ${AREAS[index] ?? ''} gap-4 short:gap-2 min-h-[13rem] md:min-h-0`}
         >
-            {/* The flagship tile carries its icon again, large and faint, as a watermark. */}
-            {large && (
-                <i className={`${service.icon} absolute pointer-events-none opacity-[0.1] -right-[8%] top-[18%] text-[16rem] md:text-[min(21vw,36vh)]`} aria-hidden="true" />
-            )}
-            <span className="flex items-start justify-between gap-3">
-                <span className={`tile-icon tile-mark ${large ? 'md:!w-14 md:!h-14 md:!rounded-[1.125rem]' : ''}`} aria-hidden="true">
-                    <i className={`${service.icon} ${large ? 'text-xl md:text-2xl' : 'text-lg'}`} />
+            <span className="tile-head">
+                <span className="icon-well" aria-hidden="true">
+                    <i className={`${service.icon} text-base`} />
                 </span>
                 <span className="tile-affordance transition-transform group-hover:rotate-90" aria-hidden="true">
                     <i className="fas fa-plus" />
                 </span>
             </span>
 
-            <span className={`block ${large ? 'md:mt-auto' : 'mt-auto'}`}>
-                <span className={`block font-semibold tracking-[-0.02em] leading-tight el-caps ${large ? 'text-xl sm:text-2xl md:text-[min(2.3vw,4.1vh)] break-words' : 'text-lg md:text-[min(1.3vw,2.3vh)]'}`}>
-                    {service.title}
-                </span>
-                <span className={`mt-1.5 short:mt-1 text-sm md:text-[min(0.95vw,1.65vh)] leading-snug text-[var(--muted)] ${large ? 'line-clamp-3' : 'line-clamp-2'}`}>
-                    {service.description}
-                </span>
+            <span className="block mt-auto">
+                <span className="block t-title el-caps">{service.title}</span>
+                <span className="mt-1.5 short:mt-1 t-caption line-clamp-3 short:line-clamp-2">{service.description}</span>
             </span>
 
-            <LogoCluster tools={tools.slice(0, CLUSTER_MAX)} className="pt-1 short:pt-0" />
+            <LogoCluster tools={tools.slice(0, CLUSTER_MAX)} className="pt-3 border-t border-[var(--line)]" />
         </TileButton>
     )
 }
@@ -77,7 +66,6 @@ function ServiceTile({ service, index, onOpen, detailsLabel }: {
 export default function Services() {
     const t = useContent()
     const [active, setActive] = useState<Service | null>(null)
-    const activeTone = active ? (LAYOUT[t.services.indexOf(active)] ?? LAYOUT[0]).tone : 'fleet'
 
     return (
         <section aria-labelledby="services-title" className="w-full h-auto md:h-full px-4 md:px-6 pt-3 md:pb-6">
@@ -88,10 +76,10 @@ export default function Services() {
                     title={t.servicesTitle}
                     eyebrow={t.servicesSubtitle}
                     index={0}
-                    className="col-span-2 md:col-[1/5] md:row-[1/3] min-h-[9rem] md:min-h-0"
+                    className="col-span-2 md:col-[1/4] md:row-[1/4] min-h-[9rem] md:min-h-0"
                 />
 
-                {t.services.map((service: Service, index: number) => (
+                {ORDER.map((i) => t.services[i]).filter(Boolean).map((service: Service, index: number) => (
                     <ServiceTile
                         key={service.title}
                         service={service}
@@ -105,21 +93,21 @@ export default function Services() {
                 <TileButton
                     index={7}
                     onClick={() => scrollToSection(sectionIndex('contact'), 'contact')}
-                    className="col-span-2 md:col-[9/13] md:row-[5/7] justify-between gap-6 min-h-[9rem] md:min-h-0"
+                    className="col-span-2 md:col-[10/13] md:row-[4/7] gap-4 min-h-[10rem] md:min-h-0"
                 >
-                    <span className="flex items-start justify-between gap-3">
-                        <span className="fam-well tile--fleet" aria-hidden="true">
-                            <i className="fas fa-comments text-lg" />
+                    <span className="tile-head">
+                        <span className="icon-well" aria-hidden="true">
+                            <i className="fas fa-comments text-base" />
                         </span>
                         <span className="tile-affordance" aria-hidden="true">
                             <i className="fas fa-arrow-right" />
                         </span>
                     </span>
-                    <span className="block">
-                        <span className="block text-sm md:text-[min(1vw,1.8vh)] font-medium text-[var(--muted)] mb-1.5 el-caps">{t.servicesCta}</span>
-                        <span className="flex items-center gap-2 text-2xl md:text-[min(2.4vw,4.3vh)] font-bold tracking-[-0.03em] leading-none text-[var(--accent)] el-caps">
+                    <span className="block mt-auto">
+                        <span className="block t-caption mb-2 el-caps">{t.servicesCta}</span>
+                        <span className="flex items-center gap-2 t-value el-caps lang-el:!text-[1.875rem] md:lang-el:!text-[min(2.3vw,4vh)]">
                             {t.servicesCtaButton}
-                            <i className="fas fa-arrow-right text-[0.6em] transition-transform duration-500 group-hover:translate-x-1" aria-hidden="true" />
+                            <i className="fas fa-arrow-right text-[0.5em] transition-transform duration-500 group-hover:translate-x-1" aria-hidden="true" />
                         </span>
                     </span>
                 </TileButton>
@@ -135,7 +123,7 @@ export default function Services() {
                 {active && (
                     <>
                         <div className="flex items-center gap-4 mb-5 pr-10">
-                            <span className={`fam-well tile--${activeTone === 'graphite' ? 'fleet' : activeTone} !w-12 !h-12`} aria-hidden="true">
+                            <span className="icon-well !w-12 !h-12" aria-hidden="true">
                                 <i className={`${active.icon} text-xl`} />
                             </span>
                             <h3 id="service-modal-title" className="text-2xl font-bold tracking-tight leading-tight el-caps">

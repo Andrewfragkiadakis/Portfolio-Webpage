@@ -13,6 +13,8 @@ interface ProjectImageProps {
      * over the image. The blurred fill still covers the whole frame. Defaults to all of it.
      */
     containBox?: string
+    /** Skip the blurred fill: a `contain` screenshot sits on the frame's own neutral surface. */
+    plain?: boolean
 }
 
 /**
@@ -24,14 +26,14 @@ interface ProjectImageProps {
  * crop opt into `cover`, optionally with a focal point (`imagePosition`). Both layers
  * share one URL and `sizes`, so the browser downloads the image once.
  */
-export default function ProjectImage({ project, sizes, className = '', eager = false, containBox }: ProjectImageProps) {
+export default function ProjectImage({ project, sizes, className = '', eager = false, containBox, plain = false }: ProjectImageProps) {
     const loading = eager ? 'eager' : 'lazy'
     if (!project.image) return null
     const fit = project.imageFit ?? 'contain'
 
     return (
         <>
-            {fit === 'contain' && (
+            {fit === 'contain' && !plain && (
                 <Image
                     src={project.image}
                     alt=""

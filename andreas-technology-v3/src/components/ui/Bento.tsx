@@ -4,11 +4,11 @@ import { motion, useInView, useReducedMotion, type Variants } from 'motion/react
 import { useRef, type ReactNode, type MouseEventHandler } from 'react'
 import { EASE_OUT } from '@/utils/motion'
 
-/** Subject families (rich gradients) plus the neutrals that give each bento its rhythm. */
-export type Family = 'fleet' | 'security' | 'automation' | 'ai' | 'itsm'
-export type Tone = 'plain' | 'graphite' | 'night' | 'aurora' | 'studio' | 'terminal' | 'accent' | Family
-
-const FAMILIES: readonly string[] = ['fleet', 'security', 'automation', 'ai', 'itsm']
+/**
+ * Round 5: every tile is neutral (white / near-black). `studio` is the one soft sweep
+ * behind the hero showcase; the map tile paints itself.
+ */
+export type Tone = 'plain' | 'studio'
 
 /** Delay between neighbouring tiles as a bento reveals. */
 const TILE_STAGGER = 0.05
@@ -33,8 +33,7 @@ const TILE_STILL: Variants = {
     visible: { opacity: 1 },
 }
 
-export const toneClass = (tone: Tone) =>
-    tone === 'plain' ? '' : FAMILIES.includes(tone) ? `tile--fam tile--${tone}` : `tile--${tone}`
+export const toneClass = (tone: Tone) => (tone === 'plain' ? '' : `tile--${tone}`)
 
 interface BentoProps {
     children: ReactNode
@@ -52,7 +51,7 @@ interface BentoProps {
  */
 export function Bento({ children, className = '', play }: BentoProps) {
     const ref = useRef<HTMLDivElement>(null)
-    // Ambient loops (Ken Burns, aurora, glow border) run only while this bento is on screen.
+    // Ambient loops (the map pin's pulse) run only while this bento is on screen.
     const live = useInView(ref, { amount: 0.35 })
     const trigger = play === undefined
         ? { initial: 'hidden', whileInView: 'visible', viewport: { once: true, amount: 0.15 } }
@@ -62,15 +61,6 @@ export function Bento({ children, className = '', play }: BentoProps) {
         <motion.div ref={ref} data-live={live && play !== false} className={`bento ${className}`} {...trigger}>
             {children}
         </motion.div>
-    )
-}
-
-/** The travelling conic light for a featured tile's border. Decorative. */
-export function GlowRing() {
-    return (
-        <span className="glow-ring" aria-hidden="true">
-            <span />
-        </span>
     )
 }
 
@@ -152,8 +142,9 @@ export function TileButton({ children, className = '', tone = 'plain', index = 0
 }
 
 /**
- * Section opener tile: zero-padded index, eyebrow and a solid display title.
- * Carries the section id so navigation and smooth-scroll can find it.
+ * Section opener tile: zero-padded index and eyebrow on top (the same label row every
+ * tile has), a solid display title at the foot. Carries the section id so navigation and
+ * smooth-scroll can find it.
  */
 export function SectionTile({ id, number, title, eyebrow, className = '', children, index = 0 }: {
     id: string
@@ -165,16 +156,44 @@ export function SectionTile({ id, number, title, eyebrow, className = '', childr
     index?: number
 }) {
     return (
-        <Tile as="header" id={id} index={index} className={`justify-between gap-1 ${className}`}>
-            <div className="flex items-center gap-2 eyebrow">
-                <span className="text-[var(--accent)] tabular-nums">{String(number).padStart(2, '0')}</span>
-                <span aria-hidden="true">/</span>
-                {eyebrow && <span className="el-caps truncate">{eyebrow.replace(/^\/\/\s*/, '')}</span>}
+        <Tile as="header" id={id} index={index} className={`justify-between gap-3 ${className}`}>
+            <div className="tile-head">
+                <p className="t-label flex items-center gap-2 min-w-0">
+                    <span className="text-[var(--accent)] tabular-nums">{String(number).padStart(2, '0')}</span>
+                    <span aria-hidden="true">/</span>
+                    {eyebrow && <span className="el-caps truncate">{eyebrow.replace(/^\/\/\s*/, '')}</span>}
+                </p>
             </div>
-            <h2 id={`${id}-title`} className="display uppercase text-[clamp(2rem,9vw,3rem)] md:text-[min(3.6vw,6vh)] break-words">
-                {title}
-            </h2>
-            {children}
+            <div>
+                <h2 id={`${id}-title`} className="display uppercase text-[clamp(2rem,9vw,3rem)] md:text-[min(3.4vw,5.6vh)] break-words">
+                    {title}
+                </h2>
+                {children}
+            </div>
         </Tile>
+    )
+}
+
+/**
+ * The label row every tile opens with: a small uppercase label on the left and, on the
+ * right, the tile's one control (an "i" hotspot, a "+" or an arrow). Same height, same
+ * position, on every tile.
+ */
+export function TileHead({ label, children, className = '' }: { label?: ReactNode; children?: ReactNode; className?: string }) {
+    return (
+        <div className={`tile-head ${className}`}>
+            {label ? <p className="t-label el-caps min-w-0 truncate">{label}</p> : <span />}
+            {children}
+        </div>
+    )
+}
+
+/** Key figure + caption at the foot of a tile: the one place the accent colours a number. */
+export function Figure({ value, caption, className = '' }: { value: ReactNode; caption?: ReactNode; className?: string }) {
+    return (
+        <div className={`mt-auto ${className}`}>
+            <p className="t-value">{value}</p>
+            {caption && <p className="t-caption mt-1.5">{caption}</p>}
+        </div>
     )
 }

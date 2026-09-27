@@ -18,10 +18,8 @@ interface InfoSpotProps {
     /** Optional heading shown at the top of the popover. */
     title?: ReactNode
     children: ReactNode
-    /** `info` for "there is more to read", `plus` for "there is more of this list". */
-    icon?: 'info' | 'plus'
-    /** `onColor` for gradient / graphite tiles, where the quiet grey well would vanish. */
-    tone?: 'default' | 'onColor'
+    /** `info` for "there is more to read", `plus` for "there is more of this list", `qr` for a scannable code. */
+    icon?: 'info' | 'plus' | 'qr'
     /** Position of the button inside its tile (it is `position: relative` by default). */
     className?: string
     /** Optional visible text next to the glyph, e.g. "+14". */
@@ -37,7 +35,7 @@ interface InfoSpotProps {
  * so tiles (overflow: hidden) and the transformed horizontal track cannot clip it; it is
  * positioned against the button and follows it while the page scrolls.
  */
-export default function InfoSpot({ label, title, children, icon = 'info', tone = 'default', className = '', text, width = 20 }: InfoSpotProps) {
+export default function InfoSpot({ label, title, children, icon = 'info', className = '', text, width = 20 }: InfoSpotProps) {
     const id = useId()
     const panelId = `${id}-panel`
     const [open, setOpen] = useState(false)
@@ -143,10 +141,10 @@ export default function InfoSpot({ label, title, children, icon = 'info', tone =
                 aria-controls={open ? panelId : undefined}
                 aria-label={label}
                 onClick={() => setOpen((v) => !v)}
-                className={`spot tile-above ${tone === 'onColor' ? 'spot--on-color' : ''} ${text ? 'spot--text' : ''} ${className}`}
+                className={`spot tile-above ${text ? 'spot--text' : ''} ${className}`}
             >
                 {text && <span aria-hidden="true" className="tabular-nums">{text}</span>}
-                <i className={`fas ${open ? 'fa-xmark' : icon === 'plus' ? 'fa-plus' : 'fa-info'} spot-glyph`} aria-hidden="true" />
+                <i className={`fas ${open ? 'fa-xmark' : icon === 'plus' ? 'fa-plus' : icon === 'qr' ? 'fa-qrcode' : 'fa-info'} spot-glyph`} aria-hidden="true" />
             </button>
             {mounted && createPortal(
                 <AnimatePresence>

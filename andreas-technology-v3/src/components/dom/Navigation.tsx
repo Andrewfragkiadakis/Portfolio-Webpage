@@ -17,7 +17,7 @@ const pad = (n: number) => String(n).padStart(2, '0')
 /** The owner's memoji (peeking over a MacBook) as the site mark, on a soft avatar disc. */
 function Mark() {
     return (
-        <span className="relative block w-9 h-9 rounded-full overflow-hidden shrink-0 bg-[linear-gradient(180deg,#e6eefb_0%,#c9d8f1_100%)] dark:bg-[linear-gradient(180deg,#30354a_0%,#1d2030_100%)] ring-1 ring-black/[0.06] dark:ring-white/10">
+        <span className="relative block w-9 h-9 rounded-full overflow-hidden shrink-0 bg-[#e8e8ed] dark:bg-[#2c2c2e] ring-1 ring-black/[0.06] dark:ring-white/10">
             <Image
                 src="/favicons/android-chrome-512x512.png"
                 alt="Andreas Fragkiadakis"

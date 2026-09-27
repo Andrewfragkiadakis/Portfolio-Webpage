@@ -2,6 +2,8 @@
 
 **Branch:** `style/bento-grid-v2`, built on the v1 Bento Grid (`style/bento-grid`).
 
+> **Round 5 supersedes the palette, the hero and several tiles described below.** The multi-colour "keynote" families, the aurora, the conic border light, the activity rings, the analog clock, the Mac glyph grid and the Ken Burns drift are gone. See [Round 5: calmer and structured](#round-5-calmer-and-structured) for the current system. The sections in between are kept as the design history.
+
 ## Brief
 
 Andreas shortlisted Bento Grid and asked for three things: **more imagery in the tiles, better colouring, and more wow factor**. His taste is Apple-native and polished. He does not want clutter or pointer-following effects. v2 keeps the v1 structure: a 12 × 6 bento per panel, the horizontal journey on desktop and a 2-column stack on mobile. What changes is what the tiles show, how they are coloured and how they move.
@@ -220,7 +222,126 @@ The "AF" monogram in the navigation is replaced by the owner's memoji (`public/f
 - Mobile horizontal overflow is 0 px in both themes. Greek was checked on every panel and in the map popover.
 - Previews are in `scratchpad/r4/bento-grid-v2/{light,dark,extra}`, with before shots and density numbers in `before/`.
 
+## Round 5: calmer and structured
+
+### Why
+
+Two friends tested the live preview and scored it 3/5 and 2/5, the lowest of the finalists. The written comment (translated from Greek) was that the data felt unstructured, the UI was unappealing and there were too many different colours. The one thing they praised was the map with the pin showing where Andreas is based. Andreas's own taste points the same way: Apple-native, clean grids, restraint and one confident accent colour.
+
+Round 5 changes two things. The palette is now neutrals plus one accent, and every panel sits on a visible column grid with one tile anatomy. All facts and content are still reachable.
+
+![Before and after, hero](style-preview/r5/compare-hero.jpg)
+![Before and after, What I do](style-preview/r5/compare-services.jpg)
+![Before and after, Contact](style-preview/r5/compare-contact.jpg)
+
+### Palette: before and after
+
+| | Round 4 | Round 5 |
+| --- | --- | --- |
+| Tile fills | White, graphite, black "night", five gradient families (fleet blue→indigo, security emerald, automation orange→pink, ai violet, itsm teal), an aurora name tile, a blue gradient CTA and a silver studio sweep | **White `#FFFFFF` on `#F5F5F7`** (light) and **graphite `#1C1C1E` on black** (dark). The only other surface is a neutral studio sweep behind the hero laptop (`#FBFBFD → #ECEEF2`, or `#2A2A2E → #1C1C1E` in dark). |
+| Accent | `#0071E3` / `#2997FF` for links, plus white pills on coloured tiles | **One accent.** `#0066CC` for accent text and marks, `#0071E3` for filled buttons, `#2997FF` in dark. It marks what you can press (the primary pills, affordances on hover, links and Verify) and the key figures (550+, 70%, Jamf 200, 07+, 03, 95%+, the Athens time). |
+| Name | Gradient surname (blue → indigo → red) | Two-tone ink: first name in `#1D1D1F`, surname in muted `#6E6E73` (in dark, `#F5F5F7` / `#A1A1A6`) |
+| Status and extras | Green live dots, green `➜ whoami`, orange clock hand, rainbow conic border, green/orange activity rings, gradient icon wells, per-brand social wells | Accent live dot, muted `$ whoami`, no clock, no border light, no rings. Icon wells are a neutral fill with the icon in the accent. Social icons are monochrome. |
+| Kept in colour | | **Official brand logos** (logo wall, service clusters), **project screenshots** and the **Athens map** (the Apple Maps palette the testers liked). The navigation memoji now sits on a neutral disc (`#E8E8ED` / `#2C2C2E`). |
+
+**Contrast (WCAG 2.x, normal text).**
+
+| Pair | Ratio |
+| --- | --- |
+| `#1D1D1F` on white | 16.8 : 1 |
+| Muted `#6E6E73` on white / on `#F5F5F7` | 5.07 / 4.66 : 1 |
+| Accent text `#0066CC` on white / on `#F5F5F7` / on the neutral avatar disc `#E8E8ED` | 5.57 / 5.11 / 4.56 : 1 |
+| White on the `#0071E3` accent pill | 4.70 : 1 |
+| `#F5F5F7` / muted `#A1A1A6` on `#1C1C1E` | 15.6 / 6.61 : 1 |
+| Muted `#A1A1A6` on `#2C2C2E` (logo squares, fills) | 5.42 : 1 |
+| Accent `#2997FF` on `#1C1C1E` / on black | 5.64 / 6.96 : 1 |
+| Map card: accent time on light glass / on dark glass | 4.58 / 5.93 : 1 |
+
+`#0071E3` as *text* on the `#F5F5F7` page background is only 4.31 : 1. That is why the accent is split, the way Apple splits it: `--accent` (`#0066CC`) for text and marks, and `--accent-fill` (`#0071E3`) for filled controls.
+
+### Structure: one grid, one anatomy
+
+**Column modules.** Each panel is still 12 × 6 on desktop, but tiles now snap to a small set of widths:
+
+| Panel | Modules | Layout |
+| --- | --- | --- |
+| Hero | 4 + 4 + 4 | Rows 1–4: name and actions (8 columns), selected work (4). Rows 5–6: three key figures, one per module. |
+| About | 3 + 3 + 3 + 3 | Rows 1–4: heading and story (left half), four key figures in a 2 × 2 (right half). Row 5: four core skills. Row 6: toolkit. |
+| What I do | 3 + 3 + 3 + 3 | **Eight equal tiles**, 4 × 2: heading, Apple fleet, endpoint security, automation, then AI, service management, networks and "Let's talk". The flagship leads by position, not size. |
+| Career | 4 + 8 | Heading, current role and timeline on the left. Six earlier roles, two degrees and four credentials on a 2-column grid on the right. |
+| Projects | 4 + 8 | Heading and featured case study on the left. Ten equal project tiles and GitHub on the right. |
+| Contact | 4 + 8 | Heading and availability on top. Email and profiles on the left, the **Athens map** across 8 columns × 4 rows on the right. |
+
+**Tile anatomy.** Every tile uses the same padding and one of two shapes.
+
+- **Block tile.** A label row on top (`.tile-head`: an 11 px uppercase `.t-label` on the left, the tile's only control on the right, which is an "i", a "+" or an arrow), then the content at the foot of the tile: a `.t-value` figure in the accent or a `.t-title`, then a `.t-caption`. Titles and figures therefore share a baseline across a row.
+- **Row tile.** One entry in a list (skills, earlier roles, degrees): an optional icon well, a title and caption, and the control on the right, all vertically centred (`.row-tile`).
+
+There are four type sizes for tile content: `.t-label`, `.t-value`, `.t-title` and `.t-caption`, all defined once in `globals.css`. `Bento.tsx` adds `TileHead` and `Figure` so that every panel builds its tiles the same way.
+
+**Reading order.** Each panel reads title → key facts → details:
+
+- **Hero.** Role and Athens time → name → `whoami` → *View my work* (accent) / *Get in touch* (outline) / LinkedIn, GitHub, Email → 550+ · 70% · Jamf 200.
+- **About.** Story → 550+ · 07+ · 03 · 95%+ → skills → toolkit.
+- **Contact.** Availability and *Send message* → email → profiles → map.
+
+**Grouping and fewer one-off tiles (65 → 57 tiles).**
+
+- The clock, the socials tile, the two CTA tiles and the rings are folded into the name tile and the three figure tiles.
+- The About Mac-glyph tile and the credentials list became the 2 × 2 figures. The credentials, with their Verify links, now sit behind the "i" on "03 Certifications".
+- On Contact, GitHub, LinkedIn and the résumé are one **Profiles** list, and the QR code moved behind a QR hotspot on the Email tile.
+- `AnalogClock`, `FleetRings` and `MacGrid` were removed.
+
+**Projects.** Screenshots now sit in a neutral inset frame with the name, year and links on the tile below. The dark frosted caption bars over the image, the blurred colour fill and the Ken Burns drift are gone. The featured case study keeps a fixed 16:10 frame, so it no longer shows a tall grey void.
+
+### The Athens map, featured
+
+The map is now the largest tile on Contact: 8 columns × 4 rows, about 920 × 530 at 1440 × 900.
+
+- **Larger canvas.** The canvas grew from 840 × 780 to 1320 × 960 px so that the fixed 30 px/km scale still covers the bigger tile, up to 1920 × 1080, without stretching. The coast, the Aigaleo ridge, the Attiki Odos, Mesogeion, Athinon, Kifisias, Vouliagmenis and Poseidonos, and the district street grids were extended to ±22 km east–west and ±16 km north–south.
+- **Bigger pin.** The memoji pin is 4 rem on desktop.
+- **Location card.** The card reads "LOCATION / Athens, Greece · 21:34", with the time in the accent. The "i" still holds the coordinates and time zone.
+
+![Map, light](style-preview/r5/map-closeup-light.png)
+![Map, dark, Greek](style-preview/r5/map-closeup-dark-gr.png)
+
+### Motion (what is left)
+
+- The spring tile entrance, the counters, the showcase cross-fade, the typewriter and the map pin's pulse remain.
+- The aurora drift, the conic border light, the Ken Burns drift, the ring fill, the glyph wave and the ticking clock are removed.
+- Hover is still only the 4 px lift and the affordance turning accent.
+- There are no pointer-following effects.
+
+### What moved where (nothing removed)
+
+| Content | Round 4 | Round 5 |
+| --- | --- | --- |
+| 95%+ SLA across 350+ tickets | Hero ring, About tile | Hero "Fleet" "i", About figure |
+| Athens local time | Hero clock tile, map card | Hero label row, map card, map "i" |
+| LinkedIn / GitHub / Email | Hero socials tile | Hero icon buttons, Contact Profiles list |
+| Credentials with Verify | About credentials tile | "i" on About "03 Certifications", Career credential tiles, Jamf 200 hero tile |
+| QR (mailto) | Contact QR tile | QR hotspot on the Contact Email tile |
+| "Each glyph = 10 Macs" | Mac grid "i" | Removed along with the glyph chart (the figure 550+ stays) |
+| Institution of each credential | Dialog only | Caption on the Career credential tile, and in the dialog |
+
+New bilingual labels live in `content.bento.tile` (EN and GR): the status, story, fleet, automation, certified, core skills, profiles, email and at-a-glance labels.
+
+### Verification (Round 5)
+
+- `npm run lint` reports 0 errors and 0 warnings. `tsc --noEmit` is clean and `next build` passes.
+- A fit check (`scratchpad/cap/r5.js`) found no clipped content at 1440 × 900 (EN and GR, light and dark) or at 1280 × 720.
+- An interaction check (`r5-interact.js`) confirmed:
+  - the fleet, credentials, QR and map hotspots open, and Escape returns focus;
+  - a click outside closes a hotspot;
+  - the skill and service dialogs open;
+  - the map canvas covers its tile at 1024 × 768, 1440 × 900 and 1920 × 1080;
+  - under reduced motion all 57 bento tiles are at opacity 1 and the pin pulse's `animation-name` is `none`.
+- Horizontal overflow at 390 px is 0 px in EN light, GR light and GR dark.
+- Previews are in `scratchpad/r5/bento-grid-v2/{light,dark,extra}`, with side-by-side comparisons in `compare/` and before shots in `before/`.
+
 ## Previews
+
+Round 5 state. The dialog shots of the project, the skill in Greek and the mobile menu are from Round 4. Those components only changed their icon-well colour.
 
 ### Light, 1440 × 900
 

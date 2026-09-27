@@ -196,6 +196,8 @@ export interface Content {
         /** Accessible names (and popover titles) of the "i" hotspots. */
         spot: { rings: string; story: string; macs: string; map: string; toolkit: string; role: string }
         coordinates: string
+        /** Round 5: the label row that opens each tile. */
+        tile: { status: string; story: string; fleet: string; automation: string; certified: string; coreSkills: string; profiles: string; email: string; stats: string }
     }
 }
 
@@ -762,7 +764,7 @@ export const content: Record<'en' | 'gr', Content> = {
             city: "Athens",
             mapPlaces: { piraeus: "Piraeus", gulf: "Saronic Gulf" },
             spot: {
-                rings: "What the rings show",
+                rings: "Fleet details",
                 story: "More about me",
                 macs: "About this chart",
                 map: "Location details",
@@ -770,6 +772,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 role: "Responsibilities",
             },
             coordinates: "Coordinates",
+            tile: { status: "Availability", story: "Who I am", fleet: "Fleet", automation: "Automation", certified: "Certified", coreSkills: "Core skills", profiles: "Profiles", email: "Email", stats: "At a glance" },
         },
         copyright: "© 2026 Created By Andreas Fragkiadakis. All rights reserved."
     },
@@ -1327,7 +1330,7 @@ export const content: Record<'en' | 'gr', Content> = {
             city: "Αθήνα",
             mapPlaces: { piraeus: "Πειραιάς", gulf: "Σαρωνικός" },
             spot: {
-                rings: "Τι δείχνουν οι δακτύλιοι",
+                rings: "Στοιχεία στόλου",
                 story: "Περισσότερα για μένα",
                 macs: "Σχετικά με το γράφημα",
                 map: "Στοιχεία τοποθεσίας",
@@ -1335,6 +1338,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 role: "Αρμοδιότητες",
             },
             coordinates: "Συντεταγμένες",
+            tile: { status: "Διαθεσιμοτητα", story: "Ποιος Ειμαι", fleet: "Στολος", automation: "Αυτοματοποιηση", certified: "Πιστοποιηση", coreSkills: "Βασικες Δεξιοτητες", profiles: "Προφιλ", email: "Email", stats: "Με μια ματια" },
         },
         copyright: "© 2026 Created By Ανδρέας Φραγκιαδάκης. All rights reserved."
     }

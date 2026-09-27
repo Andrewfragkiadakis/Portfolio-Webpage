@@ -4,6 +4,18 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 
 ## [Unreleased]
 
+### Round 5 (Bento Grid v2): calmer and structured
+- **One accent, neutral tiles.** The five gradient families, the aurora name tile, the conic border light, the gradient surname, the blue CTA tile, the graphite and night tiles, the coloured social wells and the gradient icon wells are all gone. Tiles are white on `#F5F5F7` or `#1C1C1E` on black. The accent is split: `#0066CC` for text and marks, `#0071E3` for fills, `#2997FF` in dark. Brand logos, screenshots and the Athens map keep their colour.
+- **Grid and tile anatomy.** Tiles snap to column modules per panel. Every tile opens with the same label row (`TileHead`: label on the left, one control on the right) and uses one type scale (`.t-label`, `.t-value`, `.t-title`, `.t-caption`). List entries use `.row-tile`. `Figure` renders the accent key figures.
+- **Hero.** The name, role, time, primary and secondary actions and profile links are in one tile. Three figure tiles follow: 550+ Macs, 70% faster onboarding and Jamf 200. The clock, the rings, the socials tile and the CTA tiles were removed.
+- **About.** The heading and story sit beside a 2 × 2 of figures (550+, 07+, 03, 95%+). The credentials, with their Verify links, moved behind the "i" on "03 Certifications". The Mac-glyph chart was removed.
+- **What I do.** Eight equal tiles, with Apple Fleet first.
+- **Career.** The current role is neutral with an accent status dot. Roles and degrees are row tiles showing "years · company". Credential tiles show the institution and a Verify link in the accent.
+- **Projects.** Screenshots sit in neutral inset frames, with the caption below the image. The dark frosted bars, the blurred fills, the Ken Burns drift and the glow ring were removed.
+- **Contact.** The Athens map is featured across 8 × 4 cells, and the canvas was extended to 1320 × 960 px so that it covers up to 1920 × 1080 without stretching. Email carries a QR hotspot. GitHub, LinkedIn and the résumé are one Profiles list.
+- `ProjectImage` has a `plain` option (no blurred fill), and `InfoSpot` has a `qr` icon. The `onColor` tone was removed.
+- Removed `AnalogClock`, `FleetRings` and `MacGrid`.
+
 ### Round 4 (Bento Grid v2)
 - **Contact map rebuilt**: Apple Maps-style SVG of the Athens basin, drawn from simplified real geography (the Saronic Gulf coast, Piraeus, Hymettus and Aigaleo, the motorways and main avenues, and the central parks). It is drawn at a fixed 30 px/km and never stretched, so lines stay crisp at every tile size. It has light and night palettes and a "Find My" memoji pin, and it makes no network requests.
 - **`InfoSpot`**: quiet "i" / "+N" hotspot. It is a real button with `aria-expanded`. It opens a portalled popover that Escape, a click outside or a tap outside closes, it returns focus to the button, and only one is open at a time. Details moved behind it: the hero ring legend, the second About paragraph and the current focus, the Mac glyph legend, all 29 tools with names, and the map's coordinates and time zone.

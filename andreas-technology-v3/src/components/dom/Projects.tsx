@@ -5,13 +5,14 @@ import { useState } from 'react'
 import type { Project } from '@/data/content'
 import Modal from '@/components/ui/Modal'
 import ProjectImage from '@/components/ui/ProjectImage'
-import { Bento, GlowRing, SectionTile, Tile, TileLink } from '@/components/ui/Bento'
-import type { CSSProperties } from 'react'
+import { Bento, SectionTile, Tile, TileHead, TileLink } from '@/components/ui/Bento'
 
 /**
- * The other ten projects: a 4 × 3 block of 2 × 2 tiles on the right two-thirds of the
- * panel. The last two slots of the bottom row hold the GitHub tile instead.
+ * The other ten projects: a 4 × 3 block of equal tiles on the right two-thirds of the
+ * panel, each with the same anatomy (framed screenshot → name → year and links). The
+ * last two slots of the bottom row hold the GitHub tile instead.
  */
+const FRAME = 'relative m-1.5 overflow-hidden rounded-[calc(var(--radius-tile)-0.375rem)] bg-[var(--surface-2)]'
 const SMALL_AREAS = [
     'md:col-[5/7] md:row-[1/3]', 'md:col-[7/9] md:row-[1/3]', 'md:col-[9/11] md:row-[1/3]', 'md:col-[11/13] md:row-[1/3]',
     'md:col-[5/7] md:row-[3/5]', 'md:col-[7/9] md:row-[3/5]', 'md:col-[9/11] md:row-[3/5]', 'md:col-[11/13] md:row-[3/5]',
@@ -20,7 +21,7 @@ const SMALL_AREAS = [
 
 function ProjectLinks({ project, live, code, small = false }: { project: Project; live: string; code: string; small?: boolean }) {
     const cls = small
-        ? 'w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-caption hover:bg-white hover:text-[#1d1d1f] transition-colors duration-300'
+        ? 'w-8 h-8 rounded-full bg-[var(--fill)] flex items-center justify-center text-caption hover:bg-[var(--accent-fill)] hover:text-white transition-colors duration-300'
         : 'pill pill--quiet !min-h-9 !text-body-sm'
     return (
         <span className="tile-above flex items-center gap-1.5">
@@ -67,28 +68,22 @@ export default function Projects() {
                     className="col-span-2 md:col-[1/5] md:row-[1/2] min-h-[8rem] md:min-h-0"
                 />
 
-                {/* Featured project */}
+                {/* Featured project: the same anatomy as the others, larger. */}
                 {featured && (
                     <Tile as="article" index={1} interactive className="col-span-2 md:col-[1/5] md:row-[2/7] !p-0">
                         {openButton(featured)}
-                        <GlowRing />
-                        <div className="relative w-full aspect-[16/10] md:aspect-auto md:flex-1 md:min-h-[14rem] shrink-0 overflow-hidden bg-[var(--surface-2)]">
-                            <div className="kb absolute inset-0">
-                                <ProjectImage project={featured} sizes="(max-width: 1023px) 100vw, 34vw" />
-                            </div>
-                            <span className="absolute top-4 left-4 chip chip--glass">
-                                {t.projectsSection.caseStudy}
-                            </span>
+                        <div className={`${FRAME} aspect-[16/10] shrink-0`}>
+                            <ProjectImage project={featured} sizes="(max-width: 1023px) 100vw, 34vw" plain />
                         </div>
-                        <div className="shrink-0 p-[var(--tile-pad)] flex flex-col gap-2">
-                            <div className="flex items-start justify-between gap-4">
-                                <h3 className="text-xl md:text-[min(1.75vw,3.1vh)] font-bold tracking-[-0.025em] leading-tight el-caps">
-                                    {featured.name}
-                                </h3>
-                                {featured.year && <span className="text-sm font-semibold tabular-nums text-[var(--muted)] pt-1">{featured.year}</span>}
-                            </div>
-                            <p className="text-sm md:text-[min(0.95vw,1.7vh)] leading-snug text-[var(--muted)] line-clamp-2">{featured.description}</p>
-                            <div className="flex flex-wrap items-center justify-end gap-3 pt-1">
+                        <div className="flex-1 min-h-0 px-[var(--tile-pad)] pb-[var(--tile-pad)] pt-2 flex flex-col gap-2">
+                            <TileHead label={t.projectsSection.caseStudy}>
+                                {featured.year && <span className="t-label tabular-nums">{featured.year}</span>}
+                            </TileHead>
+                            <h3 className="text-xl md:text-[min(1.6vw,2.9vh)] font-bold tracking-[-0.025em] leading-tight el-caps">
+                                {featured.name}
+                            </h3>
+                            <p className="t-caption line-clamp-4 short:line-clamp-2">{featured.description}</p>
+                            <div className="mt-auto flex flex-wrap items-center gap-3 pt-1">
                                 <ProjectLinks project={featured} live={t.projectsSection.live} code={t.projectsSection.code} />
                             </div>
                         </div>
@@ -96,50 +91,38 @@ export default function Projects() {
                 )}
 
                 {/* Everything else */}
-                {rest.map((project, i) => {
-                    return (
-                        <Tile key={project.name} as="article" index={2 + i} interactive className={`col-span-1 ${SMALL_AREAS[i] ?? ''} !p-0 justify-end min-h-[14rem] md:min-h-0 [--caption-h:4.6rem] short:[--caption-h:4.1rem]`}>
-                            {openButton(project)}
-                            {/* Image first: the screenshot fills the tile and drifts slowly (Ken Burns). */}
-                            <div className="absolute inset-0 overflow-hidden bg-[var(--surface-2)]">
-                                {project.image && (
-                                    <div className="kb absolute inset-0" style={{ '--kb-delay': `${-i * 2.7}s`, '--kb-origin': i % 2 ? '30% 40%' : '70% 60%' } as CSSProperties}>
-                                        <ProjectImage
-                                            project={project}
-                                            sizes="(max-width: 1023px) 50vw, 240px"
-                                            containBox="inset-x-2 top-2 bottom-[var(--caption-h)]"
-                                        />
-                                    </div>
-                                )}
+                {rest.map((project, i) => (
+                    <Tile key={project.name} as="article" index={2 + i} interactive className={`col-span-1 ${SMALL_AREAS[i] ?? ''} !p-0 min-h-[14rem] md:min-h-0`}>
+                        {openButton(project)}
+                        <div className={`${FRAME} flex-1 min-h-0`}>
+                            {project.image && (
+                                <ProjectImage project={project} sizes="(max-width: 1023px) 50vw, 240px" plain containBox="inset-2" />
+                            )}
+                        </div>
+                        <div className="px-3.5 md:px-[calc(var(--tile-pad)*0.8)] pb-2.5 short:pb-1.5 pt-1 flex flex-col">
+                            <h3 className="t-title !text-[0.875rem] md:!text-[min(0.95vw,1.7vh)] truncate el-caps" title={project.name}>
+                                {project.name}
+                            </h3>
+                            <div className="flex items-center justify-between gap-2 min-h-8 mt-0.5">
+                                <span className="t-caption tabular-nums">{project.year}</span>
+                                <ProjectLinks project={project} live={t.projectsSection.live} code={t.projectsSection.code} small />
                             </div>
-                            {/* Caption bar: frosted glass over the image. */}
-                            <div className="relative m-1.5 rounded-[calc(var(--radius-tile)-0.375rem)] px-3 py-2 short:py-1.5 flex flex-col gap-1 bg-[rgba(18,18,22,0.74)] text-white backdrop-blur-xl backdrop-saturate-150 ring-1 ring-white/10">
-                                <h3 className="text-[0.8125rem] md:text-[min(0.9vw,1.6vh)] font-semibold leading-tight line-clamp-2 short:line-clamp-1 el-caps">
-                                    {project.name}
-                                </h3>
-                                <div className="flex items-center justify-between gap-2 min-h-8">
-                                    <span className="min-w-0 text-[0.625rem] font-semibold tracking-wide text-white/80 tabular-nums">{project.year}</span>
-                                    <ProjectLinks project={project} live={t.projectsSection.live} code={t.projectsSection.code} small />
-                                </div>
-                            </div>
-                        </Tile>
-                    )
-                })}
+                        </div>
+                    </Tile>
+                ))}
                 <TileLink
                     index={3 + rest.length}
-                    tone="graphite"
                     href="https://github.com/Andrewfragkiadakis"
                     label={`${t.projectsSection.githubCta} (GitHub profile)`}
-                    className="col-span-2 md:col-[9/13] md:row-[5/7] justify-between gap-4 min-h-[9rem] md:min-h-0"
+                    className="col-span-2 md:col-[9/13] md:row-[5/7] gap-4 min-h-[9rem] md:min-h-0"
                 >
-                    <i className="fab fa-github absolute -right-[3%] -bottom-[22%] text-[11rem] md:text-[min(15vw,26vh)] opacity-[0.07] pointer-events-none" aria-hidden="true" />
-                    <span className="flex items-start justify-between gap-3">
-                        <i className="fab fa-github text-4xl md:text-[min(3.2vw,5.6vh)]" aria-hidden="true" />
+                    <span className="tile-head">
+                        <span className="icon-well !text-[var(--foreground)]" aria-hidden="true"><i className="fab fa-github text-lg" /></span>
                         <span className="tile-affordance" aria-hidden="true"><i className="fas fa-arrow-right -rotate-45" /></span>
                     </span>
-                    <span className="block">
-                        <span className="block eyebrow normal-case tracking-normal mb-1">github.com/Andrewfragkiadakis</span>
-                        <span className="block text-xl md:text-[min(1.7vw,3vh)] font-bold tracking-[-0.025em] leading-tight el-caps">{t.projectsSection.githubCta}</span>
+                    <span className="block mt-auto">
+                        <span className="block t-caption mb-1">github.com/Andrewfragkiadakis</span>
+                        <span className="block t-title !text-xl md:!text-[min(1.6vw,2.9vh)] !font-bold el-caps">{t.projectsSection.githubCta}</span>
                     </span>
                 </TileLink>
             </Bento>
