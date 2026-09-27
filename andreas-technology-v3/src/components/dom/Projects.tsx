@@ -6,7 +6,8 @@ import { useContent } from '@/hooks/useContent'
 import type { KeynoteCopy, Project } from '@/data/content'
 import Modal from '@/components/ui/Modal'
 import { ProjectShot } from '@/components/ui/Device'
-import { ArrowOut, Chevron, Headline, Rise, ScaleIn } from '@/components/ui/keynote'
+import { ArrowOut, Chevron, HEADER_GAP, Rise, ScaleIn, SLIDE_CLASS, SlideHeader } from '@/components/ui/keynote'
+import { splitName } from '@/utils/format'
 import { EASE_APPLE } from '@/utils/motion'
 
 type ProjectLink = { href: string; label: string }
@@ -52,37 +53,27 @@ export default function Projects() {
     const [dialog, setDialog] = useState<Project | null>(null)
 
     const project = t.projects[Math.min(activeIndex, t.projects.length - 1)]
+    const stageName = splitName(project.name)
 
     return (
-        <section
-            id="projects"
-            aria-labelledby="projects-title"
-            className="relative w-full md:h-full flex items-center px-6 sm:px-10 md:px-[max(3rem,7vw)] py-24 md:py-0"
-        >
+        <section id="projects" aria-labelledby="projects-title" className={SLIDE_CLASS}>
             <div className="relative mx-auto w-full max-w-[71rem]">
-                <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-                    <div>
-                        <Rise>
-                            <p className="t-eyebrow">{k.projects.eyebrow}</p>
-                        </Rise>
-                        <Headline
-                            id="projects-title"
-                            text={k.projects.headline}
-                            className="t-headline mt-2 text-[2.5rem] md:text-[min(4.4vw,7.2vh)]"
-                        />
-                    </div>
-                    <Rise delay={0.15} className="md:pb-1.5">
+                <SlideHeader
+                    id="projects-title"
+                    eyebrow={k.projects.eyebrow}
+                    headline={k.projects.headline}
+                    aside={
                         <a href={t.github} target="_blank" rel="noopener noreferrer" className="kn-link t-body" aria-label={`${k.projects.github} (${k.common.newTab})`}>
                             {k.projects.github}
                             <ArrowOut />
                         </a>
-                    </Rise>
-                </div>
+                    }
+                />
 
-                <div className="mt-10 md:mt-[min(3rem,5vh)] grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-x-[4vw]">
+                <div className={`${HEADER_GAP} grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-x-[4vw]`}>
                     {/* Stage (desktop): the selected project as a product shot. */}
                     <div className="hidden md:flex md:col-span-7 flex-col" id="project-stage" aria-live="polite">
-                        <ScaleIn className="relative h-[min(46vh,28rem)] flex items-end justify-center">
+                        <ScaleIn className="relative h-[min(40vh,25rem)] flex items-end justify-center">
                             <AnimatePresence mode="wait" initial={false}>
                                 <motion.div
                                     key={project.name}
@@ -95,19 +86,20 @@ export default function Projects() {
                                     <ProjectShot
                                         project={project}
                                         sizes="(min-width: 1024px) 46vw, 100vw"
-                                        className={project.device === 'phone' ? '' : 'w-full'}
+                                        className={project.device === 'phone' ? '' : project.device === 'bare' ? 'w-[86%] mb-[3%]' : 'w-full'}
                                         phoneClassName="w-[min(13rem,21vh)]"
                                     />
                                 </motion.div>
                             </AnimatePresence>
                         </ScaleIn>
 
-                        <Rise delay={0.2} className="mt-[min(2.5rem,4.5vh)]">
-                            <div className="flex items-baseline gap-3">
-                                <h3 className="t-title text-[min(1.75rem,3.1vh)]">{project.name}</h3>
-                                {project.year && <span className="t-small text-[var(--muted)] tabular-nums">{project.year}</span>}
-                            </div>
-                            <p className="mt-2 t-body md:text-[min(1.0625rem,1.9vh)] text-[var(--muted)] line-clamp-2 max-w-[40rem]">{project.description}</p>
+                        {/* Fixed-height caption, so the shot and links never jump between projects. */}
+                        <Rise delay={0.2} className="mt-[min(1.75rem,3.2vh)]">
+                            <h3 className="t-title text-[min(1.75rem,3.1vh)] truncate">{stageName.title}</h3>
+                            <p className="mt-1 t-small md:text-[min(0.9375rem,1.7vh)] text-[var(--muted)] truncate">
+                                {[stageName.subtitle, project.year].filter(Boolean).join(' · ')}
+                            </p>
+                            <p className="mt-3 t-body md:text-[min(1.0625rem,1.9vh)] text-[var(--muted)] line-clamp-2 min-h-[2.94em] max-w-[40rem]">{project.description}</p>
                             <div className="mt-3">
                                 <ProjectLinks project={project} onOpen={() => setDialog(project)} k={k.projects} newTab={k.common.newTab} />
                             </div>
@@ -120,6 +112,7 @@ export default function Projects() {
                         <ul className="border-t border-[var(--line)]">
                             {t.projects.map((item, index) => {
                                 const isActive = index === activeIndex
+                                const name = splitName(item.name)
                                 return (
                                     <li key={item.name} className="border-b border-[var(--line)]">
                                         <button
@@ -128,7 +121,10 @@ export default function Projects() {
                                             aria-pressed={isActive}
                                             className={`group w-full flex items-center justify-between gap-4 text-left py-3.5 md:py-[min(0.7rem,1.2vh)] transition-colors duration-300 ${isActive ? 'text-[var(--foreground)]' : 'text-[var(--muted)] hover:text-[var(--foreground)]'}`}
                                         >
-                                            <span className={`t-body md:text-[min(1.0625rem,1.9vh)] min-w-0 ${isActive ? 'font-semibold' : ''}`}>{item.name}</span>
+                                            <span className="t-body md:text-[min(1.0625rem,1.9vh)] min-w-0 truncate">
+                                                <span className={isActive ? 'font-semibold' : ''}>{name.title}</span>
+                                                {name.subtitle && <span className="ms-2 text-[var(--muted)] font-normal">{name.subtitle}</span>}
+                                            </span>
                                             <span className="t-caption tabular-nums shrink-0 text-[var(--muted)]">{item.year}</span>
                                         </button>
 
@@ -143,7 +139,7 @@ export default function Projects() {
                                                     transition={{ duration: 0.45, ease: EASE_APPLE }}
                                                 >
                                                     <div className="pt-4 pb-7">
-                                                        <ProjectShot project={item} sizes="100vw" className="w-full" phoneClassName="w-[11rem]" />
+                                                        <ProjectShot project={item} sizes="(max-width: 1023px) 92vw, 100vw" className={item.device === 'bare' ? 'w-[88%] mx-auto' : 'w-full'} phoneClassName="w-[11rem]" />
                                                         <p className="mt-6 t-body text-[var(--muted)]">{item.description}</p>
                                                         <div className="mt-3">
                                                             <ProjectLinks project={item} onOpen={() => setDialog(item)} k={k.projects} newTab={k.common.newTab} />
@@ -178,7 +174,8 @@ export default function Projects() {
                             <p className="t-small text-[var(--muted)]">
                                 {[dialog.year, dialog.role].filter(Boolean).join(' · ')}
                             </p>
-                            <h3 id="project-modal-title" className="t-headline text-[1.75rem] sm:text-[2.5rem] mt-1 pr-10">{dialog.name}</h3>
+                            <h3 id="project-modal-title" className="t-headline text-[2rem] sm:text-[2.5rem] mt-1 pr-10">{splitName(dialog.name).title}</h3>
+                            {splitName(dialog.name).subtitle && <p className="mt-1 t-lede text-[1.1875rem] sm:text-[1.3125rem]">{splitName(dialog.name).subtitle}</p>}
                             <ul className="mt-4 flex flex-wrap gap-1.5">
                                 {dialog.tags.map((tag) => (
                                     <li key={tag} className="px-2.5 py-1 rounded-full bg-[var(--surface)] t-caption">{tag}</li>

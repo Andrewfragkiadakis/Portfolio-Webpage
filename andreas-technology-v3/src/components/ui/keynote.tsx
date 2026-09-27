@@ -69,12 +69,20 @@ export function ArrowOut({ className = '' }: { className?: string }) {
     )
 }
 
-/** Renders `**phrase**` as a highlighted phrase (see `.t-lede strong`). */
+/**
+ * Renders `**phrase**` as a highlighted phrase (see `.t-lede strong`). Short phrases
+ * ("550+ Macs", "freelance projects") are kept on one line so a line break never splits
+ * the emphasis; long ones may wrap so they can never overflow a phone.
+ */
 export function Rich({ text }: { text: string }) {
     const parts = text.split('**')
     return (
         <>
-            {parts.map((part, i) => (i % 2 === 1 ? <strong key={i}>{part}</strong> : <Fragment key={i}>{part}</Fragment>))}
+            {parts.map((part, i) =>
+                i % 2 === 1
+                    ? <strong key={i} className={part.length <= 22 ? 'whitespace-nowrap' : undefined}>{part}</strong>
+                    : <Fragment key={i}>{part}</Fragment>
+            )}
         </>
     )
 }
@@ -166,3 +174,42 @@ export function CountUp({ value, suffix = '', duration = 1.6 }: { value: number;
     // The server render shows the final value, so it is correct without JavaScript.
     return <span ref={ref}>{value}{suffix}</span>
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * Slide header
+ * ───────────────────────────────────────────────────────────────────────────── */
+
+/**
+ * The one header every content slide shares: eyebrow, headline and an optional aside
+ * (a sub-line or link) aligned to the headline's baseline on desktop. Keeping it in one
+ * place keeps the type sizes and the gap to the content identical from slide to slide.
+ */
+export function SlideHeader({ id, eyebrow, headline, aside }: { id: string; eyebrow: string; headline: string; aside?: ReactNode }) {
+    return (
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 md:gap-10">
+            <div className="min-w-0">
+                <Rise>
+                    <p className="t-eyebrow">{eyebrow}</p>
+                </Rise>
+                <Headline id={id} text={headline} className={`t-headline mt-1.5 md:mt-2 ${HEADLINE_SIZE}`} />
+            </div>
+            {aside && (
+                <Rise delay={0.15} className="md:pb-[0.35em] md:text-right md:max-w-[24rem] md:shrink-0">
+                    {aside}
+                </Rise>
+            )}
+        </div>
+    )
+}
+
+/**
+ * Section headline sizes: 40px on phones (a step smaller on the narrowest ones, so
+ * two-line Greek headlines do not break into three), apple.com's 56–64px on desktop.
+ */
+export const HEADLINE_SIZE = 'text-[clamp(2rem,9.4vw,2.5rem)] md:text-[min(4.4vw,7.2vh)]'
+
+/** Gap between a slide header and its content. */
+export const HEADER_GAP = 'mt-9 md:mt-[min(2.5rem,4.4vh)]'
+
+/** Content slides: top-aligned on desktop at the shared --slide-top, so headlines hold still between slides. */
+export const SLIDE_CLASS = 'relative w-full md:h-full flex md:items-start px-6 sm:px-10 md:px-[max(3rem,7vw)] py-20 md:pb-0 md:pt-[var(--slide-top)]'

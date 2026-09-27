@@ -6,7 +6,8 @@ import type { Education, Experience as Role } from '@/data/content'
 import Modal from '@/components/ui/Modal'
 import { ToolLogo } from '@/components/ui/ToolBadge'
 import { TOOL_BY_LABEL, type Tool, type ToolLabel } from '@/data/tools'
-import { ArrowOut, Chevron, Headline, Rise } from '@/components/ui/keynote'
+import { ArrowOut, Chevron, HEADER_GAP, Rise, SLIDE_CLASS, SlideHeader } from '@/components/ui/keynote'
+import { shortPlace, yearSpan } from '@/utils/format'
 
 /** The stack named in the current role's own task list. */
 const NOW_STACK: ToolLabel[] = ['Jamf Pro', 'Bash / zsh', 'Python', 'TypeScript', 'MCP Servers', "acme.sh / Let's Encrypt"]
@@ -21,9 +22,9 @@ function Check() {
 }
 
 /**
- * Slide 5 — "Then. Now." The current role is the hero card; earlier roles run down a
- * timeline rail and education and credentials sit beside it. Every row opens a dialog
- * with the full detail, so the slide itself never needs to scroll.
+ * Slide 5 — "Then. Now." The current role is the hero tile; earlier roles and education
+ * are hairline lists that show only years and the organisation, so the slide reads at a
+ * glance. Every row opens a sheet with the full dates, place and detail.
  */
 export default function Experience() {
     const t = useContent()
@@ -34,22 +35,11 @@ export default function Experience() {
     const [current, ...earlier] = t.experience
 
     return (
-        <section
-            id="experience"
-            aria-labelledby="experience-title"
-            className="relative w-full md:h-full flex items-center px-6 sm:px-10 md:px-[max(3rem,7vw)] py-24 md:py-0"
-        >
+        <section id="experience" aria-labelledby="experience-title" className={SLIDE_CLASS}>
             <div className="mx-auto w-full max-w-[71rem]">
-                <Rise className="short:hidden">
-                    <p className="t-eyebrow">{k.experience.eyebrow}</p>
-                </Rise>
-                <Headline
-                    id="experience-title"
-                    text={k.experience.headline}
-                    className="t-headline mt-2 text-[2.5rem] md:text-[min(4.4vw,7.2vh)]"
-                />
+                <SlideHeader id="experience-title" eyebrow={k.experience.eyebrow} headline={k.experience.headline} />
 
-                <div className="mt-10 md:mt-[min(2.5rem,4vh)] grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-x-[3vw]">
+                <div className={`${HEADER_GAP} grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-x-[3vw]`}>
                     {/* Now — the current role as the hero tile. */}
                     <Rise delay={0.1} className="md:col-span-5">
                         <article className="tile tile--lg h-full p-7 md:px-[min(2.25rem,2.6vw)] md:py-[min(2rem,3.4vh)] flex flex-col" aria-labelledby="now-role">
@@ -57,7 +47,7 @@ export default function Experience() {
                                 <h3 className="t-small font-semibold">{k.experience.now}</h3>
                                 <span className="t-caption text-[var(--muted)] text-right">{current.duration}</span>
                             </div>
-                            <p id="now-role" className="t-title mt-4 text-[1.75rem] md:text-[min(1.75rem,3.2vh)]">{current.role}</p>
+                            <p id="now-role" className="t-title mt-4 md:mt-[min(1.25rem,2.2vh)] text-[1.75rem] md:text-[min(2rem,3.6vh)]">{current.role}</p>
                             <p className="mt-1.5 t-small text-[var(--muted)]">{current.company}</p>
                             <ul className="mt-6 md:mt-[min(1.5rem,2.6vh)]">
                                 {current.tasks.map((task) => (
@@ -66,7 +56,7 @@ export default function Experience() {
                                     </li>
                                 ))}
                             </ul>
-                            <ul className="mt-auto pt-5 flex flex-wrap gap-x-4 gap-y-2 short:hidden" aria-label={k.services.toolkit}>
+                            <ul className="mt-auto pt-6 flex flex-wrap gap-x-4 gap-y-2 md:hidden xl:flex xl:[@media(max-height:820px)]:hidden" aria-label={k.services.toolkit}>
                                 {nowStack.map((tool) => (
                                     <li key={tool.label} title={tool.label} className="inline-flex items-center gap-1.5 t-caption text-[var(--muted)]">
                                         <ToolLogo tool={tool} className="!h-3.5 text-[var(--foreground)]" />
@@ -87,16 +77,18 @@ export default function Experience() {
                                         type="button"
                                         onClick={() => setRole(item)}
                                         aria-label={`${item.role}, ${item.company} — ${k.experience.more}`}
-                                        className="group w-full text-left py-3 md:py-[min(0.6rem,1vh)] flex items-center justify-between gap-4"
+                                        className="group w-full text-left py-3 md:py-[min(0.625rem,1.05vh)] flex items-center justify-between gap-4"
                                     >
                                         <span className="min-w-0">
-                                            <span className="block t-caption text-[var(--muted)] tabular-nums">{item.duration}</span>
-                                            <span className="block mt-0.5 t-small md:text-[min(0.9375rem,1.7vh)] font-semibold group-hover:text-[var(--accent)] transition-colors">
+                                            <span className="block t-small md:text-[min(0.9375rem,1.7vh)] font-semibold group-hover:text-[var(--accent)] transition-colors">
                                                 {item.role}
                                             </span>
-                                            <span className="block t-caption text-[var(--muted)]">{item.company}</span>
+                                            <span className="block mt-0.5 t-caption text-[var(--muted)]">{shortPlace(item.company)}</span>
                                         </span>
-                                        <Chevron className="kn-chevron--nudge text-[var(--muted)] group-hover:text-[var(--accent)] transition-colors" />
+                                        <span className="shrink-0 flex items-center gap-2.5 t-caption text-[var(--muted)] tabular-nums">
+                                            {yearSpan(item.duration)}
+                                            <Chevron className="kn-chevron--nudge text-[var(--muted)] group-hover:text-[var(--accent)] transition-colors" />
+                                        </span>
                                     </button>
                                 </li>
                             ))}
@@ -108,7 +100,7 @@ export default function Experience() {
                         <h3 className="t-small font-semibold pb-3">{k.experience.education}</h3>
                         <ul className="border-t border-[var(--line)]">
                             {t.education.map((item) => (
-                                <li key={item.degree} className="py-3 md:py-[min(0.6rem,1vh)] border-b border-[var(--line)]">
+                                <li key={item.degree} className="py-3 md:py-[min(0.625rem,1.05vh)] border-b border-[var(--line)]">
                                     <button
                                         type="button"
                                         onClick={() => setEdu(item)}
@@ -118,7 +110,7 @@ export default function Experience() {
                                         {item.degree}
                                     </button>
                                     <span className="mt-0.5 flex items-center justify-between gap-3 t-caption text-[var(--muted)]">
-                                        <span className="min-w-0">{item.institution} · {item.duration}</span>
+                                        <span className="min-w-0 truncate" title={item.institution}>{shortPlace(item.institution)} · {yearSpan(item.duration).split(' – ').pop()}</span>
                                         {item.link && (
                                             <a
                                                 href={item.link}

@@ -18,6 +18,81 @@ It is a personal portfolio *in the style of* a launch page. The Apple logo is ne
 | 6 | Projects | Selected work. | Επιλεγμένα έργα. |
 | 7 | Contact | Let's build / something. | Ας φτιάξουμε / κάτι μαζί. |
 
+## Round 5: finishing polish
+
+Feedback from friends who tested the live preview: *"4/5. Best one, more minimal than the others; with a bit more work it becomes really complete."* and *"3/5."* The direction stays; this round is about finish.
+
+### Audit (round-4 build against apple.com's MacBook Pro / iPhone overview pages)
+
+Screenshots of every slide at 1440×900 and 1280×720, 390×844, light + dark, EN + GR (`scratchpad/r5/apple-keynote/before/`).
+
+**Slides and rhythm**
+- Every slide was vertically centred, so the eyebrow and headline jumped between 77px and 205px from the top as the track moved sideways. apple.com sections start at a fixed padding.
+- Slides at 1280×720 hid their eyebrows (`short:hidden`) on some slides but not others.
+- Services and Career sat within ~30px of the dot nav; About had ~200px of air under a half-empty right column.
+- About had no clear visual moment: four equal stats, and credentials and focus areas packed under the bio.
+- Career was the densest slide: full month-year ranges on every row ("September 2024 – May 2026"), full addresses ("University of West Attica, Athens, Greece"), role titles wrapping to three lines at 1024px, and an empty Now tile at 1280×720 once its tool row was hidden.
+- Services tiles had a large dead area above the (+) and the slide was the tallest one.
+
+**Type**
+- No `text-wrap: balance`: orphans such as "Benchmarks." and "system." alone on a line, and "zero-/touch" split at its hyphen in stat captions and tiles.
+- Emphasised phrases in ledes broke across lines ("freelance / projects").
+- Greek headlines used the English −0.009/−0.015em tracking, which crowds Greek capitals and accents; "Συμβαίνει δύο φορές;" broke into three lines on phones.
+- Credential pills in capitals ("JAMF 200", "TEE LICENSED"): not Apple's sentence case.
+
+**Projects and imagery**
+- Project names typeset raw: "Plano Plus - Signs & Visual Identity" with a hyphen, "HappyFox 🦊 - …" with an emoji; long names wrapped on the stage and pushed the links down, so the caption jumped between projects.
+- Letterboxed screenshots filled their spare space with a blurred, enlarged second copy of the image: grey smears around Silence Hero, and an extra decode plus a full-frame CSS blur for phones to repaint.
+- The bare HappyFox render was wider than every laptop screen; the laptop base read as a flat grey lens with no lip or contact shadow.
+
+**Components**
+- `:focus-visible` forced `border-radius: 6px` on everything, so a focused 28px tile or a pill briefly turned into a 6px rectangle.
+- Dialogs on phones were floating cards with a full-screen backdrop blur; apple.com and iOS use a bottom sheet.
+- Six stacked services tiles took four phone screens.
+- Hero: all type, no anchor for the credential the whole page is built on.
+- Contact: strong headline but nothing tying it back to the title slide.
+
+### Fixes
+
+**Rhythm**
+- `SlideHeader` (`ui/keynote.tsx`) is now the one header for Services, Tech specs, Career and Projects (eyebrow, headline, optional right-aligned aside), with shared `HEADLINE_SIZE` and `HEADER_GAP`. About uses the same classes.
+- Content slides are **top-aligned** at `--slide-top: clamp(1rem, 11vh − 3rem, 4.25rem)`, so the eyebrow sits at the same height on every content slide (103px at 1440×900, 83px at 1280×720). Hero and Contact stay centred, like title slides. The Now tile's tool row is hidden below 1280px width or 820px height, where the tile would otherwise outgrow the slide. Eyebrows are shown at every height; the `short:` variant is gone.
+- Phones: sections use 80px top and bottom padding (was 96px).
+
+**One visual moment per slide**
+1. Hero: the headline (the site's only colour) under the memoji, plus apple.com's quiet line under the buttons: "Jamf Certified Tech (Jamf 200) · Athens, Greece".
+2. About: **550+** set very large (144px at 1440×900) as the slide's hero figure, with 70%, 7+ yrs and 3 certifications under a hairline, and the credential pills under them. Focus areas became hairline rows with their glyphs in a 2 × 2 grid.
+3. What I do: the six tiles, tightened (smaller dead area, glyph 38px, text clear of the (+)): the grid is about 70px shorter at 1440×900.
+4. Tech specs: the hairline spec table, rows baseline-aligned with more even gaps.
+5. Career: the Now tile. The lists show years only ("2024 – 2026", right-aligned next to the chevron) and the organisation without its address; full dates and places stay in the sheets.
+6. Projects: the product shot. Names split into model + descriptor ("Plano Plus" / "Signs & Visual Identity"), emoji dropped; the caption has a fixed height, so the device and links hold still between projects.
+7. Contact: the memoji returns above the eyebrow, bookending the title slide.
+
+**Type**
+- `text-wrap: balance` on every heading, eyebrow and lede; `text-wrap: pretty` on paragraphs, list items and definitions.
+- "zero‑touch" uses a non-breaking hyphen (U+2011) everywhere; emphasised phrases up to 22 characters never break (`Rich`).
+- Greek: display tracking opened to −0.003em with line height 1.1, lede +0.004em; section headlines one step smaller on phones.
+- Credential pills in sentence case: "Jamf 200", "ITIL 4", "TEE licence" (GR "ΤΕΕ").
+
+**Imagery and devices**
+- `ProjectImage` drops the blurred duplicate. A letterboxed screenshot now sits on its own top and bottom edge colours (sampled from the files), so the bands disappear into the image: Silence Hero is seamless on white, Plano and the portfolio on near-black. One image, no filter.
+- Bare renders are sized to the laptop screen's width; the laptop gets a lit aluminium lip, a rounded opening notch and a soft contact shadow.
+
+**Components**
+- Focus ring: 2px blue, 3px offset, following each control's own radius (pills stay pills, tiles keep their corners); bare text links get a 4px radius.
+- Dialogs on phones are **bottom sheets**: full width, rounded top, iOS grabber, 92svh, no backdrop blur. From 640px up they stay centred cards.
+- Services on phones: apple.com's **horizontal snapping gallery** (80% width tiles with the next one peeking), one screen instead of four. The gallery scrolls inside itself, so the page still has 0px horizontal overflow.
+
+**Performance**
+- No new libraries; one fewer image decode and no CSS blur per project shot; no backdrop blur on phone sheets. Images remain next/image with `sizes`, lazy below the fold.
+
+### Checks (round 5)
+- `npm run lint`: 0 errors, 0 warnings. `npx next build`: passes.
+- Fit (content bounds between the nav and the dot nav): every slide fits 1440×900 and 1280×720 in EN and GR, both themes, and 1024×768 in Greek (the longest copy).
+- 390×844: 0px horizontal overflow (EN and GR, both themes).
+- Console: only the local 404 for `/_vercel/speed-insights/script.js`.
+- Previews: `style-preview/light|dark` refreshed; `style-preview/extra` has Greek slides, 1280×720 Career, dialogs, the phone gallery, bottom sheet and menu, a focus ring, every project on the stage (`project-stages.jpg`) and the intro.
+
 ## Round 4: what changed and why
 
 Andreas: *"It's too colourful, and some fonts and components look off from Apple's style. Redesign it — I like the general idea."* Also, for every branch: use the memoji technologist as the logo, not "AF" letters.
@@ -61,7 +136,7 @@ Andreas: *"It's too colourful, and some fonts and components look off from Apple
 | Class | Size | Weight | Tracking | Line height |
 |---|---|---|---|---|
 | `.t-hero` | 40 → 96px | 600 | −0.015em | 1.05 |
-| `.t-headline` | 40 → 64px | 600 | −0.009em | 1.08 |
+| `.t-headline` | 32–40 → 64px | 600 | −0.009em (Greek −0.003em, 1.1) | 1.08 |
 | `.t-title` | 21–28px | 600 | +0.007–0.011em | 1.14 |
 | `.t-eyebrow` | 17 → 21px | 600 | −0.022 → +0.011em | 1.19 |
 | `.t-lede` | 17 → 24px, grey with `**foreground**` phrases | 600 | +0.011em | 1.38 |
@@ -137,4 +212,4 @@ Andreas: *"It's too colourful, and some fonts and components look off from Apple
 | Folder | Contents |
 |---|---|
 | `light/`, `dark/` | `desktop-1-hero` … `desktop-7-contact` (1440×900), `mobile-1…7` (390×844) |
-| `extra/` | Greek hero and career (`gr-light-desktop-1/5`), Greek dark services, Greek mobile hero and menu, service / project / Greek bio dialogs, phone frame on the stage, 1280×720 career, the nav, the intro, and the new OG image |
+| `extra/` | (round 5) Greek hero, services and career (`gr-light-desktop-*`), 1280×720 career, project / service / Greek bio dialogs, every project on the stage (`project-stages.jpg`), a focus ring, the phone services gallery, bottom sheet, menu and phone frame, the intro, and the OG image |

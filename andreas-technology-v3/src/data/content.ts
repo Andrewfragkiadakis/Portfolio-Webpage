@@ -87,7 +87,7 @@ export interface KeynoteCopy {
         toLight: string; toDark: string; appearance: string; language: string; light: string; dark: string
     }
     intro: { headline: string; enter: string; skip: string }
-    hero: { headline: string; sub: string; viewWork: string; contact: string }
+    hero: { headline: string; sub: string; viewWork: string; contact: string; note: string }
     about: {
         eyebrow: string; headline: string; bio: string; fullStory: string; dialogTitle: string
         credentials: string; focus: string; yearsUnit: string
@@ -265,7 +265,7 @@ export const content: Record<'en' | 'gr', Content> = {
             credentialsLabel: "Credentials",
             description: [
                 "I am an IT & Computer Engineer (M.Eng.) leading Apple Fleet & IT Automation at Omilia, a global conversational-AI company, across a 550+ device environment. I own the Jamf Pro platform end-to-end and lead endpoint engineering for Checkpoint Harmony EDR, Microsoft Sentinel SIEM pipelines, and SSL certificate automation.",
-                "My work sits where security, automation and scale meet: CIS Benchmark hardening ahead of PCI-DSS and SOC 2 audits, and zero-touch macOS enrollment that cut onboarding time by 70%.",
+                "My work sits where security, automation and scale meet: CIS Benchmark hardening ahead of PCI-DSS and SOC 2 audits, and zero‑touch macOS enrollment that cut onboarding time by 70%.",
                 "I also drive enterprise AI adoption — Google Gemini org-wide, Atlassian Rovo Agents, and an AI-powered ticket-triage pipeline that cut average triage time across 350+ tickets a year.",
                 "Jamf Certified Tech (Jamf 200) | Licensed Computer Science Engineer (TEE) | ITIL 4 certified | Based in Athens | English (C2), Greek (Native), German (B2)"
             ]
@@ -319,7 +319,7 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fab fa-apple",
                 label: "Apple Fleet & MDM",
-                detail: "Jamf 200 certified. I own Jamf Pro end-to-end for a 550+ macOS fleet: zero-touch enrollment through Apple Business Manager, configuration profiles, patching, Self Service and day-to-day fleet hygiene."
+                detail: "Jamf 200 certified. I own Jamf Pro end-to-end for a 550+ macOS fleet: zero‑touch enrollment through Apple Business Manager, configuration profiles, patching, Self Service and day-to-day fleet hygiene."
             },
             {
                 icon: "fas fa-shield-halved",
@@ -360,12 +360,12 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fab fa-apple",
                 title: "Apple Fleet Engineering",
-                oneLiner: "550+ Macs on Jamf Pro. Zero-touch enrollment, 70% faster onboarding.",
-                description: "Jamf Certified Tech (Jamf 200). Managing macOS at scale with Jamf Pro and Apple Business Manager — zero-touch enrollment, configuration profiles, patch strategy, and fleet hygiene across hundreds of devices.",
-                detail: "I own Jamf Pro end-to-end for a 550+ Mac fleet. A new Mac enrolls itself through Apple Business Manager, pulls its profiles and apps, and is ready on day one — zero-touch enrollment cut onboarding time by 70%.",
+                oneLiner: "550+ Macs on Jamf Pro. Zero‑touch enrollment, 70% faster onboarding.",
+                description: "Jamf Certified Tech (Jamf 200). Managing macOS at scale with Jamf Pro and Apple Business Manager — zero‑touch enrollment, configuration profiles, patch strategy, and fleet hygiene across hundreds of devices.",
+                detail: "I own Jamf Pro end-to-end for a 550+ Mac fleet. A new Mac enrolls itself through Apple Business Manager, pulls its profiles and apps, and is ready on day one — zero‑touch enrollment cut onboarding time by 70%.",
                 highlights: [
                     "Jamf Certified Tech (Jamf 200)",
-                    "Zero-touch enrollment: 70% faster onboarding",
+                    "Zero‑touch enrollment: 70% faster onboarding",
                     "Configuration profiles, patching, Self Service and fleet hygiene"
                 ],
                 tools: ["Jamf Pro", "Apple Business Manager", "macOS", "Bash / zsh", "Swift", "AppleScript"]
@@ -441,7 +441,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 company: "OMILIA LTD, Athens, Greece",
                 duration: "September 2024 – May 2026",
                 tasks: [
-                    "Architected Jamf Pro zero-touch enrollment via Apple Business Manager for the 400+ macOS fleet — 70% onboarding-time reduction",
+                    "Architected Jamf Pro zero‑touch enrollment via Apple Business Manager for the 400+ macOS fleet — 70% onboarding-time reduction",
                     "Implemented CIS Benchmark hardening fleet-wide with the Cyber team — full compliance ahead of PCI-DSS and SOC 2 audits",
                     "Led enterprise EDR migration to Checkpoint Harmony across 400+ devices, resolving FileVault conflicts at cutover with zero data loss",
                     "Built a centralised SSL renewal pipeline (acme.sh, Let's Encrypt, DNS-01) for Cisco ISE, ESXi, Proxmox and HPE iLO — eliminated all manual cert toil",
@@ -525,7 +525,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 institution: "Jamf",
                 duration: "2026",
                 kind: "certification",
-                badge: "JAMF 200",
+                badge: "Jamf 200",
                 icon: "fab fa-apple",
                 featured: true,
                 details: [
@@ -548,7 +548,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 institution: "Technical Chamber of Greece (TEE)",
                 duration: "2025",
                 kind: "license",
-                badge: "TEE LICENSED",
+                badge: "TEE licence",
                 details: [
                     "Statutory professional licence to practise as a Computer Science Engineer in Greece",
                     "Requires an accredited five-year integrated Master's degree"
@@ -794,9 +794,10 @@ export const content: Record<'en' | 'gr', Content> = {
             intro: { headline: "Hello.", enter: "Enter", skip: "Skip intro" },
             hero: {
                 headline: "Apple fleets.\n*Automated.*",
-                sub: "I lead Apple Fleet & IT Automation at Omilia: **550+ Macs** on Jamf Pro, enrolled **zero-touch** and hardened to CIS Benchmarks.",
+                sub: "I lead Apple Fleet & IT Automation at Omilia: **550+ Macs** on Jamf Pro, enrolled **zero‑touch** and hardened to CIS Benchmarks.",
                 viewWork: "View work",
-                contact: "Contact"
+                contact: "Contact",
+                note: "Jamf Certified Tech (Jamf 200) · Athens, Greece"
             },
             about: {
                 eyebrow: "About",
@@ -807,7 +808,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 credentials: "Credentials",
                 focus: "Focus areas",
                 yearsUnit: "yrs",
-                stats: ["Macs managed on Jamf Pro", "faster onboarding, zero-touch", "in IT, infrastructure and security", "certifications, plus a TEE licence"]
+                stats: ["Macs managed on Jamf Pro", "faster onboarding, zero‑touch", "in IT, infrastructure and security", "certifications, plus a TEE licence"]
             },
             services: {
                 eyebrow: "What I do",
@@ -900,7 +901,7 @@ export const content: Record<'en' | 'gr', Content> = {
             credentialsLabel: "Πιστοποιησεις",
             description: [
                 "Είμαι Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) και ηγούμαι του τομέα Apple Fleet & IT Automation στην Omilia, μια παγκόσμια εταιρεία conversational AI, σε περιβάλλον άνω των 550 συσκευών. Διαχειρίζομαι εξ ολοκλήρου την πλατφόρμα Jamf Pro και ηγούμαι του endpoint engineering για Checkpoint Harmony EDR, pipelines Microsoft Sentinel SIEM και αυτοματοποίηση πιστοποιητικών SSL.",
-                "Η δουλειά μου βρίσκεται στο σημείο όπου συναντώνται η ασφάλεια, ο αυτοματισμός και η κλίμακα: θωράκιση κατά CIS Benchmarks ενόψει ελέγχων PCI-DSS και SOC 2, και zero-touch enrollment για macOS που μείωσε τον χρόνο onboarding κατά 70%.",
+                "Η δουλειά μου βρίσκεται στο σημείο όπου συναντώνται η ασφάλεια, ο αυτοματισμός και η κλίμακα: θωράκιση κατά CIS Benchmarks ενόψει ελέγχων PCI-DSS και SOC 2, και zero‑touch enrollment για macOS που μείωσε τον χρόνο onboarding κατά 70%.",
                 "Παράλληλα οδηγώ την υιοθέτηση AI σε εταιρικό επίπεδο — Google Gemini, Atlassian Rovo Agents και ένα AI pipeline διαλογής αιτημάτων που μείωσε τον μέσο χρόνο triage σε 350+ tickets ετησίως.",
                 "Jamf Certified Tech (Jamf 200) | Αδειούχος Μηχανικός Πληροφορικής (ΤΕΕ) | Πιστοποίηση ITIL 4 | Με έδρα την Αθήνα | Αγγλικά (C2), Ελληνικά (Μητρική), Γερμανικά (B2)"
             ]
@@ -952,7 +953,7 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fab fa-apple",
                 label: "Apple Fleet & MDM",
-                detail: "Πιστοποίηση Jamf 200. Διαχειρίζομαι εξ ολοκλήρου το Jamf Pro για στόλο 550+ macOS: zero-touch enrollment μέσω Apple Business Manager, configuration profiles, ενημερώσεις, Self Service και καθημερινή συντήρηση του στόλου."
+                detail: "Πιστοποίηση Jamf 200. Διαχειρίζομαι εξ ολοκλήρου το Jamf Pro για στόλο 550+ macOS: zero‑touch enrollment μέσω Apple Business Manager, configuration profiles, ενημερώσεις, Self Service και καθημερινή συντήρηση του στόλου."
             },
             {
                 icon: "fas fa-shield-halved",
@@ -993,12 +994,12 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fab fa-apple",
                 title: "Apple Fleet Engineering",
-                oneLiner: "550+ Mac στο Jamf Pro. Zero-touch enrollment, 70% ταχύτερο onboarding.",
-                description: "Jamf Certified Tech (Jamf 200). Διαχείριση macOS σε κλίμακα με Jamf Pro και Apple Business Manager — zero-touch enrollment, configuration profiles, στρατηγική ενημερώσεων και συντήρηση εκατοντάδων συσκευών.",
-                detail: "Διαχειρίζομαι εξ ολοκλήρου το Jamf Pro για στόλο 550+ Mac. Ένα νέο Mac εγγράφεται αυτόματα μέσω Apple Business Manager, λαμβάνει profiles και εφαρμογές και είναι έτοιμο από την πρώτη μέρα — το zero-touch enrollment μείωσε τον χρόνο onboarding κατά 70%.",
+                oneLiner: "550+ Mac στο Jamf Pro. Zero‑touch enrollment, 70% ταχύτερο onboarding.",
+                description: "Jamf Certified Tech (Jamf 200). Διαχείριση macOS σε κλίμακα με Jamf Pro και Apple Business Manager — zero‑touch enrollment, configuration profiles, στρατηγική ενημερώσεων και συντήρηση εκατοντάδων συσκευών.",
+                detail: "Διαχειρίζομαι εξ ολοκλήρου το Jamf Pro για στόλο 550+ Mac. Ένα νέο Mac εγγράφεται αυτόματα μέσω Apple Business Manager, λαμβάνει profiles και εφαρμογές και είναι έτοιμο από την πρώτη μέρα — το zero‑touch enrollment μείωσε τον χρόνο onboarding κατά 70%.",
                 highlights: [
                     "Jamf Certified Tech (Jamf 200)",
-                    "Zero-touch enrollment: 70% ταχύτερο onboarding",
+                    "Zero‑touch enrollment: 70% ταχύτερο onboarding",
                     "Configuration profiles, ενημερώσεις, Self Service και συντήρηση στόλου"
                 ],
                 tools: ["Jamf Pro", "Apple Business Manager", "macOS", "Bash / zsh", "Swift", "AppleScript"]
@@ -1074,7 +1075,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 company: "OMILIA LTD, Αθήνα",
                 duration: "Σεπτέμβριος 2024 – Μάιος 2026",
                 tasks: [
-                    "Σχεδίαση zero-touch enrollment με Jamf Pro και Apple Business Manager για στόλο 400+ macOS — μείωση χρόνου onboarding κατά 70%",
+                    "Σχεδίαση zero‑touch enrollment με Jamf Pro και Apple Business Manager για στόλο 400+ macOS — μείωση χρόνου onboarding κατά 70%",
                     "Εφαρμογή θωράκισης CIS Benchmark σε όλο τον στόλο σε συνεργασία με το τμήμα Cyber — πλήρης συμμόρφωση ενόψει ελέγχων PCI-DSS και SOC 2",
                     "Ηγεσία εταιρικής μετάβασης EDR σε Checkpoint Harmony σε 400+ συσκευές, με επίλυση συγκρούσεων FileVault χωρίς καμία απώλεια δεδομένων",
                     "Κατασκευή κεντρικού pipeline ανανέωσης SSL (acme.sh, Let's Encrypt, DNS-01) για Cisco ISE, ESXi, Proxmox και HPE iLO",
@@ -1156,7 +1157,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 institution: "Jamf",
                 duration: "2026",
                 kind: "certification",
-                badge: "JAMF 200",
+                badge: "Jamf 200",
                 icon: "fab fa-apple",
                 featured: true,
                 details: [
@@ -1425,9 +1426,10 @@ export const content: Record<'en' | 'gr', Content> = {
             intro: { headline: "Γεια σας.", enter: "Είσοδος", skip: "Παράλειψη" },
             hero: {
                 headline: "Στόλοι Apple.\n*Αυτοματοποιημένοι.*",
-                sub: "Ηγούμαι του Apple Fleet & IT Automation στην Omilia: **550+ Mac** στο Jamf Pro, με **zero-touch** enrollment και θωράκιση κατά CIS Benchmarks.",
+                sub: "Ηγούμαι του Apple Fleet & IT Automation στην Omilia: **550+ Mac** στο Jamf Pro, με **zero‑touch** enrollment και θωράκιση κατά CIS Benchmarks.",
                 viewWork: "Δείτε τη δουλειά μου",
-                contact: "Επικοινωνία"
+                contact: "Επικοινωνία",
+                note: "Jamf Certified Tech (Jamf 200) · Αθήνα"
             },
             about: {
                 eyebrow: "Σχετικά",
@@ -1438,7 +1440,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 credentials: "Πιστοποιήσεις",
                 focus: "Τομείς εστίασης",
                 yearsUnit: "έτη",
-                stats: ["Mac υπό διαχείριση στο Jamf Pro", "ταχύτερο onboarding, zero-touch", "στο IT, τις υποδομές και την ασφάλεια", "πιστοποιήσεις, συν άδεια ΤΕΕ"]
+                stats: ["Mac υπό διαχείριση στο Jamf Pro", "ταχύτερο onboarding, zero‑touch", "στο IT, τις υποδομές και την ασφάλεια", "πιστοποιήσεις, συν άδεια ΤΕΕ"]
             },
             services: {
                 eyebrow: "Υπηρεσίες",

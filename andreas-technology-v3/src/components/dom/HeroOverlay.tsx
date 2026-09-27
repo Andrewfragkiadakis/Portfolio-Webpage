@@ -21,7 +21,7 @@ export default function HeroOverlay() {
     const entered = useSiteEntered()
     // "Αυτοματοποιημένοι." is one long word: set it a step smaller on phones so it never touches the edges.
     const { language } = useLanguage()
-    const phoneSize = language === 'gr' ? 'text-[clamp(2rem,8.6vw,4.5rem)]' : 'text-[clamp(2.5rem,11vw,4.5rem)]'
+    const phoneSize = language === 'gr' ? 'text-[clamp(2rem,8.6vw,4.5rem)]' : 'text-[clamp(2.75rem,12.4vw,4.5rem)]'
 
     const go = (id: SectionId) => scrollToSection(sectionIndex(id), id)
 
@@ -68,6 +68,11 @@ export default function HeroOverlay() {
                 <button type="button" onClick={() => go('contact')} className="kn-pill kn-pill--line">
                     {k.hero.contact}
                 </button>
+            </Rise>
+
+            {/* apple.com's quiet line under the hero buttons: the credential that anchors the headline. */}
+            <Rise play={entered} delay={0.7}>
+                <p className="mt-7 md:mt-[min(2rem,3.4vh)] t-small text-[var(--muted)]">{k.hero.note}</p>
             </Rise>
         </section>
     )

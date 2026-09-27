@@ -4,6 +4,26 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 
 ## [Unreleased]
 
+### Changed (Apple Keynote style, round 5: finishing polish)
+- Content slides are top-aligned at a shared `--slide-top`, so eyebrows and headlines hold still as the desktop track moves; `SlideHeader`, `HEADLINE_SIZE` and `HEADER_GAP` give every slide the same header and gap. Eyebrows show at every viewport height
+- About: 550+ set as the slide's hero figure, three supporting figures under a hairline, credentials beside them; focus areas as hairline rows with glyphs
+- Career: lists show years only and the organisation without its address (full dates and places stay in the sheets); years sit beside the chevron
+- Projects: names split into title + descriptor with emoji dropped, fixed-height caption so the stage never jumps; bare renders match the laptop screen width
+- Services tiles shorter with text kept clear of the (+); on phones they are a horizontal snapping gallery
+- Hero gains a quiet "Jamf Certified Tech (Jamf 200)" line; Contact repeats the memoji above its eyebrow
+- Type: `text-wrap: balance` on headings and ledes, `pretty` on body text; non-breaking hyphen in "zero‑touch"; short emphasised phrases never break; Greek display tracking and phone headline size tuned; credential pills in sentence case
+- Letterboxed screenshots sit on their own sampled edge colours instead of a blurred second copy (one decode, no CSS blur)
+- Laptop frame: lit aluminium lip, rounded notch, contact shadow
+- Focus ring follows each control's radius instead of forcing 6px corners
+- Dialogs are bottom sheets on phones (grabber, rounded top, no backdrop blur)
+
+### Added (Apple Keynote style, round 5)
+- `utils/format.ts`: `splitName`, `yearSpan`, `shortPlace` display helpers
+- `keynote.hero.note` (EN/GR)
+
+### Removed (Apple Keynote style, round 5)
+- The `short:` custom variant (no slide hides content by height any more, except the Now tile's tool row below 1280px width or 820px height)
+
 ### Changed (Apple Keynote style, round 4)
 - Restrained the Apple Keynote design to apple.com's product-page language (see `STYLE.md`): neutral slides that alternate white / #F5F5F7 (black / #101011 in dark) instead of black and white, one interactive blue, and a single colour moment (the hero's second line, in Apple blues). Removed the blue-to-violet gradient words, stage glows, gradient progress line and gradient card outline
 - Type: San Francisco system stack with Inter (`latin` + `greek`, `opsz` axis) as fallback; Display/Text stacks; Apple's scale and tracking as `.t-hero`, `.t-headline`, `.t-title`, `.t-eyebrow`, `.t-lede`, `.t-body`, `.t-small`, `.t-caption`, `.t-stat` (headlines at weight 600, −0.015em / −0.009em)

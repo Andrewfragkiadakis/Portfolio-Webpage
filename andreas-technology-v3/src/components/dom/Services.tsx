@@ -9,7 +9,7 @@ import { TOOL_BY_LABEL, type Tool } from '@/data/tools'
 import Modal from '@/components/ui/Modal'
 import { ToolTile } from '@/components/ui/ToolBadge'
 import { Glyph } from '@/components/ui/Glyph'
-import { Chevron, Headline, Rise } from '@/components/ui/keynote'
+import { Chevron, HEADER_GAP, Rise, SLIDE_CLASS, SlideHeader } from '@/components/ui/keynote'
 
 const toolsFor = (service: Service): Tool[] =>
     service.tools.map((label) => TOOL_BY_LABEL.get(label)).filter((tool): tool is Tool => Boolean(tool))
@@ -25,7 +25,8 @@ function Plus() {
 
 /**
  * Slide 3 — six borderless feature tiles (symbol, title, one line and a (+) that opens
- * a sheet with highlights and toolkit), under the "Happens twice?" headline.
+ * a sheet with highlights and toolkit), under the "Happens twice?" headline. On phones
+ * the tiles become apple.com's snapping horizontal gallery.
  */
 export default function Services() {
     const t = useContent()
@@ -33,50 +34,42 @@ export default function Services() {
     const [active, setActive] = useState<Service | null>(null)
 
     return (
-        <section
-            id="services"
-            aria-labelledby="services-title"
-            className="relative w-full md:h-full flex items-center px-6 sm:px-10 md:px-[max(3rem,7vw)] py-24 md:py-0"
-        >
+        <section id="services" aria-labelledby="services-title" className={SLIDE_CLASS}>
             <div className="mx-auto w-full max-w-[71rem]">
-                <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5">
-                    <div>
-                        <Rise className="short:hidden">
-                            <p className="t-eyebrow">{k.services.eyebrow}</p>
-                        </Rise>
-                        <Headline
-                            id="services-title"
-                            text={k.services.headline}
-                            className="t-headline mt-2 text-[2.25rem] md:text-[min(4.4vw,7.2vh)]"
-                        />
-                    </div>
-                    <Rise delay={0.15} className="md:text-right md:pb-1.5">
-                        <p className="t-body text-[var(--muted)]">{k.services.ctaLead}</p>
-                        <button
-                            type="button"
-                            onClick={() => scrollToSection(sectionIndex('contact'), 'contact')}
-                            className="kn-link t-body"
-                        >
-                            {k.services.ctaLink}
-                            <Chevron />
-                        </button>
-                    </Rise>
-                </div>
+                <SlideHeader
+                    id="services-title"
+                    eyebrow={k.services.eyebrow}
+                    headline={k.services.headline}
+                    aside={
+                        <>
+                            <p className="t-body text-[var(--muted)]">{k.services.ctaLead}</p>
+                            <button
+                                type="button"
+                                onClick={() => scrollToSection(sectionIndex('contact'), 'contact')}
+                                className="kn-link t-body"
+                            >
+                                {k.services.ctaLink}
+                                <Chevron />
+                            </button>
+                        </>
+                    }
+                />
 
-                <ul className="mt-10 md:mt-[min(3rem,5vh)] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
+                {/* Phones: a snapping horizontal gallery. Desktop: a 3 × 2 grid of equal tiles. */}
+                <ul className={`${HEADER_GAP} kn-gallery md:grid md:grid-cols-3 md:gap-5`}>
                     {t.services.map((service, index) => (
-                        <Rise as="li" key={service.title} delay={0.1 + index * 0.05} className="h-full">
+                        <Rise as="li" key={service.title} delay={0.1 + Math.min(index, 3) * 0.05} className="h-auto">
                             <button
                                 type="button"
                                 onClick={() => setActive(service)}
                                 aria-label={`${service.title} — ${k.services.learnMore}`}
-                                className="tile tile--lg group relative w-full h-full text-left p-7 pb-16 md:px-[min(2rem,2.3vw)] md:pt-[min(1.75rem,3vh)] md:pb-[min(4rem,7vh)] flex flex-col"
+                                className="tile tile--lg group relative w-full h-full min-h-[16.5rem] md:min-h-0 text-left px-7 pt-7 pb-20 md:px-[min(2rem,2.3vw)] md:pt-[min(1.75rem,3vh)] md:pb-[min(1.875rem,3.2vh)] flex flex-col"
                             >
-                                <Glyph name={service.icon} className="w-8 h-8 md:w-[min(2.25rem,4vh)] md:h-[min(2.25rem,4vh)] text-[var(--foreground)]" strokeWidth={1.4} />
-                                <span className="t-title mt-4 md:mt-[min(1rem,1.8vh)] text-[1.3125rem] md:text-[min(1.5rem,2.6vh)] tracking-[0.009em] pr-2">
+                                <Glyph name={service.icon} className="w-9 h-9 md:w-[min(2.375rem,4.1vh)] md:h-[min(2.375rem,4.1vh)] text-[var(--foreground)]" strokeWidth={1.35} />
+                                <span className="t-title mt-5 md:mt-[min(1rem,1.8vh)] text-[1.3125rem] md:text-[min(1.5rem,2.6vh)] tracking-[0.009em] pr-2">
                                     {service.title}
                                 </span>
-                                <span className="mt-2 t-body md:text-[min(1.0625rem,1.85vh)] text-[var(--muted)] pr-10">
+                                <span className="mt-2 t-body md:text-[min(1.0625rem,1.85vh)] text-[var(--muted)] md:pr-[min(3.25rem,3.8vw)]">
                                     {service.oneLiner}
                                 </span>
                                 <span className="absolute right-5 bottom-5 md:right-[min(1.5rem,1.8vw)] md:bottom-[min(1.5rem,2.6vh)]">

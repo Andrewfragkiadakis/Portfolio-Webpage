@@ -18,7 +18,8 @@ interface ModalProps {
 
 /**
  * Accessible dialog: Escape closes it, focus is trapped inside while open, and focus
- * returns to whatever opened it. Rendered through a portal so it escapes the
+ * returns to whatever opened it. On phones it is a bottom sheet (full width, rounded top,
+ * grabber, no backdrop blur to repaint); from `sm` up it is a centred card. Rendered through a portal so it escapes the
  * transformed horizontal track, which would otherwise become its containing block.
  */
 export default function Modal({
@@ -88,20 +89,20 @@ export default function Modal({
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.18 }}
-                    className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+                    className="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center sm:p-4"
                     onClick={onClose}
                 >
-                    <div className="absolute inset-0 bg-black/40 backdrop-blur-[20px]" />
+                    <div className="absolute inset-0 bg-black/40 sm:backdrop-blur-[20px]" />
                     <motion.div
                         ref={panelRef}
                         role="dialog"
                         aria-modal="true"
                         aria-labelledby={labelledBy}
-                        initial={{ opacity: 0, y: 32 }}
+                        initial={{ opacity: 0, y: 48 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 16 }}
+                        exit={{ opacity: 0, y: 32 }}
                         transition={{ duration: 0.45, ease: [0.28, 0.11, 0.32, 1] }}
-                        className={`kn-sheet relative z-10 text-[var(--foreground)] rounded-[1.75rem] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.35)] max-h-[88vh] overflow-y-auto no-scrollbar ${className}`}
+                        className={`kn-sheet relative z-10 text-[var(--foreground)] rounded-t-[1.75rem] sm:rounded-[1.75rem] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.35)] max-h-[92svh] sm:max-h-[88vh] overflow-y-auto overscroll-contain no-scrollbar pb-[env(safe-area-inset-bottom)] ${className}`}
                         onClick={e => e.stopPropagation()}
                     >
                         <button
@@ -115,6 +116,8 @@ export default function Modal({
                                 <path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
                             </svg>
                         </button>
+                        {/* Phones: the sheet rises from the bottom edge, with iOS's grabber. */}
+                        <span aria-hidden="true" className="sm:hidden absolute top-2 left-1/2 -translate-x-1/2 w-9 h-[5px] rounded-full bg-[var(--line)] z-20" />
                         {children}
                     </motion.div>
                 </motion.div>

@@ -83,6 +83,12 @@ html.dark [data-tone="alt"] {
 
   /* apple.com's product-page easing. */
   --ease-apple: cubic-bezier(0.28, 0.11, 0.32, 1);
+
+  /*
+   * Vertical rhythm of the desktop slides: every content slide starts its eyebrow at the
+   * same height below the nav, so headlines do not jump as the track moves sideways.
+   */
+  --slide-top: clamp(1rem, 11vh - 3rem, 4.25rem);
 }
 
 @theme inline {
@@ -106,9 +112,6 @@ html.dark [data-tone="alt"] {
 @theme {
   --breakpoint-md: 64rem;
 }
-
-/* Short desktop viewports (1280×720, 1024×768): trims secondary lines so every slide still fits. */
-@custom-variant short (@media (min-width: 64rem) and (max-height: 820px));
 
 html {
   -webkit-font-smoothing: antialiased;
@@ -155,11 +158,28 @@ html[data-entered="true"] [data-cinematic] {
   background: rgba(0, 113, 227, 0.22);
 }
 
-/* Keyboard users must always be able to see where they are. */
+/*
+ * Keyboard users must always be able to see where they are. The ring follows each
+ * control's own shape (pills stay pills, tiles keep their 28px corners); only bare text
+ * links, which have no shape of their own, get a small radius.
+ */
 :focus-visible {
   outline: 2px solid var(--accent-fill);
   outline-offset: 3px;
-  border-radius: 6px;
+}
+
+.kn-link:focus-visible,
+:is(dt, dd, li, p, span) > button:not([class*="kn-pill"]):not([class*="tile"]):focus-visible {
+  border-radius: 4px;
+}
+
+/* Balanced display lines and no orphans in running text, as apple.com sets them. */
+:is(h1, h2, h3, h4, .t-hero, .t-headline, .t-title, .t-lede, .t-eyebrow) {
+  text-wrap: balance;
+}
+
+:is(p, li, dd, dt) {
+  text-wrap: pretty;
 }
 
 button:not(:disabled),
@@ -279,6 +299,27 @@ a[href],
     line-height: 1;
     letter-spacing: -0.015em;
     font-variant-numeric: tabular-nums;
+  }
+
+  /*
+   * Greek. Its capitals and accents are wider than Latin, so the negative display
+   * tracking that suits English crowds Greek: open it back up to neutral, and give the
+   * accents a little more line height.
+   */
+  html[lang="el"] :is(.t-hero, .t-headline) {
+    letter-spacing: -0.003em;
+    line-height: 1.1;
+  }
+
+  html[lang="el"] .t-lede {
+    letter-spacing: 0.004em;
+  }
+
+  /* Phones: Greek section headlines a step smaller, so "Συμβαίνει δύο φορές;" stays on one line. */
+  @media (max-width: 63.99rem) {
+    html[lang="el"] .t-headline {
+      font-size: clamp(1.75rem, 8vw, 2.25rem) !important;
+    }
   }
 
   /*
@@ -522,11 +563,11 @@ a[href],
 
   .device-laptop__lid {
     position: relative;
-    margin: 0 7%;
-    padding: 1.3% 1.3% 1.9%;
-    border-radius: 2.6% 2.6% 0 0 / 4.1% 4.1% 0 0;
+    margin: 0 7.5%;
+    padding: 1.4% 1.4% 2.1%;
+    border-radius: 3% 3% 0.6% 0.6% / 4.6% 4.6% 1% 1%;
     background: #0a0a0b;
-    box-shadow: 0 0 0 1px var(--device-edge), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    box-shadow: 0 0 0 1.5px var(--device-edge), inset 0 0 0 1px rgba(255, 255, 255, 0.07);
   }
 
   /* Camera. */
@@ -550,13 +591,14 @@ a[href],
     background: #111;
   }
 
+  /* The base: a thin aluminium slab, lit from above, with a soft shadow under its lip. */
   .device-laptop__base {
     position: relative;
     height: 0;
-    padding-bottom: 2.2%;
-    border-radius: 0 0 50% 50% / 0 0 100% 100%;
+    padding-bottom: 2.4%;
+    border-radius: 0.3% 0.3% 50% 50% / 8% 8% 100% 100%;
     background: var(--device-metal);
-    box-shadow: var(--device-shadow);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), var(--device-shadow);
   }
 
   /* Opening notch on the base's front edge. */
@@ -565,11 +607,27 @@ a[href],
     position: absolute;
     top: 0;
     left: 50%;
-    width: 13%;
-    height: 34%;
+    width: 12%;
+    height: 38%;
     transform: translateX(-50%);
-    border-radius: 0 0 0.5rem 0.5rem;
-    background: rgba(0, 0, 0, 0.14);
+    border-radius: 0 0 999px 999px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.06));
+  }
+
+  /* Contact shadow on the table. */
+  .device-laptop__base::after {
+    content: "";
+    position: absolute;
+    left: 6%;
+    right: 6%;
+    top: 100%;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(0, 0, 0, 0.18), transparent);
+  }
+
+  .dark .device-laptop__base::after {
+    background: radial-gradient(closest-side, rgba(0, 0, 0, 0.7), transparent);
   }
 
   .device-phone {
@@ -603,5 +661,36 @@ a[href],
     border-radius: 999px;
     background: #000;
     z-index: 2;
+  }
+
+  /*
+   * Phones: apple.com's horizontal tile gallery. Tiles snap to the gutter and the next
+   * one peeks in, so six tiles take one screen instead of four.
+   */
+  @media (max-width: 63.99rem) {
+    .kn-gallery {
+      display: flex;
+      gap: 0.75rem;
+      margin-inline: -1.5rem;
+      padding: 0 1.5rem 0.25rem;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: 1.5rem;
+      scrollbar-width: none;
+    }
+
+    .kn-gallery > * {
+      flex: 0 0 min(80%, 20rem);
+      scroll-snap-align: start;
+    }
+  }
+
+  @media (min-width: 40rem) and (max-width: 63.99rem) {
+    .kn-gallery {
+      margin-inline: -2.5rem;
+      padding-inline: 2.5rem;
+      scroll-padding-inline: 2.5rem;
+    }
   }
 }
