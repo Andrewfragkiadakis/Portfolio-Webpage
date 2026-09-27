@@ -5,7 +5,7 @@ interface MemojiProps {
     size?: number
     /**
      * `block`: the memoji on a cobalt square — the mark on paper and ink.
-     * `paper`: on a white square — the mark on a cobalt field.
+     * `paper`: on a paper square — the mark on a cobalt field.
      */
     tone?: 'block' | 'paper'
     className?: string
@@ -20,7 +20,7 @@ interface MemojiProps {
 export default function Memoji({ size = 2.25, tone = 'block', className = '', decorative = false }: MemojiProps) {
     return (
         <span
-            className={`relative inline-block shrink-0 overflow-hidden ${tone === 'block' ? 'bg-[var(--cobalt)]' : 'bg-white'} ${className}`}
+            className={`relative inline-block shrink-0 overflow-hidden ${tone === 'block' ? 'bg-[var(--cobalt)]' : 'bg-[var(--on-cobalt)]'} ${className}`}
             style={{ width: `${size}rem`, height: `${size}rem` }}
         >
             <Image

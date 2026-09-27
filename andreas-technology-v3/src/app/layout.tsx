@@ -63,7 +63,7 @@ export const metadata: Metadata = {
         follow: true,
     },
     other: {
-        'theme-color': '#2323ff',
+        'theme-color': '#2d3fbf',
     },
 }
 
@@ -75,8 +75,8 @@ export default function RootLayout({
     return (
         <html lang="en" className={interTight.variable} suppressHydrationWarning>
             <head>
-                <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
-                <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+                <meta name="theme-color" content="#14161b" media="(prefers-color-scheme: dark)" />
+                <meta name="theme-color" content="#faf9f6" media="(prefers-color-scheme: light)" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
                 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
                 <link
@@ -164,7 +164,7 @@ export default function RootLayout({
             <body className="font-sans">
                 <a
                     href="#main-content"
-                    className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100001] focus:px-4 focus:py-2 focus:bg-[var(--cobalt)] focus:text-white focus:outline-none"
+                    className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100001] focus:px-4 focus:py-2 focus:bg-[var(--cobalt)] focus:text-[var(--on-cobalt)] focus:outline-none"
                 >
                     Skip to content
                 </a>

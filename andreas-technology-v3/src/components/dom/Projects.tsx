@@ -178,7 +178,7 @@ export default function Projects() {
                         return (
                             <motion.div
                                 key={index}
-                                className="absolute inset-[6%] bg-white p-2 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.45)]"
+                                className="absolute inset-[6%] bg-[var(--paper)] p-2 shadow-[0_24px_60px_-20px_var(--shadow)]"
                                 initial={{ opacity: 0, y: 40, rotate: 8 }}
                                 animate={{ opacity: depth === 2 ? 0.9 : 1, y: depth * -10, x: depth * (depth === 1 ? 26 : -30), rotate: TILT[depth], scale: 1 - depth * 0.05 }}
                                 transition={{ duration: 0.7, ease: EASE_OUT }}

@@ -138,7 +138,7 @@ export default function Experience() {
                         className="flex flex-col flex-1 min-h-0"
                     >
                         <p className="meta text-[var(--foreground)] mt-3 mb-6 flex items-center gap-3">
-                            <span className="h-[2px] w-8 bg-white" aria-hidden="true" />
+                            <span className="h-[2px] w-8 bg-[var(--on-cobalt)]" aria-hidden="true" />
                             {current.duration}
                         </p>
                         <EntryDetail entry={current} verifyLabel={t.experienceSection.verify} />

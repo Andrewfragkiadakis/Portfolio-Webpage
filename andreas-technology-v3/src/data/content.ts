@@ -231,14 +231,14 @@ export const content: Record<'en' | 'gr', Content> = {
         linkedin: SOCIAL_URLS.linkedin,
 
         nav: {
-            home: "HOME",
-            close: "CLOSE",
+            home: "Home",
+            close: "Close",
             languageLabel: "English",
-            about: "ABOUT",
-            experience: "EXPERIENCE",
-            projects: "PROJECTS",
-            services: "WHAT I DO",
-            contact: "CONTACT"
+            about: "About",
+            experience: "Experience",
+            projects: "Projects",
+            services: "What I do",
+            contact: "Contact"
         },
 
         about: {
@@ -806,14 +806,14 @@ export const content: Record<'en' | 'gr', Content> = {
         linkedin: SOCIAL_URLS.linkedin,
 
         nav: {
-            home: "ΑΡΧΙΚΗ",
-            close: "ΚΛΕΙΣΙΜΟ",
+            home: "Αρχική",
+            close: "Κλείσιμο",
             languageLabel: "Ελληνικά",
-            about: "ΣΧΕΤΙΚΑ",
-            experience: "ΕΜΠΕΙΡΙΑ",
-            projects: "PROJECTS",
-            services: "ΥΠΗΡΕΣΙΕΣ",
-            contact: "ΕΠΙΚΟΙΝΩΝΙΑ"
+            about: "Σχετικά",
+            experience: "Εμπειρία",
+            projects: "Projects",
+            services: "Υπηρεσίες",
+            contact: "Επικοινωνία"
         },
 
         about: {

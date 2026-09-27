@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
+import { EASE_IN_OUT } from '@/utils/motion'
 
 const FOCUSABLE = 'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
 
@@ -91,11 +92,11 @@ export default function Modal({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.18 }}
+                    transition={{ duration: 0.3 }}
                     className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
                     onClick={onClose}
                 >
-                    <div className="absolute inset-0 bg-[#0a0a0a]/80" />
+                    <div className="absolute inset-0 bg-[var(--scrim)]" />
                     <motion.div
                         ref={panelRef}
                         role="dialog"
@@ -104,7 +105,7 @@ export default function Modal({
                         initial={reduce ? { opacity: 0 } : { opacity: 1, clipPath: 'inset(100% -16px -16px -4px)' }}
                         animate={reduce ? { opacity: 1 } : { opacity: 1, clipPath: OPEN }}
                         exit={reduce ? { opacity: 0 } : { opacity: 1, clipPath: 'inset(-4px -16px 100% -4px)' }}
-                        transition={{ duration: reduce ? 0 : 0.4, ease: [0.76, 0, 0.24, 1] }}
+                        transition={{ duration: reduce ? 0 : 0.55, ease: EASE_IN_OUT }}
                         className={`relative z-10 bg-[var(--background)] text-[var(--foreground)] shadow-[inset_0_0_0_2px_var(--foreground),12px_12px_0_0_var(--block)] max-h-[85vh] overflow-y-auto ${className}`}
                         onClick={e => e.stopPropagation()}
                     >
@@ -113,7 +114,7 @@ export default function Modal({
                             type="button"
                             onClick={onClose}
                             aria-label={closeLabel}
-                            className="absolute top-3 right-3 z-20 w-11 h-11 flex items-center justify-center cursor-pointer bg-white text-[#2323ff] shadow-[inset_0_0_0_1.5px_#0a0a0a] hover:bg-[#0a0a0a] hover:text-white transition-colors [--focus:#ffffff] focus-visible:outline-offset-[-6px] focus-visible:outline-[#2323ff]"
+                            className="absolute top-3 right-3 z-20 w-11 h-11 flex items-center justify-center cursor-pointer bg-[var(--paper)] text-[var(--cobalt)] shadow-[inset_0_0_0_1.5px_var(--ink)] hover:bg-[var(--cobalt-deep)] hover:text-[var(--on-cobalt)] transition-colors duration-300 focus-visible:outline-offset-[-6px] focus-visible:outline-[var(--cobalt)]"
                         >
                             <i className="fas fa-times" aria-hidden="true" />
                         </button>

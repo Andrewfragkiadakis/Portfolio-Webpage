@@ -80,8 +80,8 @@ export default function Navigation() {
                     aria-label={`${t.editorial.firstName} ${t.editorial.lastName} — ${t.nav.home}`}
                 >
                     <Memoji size={2.25} decorative />
-                    <span className="font-display font-extrabold tracking-[-0.03em] text-[0.95rem] leading-none uppercase hidden sm:inline md:hidden xl:inline" aria-hidden="true">
-                        {t.hero.firstName} {t.hero.lastName}
+                    <span className="font-display font-bold tracking-[-0.02em] text-[1rem] leading-none hidden sm:inline md:hidden xl:inline" aria-hidden="true">
+                        {t.editorial.firstName} {t.editorial.lastName}
                     </span>
                 </button>
 
@@ -94,13 +94,13 @@ export default function Navigation() {
                                 key={item.section}
                                 onClick={() => scrollToSection(item.section, item.i)}
                                 aria-current={isActive ? 'true' : undefined}
-                                className={`relative h-9 px-2.5 lg:px-3 eyebrow transition-colors duration-300 ${isActive ? 'text-[var(--on-block)] [--focus:var(--foreground)]' : 'text-[var(--foreground)] hover:text-[var(--accent)]'}`}
+                                className={`relative h-9 px-2.5 lg:px-3 text-body-sm font-medium tracking-[-0.005em] transition-colors duration-300 ${isActive ? 'text-[var(--on-block)] [--focus:var(--foreground)]' : 'text-[var(--foreground)] hover:text-[var(--accent)]'}`}
                             >
                                 {isActive && (
                                     <motion.span
                                         layoutId="nav-active-block"
                                         className="absolute inset-0 bg-[var(--block)]"
-                                        transition={{ type: 'spring', stiffness: 420, damping: 36 }}
+                                        transition={{ type: 'spring', stiffness: 260, damping: 34 }}
                                         aria-hidden="true"
                                     />
                                 )}
@@ -154,7 +154,7 @@ export default function Navigation() {
             </div>
 
             <div
-                className={`md:hidden fixed inset-0 z-[100] flex flex-col surface-block transition-[clip-path,visibility] duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] ${mobileMenuOpen ? 'visible [clip-path:inset(0_0_0_0)]' : 'invisible pointer-events-none [clip-path:inset(0_0_100%_0)]'}`}
+                className={`md:hidden fixed inset-0 z-[100] flex flex-col surface-block transition-[clip-path,visibility] duration-500 ease-[cubic-bezier(0.65,0,0.35,1)] ${mobileMenuOpen ? 'visible [clip-path:inset(0_0_0_0)]' : 'invisible pointer-events-none [clip-path:inset(0_0_100%_0)]'}`}
                 aria-hidden={!mobileMenuOpen}
             >
                 <div className="flex justify-between items-center gap-3 px-4 h-16 border-b border-[var(--line)]">

@@ -83,12 +83,12 @@ export default function MobileNav() {
                             onClick={() => scrollToSection(item.id)}
                             aria-current={isActive ? 'true' : undefined}
                             className={`flex flex-1 min-w-0 flex-col items-center justify-center gap-1 min-h-13 px-1 transition-colors duration-300 ease-out focus-visible:outline-offset-[-5px] ${isActive
-                                ? 'bg-[var(--block)] text-[var(--on-block)] [--focus:#fff]'
+                                ? 'bg-[var(--block)] text-[var(--on-block)] [--focus:var(--on-block)]'
                                 : 'text-[var(--foreground)] hover:bg-[var(--foreground)]/10'
                                 }`}
                         >
                             <i className={`${item.icon} text-base`} aria-hidden="true" />
-                            <span className="text-micro font-semibold uppercase tracking-[0.06em] truncate w-full text-center">
+                            <span className="text-caption font-medium tracking-[-0.005em] truncate w-full text-center">
                                 {item.label}
                             </span>
                         </button>

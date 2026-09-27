@@ -91,7 +91,7 @@ export default function Contact() {
                     </div>
                     <div className="col-span-2 md:col-span-4">
                         <dt className="meta mb-1.5 flex items-center gap-2">
-                            <span className="inline-block w-1.5 h-1.5 bg-white" aria-hidden="true" />
+                            <span className="inline-block w-1.5 h-1.5 bg-[var(--on-cobalt)]" aria-hidden="true" />
                             {t.contact.opportunitiesTitle}
                         </dt>
                         <dd className="leading-snug">{t.contact.opportunitiesDescription}</dd>
@@ -104,7 +104,7 @@ export default function Contact() {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="Contact via email"
-                        className="arrow-link md:col-span-3 flex items-center justify-between gap-3 bg-white text-[var(--cobalt)] border border-white px-5 py-3.5 text-sm font-semibold hover:bg-[var(--cobalt)] hover:text-white transition-colors duration-300"
+                        className="arrow-link md:col-span-3 flex items-center justify-between gap-3 bg-[var(--on-cobalt)] text-[var(--cobalt)] border border-[var(--on-cobalt)] px-5 py-3.5 text-sm font-semibold hover:bg-[var(--cobalt)] hover:text-[var(--on-cobalt)] transition-colors duration-300"
                     >
                         {t.contact.sendMessage}
                         <span className="arrow" aria-hidden="true">→</span>
@@ -112,7 +112,7 @@ export default function Contact() {
                     <a
                         href={cvLink}
                         download
-                        className="arrow-link md:col-span-3 flex items-center justify-between gap-3 border border-white px-5 py-3.5 text-sm font-semibold hover:bg-white hover:text-[var(--cobalt)] transition-colors duration-300"
+                        className="arrow-link md:col-span-3 flex items-center justify-between gap-3 border border-[var(--on-cobalt)] px-5 py-3.5 text-sm font-semibold hover:bg-[var(--on-cobalt)] hover:text-[var(--cobalt)] transition-colors duration-300"
                     >
                         {t.contact.downloadResume}
                         <span className="arrow rotate-90" aria-hidden="true">→</span>
@@ -124,7 +124,7 @@ export default function Contact() {
                     <button
                         type="button"
                         onClick={() => scrollToSection(0, 'hero')}
-                        className="arrow-link inline-flex items-center gap-1.5 uppercase hover:text-white transition-colors"
+                        className="arrow-link inline-flex items-center gap-1.5 uppercase hover:text-[var(--on-cobalt)] transition-colors"
                     >
                         {t.editorial.backToTop}
                         <span className="arrow -rotate-90" aria-hidden="true">→</span>

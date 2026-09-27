@@ -5,7 +5,8 @@ import type { Variants } from 'motion/react'
  * Enter with a long ease-out; leave faster with ease-in-out.
  */
 export const EASE_OUT = [0.22, 1, 0.36, 1] as const
-export const EASE_IN_OUT = [0.76, 0, 0.24, 1] as const
+/** Round 5: a gentler in-out (easeInOutCubic) than the original quint-like curve, so blocks glide rather than snap. */
+export const EASE_IN_OUT = [0.65, 0, 0.35, 1] as const
 
 /** Fired by the intro overlay the moment the visitor enters the site. */
 export const SITE_ENTERED_EVENT = 'site:entered'
@@ -26,7 +27,7 @@ const CLOSED: Record<WipeFrom, string> = {
  */
 export const wipe = (from: WipeFrom, delay = 0): Variants => ({
     hidden: { clipPath: CLOSED[from] },
-    visible: { clipPath: 'inset(0% 0% 0% 0%)', transition: { duration: 1.05, ease: EASE_IN_OUT, delay } },
+    visible: { clipPath: 'inset(0% 0% 0% 0%)', transition: { duration: 1.15, ease: EASE_IN_OUT, delay } },
 })
 
 export const WIPE_FROM_LEFT = wipe('left')

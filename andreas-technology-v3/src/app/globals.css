@@ -1,28 +1,45 @@
 @import "tailwindcss";
 
 /*
- * SWISS COBALT (round 4)
- * Cobalt Block's colour-blocking — flat ultramarine fields against paper (light) or ink
+ * SWISS COBALT (round 5: calmer blue)
+ * Cobalt Block's colour-blocking — flat cobalt fields against paper (light) or ink
  * (dark), split screens where the block changes side panel to panel — set with Swiss
  * discipline: one grotesk (Inter Tight), meta-row headers on a strong hairline, index
  * tables with tabular figures, and one set of margins on every panel.
  *
+ * Round 5 replaced the electric #2323FF with a deep, softer cobalt, took the edge off
+ * pure white and pure black, and set off-white type on the blue.
+ *
  * Contrast (WCAG 2.x):
- *   #FFFFFF on #2323FF  7.6:1  any text on a cobalt field (AA + AAA)
- *   #2323FF on #FFFFFF  7.6:1  cobalt as text on paper (AA)
- *   #8C93FF on #0A0A0A  7.3:1  accent text on ink (cobalt itself is only 2.6:1 on ink,
- *                              so on the dark theme cobalt is a field colour, never text)
- *   white 82% on cobalt 5.5:1  the lowest-contrast small text allowed on a field
- *   ink 70% on paper    7.6:1  muted text; paper 70% on ink 9.6:1
- *   #FF3B30 signal             one non-text detail: the square "live clock" dot
+ *   #FAF9F6 on #2D3FBF  7.75:1  any text on a cobalt field (AA + AAA)
+ *   #2D3FBF on #FAF9F6  7.75:1  cobalt as text on paper (AA + AAA)
+ *   #98A2EE on #14161B  7.53:1  accent text on ink (cobalt itself is only 2.2:1 on ink,
+ *                               so on the dark theme cobalt is a field colour, never text)
+ *   #D5D8EC on #2D3FBF  5.77:1  muted type on a field (off-white 82%), the lowest allowed
+ *   #14161B on #FAF9F6 17.2:1   body text; #EEEDE8 on #14161B 15.4:1 (dark)
+ *   muted 70%            6.6:1  on paper; 8.0:1 on ink
+ *   #E5483B signal              one non-text detail: the square "live clock" dot (3.75:1)
  */
 :root {
-  --paper: #ffffff;
-  --ink: #0a0a0a;
-  --cobalt: #2323ff;
-  --cobalt-tint: #8c93ff;
-  --on-cobalt: #ffffff;
-  --signal: #ff3b30;
+  /*
+   * Palette. Round 5 calmed the blue (see STYLE.md): a deep cobalt instead of the
+   * electric #2323FF, an off-white paper, a blue-black ink, and off-white type on blue.
+   */
+  --paper: #faf9f6;
+  --ink: #14161b;
+  --cobalt: #2d3fbf;
+  /* Pressed / hover shade of the blue (button wipes, dialog close). */
+  --cobalt-deep: #2635a0;
+  /* The blue lifted for use as text or a thin mark on ink (dark theme). */
+  --cobalt-tint: #98a2ee;
+  /* Type on a blue field. */
+  --on-cobalt: #faf9f6;
+  /* Dark-theme text colour (on ink). */
+  --on-ink: #eeede8;
+  --signal: #e5483b;
+  /* Dialog scrim and drop shadows. */
+  --scrim: color-mix(in srgb, var(--ink) 80%, transparent);
+  --shadow: color-mix(in srgb, var(--ink) 45%, transparent);
 
   --background: var(--paper);
   --foreground: var(--ink);
@@ -37,8 +54,16 @@
   --muted: color-mix(in srgb, var(--foreground) 70%, var(--background));
   --line: color-mix(in srgb, var(--foreground) 16%, transparent);
   --rule: var(--line);
-  --rule-strong: color-mix(in srgb, var(--foreground) 90%, transparent);
+  --rule-strong: color-mix(in srgb, var(--foreground) 80%, transparent);
   --focus: var(--cobalt);
+  /* Selection is a pale cobalt wash with ink type, not a full-strength block. */
+  --selection: color-mix(in srgb, var(--cobalt) 18%, var(--paper));
+  --on-selection: var(--ink);
+
+  /* The same set of tokens as they read on a blue field. */
+  --on-cobalt-muted: color-mix(in srgb, var(--on-cobalt) 82%, var(--cobalt));
+  --on-cobalt-line: color-mix(in srgb, var(--on-cobalt) 30%, transparent);
+  --on-cobalt-rule-strong: color-mix(in srgb, var(--on-cobalt) 80%, transparent);
 
   --font-display: var(--font-inter-tight), "Inter Tight", "Helvetica Neue", Arial, sans-serif;
 
@@ -59,10 +84,12 @@
 
 .dark {
   --background: var(--ink);
-  --foreground: var(--paper);
+  --foreground: var(--on-ink);
   --accent: var(--cobalt-tint);
-  --display: var(--paper);
-  --focus: var(--paper);
+  --display: var(--on-ink);
+  --focus: var(--on-ink);
+  --selection: color-mix(in srgb, var(--cobalt) 55%, var(--ink));
+  --on-selection: var(--on-ink);
 }
 
 /*
@@ -75,10 +102,10 @@
   --background: var(--cobalt);
   --foreground: var(--on-cobalt);
   --display: var(--on-cobalt);
-  --muted: rgba(255, 255, 255, 0.82);
-  --line: rgba(255, 255, 255, 0.3);
-  --rule: rgba(255, 255, 255, 0.3);
-  --rule-strong: rgba(255, 255, 255, 0.9);
+  --muted: var(--on-cobalt-muted);
+  --line: var(--on-cobalt-line);
+  --rule: var(--on-cobalt-line);
+  --rule-strong: var(--on-cobalt-rule-strong);
   --accent: var(--on-cobalt);
   --accent-ink: var(--on-cobalt);
   --focus: var(--on-cobalt);
@@ -170,8 +197,8 @@ html[data-entered="true"] [data-cinematic] {
 }
 
 ::selection {
-  background: var(--cobalt);
-  color: var(--on-cobalt);
+  background: var(--selection);
+  color: var(--on-selection);
 }
 
 :is(.field, .surface-block) ::selection {
@@ -237,8 +264,8 @@ a[href],
    */
   .font-display {
     font-family: var(--font-display);
-    font-weight: 900;
-    letter-spacing: -0.045em;
+    font-weight: 850;
+    letter-spacing: -0.04em;
     /* Tight tracking closes word gaps too; give spaces back. */
     word-spacing: 0.12em;
     line-height: 0.86;
@@ -330,7 +357,7 @@ a[href],
   .cell-page:is(:hover, :focus-visible, :has(:focus-visible)) {
     color: var(--on-block);
     --focus: var(--on-block);
-    --muted: rgba(255, 255, 255, 0.82);
+    --muted: var(--on-cobalt-muted);
   }
 
   /* Services grid: a checkerboard at every column count. */
@@ -383,7 +410,7 @@ a[href],
   .index-row[data-active="true"] {
     --background: var(--cobalt);
     --foreground: var(--on-cobalt);
-    --muted: rgba(255, 255, 255, 0.82);
+    --muted: var(--on-cobalt-muted);
     --accent-ink: var(--on-cobalt);
     --focus: var(--on-cobalt);
     --line: transparent;
@@ -397,7 +424,7 @@ a[href],
     .index-row:hover {
       --background: var(--cobalt);
       --foreground: var(--on-cobalt);
-      --muted: rgba(255, 255, 255, 0.82);
+      --muted: var(--on-cobalt-muted);
       --accent-ink: var(--on-cobalt);
       --focus: var(--on-cobalt);
       --line: transparent;
@@ -455,26 +482,22 @@ a[href],
     transform: scaleY(1);
   }
 
-  /* Solid cobalt; wipes to the foreground colour. */
+  /* Solid cobalt; wipes to the deeper cobalt (round 5: calmer than a jump to ink). */
   .btn-solid {
     background-color: var(--block);
     color: var(--on-block);
-    --btn-wipe: var(--foreground);
-  }
-
-  .btn-solid:is(:hover, :focus-visible) {
-    color: var(--background);
+    --btn-wipe: var(--cobalt-deep);
   }
 
   /* Solid paper, for use on a cobalt block; wipes to ink. */
   .btn-paper {
-    background-color: #ffffff;
+    background-color: var(--on-cobalt);
     color: var(--cobalt);
-    --btn-wipe: var(--ink);
+    --btn-wipe: var(--cobalt-deep);
   }
 
   .btn-paper:is(:hover, :focus-visible) {
-    color: #ffffff;
+    color: var(--on-cobalt);
   }
 
   /* Outline in the current foreground; wipes to cobalt (or to paper on a cobalt block). */
@@ -490,12 +513,12 @@ a[href],
   }
 
   :is(.field, .surface-block) .btn-line {
-    --btn-wipe: #ffffff;
+    --btn-wipe: var(--on-cobalt);
   }
 
   :is(.field, .surface-block) .btn-line:is(:hover, :focus-visible) {
     color: var(--cobalt);
-    box-shadow: inset 0 0 0 1px #ffffff;
+    box-shadow: inset 0 0 0 1px var(--on-cobalt);
   }
 
   /* Small bar buttons (theme, language, menu): meta type instead of the button cut. */
@@ -503,10 +526,9 @@ a[href],
     min-height: 0;
     height: 2.25rem;
     padding: 0 0.75rem;
-    font-size: var(--text-caption);
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-size: var(--text-body-sm);
+    font-weight: 500;
+    letter-spacing: -0.005em;
     gap: 0.5rem;
   }
 

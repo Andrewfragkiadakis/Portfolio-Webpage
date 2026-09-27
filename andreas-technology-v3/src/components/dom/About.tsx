@@ -186,7 +186,7 @@ export default function About() {
                         </motion.span>
                     </div>
                     <motion.div variants={FADE_UP} custom={0.7} className="meta text-[var(--foreground)] mt-3 flex items-center gap-3">
-                        <span className="h-[2px] w-8 bg-white" aria-hidden="true" />
+                        <span className="h-[2px] w-8 bg-[var(--on-cobalt)]" aria-hidden="true" />
                         {t.about.statsLabels[1]}
                     </motion.div>
                 </div>

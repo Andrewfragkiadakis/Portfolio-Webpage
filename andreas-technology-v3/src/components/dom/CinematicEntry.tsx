@@ -57,7 +57,7 @@ export default function CinematicEntry() {
                 <motion.div
                     data-cinematic="true"
                     initial={{ opacity: 1 }}
-                    exit={{ clipPath: 'inset(0% 0% 100% 0%)', transition: { duration: reduce ? 0 : 0.9, ease: [0.76, 0, 0.24, 1] } }}
+                    exit={{ clipPath: 'inset(0% 0% 100% 0%)', transition: { duration: reduce ? 0 : 1, ease: [0.65, 0, 0.35, 1] } }}
                     style={{ clipPath: 'inset(0% 0% 0% 0%)' }}
                     className="surface-block fixed inset-0 z-[99999] flex flex-col items-start justify-end px-6 sm:px-12 pb-16 sm:pb-20"
                 >

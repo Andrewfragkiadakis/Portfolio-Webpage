@@ -7,11 +7,12 @@ export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
 // Swiss Cobalt: the hero's 40/60 split, name broken across the seam.
-const COBALT = '#2323ff'
-const PAPER = '#ffffff'
-const INK = '#0a0a0a'
-const RULE_ON_COBALT = 'rgba(255,255,255,0.9)'
-const RULE_ON_PAPER = 'rgba(10,10,10,0.9)'
+// Round 5 palette (globals.css): calm cobalt, off-white paper, blue-black ink.
+const COBALT = '#2d3fbf'
+const PAPER = '#faf9f6'
+const INK = '#14161b'
+const RULE_ON_COBALT = 'rgba(250,249,246,0.8)'
+const RULE_ON_PAPER = 'rgba(20,22,27,0.8)'
 
 const META = { fontSize: 18, letterSpacing: '0.06em', textTransform: 'uppercase' as const }
 
