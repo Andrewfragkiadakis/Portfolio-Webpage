@@ -15,6 +15,79 @@ The horizontal journey is kept: each section is a desktop space. Phones still ge
 
 Nothing is Apple artwork. There is no Apple logo, and no Apple app icon is copied. All app icons, glyphs and the wallpaper are drawn from scratch in this repo. Tool logos in the toolkit marquee are left alone, because they name tools.
 
+## Round 5: mobile performance
+
+Feedback from friends who tried the live preview (4/5 each): they love the concept, but on the phone it "has poor performance and latency loading the assets", and it "lags a bit" (κολλάει λίγο). The look is unchanged; everything below is about speed.
+
+### Method
+
+- **Phone:** Chrome via Playwright, 390×844 at DPR 3, touch, Android UA, **CPU throttled 4×**, network **Slow 4G** (DevTools preset: 562.5 ms RTT, 1.44 Mbps down, 675 kbps up), cache disabled. Median of 5 cold loads (returning visitor), plus one first visit (boot screen), a jump to Projects, and a touch-scroll of the whole stack down and up (`Input.synthesizeScrollGesture`, 2,400 px/s) sampled with a rAF frame timer and CDP `Performance.getMetrics`. Script: `scratchpad/cap/perf-r5.js`; traces with `trace-m5.js`, repaint attribution with `paint-who.js`.
+- **Baselines:** the deployed preview (commit 434122f on Vercel, real network plus the same throttling), and the same commit built locally from a `git archive` copy (`next start` on 3192). **After:** this round built with `next start` on 3191. Local servers are HTTP/1.1; Vercel serves HTTP/2.
+- **Desktop:** 1440×900, 4× CPU, interleaved A/B runs (`ab-desk.js`, `desk-load9.js`). The machine was shared with other builds (load average 4–9), so the desktop numbers are noisy; the direction held in every repeat.
+
+### Phone: before → after
+
+| Phone (390×844 @3x, 4× CPU, Slow 4G) | Vercel preview (before) | Local build, before | **Local build, after** |
+| --- | --- | --- | --- |
+| First Contentful Paint | 1.59 s | 1.41 s | **1.38 s** |
+| **Largest Contentful Paint** (the hero name) | 4.38 s | 4.10 s | **1.72 s** |
+| Total Blocking Time / longest task | 127 ms / 138 ms | 134 ms / 139 ms | **28 ms / 63 ms** |
+| Hydrated (first React commit) | 4.09 s | 3.35 s | 3.29 s |
+| **First visit: "Enter System" appears** | 9.0 s | 7.8 s | **4.2 s** |
+| `load` event | 4.96 s | 6.42 s | **3.22 s** |
+| JavaScript (gzip, all chunks incl. lazy) | 316 KB (incl. 23 KB Vercel preview toolbar) | 283 KB | **274 KB** (critical path 250 → 241 KB) |
+| Images fetched before `load` | 30 (two memoji crops, 28 logos) | 30 | **1** (the memoji; the 28 tool logos wait for `load`) |
+| Hero images visible | 1.47 s | 1.28 s | 1.25 s |
+| Project thumbnails on a phone (13 in view) | 640w WebP, ~131 KB | same | **384w AVIF, ~66 KB** |
+| **Touch-scroll down the stack**: frames > 25 ms / p95 frame | 19 / 33 ms | 10 / 33 ms | **2 / 16.7 ms** |
+| Scroll: main-thread time / style recalc | 1.17 s / 173 ms | 1.14 s / 203 ms | **0.46 s / 26 ms** |
+
+Jumping to Projects, the thumbnails in view took ~1.4 s to show locally after (13 counted in view) against ~0.9 s before (10 counted). The files are half the size; the local server is HTTP/1.1 with six connections, so round trips at 562 ms dominate. Vercel serves HTTP/2, where they load in parallel.
+
+### Desktop (1440×900, 4× CPU)
+
+| Desktop | Before | After |
+| --- | --- | --- |
+| Load: TBT (median of 9 interleaved runs, busy machine) | 545 ms | **91 ms** |
+| Load: hydrated / Welcome window starts opening / LCP | 891 / 1,449 / 1,908 ms | **669 / 1,121 / 1,500 ms** |
+| First interaction (open the Go menu right after load) | 128 ms | 120 ms |
+| Dock → Projects and back: janky frames / p95 / worst | 22 / 33 ms / 67 ms | **7 / 16.8 ms / 50 ms** |
+| Scroll across the spaces: janky frames / main thread | 30 / 2.35 s | **19 / 1.95 s** |
+| Minimise + restore | 0 janky | 0 janky |
+
+On a quiet run the same A/B gave Dock launch 5 → 2 janky frames and scroll 2 → 2; desktop LCP is the Welcome window's opening spring and varies ±400 ms with machine load.
+
+### What was slow, and the fix
+
+1. **Content was invisible until JavaScript ran.** Every window was server-rendered at `opacity: 0` and waited for hydration to spring open, so a phone on Slow 4G showed an empty wallpaper for ~2.5 s after first paint. On small screens the sheets are now visible in the server HTML (`.os-win, .os-reveal` override Motion's start styles below 64rem), and phones get no window, widget or project-icon reveal animations. The hero name is painted at first paint: **LCP 4.1 s → 1.7 s**.
+2. **The boot screen waited for hydration, then typed for ~4.5 s.** The log, progress bar and "Enter System" now run on a CSS timeline from the first paint of the server HTML (stepped `max-width` in `ch` on the mono lines, cursor that moves line to line, button fading in at the end). The typing is a little quicker (28 ms per character). Under reduced motion everything is shown at once. **"Enter System" 7.8 s → 4.2 s** on a throttled phone (9.0 s on the live preview).
+3. **`typewriter-effect` (≈14 KB gzip) on the critical path** for the Terminal line and the boot log. The boot log is now CSS (above); the Terminal uses `TypeLoop` (60 lines), which writes to a text node on a timer: no React render per character. The dependency is removed.
+4. **Backdrop blurs under scrolling content.** The sidebar's `backdrop-filter: blur(40px)` sat on the window's own opaque surface, so it only blurred a flat colour (a pixel diff with and without it is identical) but still cost a full-height blur pass whenever the window moved. It is removed everywhere. On phones the Now widget, HUDs and Terminal use near-opaque fills (`--hud-solid`, `rgb(28,28,32)`); the fixed status bar and dock keep a lighter 18 px frost (small areas, and they are the iOS look).
+5. **The About marquee repainted every frame on phones.** It was a rAF loop writing `transform` from JavaScript (plus a paint of the masked pills). It is now a CSS animation on the compositor, paused off screen and under the pointer. Style recalc while scrolling the stack went 203 → 26 ms.
+6. **The mobile dock transitioned `bottom`** (`transition-all`), a layout on every frame of the hide/show while scrolling. It now moves with transform and opacity only.
+7. **Theme flip during hydration.** `ThemeProvider` applied its `'dark'` default to `<html>` before reading the stored theme, so every light-theme load switched the page to dark and back mid-hydration: two full-page style recalcs (~35 ms each at 4×) and a possible dark frame. The provider now leaves `<html>` alone until the stored theme is known. The hydration task went 113 → 82 ms.
+8. **Work straight after hydration.** Experience, Projects and Contact (client-only) start downloading at once, but render one per idle period, after the Welcome window's opening spring on desktop (900 ms). Any travel (scroll, Dock, Mission Control) renders the rest immediately, and until then each space keeps a placeholder with its anchor id, so the phone dock can still jump there. Mission Control and the notification are loaded on desktop only, after hydration; the dialog (Quick Look, service and skill sheets) loads after hydration too. Mission Control's geometry moved to `ui/overview.ts` so the journey does not pull the overview UI into the first load.
+9. **28 SVG logo requests competing with the scripts.** The tool-logo masks (About marquee, service toolkits) wait until the `load` event plus an idle callback, or the first scroll (`html[data-logos="wait"]`, set by the head script; without JavaScript they load at once). The `load` event moved from 6.4 s to 3.2 s.
+10. **Images:** `next/image` now serves **AVIF first** (WebP fallback) with a month-long optimizer cache. Phone thumbnails ask for 30vw, which picks the 384w variant (~2.2× density) instead of 640w at DPR 3. The menu-bar memoji crop is `loading="lazy"`, so phones (where the menu bar is hidden) never fetch it.
+
+Checked and left alone: the wallpaper is an inline SVG (no download) rasterised once on a fixed layer; the project images already used `next/image` with lazy loading and `sizes`; no fonts load on Apple devices (SF), and Inter/JetBrains Mono stay `display: swap` and unpreloaded elsewhere.
+
+### Not done (possible next steps)
+
+- **Greek copy is still in the first-load bundle** (~12 KB gzip). Lazy-loading it means moving the Greek half out of `content.ts`, which every style branch shares.
+- **Android fonts.** Android has no SF, so it downloads Inter (48 KB latin + 19 KB greek) and JetBrains Mono (~40 KB) with `display: swap`. Putting `system-ui` / `monospace` ahead of them would save ~100 KB on Android, but it changes the typeface there, so it is left for the owner to decide.
+- **Hydration of the whole tree on phones** (~170 ms at 4×, spread over several tasks) includes desktop-only UI hidden by CSS (menu bar menus, Dock). A lighter phone tree would need a second layout; the sheets already share one tree by design.
+
+### Round 5 files
+
+- **New:** `src/components/ui/TypeLoop.tsx`, `src/components/ui/overview.ts` (Mission Control geometry), `src/components/ui/DesktopExtras.tsx` (desktop-only lazy notification).
+- **Rewritten:** `CinematicEntry.tsx` (CSS timeline), the animation half of `LogoLoop.tsx`.
+- **Adjusted:** `Window.tsx`, `HeroOverlay.tsx`, `HorizontalLayout.tsx` (deferred sections, logo release, lazy Mission Control), `Projects.tsx`, `About.tsx`, `Services.tsx` (lazy dialog), `MobileNav.tsx`, `Navigation.tsx`, `AppIcon.tsx` (`lazy`), `MissionControl.tsx`, `ThemeContext.tsx`, `page.tsx`, `layout.tsx` (`data-logos`), `globals.css` (phone block, boot timeline, marquee keyframes, logo gate), `next.config.ts` (AVIF), `package.json` (`typewriter-effect` removed).
+
+### Round 5 previews
+
+In `scratchpad/r5/desktop-os-v2/` (`light/`, `dark/`): the six desktop spaces and five phone scroll depths per theme, from the dev server. No horizontal overflow at 390 px.
+
 ## Round 4: polish, performance, macOS extras
 
 Asked for: "more polishing, more performance fixes, and visual enhancements", and the memoji instead of an "AF" logo.
@@ -113,13 +186,13 @@ In `scratchpad/r4/desktop-os-v2/` (`light/`, `dark/`, `extra/`): Mission Control
 | `--focus-ring` | `#3B8CFF` | `#3E8EFF` | 3px macOS focus halo |
 | `--window-bg` | `#FFFFFF` | `#1F1F22` | window content (opaque) |
 | `--window-chrome` / `--statusbar` | `#F6F6F7` | `#2A2A2E` / `#252528` | unified toolbar, status and path bars |
-| `--sidebar` | `rgba(236,234,242,.74)` + `blur(40px) saturate(190%)` | `rgba(46,44,54,.62)` + same | vibrancy sidebars |
+| `--sidebar` | `rgba(236,234,242,.74)` | `rgba(46,44,54,.62)` | vibrancy-tinted sidebars (Round 5: no backdrop blur; it only blurred the window's own opaque surface) |
 | `--card` | `#F5F5F7` | white @ 5% | inset cards |
 | `--hairline` / `--hairline-strong` | black @ 10% / 16% | white @ 9% / 15% | 0.5px separators |
 | `--menubar` | `rgba(246,246,250,.62)` + blur 40 | `rgba(20,20,26,.5)` + blur 40 | 24px menu bar |
 | `--menu-bg` | `rgba(240,240,244,.82)` + blur 40 | `rgba(38,38,44,.8)` + blur 40 | dropdown menus, Dock labels |
 | `--dock-bg` | white @ 30% + blur 30 | `rgba(36,36,44,.38)` + blur 30 | Dock |
-| `--hud` | `rgba(252,252,254,.78)` | `rgba(34,34,40,.78)` | Now widget, window hints, phone launcher |
+| `--hud` / `--hud-solid` | `rgba(252,252,254,.78)` / `rgba(250,250,252,.95)` | `rgba(34,34,40,.78)` / `rgba(38,38,44,.95)` | Now widget, window hints, phone launcher; `-solid` replaces the blur on phones |
 | Traffic lights | close `#FF5F57`, minimise `#FEBC2E`, zoom `#28C840`; inactive `#D6D6DA` | inactive `#4C4C52` | with ×, − and + glyphs in darker inks |
 | `--shadow-key` / `--shadow-inactive` | 0.5px rim + 26/64 + 8/18 blur / 0.5px rim + 12/32 + 3/8 | deeper, plus a 0.5px light inner rim | the key window casts the deeper shadow |
 | Wallpaper | peach, pink, lilac, periwinkle and sky folds on `#F9E4DA → #E6DDF6 → #CFE2F6` | plum, violet, indigo and teal folds on `#120D2E → #161A48 → #0A1B33` | original SVG (`Wallpaper.tsx`), four folded bands with soft shadows and an edge sheen; no image download |
@@ -205,7 +278,7 @@ State lives in `DesktopContext` (`stack`, `keyId`, `status`, `zoomed`, `layoutEp
 
 | What | How |
 | --- | --- |
-| Window open | `opacity 0 → 1`, `scale 0.92 → 1`, spring `{ visualDuration: 0.35, bounce: 0.14 }`. It plays on reveal: the hero after the boot screen, the other windows when their space comes into view. |
+| Window open | `opacity 0 → 1`, `scale 0.92 → 1`, spring `{ visualDuration: 0.35, bounce: 0.14 }`. It plays on reveal: the hero after the boot screen, the other windows when their space comes into view. Desktop only since Round 5: phone sheets are simply there. |
 | Minimise / restore | 0.52s keyframes, `cubic-bezier(.5,0,.25,1)`. The width pinches first, then the window moves down into the icon. Restore plays the reverse path (0.5s). |
 | Close / reopen | 0.16s fade and scale to 0.96. Reopening uses the window-open spring. |
 | Zoom | a size and position spring, `visualDuration .34`, `bounce .06` |
@@ -258,7 +331,7 @@ State lives in `DesktopContext` (`stack`, `keyId`, `status`, `zoomed`, `layoutEp
 
 ## Trade-offs
 
-- **Opaque windows cost less GPU than v1.** `backdrop-filter` is now used only on sidebars, the menu bar, the Dock, menus, the Terminal and HUDs.
+- **Opaque windows cost less GPU than v1.** `backdrop-filter` is now used only on the menu bar, the Dock, menus, the Terminal and HUDs, and on phones only on the fixed status bar and dock (Round 5).
 - **Only the text-bearing areas are vibrancy.** Content panes are opaque, as on macOS, so body text never sits on a moving blur.
 - **The genie is approximate.** CSS transforms cannot warp a surface, so the window pinches (scaleX) before it pours (y, scaleY), with split timing. At 0.5s it reads as the genie. A true mesh warp would need WebGL.
 - **Windows cannot leave their space.** Dragging is clamped to the visible desktop of the window's own panel, so the horizontal journey stays coherent. On macOS you can push a window partly off-screen.

@@ -293,19 +293,22 @@ export function Avatar({
     crop = 'peek',
     alt = 'Andreas Fragkiadakis',
     className = '',
+    lazy = false,
 }: {
     size?: number
     crop?: 'peek' | 'face'
     /** Empty when a visible name right beside it already says who this is. */
     alt?: string
     className?: string
+    /** Only load when rendered in view (the menu-bar crop never loads on phones). */
+    lazy?: boolean
 }) {
     const src = crop === 'face' ? '/avatar/memoji-face.webp' : '/avatar/memoji-peek.webp'
     return (
         <span className={`os-avatar ${crop === 'face' ? 'os-avatar--face' : ''} ${className}`} style={{ width: size, height: size }}>
             {/* A 3 KB / 10 KB pre-cropped WebP at 3x: no optimizer round trip, never blurry. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={src} alt={alt} width={size} height={size} decoding="async" draggable={false} />
+            <img src={src} alt={alt} width={size} height={size} decoding="async" loading={lazy ? 'lazy' : undefined} draggable={false} />
         </span>
     )
 }

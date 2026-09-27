@@ -2,7 +2,7 @@
 
 import { useContent } from '@/hooks/useContent'
 import { motion, useReducedMotion } from 'motion/react'
-import Typewriter from 'typewriter-effect'
+import TypeLoop from '@/components/ui/TypeLoop'
 import { gmailComposeUrl } from '@/utils/links'
 import { WINDOW_SPRING } from '@/utils/motion'
 import { useSiteEntered } from '@/hooks/useSiteEntered'
@@ -46,6 +46,7 @@ export default function HeroOverlay() {
     // The typing loop only runs while its space is in front: off-screen it would keep
     // relaying out and repainting the translucent Terminal for nobody.
     const onDesktopSpace = useDesktopState((s) => s.active === 'hero')
+    const phone = useDesktopState((s) => s.isDesktop === false)
 
     const [first, ...rest] = t.os.displayName.split(' ')
     const credentials = t.education.filter((e) => e.badge && e.kind && e.kind !== 'degree')
@@ -152,9 +153,7 @@ export default function HeroOverlay() {
                             <span className="sr-only">{t.hero.typewriter.join(' | ')}</span>
                             <span aria-hidden="true">
                                 {entered && onDesktopSpace && (
-                                    <Typewriter
-                                        options={{ strings: t.hero.typewriter, autoStart: true, loop: true, delay: 45, deleteSpeed: 25, cursor: '▍' }}
-                                    />
+                                    <TypeLoop strings={t.hero.typewriter} />
                                 )}
                             </span>
                         </div>
@@ -177,8 +176,8 @@ export default function HeroOverlay() {
                 <motion.div
                     initial={reduceMotion ? false : { opacity: 0, scale: 0.92 }}
                     animate={entered ? { opacity: 1, scale: 1 } : undefined}
-                    transition={{ ...WINDOW_SPRING, delay: 0.24 }}
-                    className="os-widget w-full md:max-w-[22rem] md:ml-8 p-4 md:p-[1.125rem]"
+                    transition={phone ? { duration: 0 } : { ...WINDOW_SPRING, delay: 0.24 }}
+                    className="os-widget os-reveal w-full md:max-w-[22rem] md:ml-8 p-4 md:p-[1.125rem]"
                 >
                     <div className="flex items-center gap-2 text-caption font-semibold text-[var(--muted)]">
                         <AppIcon app="about" size={18} />

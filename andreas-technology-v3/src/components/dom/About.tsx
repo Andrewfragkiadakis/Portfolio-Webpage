@@ -1,10 +1,10 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import { useContent } from '@/hooks/useContent'
 import { useInView, useReducedMotion, animate } from 'motion/react'
 import { useRef, useEffect, useState } from 'react'
 import type { Skill } from '@/data/content'
-import Modal from '@/components/ui/Modal'
 import LogoLoop from '@/components/ui/LogoLoop'
 import type { LogoItem } from '@/components/ui/LogoLoop'
 import { TOOLS, type Tool } from '@/data/tools'
@@ -14,6 +14,9 @@ import CredentialChips from '@/components/ui/CredentialChips'
 import { Avatar, GlyphTile } from '@/components/ui/AppIcon'
 import Icon, { symbolFor } from '@/components/ui/Icon'
 import { SERVICE_TINTS } from '@/data/apps'
+
+// Quick Look / sheets: closed at load, so the dialog code arrives after hydration.
+const Modal = dynamic(() => import('@/components/ui/Modal'), { ssr: false })
 
 /** Counts up once in view. Writes straight to the DOM so it never re-renders React per frame. */
 function AnimatedCounter({ value, suffix = '', duration = 2 }: { value: number; suffix?: string; duration?: number }) {

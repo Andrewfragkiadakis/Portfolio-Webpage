@@ -19,7 +19,6 @@ interface LogoLoopProps {
     className?: string
 }
 
-const SMOOTH_TAU = 0.25
 const MIN_COPIES = 2
 const COPY_HEADROOM = 2
 
@@ -36,11 +35,9 @@ export default function LogoLoop({
     className = '',
 }: LogoLoopProps) {
     const containerRef = useRef<HTMLDivElement>(null)
-    const trackRef = useRef<HTMLDivElement>(null)
     const seqRef = useRef<HTMLDivElement>(null)
     const [seqWidth, setSeqWidth] = useState(0)
     const [copyCount, setCopyCount] = useState(MIN_COPIES)
-    const [isHovered, setIsHovered] = useState(false)
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
     const targetVelocity = useMemo(() => {
@@ -96,66 +93,28 @@ export default function LogoLoop({
     }, [updateDimensions, logos, gap, logoHeight])
     /* eslint-enable react-hooks/set-state-in-effect */
 
+    // Round 5: the marquee is a CSS animation on the compositor, not a rAF loop writing
+    // a transform from JavaScript every frame (which also repainted the masked pills on
+    // phones). It pauses under the pointer and whenever it is off screen.
+    const [onScreen, setOnScreen] = useState(false)
     useEffect(() => {
-        const track = trackRef.current
         const container = containerRef.current
-        if (!track || seqWidth <= 0) return
+        if (!container) return
+        const observer = new IntersectionObserver(([entry]) => setOnScreen(entry.isIntersecting), { threshold: 0 })
+        observer.observe(container)
+        return () => observer.disconnect()
+    }, [])
 
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            track.style.transform = 'translate3d(0, 0, 0)'
-            return
-        }
-
-        let rafId: number | null = null
-        let lastTs: number | null = null
-        let offset = 0
-        let velocity = 0
-        let isOnScreen = true
-
-        const animate = (ts: number) => {
-            if (lastTs === null) lastTs = ts
-            const dt = Math.max(0, ts - lastTs) / 1000
-            lastTs = ts
-            const target = isHovered && pauseOnHover ? 0 : targetVelocity
-            velocity += (target - velocity) * (1 - Math.exp(-dt / SMOOTH_TAU))
-            offset = ((offset + velocity * dt) % seqWidth + seqWidth) % seqWidth
-            track.style.transform = `translate3d(${-offset}px, 0, 0)`
-            rafId = requestAnimationFrame(animate)
-        }
-
-        const start = () => {
-            if (rafId !== null) return
-            lastTs = null
-            rafId = requestAnimationFrame(animate)
-        }
-
-        const stop = () => {
-            if (rafId !== null) cancelAnimationFrame(rafId)
-            rafId = null
-        }
-
-        // Don't burn frames scrolling a marquee nobody is looking at.
-        const sync = () => (isOnScreen && !document.hidden ? start() : stop())
-
-        let observer: IntersectionObserver | undefined
-        if (container) {
-            observer = new IntersectionObserver(([entry]) => {
-                isOnScreen = entry.isIntersecting
-                sync()
-            }, { threshold: 0 })
-            observer.observe(container)
-        }
-        document.addEventListener('visibilitychange', sync)
-        sync()
-
-        return () => {
-            stop()
-            observer?.disconnect()
-            document.removeEventListener('visibilitychange', sync)
-        }
-    }, [targetVelocity, seqWidth, isHovered, pauseOnHover])
-
-    const rootClassName = ['logoloop', fadeOut && 'logoloop--fade', scaleOnHover && 'logoloop--scale-hover', className].filter(Boolean).join(' ')
+    const rootClassName = ['logoloop', fadeOut && 'logoloop--fade', scaleOnHover && 'logoloop--scale-hover', pauseOnHover && 'logoloop--pause-hover', className].filter(Boolean).join(' ')
+    const speedAbs = Math.abs(targetVelocity) || 1
+    const trackStyle = seqWidth > 0
+        ? ({
+            '--loop-distance': `-${seqWidth}px`,
+            '--loop-duration': `${seqWidth / speedAbs}s`,
+            animationDirection: targetVelocity < 0 ? 'reverse' : 'normal',
+            animationPlayState: onScreen ? 'running' : 'paused',
+        } as React.CSSProperties)
+        : undefined
 
     return (
         <div
@@ -164,10 +123,8 @@ export default function LogoLoop({
             style={{ '--logoloop-gap': gap, '--logoloop-logoHeight': logoHeight, ...(fadeOutColor && { '--logoloop-fadeColor': fadeOutColor }) } as React.CSSProperties}
             role="marquee"
             aria-label="Tech stack"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
         >
-            <div ref={trackRef} className="logoloop__track">
+            <div className={`logoloop__track ${seqWidth > 0 ? 'is-running' : ''}`} style={trackStyle}>
                 {Array.from({ length: copyCount }, (_, ci) => (
                     <div key={ci} className="logoloop__list" aria-hidden={ci > 0} ref={ci === 0 ? seqRef : undefined}>
                         {logos.map((item, ii) => (

@@ -50,6 +50,7 @@
   --dock-bg: rgba(255, 255, 255, 0.3);
   --dock-rim: rgba(255, 255, 255, 0.5);
   --hud: rgba(252, 252, 254, 0.78);
+  --hud-solid: rgba(250, 250, 252, 0.95);
   --cc-module: rgba(255, 255, 255, 0.55);
   --scroll-thumb: rgba(0, 0, 0, 0.32);
   --space-thumb:
@@ -129,6 +130,7 @@
   --dock-bg: rgba(36, 36, 44, 0.38);
   --dock-rim: rgba(255, 255, 255, 0.16);
   --hud: rgba(34, 34, 40, 0.78);
+  --hud-solid: rgba(38, 38, 44, 0.95);
   --cc-module: rgba(255, 255, 255, 0.07);
   --scroll-thumb: rgba(255, 255, 255, 0.34);
   --space-thumb:
@@ -409,11 +411,12 @@ body {
   }
 }
 
-/* Vibrancy: the wallpaper glows through the sidebar, as on macOS. */
+/* Vibrancy tint. Round 5: no backdrop-filter. The sidebar sits on the window's own
+   opaque surface, so the blur only ever blurred a flat colour: a pixel diff with and
+   without it is identical, but it cost a full-height blur pass on every frame the
+   window moved (scrolling the phone stack, travelling between spaces, dragging). */
 .os-sidebar {
   background: var(--sidebar);
-  -webkit-backdrop-filter: blur(40px) saturate(190%);
-  backdrop-filter: blur(40px) saturate(190%);
   border-bottom: 0.5px solid var(--hairline);
 }
 
@@ -1133,8 +1136,86 @@ html.theme-transition *::after {
   z-index: 1;
 }
 
+/* ─── Phones (Round 5) ─────────────────────────────────────────────────
+   1. The sheets are visible in the server HTML. Windows used to start at opacity 0
+      and wait for hydration to animate in, which put LCP ~2.5 s after first paint
+      on a throttled phone. Motion's inline start styles are overridden here.
+   2. No backdrop-filter on in-flow surfaces: every blur under a scrolling sheet is
+      re-rendered on every frame. They get near-opaque fills instead. The fixed
+      status bar and dock keep a lighter frost (small areas, and they are the iOS
+      look). */
+@media not all and (min-width: 64rem) {
+  .os-win,
+  .os-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .os-widget,
+  .os-hud {
+    background: var(--hud-solid);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .os-window--terminal {
+    background: rgb(28, 28, 32);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .os-menubar::before,
+  .os-dock::before {
+    -webkit-backdrop-filter: blur(18px) saturate(170%);
+    backdrop-filter: blur(18px) saturate(170%);
+  }
+}
+
 html[data-entered="true"] [data-cinematic] {
   display: none !important;
+}
+
+/* Boot screen (Round 5): the log types, the bar fills and "Enter System" appears on
+   CSS time, from the first paint of the server HTML: no wait for hydration. */
+.boot-progress {
+  transform: scaleX(0);
+  animation: boot-fill var(--boot-done) cubic-bezier(0.3, 0.6, 0.4, 1) forwards;
+}
+@keyframes boot-fill { to { transform: scaleX(1); } }
+
+.boot-row { display: flex; align-items: baseline; white-space: nowrap; }
+.boot-text {
+  display: inline-block;
+  overflow: hidden;
+  max-width: 0;
+  animation: boot-type var(--dur) steps(var(--n), end) var(--at) forwards;
+}
+@keyframes boot-type { to { max-width: calc(var(--n) * 1ch); } }
+
+/* The cursor sits after the line being typed, then moves on to the next one. */
+.boot-cursor {
+  visibility: hidden;
+  animation: boot-on 0s linear var(--at) forwards, boot-off 0s linear var(--until) forwards, term-blink 1.1s steps(1, end) infinite;
+}
+@keyframes boot-on { to { visibility: visible; } }
+@keyframes boot-off { to { visibility: hidden; } }
+
+.boot-enter {
+  visibility: hidden;
+  opacity: 0;
+  animation: boot-enter 0.35s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--boot-done) + 150ms) forwards;
+}
+@keyframes boot-enter {
+  from { visibility: visible; opacity: 0; transform: translateY(8px); }
+  to { visibility: visible; opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boot-progress { animation: none; transform: none; }
+  .boot-text { animation: none; max-width: none; }
+  .boot-cursor { animation: none; }
+  .boot-row:last-child .boot-cursor { visibility: visible; }
+  .boot-enter { animation: none; visibility: visible; opacity: 1; }
 }
 
 /* Text selection in the macOS highlight colours (blue accent). */
@@ -1208,6 +1289,16 @@ html::-webkit-scrollbar { display: none; }
   position: relative;
   z-index: 0;
 }
+
+/* Round 5: runs on the compositor (see LogoLoop.tsx). */
+.logoloop__track.is-running {
+  animation: logoloop var(--loop-duration) linear infinite;
+}
+@keyframes logoloop {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(var(--loop-distance), 0, 0); }
+}
+.logoloop--pause-hover:hover .logoloop__track { animation-play-state: paused !important; }
 
 .logoloop__list {
   display: flex;
@@ -1332,10 +1423,21 @@ html::-webkit-scrollbar { display: none; }
   -webkit-mask-size: contain;
 }
 
+/* Round 5: the 28 tool logos (one SVG mask each) wait until the page has loaded, so
+   they never compete with the scripts on a slow connection. The <head> script sets
+   data-logos="wait"; without JavaScript it is never set and the logos load at once. */
+html[data-logos="wait"] .tool-logo,
+html[data-logos="wait"] .tool-tile__logo {
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+  background-color: transparent;
+}
+
 }
 
 @media (prefers-reduced-motion: reduce) {
   .logoloop__track {
+    animation: none !important;
     transform: translate3d(0, 0, 0) !important;
   }
 }

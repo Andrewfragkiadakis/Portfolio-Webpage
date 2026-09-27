@@ -86,7 +86,7 @@ export default function RootLayout({
                 />
                 <script
                     dangerouslySetInnerHTML={{
-                        __html: `(function(){try{if(localStorage.getItem('cinematic-entered')==='true'){document.documentElement.dataset.entered='true';}}catch(e){}})();`,
+                        __html: `(function(){var d=document.documentElement;d.dataset.logos='wait';try{if(localStorage.getItem('cinematic-entered')==='true'){d.dataset.entered='true';}}catch(e){}})();`,
                     }}
                 />
                 <script

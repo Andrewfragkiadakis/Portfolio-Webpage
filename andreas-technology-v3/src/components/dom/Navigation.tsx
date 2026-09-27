@@ -291,7 +291,7 @@ export default function Navigation() {
         {
             id: 'af',
             // Where the Apple menu sits on a Mac: the owner's memoji, never a vendor logo.
-            label: <Avatar crop="face" size={18} />,
+            label: <Avatar crop="face" size={18} lazy />,
             ariaLabel: t.os.displayName,
             className: 'os-menubar__item--avatar',
             entries: [

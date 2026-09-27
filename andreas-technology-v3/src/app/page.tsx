@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 import Navigation from '@/components/dom/Navigation'
 import MobileNav from '@/components/dom/MobileNav'
 import Dock from '@/components/dom/Dock'
-import Notification from '@/components/ui/Notification'
+import DesktopExtras from '@/components/ui/DesktopExtras'
 import MainContent from '@/components/MainContent'
 import { DesktopProvider } from '@/contexts/DesktopContext'
 
@@ -16,7 +16,7 @@ export default function Home() {
             <Navigation />
             <MobileNav />
             <Dock />
-            <Notification />
+            <DesktopExtras />
             <main id="main-content" className="relative z-10 w-full">
                 <Suspense fallback={<MainFallback />}>
                     <MainContent />

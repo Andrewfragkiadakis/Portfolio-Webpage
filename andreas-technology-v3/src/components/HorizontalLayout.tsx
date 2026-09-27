@@ -1,4 +1,4 @@
-import { useEffect, useRef, Suspense, useCallback, type ReactNode } from 'react'
+import { useEffect, useRef, useState, Suspense, useCallback, type ReactNode } from 'react'
 import dynamic from 'next/dynamic'
 import { motion, useScroll, useTransform, useVelocity, useMotionValue, animate, useReducedMotion, type MotionValue } from 'motion/react'
 import HeroOverlay from '@/components/dom/HeroOverlay'
@@ -7,13 +7,21 @@ import Services from '@/components/dom/Services'
 import { useIsDesktop } from '@/hooks/useIsDesktop'
 import { SECTION_IDS, SECTION_STEPS, TRACK_HEIGHT_VH, TRACK_TRAVEL_VW } from '@/data/sections'
 import { useDesktopActions, useDesktopState } from '@/contexts/DesktopContext'
-import MissionControl, { useOverviewGeometry, type SpaceSlot } from '@/components/ui/MissionControl'
+import { useOverviewGeometry, type SpaceSlot } from '@/components/ui/overview'
 import { readActiveSection } from '@/hooks/useActiveSection'
 import { scrollToSection } from '@/utils/smooth-scroll'
 
-const Experience = dynamic(() => import('@/components/dom/Experience'), { ssr: false })
-const Projects = dynamic(() => import('@/components/dom/Projects'), { ssr: false })
-const Contact = dynamic(() => import('@/components/dom/Contact'), { ssr: false })
+const loadExperience = () => import('@/components/dom/Experience')
+const loadProjects = () => import('@/components/dom/Projects')
+const loadContact = () => import('@/components/dom/Contact')
+const Experience = dynamic(loadExperience, { ssr: false })
+const Projects = dynamic(loadProjects, { ssr: false })
+const Contact = dynamic(loadContact, { ssr: false })
+const DEFERRED_SECTIONS = 3
+/** Desktop: let the Welcome window's opening spring play before the later spaces render. */
+const DEFER_AFTER_REVEAL_MS = 900
+// Desktop only, and never visible at load: fetched after hydration, never on phones.
+const MissionControl = dynamic(() => import('@/components/ui/MissionControl'), { ssr: false })
 
 /**
  * One space of the journey. In Mission Control it scales down into its slot of the
@@ -61,8 +69,9 @@ function Space({ index, ov, slot, children, onDesktopPointerDown }: { index: num
     )
 }
 
-function SectionFallback() {
-    return <div className="min-h-screen w-full flex items-center justify-center bg-transparent" aria-hidden />
+/** Holds a space's place; with an `id` it is also a travel target until the window renders. */
+function SectionFallback({ id }: { id?: string }) {
+    return <div id={id} className="min-h-screen w-full flex items-center justify-center bg-transparent" aria-hidden />
 }
 
 /** Stop settling the scroll once it is this close to a section boundary (in progress units). */
@@ -110,6 +119,62 @@ export default function HorizontalLayout() {
 
 
     const clearFocus = useCallback(() => focus(null), [focus])
+
+    // The three later spaces (Experience, Projects, Contact) are client-only. Their code
+    // starts downloading at once, but they render one per idle period, after the
+    // Welcome window has opened on desktop: rendering all three straight after
+    // hydration was ~250 ms of main thread (4x CPU) that stalled the opening spring
+    // and the first scroll on phones. Any travel (scroll, Mission Control) renders
+    // whatever is left immediately.
+    const [deferred, setDeferred] = useState(0)
+    useEffect(() => {
+        loadExperience(); loadProjects(); loadContact()
+    }, [])
+    useEffect(() => {
+        if (deferred >= DEFERRED_SECTIONS || isDesktop === null) return
+        let idleId: number | undefined
+        const next = () => setDeferred((n) => n + 1)
+        const timer = window.setTimeout(() => {
+            idleId = typeof window.requestIdleCallback === 'function' ? window.requestIdleCallback(next, { timeout: 1000 }) : window.setTimeout(next, 50)
+        }, deferred === 0 && isDesktop ? DEFER_AFTER_REVEAL_MS : 0)
+        const all = () => setDeferred(DEFERRED_SECTIONS)
+        window.addEventListener('scroll', all, { passive: true, once: true })
+        return () => {
+            window.clearTimeout(timer)
+            if (idleId !== undefined) {
+                if (typeof window.cancelIdleCallback === 'function') window.cancelIdleCallback(idleId)
+                else window.clearTimeout(idleId)
+            }
+            window.removeEventListener('scroll', all)
+        }
+    }, [deferred, isDesktop])
+    const rendered = overview ? DEFERRED_SECTIONS : deferred
+
+    // Release the deferred tool logos (see `data-logos` in globals.css) once the page
+    // has loaded and the main thread is idle, or as soon as the visitor scrolls.
+    useEffect(() => {
+        const root = document.documentElement
+        if (root.dataset.logos !== 'wait') return
+        let idleId: number | undefined
+        const release = () => {
+            delete root.dataset.logos
+            window.removeEventListener('scroll', release)
+        }
+        const whenIdle = () => {
+            idleId = typeof window.requestIdleCallback === 'function' ? window.requestIdleCallback(release, { timeout: 1500 }) : window.setTimeout(release, 300)
+        }
+        if (document.readyState === 'complete') whenIdle()
+        else window.addEventListener('load', whenIdle, { once: true })
+        window.addEventListener('scroll', release, { passive: true, once: true })
+        return () => {
+            window.removeEventListener('load', whenIdle)
+            window.removeEventListener('scroll', release)
+            if (idleId !== undefined) {
+                if (typeof window.cancelIdleCallback === 'function') window.cancelIdleCallback(idleId)
+                else window.clearTimeout(idleId)
+            }
+        }
+    }, [])
 
     const velocity = useVelocity(scrollYProgress)
     // A ref, not state: the snap guard is read inside listeners and must never
@@ -203,9 +268,9 @@ export default function HorizontalLayout() {
         <HeroOverlay key="hero" />,
         <About key="about" />,
         <Services key="services" />,
-        <Suspense key="experience" fallback={<SectionFallback />}><Experience /></Suspense>,
-        <Suspense key="projects" fallback={<SectionFallback />}><Projects /></Suspense>,
-        <Suspense key="contact" fallback={<SectionFallback />}><Contact /></Suspense>,
+        <Suspense key="experience" fallback={<SectionFallback />}>{rendered > 0 ? <Experience /> : <SectionFallback id="experience" />}</Suspense>,
+        <Suspense key="projects" fallback={<SectionFallback />}>{rendered > 1 ? <Projects /> : <SectionFallback id="projects" />}</Suspense>,
+        <Suspense key="contact" fallback={<SectionFallback />}>{rendered > 2 ? <Contact /> : <SectionFallback id="contact" />}</Suspense>,
     ]
 
     return (
@@ -237,7 +302,7 @@ export default function HorizontalLayout() {
                     ))}
                 </motion.div>
             </div>
-            <MissionControl geo={geo} />
+            {geo && <MissionControl geo={geo} />}
         </div>
     )
 }

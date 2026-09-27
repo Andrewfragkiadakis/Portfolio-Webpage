@@ -44,7 +44,10 @@ export default function MobileNav() {
 
     return (
         <div
-            className={`md:hidden fixed inset-x-3 z-50 transition-all duration-300 ease-out ${isVisible ? 'bottom-3 opacity-100 translate-y-0' : 'bottom-0 opacity-0 translate-y-4 pointer-events-none'}`}
+            // Only opacity and transform transition (compositor-only). It used to be
+            // `transition-all` on `bottom`, which re-laid out the page on every frame of
+            // the hide/show while the phone was scrolling.
+            className={`md:hidden fixed inset-x-3 bottom-3 z-50 transition-[opacity,transform] duration-300 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-7 pointer-events-none'}`}
         >
             <nav className="os-dock [--dock-bg:var(--hud)] mx-auto max-w-sm rounded-[1.75rem] px-3 py-2.5" aria-label="Mobile navigation">
                 <ul className="grid grid-cols-4 gap-1">

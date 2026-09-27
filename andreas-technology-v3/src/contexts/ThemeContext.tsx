@@ -25,7 +25,12 @@ function getThemeByTime(): Theme {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-    const [theme, setThemeState] = useState<Theme>('dark')
+    // null until mounted: the <head> script has already put the right class on <html>,
+    // and the effect below must not touch it before the stored theme is known. (It used
+    // to apply the 'dark' default first, so every light-theme load flipped <html> to
+    // dark and back during hydration: two full-page style recalcs, ~70 ms on a phone.)
+    const [resolved, setThemeState] = useState<Theme | null>(null)
+    const theme: Theme = resolved ?? 'dark'
 
     useEffect(() => {
         // localStorage and matchMedia are browser-only, so the real theme can only be
@@ -95,10 +100,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
 
     useEffect(() => {
-        document.documentElement.classList.remove('light', 'dark')
-        document.documentElement.classList.add(theme)
-        localStorage.setItem('theme', theme)
-    }, [theme])
+        if (!resolved) return
+        const root = document.documentElement
+        if (!root.classList.contains(resolved)) {
+            root.classList.remove('light', 'dark')
+            root.classList.add(resolved)
+        }
+        localStorage.setItem('theme', resolved)
+    }, [resolved])
 
     return (
         <ThemeContext.Provider value={{ theme, setTheme }}>

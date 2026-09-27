@@ -1,17 +1,20 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import { useContent } from '@/hooks/useContent'
 import { useDesktopActions } from '@/contexts/DesktopContext'
 import { useState } from 'react'
 import type { Service } from '@/data/content'
 import { TOOL_BY_LABEL, type Tool } from '@/data/tools'
-import Modal from '@/components/ui/Modal'
 import Window from '@/components/ui/Window'
 import { ToolTile } from '@/components/ui/ToolBadge'
 import { GlyphTile } from '@/components/ui/AppIcon'
 import Icon, { symbolFor } from '@/components/ui/Icon'
 import { FinderSidebar, PathBar } from '@/components/ui/Finder'
 import { SERVICE_TINTS } from '@/data/apps'
+
+// Quick Look / sheets: closed at load, so the dialog code arrives after hydration.
+const Modal = dynamic(() => import('@/components/ui/Modal'), { ssr: false })
 
 const toolsFor = (service: Service): Tool[] =>
     service.tools.map((label) => TOOL_BY_LABEL.get(label)).filter((tool): tool is Tool => Boolean(tool))

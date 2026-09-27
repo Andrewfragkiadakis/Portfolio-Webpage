@@ -228,6 +228,10 @@ export default function Window({
     const drag = useRef<{ id: number; sx: number; sy: number; ox: number; oy: number; minX: number; maxX: number; minY: number; maxY: number } | null>(null)
 
     const managed = isDesktop === true
+    // Phones get no window animations: the sheets are simply there. The server HTML is
+    // kept visible on small screens by CSS (see `.os-win` in globals.css), so the first
+    // paint shows the content instead of waiting for JavaScript to reveal it.
+    const phone = isDesktop === false
 
     /* Frame size helpers for zoom. */
     const setSize = (el: HTMLElement, w?: number, h?: number) => {
@@ -431,7 +435,7 @@ export default function Window({
     )
 
     const Root = (as === 'section' ? motion.section : motion.div) as typeof motion.div
-    const animateTo = !revealed && !reduceMotion ? 'hidden' : status
+    const animateTo = !revealed && !reduceMotion && !phone ? 'hidden' : status
     const hint = status === 'minimized' ? t.os.hidden.minimized : t.os.hidden.closed
 
     return (
@@ -449,7 +453,7 @@ export default function Window({
                 id={anchor}
                 aria-labelledby={labelledBy}
                 tabIndex={-1}
-                custom={{ ...genie, delay: genie.from === 'none' ? delay : 0, reduce: Boolean(reduceMotion) } satisfies VariantInput}
+                custom={{ ...genie, delay: genie.from === 'none' ? delay : 0, reduce: Boolean(reduceMotion) || phone } satisfies VariantInput}
                 variants={VARIANTS}
                 initial={reduceMotion ? false : 'hidden'}
                 animate={animateTo}

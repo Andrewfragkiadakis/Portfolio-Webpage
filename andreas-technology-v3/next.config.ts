@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
     root: path.join(__dirname),
   },
   images: {
+    // AVIF first (roughly a third smaller than WebP for these screenshots), WebP fallback.
+    formats: ['image/avif', 'image/webp'],
+    // Optimised variants are immutable per URL; keep them cached for a month.
+    minimumCacheTTL: 2678400,
     remotePatterns: [
       { protocol: 'https', hostname: 'andreas.technology', pathname: '/**' },
     ],

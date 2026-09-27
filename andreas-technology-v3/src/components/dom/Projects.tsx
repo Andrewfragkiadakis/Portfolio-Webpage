@@ -1,16 +1,19 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import { useContent } from '@/hooks/useContent'
 import { motion, useReducedMotion, type Variants } from 'motion/react'
 import { useState } from 'react'
 import type { Project } from '@/data/content'
-import Modal from '@/components/ui/Modal'
 import ProjectImage from '@/components/ui/ProjectImage'
 import Window from '@/components/ui/Window'
 import Icon, { type SymbolName } from '@/components/ui/Icon'
 import { FinderSidebar, PathBar } from '@/components/ui/Finder'
 import { useDesktopActions, useDesktopState } from '@/contexts/DesktopContext'
 import { EASE_OUT } from '@/utils/motion'
+
+// Quick Look / sheets: closed at load, so the dialog code arrives after hydration.
+const Modal = dynamic(() => import('@/components/ui/Modal'), { ssr: false })
 
 const ICON_POP: Variants = {
     hidden: { opacity: 0, y: 16, scale: 0.96 },
@@ -79,6 +82,8 @@ export default function Projects() {
     const reduceMotion = useReducedMotion()
     const [activeProject, setActiveProject] = useState<Project | null>(null)
     const view = useDesktopState((s) => s.projectsView)
+    // Phones: no pop-in per icon while scrolling the stack.
+    const phone = useDesktopState((s) => s.isDesktop === false)
     const { setProjectsView: setView } = useDesktopActions()
 
     return (
@@ -134,7 +139,7 @@ export default function Projects() {
                         {t.projects.map((project: Project, index: number) => (
                             <motion.li
                                 key={project.name}
-                                initial={reduceMotion ? false : 'hidden'}
+                                initial={reduceMotion || phone ? false : 'hidden'}
                                 whileInView="visible"
                                 viewport={{ once: true, amount: 0.2 }}
                                 variants={ICON_POP}
@@ -147,9 +152,11 @@ export default function Projects() {
                                     className="group w-full flex flex-col items-center gap-1.5 p-1.5 rounded-lg text-center transition-colors hover:bg-[var(--control)] focus-visible:bg-[var(--control)]"
                                 >
                                     <span className="relative block w-full aspect-[16/10] overflow-hidden rounded-md bg-[var(--control)] shadow-[0_0_0_0.5px_var(--hairline-strong),0_6px_14px_-8px_rgba(0,0,0,0.45)]">
+                                        {/* Phones: the tile is ~45vw, but asking for 30vw picks the
+                                            384w variant (~2.2x) instead of 640w at DPR 3: half the bytes. */}
                                         <ProjectImage
                                             project={project}
-                                            sizes="(max-width: 639px) 45vw, (max-width: 1279px) 25vw, 180px"
+                                            sizes="(max-width: 639px) 30vw, (max-width: 1279px) 25vw, 180px"
                                             className="transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-safe:group-hover:scale-[1.05]"
                                         />
                                     </span>
