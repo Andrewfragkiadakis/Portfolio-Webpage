@@ -364,7 +364,7 @@ export const content: Record<'en' | 'gr', Content> = {
                     "AI ticket triage across 350+ tickets a year",
                     "MCP server prototypes for IT tooling"
                 ],
-                tools: ["Claude Code", "MCP Servers", "Google Gemini", "Atlassian Rovo", "Jira Service Management", "Slack"]
+                tools: ["Claude Code", "MCP Servers", "Google Gemini", "Grok Bot", "Atlassian Rovo", "Jira Service Management", "Slack"]
             },
             {
                 icon: "fas fa-headset",
@@ -932,7 +932,7 @@ export const content: Record<'en' | 'gr', Content> = {
                     "Διαλογή αιτημάτων με AI σε 350+ tickets τον χρόνο",
                     "Prototypes MCP servers για εργαλεία IT"
                 ],
-                tools: ["Claude Code", "MCP Servers", "Google Gemini", "Atlassian Rovo", "Jira Service Management", "Slack"]
+                tools: ["Claude Code", "MCP Servers", "Google Gemini", "Grok Bot", "Atlassian Rovo", "Jira Service Management", "Slack"]
             },
             {
                 icon: "fas fa-headset",

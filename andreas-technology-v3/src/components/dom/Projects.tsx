@@ -96,7 +96,7 @@ export default function Projects() {
                         {openButton(project)}
                         <div className={`${FRAME} flex-1 min-h-0`}>
                             {project.image && (
-                                <ProjectImage project={project} sizes="(max-width: 1023px) 50vw, 240px" plain containBox="inset-2" />
+                                <ProjectImage project={project} sizes="(max-width: 1023px) 50vw, 240px" fill />
                             )}
                         </div>
                         <div className="px-3.5 md:px-[calc(var(--tile-pad)*0.8)] pb-2.5 short:pb-1.5 pt-1 flex flex-col">

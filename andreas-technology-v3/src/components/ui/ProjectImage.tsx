@@ -15,6 +15,8 @@ interface ProjectImageProps {
     containBox?: string
     /** Skip the blurred fill: a `contain` screenshot sits on the frame's own neutral surface. */
     plain?: boolean
+    /** Fill the whole frame edge to edge: scaled uniformly (never stretched) and cropped to fit, anchored to the top of the screenshot unless the project sets a focal point. */
+    fill?: boolean
 }
 
 /**
@@ -26,10 +28,10 @@ interface ProjectImageProps {
  * crop opt into `cover`, optionally with a focal point (`imagePosition`). Both layers
  * share one URL and `sizes`, so the browser downloads the image once.
  */
-export default function ProjectImage({ project, sizes, className = '', eager = false, containBox, plain = false }: ProjectImageProps) {
+export default function ProjectImage({ project, sizes, className = '', eager = false, containBox, plain = false, fill = false }: ProjectImageProps) {
     const loading = eager ? 'eager' : 'lazy'
     if (!project.image) return null
-    const fit = project.imageFit ?? 'contain'
+    const fit = fill ? 'cover' : (project.imageFit ?? 'contain')
 
     return (
         <>
@@ -56,7 +58,7 @@ export default function ProjectImage({ project, sizes, className = '', eager = f
                     sizes={sizes}
                     loading={loading}
                     className={`${fit === 'contain' ? 'object-contain' : 'object-cover'} ${className}`}
-                    style={project.imagePosition ? { objectPosition: project.imagePosition } : undefined}
+                    style={project.imagePosition || fill ? { objectPosition: project.imagePosition ?? '50% 0%' } : undefined}
                 />
             )}
         </>

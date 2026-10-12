@@ -50,6 +50,7 @@ export const TOOLS = [
     { label: 'Claude Code', logo: 'claude', brand: '#D97757', row: 'build' },
     { label: 'MCP Servers', logo: 'modelcontextprotocol', brand: '#000000', row: 'build' },
     { label: 'Google Gemini', logo: 'googlegemini', brand: '#8E75B2', row: 'build' },
+    { label: 'Grok Bot', logo: 'grok', brand: '#000000', row: 'build' },
     { label: 'Atlassian Rovo', logo: 'atlassian', brand: '#0052CC', row: 'build' },
     // Collaboration & ITSM
     { label: 'Jira Service Management', logo: 'jira', brand: '#0052CC', row: 'build' },
