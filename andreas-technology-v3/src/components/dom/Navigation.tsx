@@ -115,7 +115,7 @@ export default function Navigation() {
                         <button
                             type="button"
                             onClick={() => go('hero', 0)}
-                            className="flex items-center gap-2.5 min-w-0 rounded-full"
+                            className="flex items-center gap-2.5 min-w-0 min-h-11 rounded-full"
                         >
                             <Mark size={30} className="-my-1" />
                             <span
@@ -189,7 +189,7 @@ export default function Navigation() {
                     data-closing={menu.closing ? '' : undefined}
                     className="kn-menu md:hidden fixed inset-x-0 top-[var(--nav-h)] bottom-0 z-[55] bg-[var(--background)] text-[var(--foreground)] overflow-y-auto"
                 >
-                    <nav aria-label={k.nav.menu} className="px-10 pt-6 pb-10 flex flex-col min-h-full">
+                    <nav aria-label={k.nav.menu} className="px-6 sm:px-10 pt-6 pb-10 flex flex-col min-h-full">
                         <ul className="flex flex-col">
                             {SECTION_IDS.map((id, i) => (
                                 <li key={id} className="kn-menu__item" style={{ '--i': i } as React.CSSProperties}>
@@ -198,7 +198,7 @@ export default function Navigation() {
                                         href={`#${id}`}
                                         onClick={(e) => { e.preventDefault(); go(id, i) }}
                                         aria-current={activeIndex === i ? 'true' : undefined}
-                                        className="block w-full text-left py-1.5 font-[family-name:var(--font-display)] text-[1.75rem] font-semibold leading-[1.14] tracking-[0.007em]"
+                                        className={`block w-full text-left py-1.5 font-[family-name:var(--font-display)] text-[1.75rem] font-semibold leading-[1.14] tracking-[0.007em] ${activeIndex === i ? 'text-[var(--foreground)]' : 'text-[var(--foreground)]/70'}`}
                                     >
                                         {labels[id]}
                                     </a>

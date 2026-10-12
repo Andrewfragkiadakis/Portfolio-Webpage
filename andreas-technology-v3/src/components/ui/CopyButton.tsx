@@ -66,7 +66,7 @@ export default function CopyButton({ value, label, copiedLabel, failedLabel }: C
                 type="button"
                 onClick={copy}
                 aria-label={`${label}: ${value}`}
-                className="relative shrink-0 inline-flex items-center gap-1.5 h-7 px-3 rounded-full bg-[var(--surface)] t-caption text-[var(--foreground)] hover:bg-[var(--surface-2)] transition-colors"
+                className="kn-hit relative shrink-0 inline-flex items-center gap-1.5 h-7 px-3 rounded-full bg-[var(--surface)] t-caption text-[var(--foreground)] hover:bg-[var(--surface-2)] transition-colors"
             >
                 <Glyph name={icon} className="w-3.5 h-3.5" strokeWidth={1.8} />
                 <span aria-hidden="true" className="relative inline-flex items-center overflow-hidden h-[1.25em] leading-[1.25em]">

@@ -17,6 +17,12 @@ export function splitName(name: string): { title: string; subtitle?: string } {
     return { title: match[1].trim(), subtitle: match[2].trim() }
 }
 
+/** Image description for a project: its name and descriptor, without separators or emoji. */
+export function projectAlt(name: string): string {
+    const { title, subtitle } = splitName(name)
+    return [title, subtitle].filter(Boolean).join(', ')
+}
+
 /** "September 2024 – May 2026" → "2024 – 2026"; "2025" stays "2025". Non-year text (e.g. "Present") is kept. */
 export function yearSpan(duration: string): string {
     const parts = duration.split(/\s[-–—]\s/)

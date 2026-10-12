@@ -2,6 +2,7 @@ import Image from 'next/image'
 import type { ReactNode } from 'react'
 import type { Project } from '@/data/content/types'
 import ProjectImage from '@/components/ui/ProjectImage'
+import { projectAlt } from '@/utils/format'
 
 /**
  * Device frames drawn in CSS (see `.device-*` in globals.css). They are original,
@@ -30,22 +31,25 @@ export function Phone({ children, className = '' }: { children: ReactNode; class
  * A project screenshot inside the device it was made for. `sizes` describes the
  * rendered width of the whole frame; the screen is a little narrower.
  */
-export function ProjectShot({ project, sizes, className = '', phoneClassName = 'w-[min(100%,15rem)]' }: {
+export function ProjectShot({ project, sizes, alt, className = '', phoneClassName = 'w-[min(100%,15rem)]' }: {
     project: Project
     sizes: string
+    /** Defaults to the project's name and descriptor; pass "" where a caption already names it. */
+    alt?: string
     className?: string
     /** Width of the phone frame, which is sized by width like the laptop. */
     phoneClassName?: string
 }) {
     if (!project.image) return null
     const device = project.device ?? 'laptop'
+    const description = alt ?? projectAlt(project.name)
 
     if (device === 'phone') {
         return (
             <div className={`relative ${className}`}>
                 <Phone className={`mx-auto ${phoneClassName}`}>
                     {/* The screen crops a landscape screenshot, so request roughly 3.5× its width. */}
-                    <Image src={project.image} alt={project.name} fill sizes="720px" className="object-cover" />
+                    <Image src={project.image} alt={description} fill sizes="720px" className="object-cover" />
                 </Phone>
             </div>
         )
@@ -57,7 +61,7 @@ export function ProjectShot({ project, sizes, className = '', phoneClassName = '
                 <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[1.25rem] shadow-[var(--device-shadow)]">
                     <Image
                         src={project.image}
-                        alt={project.name}
+                        alt={description}
                         fill
                         sizes={sizes}
                         className="object-cover"
@@ -71,7 +75,7 @@ export function ProjectShot({ project, sizes, className = '', phoneClassName = '
     return (
         <div className={`relative ${className}`}>
             <Laptop>
-                <ProjectImage project={project} sizes={sizes} />
+                <ProjectImage project={project} sizes={sizes} alt={description} />
             </Laptop>
         </div>
     )

@@ -46,7 +46,7 @@ export default function Services() {
                             <button
                                 type="button"
                                 onClick={() => { void scrollToSection(sectionIndex('contact')).then(() => focusSection('contact')) }}
-                                className="kn-link t-body"
+                                className="kn-link t-body min-h-11 md:min-h-0"
                             >
                                 {k.services.ctaLink}
                                 <Chevron />
@@ -93,12 +93,12 @@ export default function Services() {
                 {active && (
                     <>
                         <Glyph name={active.icon} className="w-10 h-10 mb-5 text-[var(--foreground)]" strokeWidth={1.4} />
-                        <h3 id="service-modal-title" className="t-headline text-[2rem] sm:text-[2.5rem] pr-10">
+                        <h2 id="service-modal-title" className="t-headline text-[2rem] sm:text-[2.5rem] pr-10">
                             {active.title}
-                        </h3>
+                        </h2>
                         <p className="mt-4 t-lede text-[1.1875rem] sm:text-[1.3125rem]">{active.detail}</p>
 
-                        <h4 className="mt-9 pb-3 t-small font-semibold border-b border-[var(--line)]">{k.services.highlights}</h4>
+                        <h3 className="mt-9 pb-3 t-small font-semibold border-b border-[var(--line)]">{k.services.highlights}</h3>
                         <ul>
                             {active.highlights.map((item) => (
                                 <li key={item} className="t-body py-3 border-b border-[var(--line)]">
@@ -107,7 +107,7 @@ export default function Services() {
                             ))}
                         </ul>
 
-                        <h4 className="mt-9 mb-4 t-small font-semibold">{k.services.toolkit}</h4>
+                        <h3 className="mt-9 mb-4 t-small font-semibold">{k.services.toolkit}</h3>
                         <ul className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-3">
                             {toolsFor(active).map((tool) => (
                                 <li key={tool.label} className="flex items-center gap-2.5 min-w-0">

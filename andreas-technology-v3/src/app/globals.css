@@ -499,6 +499,30 @@ html {
     text-underline-offset: 0.14em;
   }
 
+  /* Touch layouts: standalone links are at least 44 px tall and wide (WCAG 2.5.8 / Apple HIG). */
+  .kn-link {
+    @variant stack {
+      min-height: 2.75rem;
+      min-width: 2.75rem;
+    }
+  }
+
+  /*
+   * A visually small control with a 44 px touch target: an invisible hit area around it.
+   * --hit-y / --hit-x set how far it reaches (negative = outward).
+   */
+  .kn-hit {
+    @variant stack {
+      position: relative;
+
+      &::after {
+        content: "";
+        position: absolute;
+        inset: var(--hit-y, -0.5rem) var(--hit-x, -0.5rem);
+      }
+    }
+  }
+
   .kn-link:hover {
     @media (hover: hover) {
       text-decoration: underline;
@@ -1115,5 +1139,62 @@ html {
 @keyframes kn-swap-in {
   from {
     transform: translate3d(0, 100%, 0);
+  }
+}
+
+/*
+ * Notched phones (the page runs edge to edge): the nav, slides and menu keep their content
+ * clear of the notch in landscape, and sheets clear the home indicator.
+ */
+header > nav,
+.slide,
+#mobile-menu {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+.kn-modal__panel::after {
+  content: "";
+  display: block;
+  height: env(safe-area-inset-bottom);
+}
+
+/* Increased contrast: darker secondary text and hairlines, opaque bars. */
+@media (prefers-contrast: more) {
+  :root,
+  html:not(.dark) [data-tone] {
+    --muted: #424245;
+    --line: #86868b;
+    --nav-bg: rgba(251, 251, 253, 0.98);
+  }
+
+  .dark,
+  html.dark [data-tone] {
+    --muted: #c7c7cc;
+    --line: #86868b;
+    --nav-bg: rgba(22, 22, 23, 0.98);
+  }
+
+  .kn-sheet {
+    --line: #86868b;
+  }
+}
+
+/* Forced colours (Windows contrast themes): keep the accent text, logos, dots and (+) visible. */
+@media (forced-colors: active) {
+  .t-accent {
+    -webkit-text-fill-color: currentColor;
+    background: none;
+  }
+
+  .tool-logo,
+  .tool-tile__logo,
+  .kn-dot {
+    forced-color-adjust: none;
+    background-color: CanvasText;
+  }
+
+  .kn-plus {
+    border: 1px solid CanvasText;
   }
 }

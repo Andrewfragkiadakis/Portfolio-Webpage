@@ -34,7 +34,7 @@ export default function About() {
                         <p className="t-lede mt-5 md:mt-[min(1.75rem,3vh)] text-[1.0625rem] leading-[1.4] md:text-[clamp(1.0625rem,2.4vh,1.3125rem)] max-w-[33rem]">
                             <Rich text={k.about.bio} />
                         </p>
-                        <button type="button" onClick={() => setBioOpen(true)} className="kn-link t-body mt-4">
+                        <button type="button" onClick={() => setBioOpen(true)} className="kn-link t-body mt-4 min-h-11 md:min-h-0">
                             {k.about.fullStory}
                             <Chevron />
                         </button>
@@ -96,7 +96,7 @@ export default function About() {
                                         {item.link && <ArrowOut className="text-[var(--muted)]" />}
                                     </>
                                 )
-                                const cls = 'inline-flex items-center gap-1 h-8 px-3.5 rounded-full bg-[var(--surface)] t-small text-[var(--foreground)] transition-colors'
+                                const cls = 'inline-flex items-center gap-1 h-11 md:h-8 px-3.5 rounded-full bg-[var(--surface)] t-small text-[var(--foreground)] transition-colors'
                                 return (
                                     <li key={item.id}>
                                         {item.link ? (
@@ -116,14 +116,18 @@ export default function About() {
 
             <Modal open={bioOpen} onClose={() => setBioOpen(false)} labelledBy="bio-modal-title" closeLabel={k.common.close} className="max-w-[43rem] w-full px-7 py-10 sm:px-14 sm:py-14">
                 <p className="t-eyebrow">{k.about.eyebrow}</p>
-                <h3 id="bio-modal-title" className="t-headline text-[2rem] sm:text-[2.5rem] mt-1 mb-7 pr-10">{k.about.dialogTitle}</h3>
+                <h2 id="bio-modal-title" className="t-headline text-[2rem] sm:text-[2.5rem] mt-1 mb-7 pr-10">{k.about.dialogTitle}</h2>
                 <div className="space-y-4 t-body text-[var(--foreground)]">
-                    {t.about.description.map((paragraph, i) => (
-                        <p key={i} className={i === t.about.description.length - 1 ? 't-small text-[var(--muted)] pt-4 border-t border-[var(--line)]' : undefined}>
-                            {paragraph}
-                        </p>
+                    {t.about.description.slice(0, -1).map((paragraph) => (
+                        <p key={paragraph}>{paragraph}</p>
                     ))}
                 </div>
+                {/* The last paragraph is a run of facts ("Jamf 200 · ITIL 4 · Athens · …"): a quiet list. */}
+                <ul className="mt-7 border-t border-[var(--line)] t-small text-[var(--muted)]">
+                    {(t.about.description.at(-1) ?? '').split(' · ').map((fact) => (
+                        <li key={fact} className="py-2.5 border-b border-[var(--line)]">{fact}</li>
+                    ))}
+                </ul>
             </Modal>
 
             <Modal
@@ -136,7 +140,7 @@ export default function About() {
                 {activeSkill && (
                     <>
                         <Glyph name={activeSkill.icon} className="w-9 h-9 mb-5 text-[var(--foreground)]" strokeWidth={1.4} />
-                        <h3 id="skill-modal-title" className="t-title text-[1.75rem] mb-3 pr-10">{activeSkill.label}</h3>
+                        <h2 id="skill-modal-title" className="t-title text-[1.75rem] mb-3 pr-10">{activeSkill.label}</h2>
                         <p className="t-body text-[var(--muted)]">{activeSkill.detail}</p>
                     </>
                 )}

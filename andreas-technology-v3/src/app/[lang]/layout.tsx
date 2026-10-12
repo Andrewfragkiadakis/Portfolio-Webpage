@@ -67,6 +67,9 @@ export async function generateMetadata({ params }: LayoutProps<'/[lang]'>): Prom
 }
 
 export const viewport: Viewport = {
+    // Edge to edge on notched phones; content keeps clear of the notch and home indicator
+    // through env(safe-area-inset-*) in globals.css.
+    viewportFit: 'cover',
     themeColor: [
         { media: '(prefers-color-scheme: light)', color: '#ffffff' },
         { media: '(prefers-color-scheme: dark)', color: '#000000' },

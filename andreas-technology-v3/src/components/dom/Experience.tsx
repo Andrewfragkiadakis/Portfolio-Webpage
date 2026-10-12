@@ -105,7 +105,7 @@ export default function Experience() {
                                         type="button"
                                         onClick={() => setEdu(item)}
                                         aria-label={`${item.degree} — ${k.experience.details}`}
-                                        className="w-full text-left t-small md:text-[clamp(0.8125rem,1.6vh,0.875rem)] font-semibold hover:text-[var(--accent)] transition-colors"
+                                        className="kn-hit [--hit-y:-0.75rem] [--hit-x:0px] w-full text-left t-small md:text-[clamp(0.8125rem,1.6vh,0.875rem)] font-semibold hover:text-[var(--accent)] transition-colors"
                                     >
                                         {item.degree}
                                     </button>
@@ -136,9 +136,9 @@ export default function Experience() {
                 {role && (
                     <>
                         <p className="t-small text-[var(--muted)]">{role.duration}</p>
-                        <h3 id="role-modal-title" className="t-headline text-[1.75rem] sm:text-[2.25rem] mt-1 pr-10">{role.role}</h3>
+                        <h2 id="role-modal-title" className="t-headline text-[1.75rem] sm:text-[2.25rem] mt-1 pr-10">{role.role}</h2>
                         <p className="mt-1 t-body text-[var(--muted)]">{role.company}</p>
-                        <h4 className="mt-8 mb-3 t-small font-semibold">{k.experience.tasks}</h4>
+                        <h3 className="mt-8 mb-3 t-small font-semibold">{k.experience.tasks}</h3>
                         <ul className="space-y-3">
                             {role.tasks.map((task) => (
                                 <li key={task} className="flex items-start gap-3 t-body">
@@ -155,7 +155,7 @@ export default function Experience() {
                 {edu && (
                     <>
                         <p className="t-small text-[var(--muted)]">{edu.duration}{edu.badge ? ` · ${edu.badge}` : ''}</p>
-                        <h3 id="edu-modal-title" className="t-headline text-[1.75rem] sm:text-[2.25rem] mt-1 pr-10">{edu.degree}</h3>
+                        <h2 id="edu-modal-title" className="t-headline text-[1.75rem] sm:text-[2.25rem] mt-1 pr-10">{edu.degree}</h2>
                         <p className="mt-1 t-body text-[var(--muted)]">{edu.institution}</p>
                         <ul className="mt-6 space-y-3">
                             {edu.details.map((detail) => (

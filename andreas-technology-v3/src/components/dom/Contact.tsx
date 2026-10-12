@@ -56,11 +56,11 @@ export default function Contact() {
             </div>
 
             <Rise step={4} className="relative w-full max-w-[71rem] mt-16 md:mt-[min(4.5rem,6vh)]">
-                <dl className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[1.6fr_1fr_1fr_1fr] border-t border-[var(--line)] text-left">
+                <dl className="grid grid-cols-1 sm:grid-cols-2 sm:gap-x-8 md:gap-x-0 md:grid-cols-[1.6fr_1fr_1fr_1fr] border-t border-[var(--line)] text-left">
                     <div className="py-5 md:pr-6 border-b md:border-b-0 border-[var(--line)]">
                         <dt className="t-caption text-[var(--muted)]">{k.contact.email}</dt>
                         <dd className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-2">
-                            <a href={`mailto:${t.email}`} className="t-body break-all hover:text-[var(--accent)] transition-colors">{t.email}</a>
+                            <a href={`mailto:${t.email}`} className="inline-flex items-center min-h-11 md:min-h-0 t-body break-all hover:text-[var(--accent)] transition-colors">{t.email}</a>
                             <CopyButton value={t.email} label={k.contact.copy} copiedLabel={k.contact.copied} failedLabel={k.contact.copyFailed} />
                         </dd>
                     </div>
@@ -88,7 +88,7 @@ export default function Contact() {
                         </dd>
                     </div>
                 </dl>
-                <p className="mt-6 md:mt-[min(2rem,3vh)] t-caption text-[var(--muted)]">{t.copyright}</p>
+                <footer className="mt-6 md:mt-[min(2rem,3vh)] t-caption text-[var(--muted)]">{t.copyright}</footer>
             </Rise>
         </section>
     )

@@ -5,6 +5,7 @@ import type { Project } from '@/data/content/types'
 interface ProjectImageProps {
     project: Project
     sizes: string
+    alt: string
     /** Extra classes for the image, e.g. a hover zoom. */
     className?: string
 }
@@ -16,7 +17,7 @@ interface ProjectImageProps {
  * survives a crop opt into `cover`, optionally with a focal point (`imagePosition`).
  * next/image serves a right-sized file for `sizes` and lazy-loads it below the fold.
  */
-export default function ProjectImage({ project, sizes, className = '' }: ProjectImageProps) {
+export default function ProjectImage({ project, sizes, alt, className = '' }: ProjectImageProps) {
     if (!project.image) return null
     const fit = project.imageFit ?? 'contain'
     const edges = fit === 'contain' ? project.edges : undefined
@@ -27,7 +28,7 @@ export default function ProjectImage({ project, sizes, className = '' }: Project
             {backdrop && <span aria-hidden="true" className="absolute inset-0" style={backdrop} />}
             <Image
                 src={project.image}
-                alt={project.name}
+                alt={alt}
                 fill
                 sizes={sizes}
                 className={`${fit === 'contain' ? 'object-contain' : 'object-cover'} ${className}`}

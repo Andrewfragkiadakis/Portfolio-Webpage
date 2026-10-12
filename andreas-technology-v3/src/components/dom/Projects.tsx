@@ -118,6 +118,7 @@ export default function Projects() {
         <ProjectShot
             project={item}
             sizes={STAGE_SIZES}
+            alt=""
             className={item.device === 'phone' ? '' : item.device === 'bare' ? 'w-[86%] mb-[3%]' : 'w-full'}
             phoneClassName="w-[min(13rem,21vh)]"
         />
@@ -131,7 +132,7 @@ export default function Projects() {
                     eyebrow={k.projects.eyebrow}
                     headline={k.projects.headline}
                     aside={
-                        <a href={t.github} target="_blank" rel="noopener noreferrer" className="kn-link t-body" aria-label={`${k.projects.github} (${k.common.newTab})`}>
+                        <a href={t.github} target="_blank" rel="noopener noreferrer" className="kn-link t-body min-h-11 md:min-h-0" aria-label={`${k.projects.github} (${k.common.newTab})`}>
                             {k.projects.github}
                             <ArrowOut />
                         </a>
@@ -235,7 +236,7 @@ export default function Projects() {
                             <p className="t-small text-[var(--muted)]">
                                 {[dialog.year, dialog.role].filter(Boolean).join(' · ')}
                             </p>
-                            <h3 id="project-modal-title" className="t-headline text-[2rem] sm:text-[2.5rem] mt-1 pr-10">{splitName(dialog.name).title}</h3>
+                            <h2 id="project-modal-title" className="t-headline text-[2rem] sm:text-[2.5rem] mt-1 pr-10">{splitName(dialog.name).title}</h2>
                             {splitName(dialog.name).subtitle && <p className="mt-1 t-lede text-[1.1875rem] sm:text-[1.3125rem]">{splitName(dialog.name).subtitle}</p>}
                             <ul className="mt-4 flex flex-wrap gap-1.5">
                                 {dialog.tags.map((tag) => (
@@ -245,7 +246,7 @@ export default function Projects() {
                             <p className="mt-5 t-body text-[var(--muted)]">{dialog.detail}</p>
                             {dialog.highlights && dialog.highlights.length > 0 && (
                                 <>
-                                    <h4 className="mt-9 pb-3 t-small font-semibold border-b border-[var(--line)]">{k.projects.highlights}</h4>
+                                    <h3 className="mt-9 pb-3 t-small font-semibold border-b border-[var(--line)]">{k.projects.highlights}</h3>
                                     <ul>
                                         {dialog.highlights.map((item) => (
                                             <li key={item} className="t-body py-3 border-b border-[var(--line)]">{item}</li>
@@ -265,6 +266,7 @@ export default function Projects() {
                                         >
                                             {link.label}
                                             <ArrowOut />
+                                            <span className="sr-only"> ({k.common.newTab})</span>
                                         </a>
                                     ))}
                                 </div>
