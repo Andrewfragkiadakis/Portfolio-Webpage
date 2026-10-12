@@ -30,11 +30,11 @@ export const TOOLS = [
     { label: 'Jamf Pro', logo: 'jamf', ratio: 2.875, brand: '#000000', row: 'ops', group: 'apple' },
     { label: 'Apple Business Manager', logo: 'apple', brand: '#000000', row: 'ops', group: 'apple' },
     { label: 'macOS', logo: 'macos', ratio: 4.26, brand: '#000000', row: 'ops', group: 'apple' },
-    { label: 'Checkpoint Harmony EDR', logo: 'checkpoint', ratio: 1.05, brand: '#EE0C5D', row: 'ops', group: 'security' },
+    { label: 'Check Point Harmony Endpoint', logo: 'checkpoint', ratio: 1.05, brand: '#EE0C5D', row: 'ops', group: 'security' },
     { label: 'Microsoft Sentinel', logo: 'microsoft-sentinel', brand: '#0078D4', row: 'ops', group: 'security' },
     // Identity & access
     { label: 'Microsoft Entra ID', logo: 'entra-id', brand: '#0078D4', row: 'ops', group: 'security' },
-    { label: 'DUO MFA', logo: 'duo', ratio: 2.06, brand: '#6DC04B', row: 'ops', group: 'security' },
+    { label: 'Duo MFA', logo: 'duo', ratio: 2.06, brand: '#6DC04B', row: 'ops', group: 'security' },
     { label: '1Password', logo: '1password', brand: '#145FE4', row: 'ops', group: 'security' },
     { label: 'Active Directory', logo: 'active-directory', brand: '#0078D4', row: 'ops', group: 'security' },
     // Infrastructure

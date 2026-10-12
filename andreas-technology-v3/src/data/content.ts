@@ -264,10 +264,10 @@ export const content: Record<'en' | 'gr', Content> = {
             statsLabels: ["Years Experience", "Endpoints Managed", "Faster Onboarding", "Certifications"],
             credentialsLabel: "Credentials",
             description: [
-                "I am an IT & Computer Engineer (M.Eng.) leading Apple Fleet & IT Automation at Omilia, a global conversational-AI company, across a 550+ device environment. I own the Jamf Pro platform end-to-end and lead endpoint engineering for Checkpoint Harmony EDR, Microsoft Sentinel SIEM pipelines, and SSL certificate automation.",
-                "My work sits where security, automation and scale meet: CIS Benchmark hardening ahead of PCI-DSS and SOC 2 audits, and zero‑touch macOS enrollment that cut onboarding time by 70%.",
-                "I also drive enterprise AI adoption — Google Gemini org-wide, Atlassian Rovo Agents, and an AI-powered ticket-triage pipeline that cut average triage time across 350+ tickets a year.",
-                "Jamf Certified Tech (Jamf 200) | Licensed Computer Science Engineer (TEE) | ITIL 4 certified | Based in Athens | English (C2), Greek (Native), German (B2)"
+                "I’m a Computer Engineer (M.Eng.) and Team Lead for Apple Fleet & IT Automation at Omilia, a global conversational-AI company. I own Jamf Pro end to end for 550+ Macs and lead endpoint engineering across Check Point Harmony Endpoint, Microsoft Sentinel and SSL certificate automation.",
+                "In practice, that means CIS Benchmark hardening ahead of PCI DSS and SOC 2 audits, and zero‑touch enrollment that cut Mac onboarding time by 70%.",
+                "I also lead AI adoption: Google Gemini org-wide, Atlassian Rovo Agents, and an AI ticket-triage pipeline that cut average triage time across 350+ tickets.",
+                "Jamf Certified Tech (Jamf 200) · TEE-licensed engineer · ITIL 4 Foundation · Athens, Greece · English (C2), Greek (native), German (B2)"
             ]
         },
 
@@ -324,7 +324,7 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fas fa-shield-halved",
                 label: "Endpoint Security & Identity",
-                detail: "Checkpoint Harmony EDR, CIS Benchmark hardening ahead of PCI-DSS and SOC 2 audits, Microsoft Sentinel SIEM pipelines, and identity and access with Microsoft Entra ID, DUO MFA and 1Password."
+                detail: "Check Point Harmony Endpoint, CIS Benchmark hardening ahead of PCI DSS and SOC 2 audits, Microsoft Sentinel SIEM pipelines, and identity and access with Microsoft Entra ID, Duo MFA and 1Password."
             },
             {
                 icon: "fas fa-terminal",
@@ -347,15 +347,15 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fas fa-shield-halved",
                 title: "Endpoint Security & Compliance",
-                oneLiner: "CIS-hardened, EDR-protected Macs, ready for PCI-DSS and SOC 2 audits.",
-                description: "Hardening fleets against real-world threats: CIS Benchmark implementation, EDR deployment and migration, disk-encryption management, and audit readiness for PCI-DSS and SOC 2.",
-                detail: "Security that holds up in an audit and in production. I implemented CIS Benchmark hardening fleet-wide ahead of PCI-DSS and SOC 2 audits, led the migration to Checkpoint Harmony EDR, and feed endpoint telemetry into Microsoft Sentinel so detection has real context.",
+                oneLiner: "CIS-hardened, EDR-protected Macs, ready for PCI DSS and SOC 2 audits.",
+                description: "Hardening fleets against real-world threats: CIS Benchmark implementation, EDR deployment and migration, disk-encryption management, and audit readiness for PCI DSS and SOC 2.",
+                detail: "Security that holds up in an audit and in production. I implemented CIS Benchmark hardening fleet-wide ahead of PCI DSS and SOC 2 audits, led the migration to Check Point Harmony Endpoint, and feed endpoint telemetry into Microsoft Sentinel so detection has real context.",
                 highlights: [
-                    "CIS Benchmark hardening ahead of PCI-DSS and SOC 2 audits",
+                    "CIS Benchmark hardening ahead of PCI DSS and SOC 2 audits",
                     "EDR migration with FileVault conflicts resolved and zero data loss",
                     "Sentinel SIEM log pipelines over RFC 5424 + TLS"
                 ],
-                tools: ["Checkpoint Harmony EDR", "Microsoft Sentinel", "Jamf Pro", "Microsoft Entra ID", "DUO MFA", "1Password"]
+                tools: ["Check Point Harmony Endpoint", "Microsoft Sentinel", "Jamf Pro", "Microsoft Entra ID", "Duo MFA", "1Password"]
             },
             {
                 icon: "fab fa-apple",
@@ -386,12 +386,12 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fas fa-robot",
                 title: "AI-Augmented Operations",
-                oneLiner: "Gemini, Rovo Agents and AI ticket triage that measurably cut work.",
+                oneLiner: "Gemini org-wide, Rovo Agents and AI ticket triage in Jira.",
                 description: "Deploying AI that measurably reduces work — org-wide assistant rollouts, agentic automation, and AI-powered ticket triage that cuts time-to-resolution instead of adding another dashboard.",
-                detail: "AI adoption that shows up in the numbers. I rolled out Google Gemini org-wide and Atlassian Rovo Agents, built an AI ticket-triage pipeline for Jira Service Management, and prototype MCP servers so assistants like Claude Code can work with IT systems directly.",
+                detail: "AI that does real work. I rolled out Google Gemini org-wide and Atlassian Rovo Agents, built an AI ticket-triage pipeline for Jira Service Management, and prototype MCP servers so assistants like Claude Code can work with IT systems directly.",
                 highlights: [
                     "Org-wide Google Gemini rollout",
-                    "AI ticket triage across 350+ tickets a year",
+                    "AI ticket triage across 350+ tickets",
                     "MCP server prototypes for IT tooling"
                 ],
                 tools: ["Claude Code", "MCP Servers", "Google Gemini", "Grok Bot", "Atlassian Rovo", "Jira Service Management", "Slack"]
@@ -428,30 +428,30 @@ export const content: Record<'en' | 'gr', Content> = {
         experience: [
             {
                 role: "Team Lead, Apple Fleet & IT Automation",
-                company: "OMILIA LTD, Athens, Greece",
+                company: "Omilia, Athens, Greece",
                 duration: "April 2026 – Present",
                 tasks: [
                     "Own the Apple Fleet & IT Automation function, the Jamf Pro platform, and AI-driven IT pipelines across 550+ macOS endpoints",
-                    "Lead automation engineering in Bash, Python and TypeScript — Jamf API, AI ticket-triage, MCP server prototypes and SSL renewal infrastructure",
+                    "Lead automation engineering in Bash, Python and TypeScript — Jamf API, AI ticket triage, MCP server prototypes and SSL renewal infrastructure",
                     "Partner with Cyber, HR, Finance and Engineering to turn business needs into faster onboarding, fewer tickets and zero certificate toil"
                 ]
             },
             {
-                role: "Information Technology Engineer",
-                company: "OMILIA LTD, Athens, Greece",
+                role: "IT Engineer",
+                company: "Omilia, Athens, Greece",
                 duration: "September 2024 – May 2026",
                 tasks: [
                     "Architected Jamf Pro zero‑touch enrollment via Apple Business Manager for the 550+ Mac fleet, cutting onboarding time by 70%",
-                    "Implemented CIS Benchmark hardening fleet-wide with the Cyber team — full compliance ahead of PCI-DSS and SOC 2 audits",
+                    "Implemented CIS Benchmark hardening fleet-wide with the Cyber team — full compliance ahead of PCI DSS and SOC 2 audits",
                     "Led the enterprise EDR migration to Check Point Harmony Endpoint across 550+ devices, resolving FileVault conflicts at cutover with zero data loss",
                     "Built a centralised SSL renewal pipeline (acme.sh, Let's Encrypt, DNS-01) for Cisco ISE, ESXi, Proxmox and HPE iLO — eliminated all manual cert toil",
-                    "Engineered Microsoft Sentinel SIEM integration with Python log collectors (RFC 5424 + TLS) unifying Jamf, Anydesk and HID telemetry",
+                    "Engineered Microsoft Sentinel SIEM integration with Python log collectors (RFC 5424 + TLS) unifying Jamf, AnyDesk and HID telemetry",
                     "Drove enterprise AI adoption: Gemini org-wide, Atlassian Rovo Agents, and an AI-powered ticket-triage pipeline",
                     "Resolved 350+ Jira tickets at 95%+ SLA, authored 40+ Confluence guides and administered 9 enterprise platforms"
                 ]
             },
             {
-                role: "Mandatory Army Service — IT Operations & Administrative Support",
+                role: "Military Service — IT & Administrative Support",
                 company: "Hellenic Army, Greece",
                 duration: "November 2025 – August 2026",
                 tasks: [
@@ -460,8 +460,8 @@ export const content: Record<'en' | 'gr', Content> = {
                 ]
             },
             {
-                role: "Information Technology Support & Infrastructure Coordinator",
-                company: "KEEP EAT HEALTHY, Koropi, Greece",
+                role: "IT Support & Infrastructure Coordinator",
+                company: "Keep Eat Healthy, Koropi, Greece",
                 duration: "May 2022 – November 2025",
                 tasks: [
                     "Owned end-to-end IT for a hybrid office: network, endpoint security, hardware lifecycle and vendor coordination",
@@ -470,8 +470,8 @@ export const content: Record<'en' | 'gr', Content> = {
                 ]
             },
             {
-                role: "Information Technology Support Specialist",
-                company: "ANEMOMYLOI ANDROS AE, Andros, Greece",
+                role: "IT Support Specialist",
+                company: "Anemomyloi Andros, Andros, Greece",
                 duration: "January 2023 – February 2024",
                 tasks: [
                     "Digitised daily operations by migrating the entire business archive from paper to Google Drive with data retention and security controls",
@@ -481,15 +481,15 @@ export const content: Record<'en' | 'gr', Content> = {
             },
             {
                 role: "Web Developer",
-                company: "Self-Employed, Greece",
+                company: "Freelance, Greece",
                 duration: "2020 – November 2023",
                 tasks: [
-                    "Delivered end-to-end client websites covering domain, DNS, SSL/TLS, hosting, MySQL, WordPress and SEO",
-                    "Achieved measurable organic-traffic gains through structured data and performance tuning"
+                    "Built and launched client websites end to end: domain, DNS, SSL/TLS, hosting, MySQL, WordPress and SEO",
+                    "Improved organic search visibility with structured data and performance tuning"
                 ]
             },
             {
-                role: "Network Systems Installation & Configuration Technician",
+                role: "Network Systems Technician",
                 company: "Weballdesign, Athens, Greece",
                 duration: "2020 – November 2022",
                 tasks: [
@@ -503,13 +503,12 @@ export const content: Record<'en' | 'gr', Content> = {
         educationTitle: "EDUCATION",
         education: [
             {
-                degree: "Integrated Master's Degree (5 Years), Computer Science",
+                degree: "Integrated Master’s (M.Eng.), Informatics & Computer Engineering",
                 institution: "University of West Attica, Athens, Greece",
                 duration: "September 2019 – June 2025",
                 details: [
                     "Distinguished member of the university's Tech Society",
-                    "Relevant coursework: Advanced Computer Systems, AI, Network Security, Databases, Web Development, Cloud Computing",
-                    "GPA: 2.98"
+                    "Relevant coursework: Advanced Computer Systems, AI, Network Security, Databases, Web Development, Cloud Computing"
                 ]
             },
             {
@@ -542,13 +541,13 @@ export const content: Record<'en' | 'gr', Content> = {
                 link: "/files/itil-v4-cert.pdf"
             },
             {
-                degree: "Professional License — IT & Computer Science Engineer",
+                degree: "Professional Licence — Informatics & Computer Engineer",
                 institution: "Technical Chamber of Greece (TEE)",
                 duration: "2025",
                 kind: "license",
                 badge: "TEE licence",
                 details: [
-                    "Statutory professional licence to practise as a Computer Science Engineer in Greece",
+                    "Statutory licence to practise as an Informatics & Computer Engineer in Greece",
                     "Requires an accredited five-year integrated Master's degree"
                 ]
             },
@@ -598,7 +597,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 name: "Plano Plus - Signs & Visual Identity",
                 year: 2026,
                 tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion", "Resend"],
-                description: "Marketing & signage studio website built with Next.js App Router. Features light/dark theme, parallax effects, smooth scrolling, contact form with email integration, and modern UI/UX. Serves clients across Crete with professional signage and branding solutions.",
+                description: "A fast, premium website for a signage and visual-identity studio in Crete, built on Next.js, with a contact form that lands straight in the client’s inbox.",
                 role: "Solo design and build · Client project",
                 detail: "A full marketing site for a Cretan signage and visual-identity studio, built on the Next.js App Router. The brief was to make a traditional signage business look as considered online as its work looks on the street: fast, tactile, and unmistakably premium. Includes light/dark theming, parallax depth, smooth scrolling, and a contact form wired to transactional email.",
                 highlights: [
@@ -614,13 +613,13 @@ export const content: Record<'en' | 'gr', Content> = {
                 name: "Signature Craft",
                 year: 2026,
                 tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Email Signatures"],
-                description: "Open-source email signature builder with 32+ templates, zero sign-up, and a polished dark-mode UI. Design stunning HTML signatures for Gmail, Outlook, Apple Mail, Yahoo & Thunderbird in minutes — completely free.",
-                role: "Solo design and build · Open source",
-                detail: "An open-source email signature builder aimed at a problem every company has and nobody owns: signatures that break the moment they leave your machine. Signature Craft generates table-based HTML that renders consistently across the major mail clients, with no sign-up, no paywall and no tracking.",
+                description: "An email-signature builder with 32+ templates. Signatures that render correctly in Gmail, Outlook, Apple Mail, Yahoo and Thunderbird — free, with no sign-up.",
+                role: "Solo design and build",
+                detail: "An email-signature builder for a problem every company has and nobody owns: signatures that break the moment they leave your machine. Signature Craft generates table-based HTML that renders consistently across the major mail clients, with no sign-up, no paywall and no tracking.",
                 highlights: [
                     "32+ templates spanning corporate, minimal and creative layouts",
                     "Client-safe HTML tested against Gmail, Outlook, Apple Mail, Yahoo and Thunderbird",
-                    "Zero sign-up, zero tracking, fully open source",
+                    "Free, with no sign-up and no tracking",
                     "Live preview with one-click copy to clipboard"
                 ],
                 liveSiteLink: "https://signature-craft-tau.vercel.app/",
@@ -645,12 +644,12 @@ export const content: Record<'en' | 'gr', Content> = {
                 image: "/images/portfolio-website/2026.png"
             },
             {
-                name: "Thesis: Hybrid Wireless-Optical Networks for 5G",
+                name: "Radio over Fiber for 5G - M.Eng. Thesis",
                 year: 2025,
                 tags: ["Thesis", "5G", "Radio over Fiber", "Research"],
-                description: "Master's thesis on new hybrid wireless-optical networks (Radio over Fiber) for 5G. Includes research and full thesis documentation.",
+                description: "M.Eng. thesis on Radio over Fiber: where hybrid wireless-optical networks change the cost of 5G. Comes with an interactive slide deck.",
                 role: "Sole researcher · Integrated M.Eng. thesis, University of West Attica",
-                detail: "Research into hybrid wireless-optical access networks for 5G, centred on Radio over Fiber as a way to move signal processing off the antenna site and into a shared facility. The work compares distributed and centralised RAN architectures and evaluates where optical transport meaningfully changes the total cost of ownership. Published as \"New Hybrid Wireless Optical Networks (Radio Over Fiber) for 5G Networks\".",
+                detail: "Research into hybrid wireless-optical access networks for 5G, centred on Radio over Fiber as a way to move signal processing off the antenna site and into a shared facility. The work compares distributed and centralised RAN architectures and evaluates where optical transport meaningfully changes the total cost of ownership. Published as “New Hybrid Wireless Optical Networks (Radio Over Fiber) for 5G Networks”.",
                 highlights: [
                     "Compared D-RAN and C-RAN deployment models on cost and capacity",
                     "Evaluated WDM transport for fronthaul consolidation",
@@ -665,7 +664,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 name: "Silence Hero - Chrome Extension",
                 year: 2024,
                 tags: ["Chrome Extension", "JavaScript", "HTML", "CSS", "UI/UX"],
-                description: "A Chrome extension that helps you remember Greek quiet hours with visual cues and a countdown timer. Never disturb your neighbors again!",
+                description: "A Chrome extension that shows, at a glance, whether it’s Greek quiet hours — with a countdown to the next change.",
                 role: "Solo build",
                 detail: "A small, deliberately single-purpose Chrome extension that tracks Greek statutory quiet hours and tells you, at a glance, whether right now is a good time to drill a hole in the wall. Visual state plus a live countdown to the next transition.",
                 highlights: [
@@ -681,11 +680,11 @@ export const content: Record<'en' | 'gr', Content> = {
                 name: "Nexus Party App",
                 year: 2026,
                 tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Zustand", "Framer Motion", "PWA"],
-                description: "Greek party game collection with 6 multiplayer games: Quizball, Taboo, Παλέρμο, Πες Βρες, Impostor, and Truth or Dare. Built as a PWA with smooth animations, automatic scoring, timers, and configurable game settings. Perfect for wild nights with friends.",
+                description: "Six Greek party games in one installable PWA — Quizball, Taboo, Palermo, Pes Vres, Impostor and Truth or Dare — with automatic scoring, timers and custom rules.",
                 role: "Solo design and build",
                 detail: "A Greek-language party game collection bundling six multiplayer games into one installable PWA. Built to solve a real problem at gatherings: nobody wants to download six apps or remember six sets of rules. Handles scoring, timers and per-game configuration so the group can keep playing instead of arguing about the rules.",
                 highlights: [
-                    "Six multiplayer games: Quizball, Taboo, Παλέρμο, Πες Βρες, Impostor, Truth or Dare",
+                    "Six multiplayer games: Quizball, Taboo, Palermo, Pes Vres, Impostor, Truth or Dare",
                     "Installable PWA that works offline",
                     "Automatic scoring, round timers and configurable rules",
                     "State managed with Zustand; animated with Framer Motion"
@@ -696,10 +695,10 @@ export const content: Record<'en' | 'gr', Content> = {
                 imageFit: "cover"
             },
             {
-                name: "HappyFox 🦊 - Mental Health App",
+                name: "HappyFox - Mental Health App",
                 year: 2023,
                 tags: ["UI/UX Design", "Figma", "Team Project", "SRH Heidelberg"],
-                description: "Developed UI/UX concepts for a user-friendly mental health app aimed at promoting emotional well-being during a Master's course.",
+                description: "A mental-health app concept for low-energy days, built around a daily check-in that takes under a minute. Team project at SRH Heidelberg.",
                 role: "Team project · UI/UX design, SRH Heidelberg",
                 detail: "A mental-health application concept developed during a Master's course at SRH Heidelberg. The team's focus was on designing for people in a low-energy state: reducing friction, avoiding judgemental language, and making the daily check-in something you can complete in under a minute.",
                 highlights: [
@@ -717,7 +716,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 name: "Schiller Language Centers Website",
                 year: 2026,
                 tags: ["Wix", "Wix Studio", "Web Development", "Educational"],
-                description: "Developed the website for Schiller Language Centers in Rethymno, Greece. The site showcases courses in English, German, and Educational Robotics.",
+                description: "The website for Schiller Language Centers in Rethymno, Crete: English, German and Educational Robotics courses, kept current by the school’s own staff.",
                 role: "Solo build · Client project",
                 detail: "The public website for Schiller Language Centers in Rethymno, Crete, covering their English, German and Educational Robotics programmes. Built on Wix Studio so the client's own staff can keep course listings and term dates current without needing a developer.",
                 highlights: [
@@ -766,7 +765,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 name: "The Friendly Wheelchair (Concept)",
                 year: 2023,
                 tags: ["Project Management", "AI", "NLP", "Agile/SCRUM", "Healthcare IT"],
-                description: "Developed a detailed project management plan and technical specifications for an AI-powered self-driving wheelchair concept for Heidelberg Clinics.",
+                description: "A project plan and technical specification for an AI-assisted self-driving wheelchair, scoped for the Heidelberg clinics.",
                 role: "Project management lead · SRH Heidelberg",
                 detail: "A project management plan and technical specification for an AI-assisted self-driving wheelchair intended for the Heidelberg clinics. The work was deliberately not a prototype: it covered scope, risk, stakeholder mapping, regulatory considerations and delivery planning for a healthcare-grade assistive device.",
                 highlights: [
@@ -800,7 +799,7 @@ export const content: Record<'en' | 'gr', Content> = {
             about: {
                 eyebrow: "About",
                 headline: "Meet Andreas.",
-                bio: "An IT & Computer Engineer (M.Eng.) who owns **Jamf Pro end to end** at Omilia, a global conversational-AI company. The work sits where **security, automation and scale** meet — and every repeated task becomes a system.",
+                bio: "A Computer Engineer (M.Eng.) leading Apple Fleet & IT Automation at Omilia, a global conversational-AI company. I own **Jamf Pro end to end**, harden the fleet to CIS Benchmarks, and turn **every repeated task** into code.",
                 fullStory: "Read the full story",
                 dialogTitle: "About Andreas",
                 credentials: "Credentials",
@@ -842,7 +841,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 code: "View code",
                 report: "Report",
                 publication: "Publication",
-                github: "All projects on GitHub",
+                github: "More on GitHub",
                 lineup: "All projects",
                 role: "Role",
                 highlights: "Highlights"
@@ -898,10 +897,10 @@ export const content: Record<'en' | 'gr', Content> = {
             statsLabels: ["Χρονια Εμπειριας", "Συσκευες υπο Διαχειριση", "Ταχυτερο Onboarding", "Πιστοποιησεις"],
             credentialsLabel: "Πιστοποιησεις",
             description: [
-                "Είμαι Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) και ηγούμαι του τομέα Apple Fleet & IT Automation στην Omilia, μια παγκόσμια εταιρεία conversational AI, σε περιβάλλον άνω των 550 συσκευών. Διαχειρίζομαι εξ ολοκλήρου την πλατφόρμα Jamf Pro και ηγούμαι του endpoint engineering για Checkpoint Harmony EDR, pipelines Microsoft Sentinel SIEM και αυτοματοποίηση πιστοποιητικών SSL.",
-                "Η δουλειά μου βρίσκεται στο σημείο όπου συναντώνται η ασφάλεια, ο αυτοματισμός και η κλίμακα: θωράκιση κατά CIS Benchmarks ενόψει ελέγχων PCI-DSS και SOC 2, και zero‑touch enrollment για macOS που μείωσε τον χρόνο onboarding κατά 70%.",
-                "Παράλληλα οδηγώ την υιοθέτηση AI σε εταιρικό επίπεδο — Google Gemini, Atlassian Rovo Agents και ένα AI pipeline διαλογής αιτημάτων που μείωσε τον μέσο χρόνο triage σε 350+ tickets ετησίως.",
-                "Jamf Certified Tech (Jamf 200) | Αδειούχος Μηχανικός Πληροφορικής (ΤΕΕ) | Πιστοποίηση ITIL 4 | Με έδρα την Αθήνα | Αγγλικά (C2), Ελληνικά (Μητρική), Γερμανικά (B2)"
+                "Είμαι Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) και Team Lead της ομάδας Apple Fleet & IT Automation στην Omilia, μια παγκόσμια εταιρεία conversational AI. Έχω πλήρη ευθύνη για το Jamf Pro σε 550+ Mac και ηγούμαι του endpoint engineering για Check Point Harmony Endpoint, Microsoft Sentinel και αυτοματοποίηση πιστοποιητικών SSL.",
+                "Στην πράξη: θωράκιση κατά CIS Benchmarks ενόψει ελέγχων PCI DSS και SOC 2, και zero‑touch enrollment που μείωσε τον χρόνο onboarding των Mac κατά 70%.",
+                "Παράλληλα προωθώ την υιοθέτηση AI: Google Gemini σε όλο τον οργανισμό, Atlassian Rovo Agents και ένα pipeline διαλογής αιτημάτων με AI που μείωσε τον μέσο χρόνο triage σε 350+ tickets.",
+                "Jamf Certified Tech (Jamf 200) · Αδειούχος μηχανικός ΤΕΕ · ITIL 4 Foundation · Αθήνα · Αγγλικά (C2), Ελληνικά (μητρική), Γερμανικά (B2)"
             ]
         },
 
@@ -956,7 +955,7 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fas fa-shield-halved",
                 label: "Endpoint Security & Identity",
-                detail: "Checkpoint Harmony EDR, θωράκιση κατά CIS Benchmarks για ελέγχους PCI-DSS και SOC 2, pipelines Microsoft Sentinel SIEM, και διαχείριση ταυτότητας και πρόσβασης με Microsoft Entra ID, DUO MFA και 1Password."
+                detail: "Check Point Harmony Endpoint, θωράκιση κατά CIS Benchmarks για ελέγχους PCI DSS και SOC 2, pipelines Microsoft Sentinel SIEM, και διαχείριση ταυτότητας και πρόσβασης με Microsoft Entra ID, Duo MFA και 1Password."
             },
             {
                 icon: "fas fa-terminal",
@@ -979,15 +978,15 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fas fa-shield-halved",
                 title: "Ασφάλεια Τερματικών & Συμμόρφωση",
-                oneLiner: "Mac θωρακισμένα κατά CIS, με EDR, έτοιμα για ελέγχους PCI-DSS και SOC 2.",
-                description: "Θωράκιση στόλου συσκευών απέναντι σε πραγματικές απειλές: εφαρμογή CIS Benchmarks, ανάπτυξη και μετάβαση EDR, διαχείριση κρυπτογράφησης δίσκων και ετοιμότητα για ελέγχους PCI-DSS και SOC 2.",
-                detail: "Ασφάλεια που αντέχει τόσο σε έλεγχο όσο και στην παραγωγή. Εφάρμοσα θωράκιση κατά CIS Benchmarks σε όλο τον στόλο πριν από ελέγχους PCI-DSS και SOC 2, ηγήθηκα της μετάβασης σε Checkpoint Harmony EDR και τροφοδοτώ το Microsoft Sentinel με telemetry τερματικών ώστε η ανίχνευση να έχει πραγματικό πλαίσιο.",
+                oneLiner: "Mac θωρακισμένα κατά CIS, με EDR, έτοιμα για ελέγχους PCI DSS και SOC 2.",
+                description: "Θωράκιση στόλου συσκευών απέναντι σε πραγματικές απειλές: εφαρμογή CIS Benchmarks, ανάπτυξη και μετάβαση EDR, διαχείριση κρυπτογράφησης δίσκων και ετοιμότητα για ελέγχους PCI DSS και SOC 2.",
+                detail: "Ασφάλεια που αντέχει τόσο σε έλεγχο όσο και στην παραγωγή. Εφάρμοσα θωράκιση κατά CIS Benchmarks σε όλο τον στόλο πριν από ελέγχους PCI DSS και SOC 2, ηγήθηκα της μετάβασης σε Check Point Harmony Endpoint και τροφοδοτώ το Microsoft Sentinel με telemetry τερματικών ώστε η ανίχνευση να έχει πραγματικό πλαίσιο.",
                 highlights: [
-                    "Θωράκιση κατά CIS Benchmarks πριν από ελέγχους PCI-DSS και SOC 2",
+                    "Θωράκιση κατά CIS Benchmarks πριν από ελέγχους PCI DSS και SOC 2",
                     "Μετάβαση EDR με επίλυση συγκρούσεων FileVault και μηδενική απώλεια δεδομένων",
                     "Pipelines Sentinel SIEM μέσω RFC 5424 + TLS"
                 ],
-                tools: ["Checkpoint Harmony EDR", "Microsoft Sentinel", "Jamf Pro", "Microsoft Entra ID", "DUO MFA", "1Password"]
+                tools: ["Check Point Harmony Endpoint", "Microsoft Sentinel", "Jamf Pro", "Microsoft Entra ID", "Duo MFA", "1Password"]
             },
             {
                 icon: "fab fa-apple",
@@ -1018,12 +1017,12 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fas fa-robot",
                 title: "AI-Augmented Operations",
-                oneLiner: "Gemini, Rovo Agents και AI ticket triage που μειώνουν μετρήσιμα τη δουλειά.",
+                oneLiner: "Gemini σε όλο τον οργανισμό, Rovo Agents και διαλογή αιτημάτων με AI στο Jira.",
                 description: "Ανάπτυξη AI που μειώνει μετρήσιμα τον φόρτο εργασίας — εταιρικά rollouts βοηθών, agentic automation και διαλογή αιτημάτων με AI που μειώνει τον χρόνο επίλυσης.",
-                detail: "Υιοθέτηση AI που φαίνεται στα νούμερα. Ανέπτυξα το Google Gemini σε όλο τον οργανισμό και τους Atlassian Rovo Agents, δημιούργησα pipeline διαλογής αιτημάτων με AI για το Jira Service Management και αναπτύσσω prototypes MCP servers ώστε βοηθοί όπως το Claude Code να δουλεύουν απευθείας με συστήματα IT.",
+                detail: "AI που κάνει πραγματική δουλειά. Εισήγαγα το Google Gemini σε όλο τον οργανισμό και τους Atlassian Rovo Agents, δημιούργησα pipeline διαλογής αιτημάτων με AI για το Jira Service Management και αναπτύσσω prototypes MCP servers ώστε βοηθοί όπως το Claude Code να δουλεύουν απευθείας με τα συστήματα IT.",
                 highlights: [
                     "Ανάπτυξη Google Gemini σε όλο τον οργανισμό",
-                    "Διαλογή αιτημάτων με AI σε 350+ tickets τον χρόνο",
+                    "Διαλογή αιτημάτων με AI σε 350+ tickets",
                     "Prototypes MCP servers για εργαλεία IT"
                 ],
                 tools: ["Claude Code", "MCP Servers", "Google Gemini", "Grok Bot", "Atlassian Rovo", "Jira Service Management", "Slack"]
@@ -1060,30 +1059,30 @@ export const content: Record<'en' | 'gr', Content> = {
         experience: [
             {
                 role: "Team Lead, Apple Fleet & IT Automation",
-                company: "OMILIA LTD, Αθήνα",
+                company: "Omilia, Αθήνα",
                 duration: "Απρίλιος 2026 – Σήμερα",
                 tasks: [
                     "Πλήρης ευθύνη για τον τομέα Apple Fleet & IT Automation, την πλατφόρμα Jamf Pro και τα AI pipelines σε 550+ τερματικά macOS",
-                    "Ηγεσία automation engineering σε Bash, Python και TypeScript — Jamf API, AI ticket-triage, prototypes MCP server και υποδομή ανανέωσης SSL",
+                    "Ηγεσία automation engineering σε Bash, Python και TypeScript — Jamf API, διαλογή αιτημάτων με AI, prototypes MCP servers και υποδομή ανανέωσης SSL",
                     "Συνεργασία με Cyber, HR, Finance και Engineering για ταχύτερο onboarding, λιγότερα tickets και μηδενική χειροκίνητη διαχείριση πιστοποιητικών"
                 ]
             },
             {
-                role: "Information Technology Engineer",
-                company: "OMILIA LTD, Αθήνα",
+                role: "IT Engineer",
+                company: "Omilia, Αθήνα",
                 duration: "Σεπτέμβριος 2024 – Μάιος 2026",
                 tasks: [
                     "Σχεδίαση zero‑touch enrollment με Jamf Pro και Apple Business Manager για στόλο 550+ Mac — μείωση χρόνου onboarding κατά 70%",
-                    "Εφαρμογή θωράκισης CIS Benchmark σε όλο τον στόλο σε συνεργασία με το τμήμα Cyber — πλήρης συμμόρφωση ενόψει ελέγχων PCI-DSS και SOC 2",
+                    "Εφαρμογή θωράκισης CIS Benchmark σε όλο τον στόλο σε συνεργασία με το τμήμα Cyber — πλήρης συμμόρφωση ενόψει ελέγχων PCI DSS και SOC 2",
                     "Ηγεσία εταιρικής μετάβασης EDR σε Check Point Harmony Endpoint σε 550+ συσκευές, με επίλυση συγκρούσεων FileVault χωρίς καμία απώλεια δεδομένων",
                     "Κατασκευή κεντρικού pipeline ανανέωσης SSL (acme.sh, Let's Encrypt, DNS-01) για Cisco ISE, ESXi, Proxmox και HPE iLO",
-                    "Υλοποίηση ενσωμάτωσης Microsoft Sentinel SIEM με Python log collectors (RFC 5424 + TLS) για Jamf, Anydesk και HID",
-                    "Προώθηση εταιρικής υιοθέτησης AI: Gemini, Atlassian Rovo Agents και AI pipeline διαλογής αιτημάτων",
+                    "Υλοποίηση ενσωμάτωσης Microsoft Sentinel SIEM με Python log collectors (RFC 5424 + TLS) για Jamf, AnyDesk και HID",
+                    "Προώθηση εταιρικής υιοθέτησης AI: Gemini σε όλο τον οργανισμό, Atlassian Rovo Agents και pipeline διαλογής αιτημάτων με AI",
                     "Επίλυση 350+ Jira tickets με SLA 95%+, συγγραφή 40+ οδηγών Confluence και διαχείριση 9 εταιρικών πλατφορμών"
                 ]
             },
             {
-                role: "Στρατιωτική Θητεία — IT Operations & Διοικητική Υποστήριξη",
+                role: "Στρατιωτική θητεία — IT & διοικητική υποστήριξη",
                 company: "Ελληνικός Στρατός",
                 duration: "Νοέμβριος 2025 – Αύγουστος 2026",
                 tasks: [
@@ -1093,7 +1092,7 @@ export const content: Record<'en' | 'gr', Content> = {
             },
             {
                 role: "IT Support & Infrastructure Coordinator",
-                company: "KEEP EAT HEALTHY, Κορωπί",
+                company: "Keep Eat Healthy, Κορωπί",
                 duration: "Μάιος 2022 – Νοέμβριος 2025",
                 tasks: [
                     "Πλήρης ευθύνη IT για υβριδικό γραφείο: δίκτυο, ασφάλεια τερματικών, κύκλος ζωής εξοπλισμού και συντονισμός προμηθευτών",
@@ -1103,7 +1102,7 @@ export const content: Record<'en' | 'gr', Content> = {
             },
             {
                 role: "IT Support Specialist",
-                company: "ANEMOMYLOI ANDROS AE, Άνδρος",
+                company: "Anemomyloi Andros, Άνδρος",
                 duration: "Ιανουάριος 2023 – Φεβρουάριος 2024",
                 tasks: [
                     "Ψηφιοποίηση καθημερινών λειτουργιών με μεταφορά ολόκληρου του εταιρικού αρχείου από έντυπη μορφή σε Google Drive",
@@ -1117,17 +1116,17 @@ export const content: Record<'en' | 'gr', Content> = {
                 duration: "2020 – Νοέμβριος 2023",
                 tasks: [
                     "Ανάπτυξη ιστοσελίδων end-to-end: domain, DNS, SSL/TLS, hosting, MySQL, WordPress και SEO",
-                    "Μετρήσιμη αύξηση οργανικής επισκεψιμότητας μέσω structured data και βελτιστοποίησης απόδοσης"
+                    "Βελτίωση της οργανικής προβολής στις μηχανές αναζήτησης με structured data και βελτιστοποίηση απόδοσης"
                 ]
             },
             {
                 role: "Network Systems Technician",
                 company: "Weballdesign, Αθήνα",
-                duration: "2020 - Νοέμβριος 2022",
+                duration: "2020 – Νοέμβριος 2022",
                 tasks: [
-                    "Εγκατάσταση και παραμετροποίηση συστημάτων Server/Client σε εκπαιδευτικά ιδρύματα",
-                    "Συντήρηση δικτυακού εξοπλισμού (Routers, Switches, UPS) και διαγνωστικοί έλεγχοι",
-                    "Εκπαίδευση προσωπικού στη χρήση νέων συστημάτων"
+                    "Εγκατάσταση και παραμετροποίηση συστημάτων server/client σε εκπαιδευτικά ιδρύματα",
+                    "Συντήρηση δικτυακού εξοπλισμού (routers, switches, UPS) και διαγνωστικοί έλεγχοι",
+                    "Εκπαίδευση προσωπικού και τεκμηρίωση διαδικασιών"
                 ]
             }
         ],
@@ -1135,13 +1134,12 @@ export const content: Record<'en' | 'gr', Content> = {
         educationTitle: "ΕΚΠΑΙΔΕΥΣΗ",
         education: [
             {
-                degree: "Integrated Master's in Computer Science (5ετές)",
+                degree: "Δίπλωμα Μηχανικού Πληροφορικής και Υπολογιστών (Integrated Master)",
                 institution: "Πανεπιστήμιο Δυτικής Αττικής",
-                duration: "Σεπτέμβριος 2019 - Ιούνιος 2025",
+                duration: "Σεπτέμβριος 2019 – Ιούνιος 2025",
                 details: [
                     "Ενεργό μέλος του Tech Society του πανεπιστημίου",
-                    "Σχετικά μαθήματα: Προηγμένα Υπολογιστικά Συστήματα, AI, Ασφάλεια Δικτύων, Βάσεις Δεδομένων, Web Development, Cloud Computing",
-                    "Μέσος Όρος (GPA): 7.6 / 10"
+                    "Σχετικά μαθήματα: Προηγμένα Υπολογιστικά Συστήματα, AI, Ασφάλεια Δικτύων, Βάσεις Δεδομένων, Web Development, Cloud Computing"
                 ]
             },
             {
@@ -1174,13 +1172,13 @@ export const content: Record<'en' | 'gr', Content> = {
                 link: "/files/itil-v4-cert.pdf"
             },
             {
-                degree: "Άδεια Ασκήσεως Επαγγέλματος — Μηχανικός Πληροφορικής & Υπολογιστών",
+                degree: "Άδεια Άσκησης Επαγγέλματος — Μηχανικός Πληροφορικής & Υπολογιστών",
                 institution: "Τεχνικό Επιμελητήριο Ελλάδας (ΤΕΕ)",
                 duration: "2025",
                 kind: "license",
                 badge: "ΤΕΕ",
                 details: [
-                    "Θεσμοθετημένη άδεια άσκησης επαγγέλματος Μηχανικού Πληροφορικής στην Ελλάδα",
+                    "Θεσμοθετημένη άδεια άσκησης επαγγέλματος Μηχανικού Πληροφορικής και Υπολογιστών στην Ελλάδα",
                     "Προϋποθέτει πενταετές ενιαίο και αδιάσπαστο μεταπτυχιακό δίπλωμα"
                 ]
             },
@@ -1230,7 +1228,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 name: "Plano Plus - Επιγραφές & Οπτική Ταυτότητα",
                 year: 2026,
                 tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion", "Resend"],
-                description: "Ιστοσελίδα στούντιο επιγραφών και οπτικής επικοινωνίας με Next.js App Router. Χαρακτηριστικά: light/dark theme, parallax effects, smooth scrolling, φόρμα επικοινωνίας με email integration, και σύγχρονο UI/UX. Εξυπηρετεί πελάτες σε όλη την Κρήτη με επαγγελματικές λύσεις επιγραφών και branding.",
+                description: "Γρήγορη, premium ιστοσελίδα για στούντιο επιγραφών και οπτικής ταυτότητας στην Κρήτη, με Next.js και φόρμα επικοινωνίας που φτάνει κατευθείαν στο inbox του πελάτη.",
                 role: "Ατομικός σχεδιασμός και υλοποίηση · Έργο πελάτη",
                 detail: "Πλήρης ιστοσελίδα για στούντιο επιγραφών και οπτικής ταυτότητας στην Κρήτη, με Next.js App Router. Ζητούμενο ήταν μια παραδοσιακή επιχείρηση επιγραφών να δείχνει online τόσο προσεγμένη όσο η δουλειά της στον δρόμο. Περιλαμβάνει light/dark theme, parallax, smooth scrolling και φόρμα επικοινωνίας με αποστολή email.",
                 highlights: [
@@ -1246,13 +1244,13 @@ export const content: Record<'en' | 'gr', Content> = {
                 name: "Signature Craft",
                 year: 2026,
                 tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Email Signatures"],
-                description: "Open-source εργαλείο δημιουργίας email signatures με 32+ templates, χωρίς εγγραφή, και σύγχρονο dark-mode UI. Σχεδιάστε επαγγελματικές HTML υπογραφές για Gmail, Outlook, Apple Mail, Yahoo & Thunderbird σε λίγα λεπτά — εντελώς δωρεάν.",
-                role: "Ατομικός σχεδιασμός και υλοποίηση · Open source",
-                detail: "Open-source εργαλείο δημιουργίας email signatures για ένα πρόβλημα που έχουν όλες οι εταιρείες: υπογραφές που «σπάνε» μόλις φύγουν από τον υπολογιστή σου. Παράγει HTML βασισμένο σε πίνακες που εμφανίζεται σωστά στους βασικούς mail clients, χωρίς εγγραφή και χωρίς tracking.",
+                description: "Εργαλείο δημιουργίας email signatures με 32+ templates. Υπογραφές που εμφανίζονται σωστά σε Gmail, Outlook, Apple Mail, Yahoo και Thunderbird — δωρεάν, χωρίς εγγραφή.",
+                role: "Ατομικός σχεδιασμός και υλοποίηση",
+                detail: "Εργαλείο δημιουργίας email signatures για ένα πρόβλημα που έχουν όλες οι εταιρείες: υπογραφές που «σπάνε» μόλις φύγουν από τον υπολογιστή. Παράγει HTML βασισμένο σε πίνακες που εμφανίζεται σωστά στους βασικούς mail clients, χωρίς εγγραφή, χωρίς συνδρομή και χωρίς tracking.",
                 highlights: [
                     "32+ templates: εταιρικά, minimal και δημιουργικά",
                     "HTML ελεγμένο σε Gmail, Outlook, Apple Mail, Yahoo και Thunderbird",
-                    "Χωρίς εγγραφή, χωρίς tracking, πλήρως open source",
+                    "Δωρεάν, χωρίς εγγραφή και χωρίς tracking",
                     "Ζωντανή προεπισκόπηση με αντιγραφή με ένα κλικ"
                 ],
                 liveSiteLink: "https://signature-craft-tau.vercel.app/",
@@ -1277,12 +1275,12 @@ export const content: Record<'en' | 'gr', Content> = {
                 image: "/images/portfolio-website/2026.png"
             },
             {
-                name: "Thesis: Hybrid Wireless-Optical Networks for 5G",
+                name: "Radio over Fiber για 5G - Διπλωματική Εργασία",
                 year: 2025,
                 tags: ["Διπλωματική", "5G", "Radio over Fiber", "Έρευνα"],
-                description: "Διπλωματική εργασία στα υβριδικά ασύρματα-οπτικά δίκτυα (Radio over Fiber) για δίκτυα 5ης γενιάς. Περιλαμβάνει τεχνική έρευνα και τεκμηρίωση.",
+                description: "Διπλωματική εργασία για το Radio over Fiber: πού τα υβριδικά ασύρματα-οπτικά δίκτυα αλλάζουν το κόστος του 5G. Συνοδεύεται από διαδραστική παρουσίαση.",
                 role: "Μοναδικός ερευνητής · Διπλωματική M.Eng., Πανεπιστήμιο Δυτικής Αττικής",
-                detail: "Έρευνα σε υβριδικά ασύρματα-οπτικά δίκτυα πρόσβασης για 5G, με επίκεντρο το Radio over Fiber ως τρόπο μεταφοράς της επεξεργασίας σήματος εκτός του σημείου κεραίας. Συγκρίνει κατανεμημένες και κεντρικοποιημένες αρχιτεκτονικές RAN και αξιολογεί πού η οπτική μετάδοση αλλάζει ουσιαστικά το συνολικό κόστος κτήσης.",
+                detail: "Έρευνα σε υβριδικά ασύρματα-οπτικά δίκτυα πρόσβασης για 5G, με επίκεντρο το Radio over Fiber ως τρόπο μεταφοράς της επεξεργασίας σήματος εκτός του σημείου κεραίας. Συγκρίνει κατανεμημένες και κεντρικοποιημένες αρχιτεκτονικές RAN και αξιολογεί πού η οπτική μετάδοση αλλάζει ουσιαστικά το συνολικό κόστος κτήσης. Δημοσιεύτηκε ως «New Hybrid Wireless Optical Networks (Radio Over Fiber) for 5G Networks».",
                 highlights: [
                     "Σύγκριση μοντέλων D-RAN και C-RAN ως προς κόστος και χωρητικότητα",
                     "Αξιολόγηση μετάδοσης WDM για ενοποίηση fronthaul",
@@ -1297,9 +1295,9 @@ export const content: Record<'en' | 'gr', Content> = {
                 name: "Silence Hero - Chrome Extension",
                 year: 2024,
                 tags: ["Chrome Extension", "JavaScript", "HTML", "CSS", "UI/UX"],
-                description: "Επέκταση για Chrome που υπενθυμίζει τις ώρες κοινής ησυχίας στην Ελλάδα με οπτικές ενδείξεις και αντίστροφη μέτρηση.",
+                description: "Επέκταση Chrome που δείχνει με μια ματιά αν είναι ώρες κοινής ησυχίας, με αντίστροφη μέτρηση για την επόμενη αλλαγή.",
                 role: "Ατομική υλοποίηση",
-                detail: "Μικρή επέκταση Chrome με έναν και μόνο σκοπό: παρακολουθεί τις ώρες κοινής ησυχίας στην Ελλάδα και σου λέει με μια ματιά αν είναι καλή στιγμή να τρυπήσεις τον τοίχο. Οπτική ένδειξη και ζωντανή αντίστροφη μέτρηση.",
+                detail: "Μικρή επέκταση Chrome με έναν και μόνο σκοπό: παρακολουθεί τις ώρες κοινής ησυχίας στην Ελλάδα και δείχνει με μια ματιά αν είναι καλή στιγμή να τρυπήσετε τον τοίχο. Οπτική ένδειξη και ζωντανή αντίστροφη μέτρηση.",
                 highlights: [
                     "Ζωντανή αντίστροφη μέτρηση για την επόμενη αλλαγή",
                     "Άμεση οπτική ένδειξη στη γραμμή εργαλείων",
@@ -1313,7 +1311,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 name: "Nexus Party App",
                 year: 2026,
                 tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Zustand", "Framer Motion", "PWA"],
-                description: "Συλλογή ελληνικών παιχνιδιών για πάρτι με 6 multiplayer παιχνίδια: Quizball, Taboo, Παλέρμο, Πες Βρες, Impostor, και Truth or Dare. Κατασκευασμένο ως PWA με ομαλές animations, αυτόματη βαθμολογία, χρονοδιακόπτες, και παραμετροποιήσιμες ρυθμίσεις. Ιδανικό για άγριες νύχτες με φίλους.",
+                description: "Έξι ελληνικά παιχνίδια για πάρτι σε μία εγκαταστάσιμη PWA — Quizball, Taboo, Παλέρμο, Πες Βρες, Impostor και Truth or Dare — με αυτόματη βαθμολογία, χρονόμετρα και δικούς σας κανόνες.",
                 role: "Ατομικός σχεδιασμός και υλοποίηση",
                 detail: "Ελληνική συλλογή παιχνιδιών για πάρτι που συγκεντρώνει έξι multiplayer παιχνίδια σε μία εγκαταστάσιμη PWA. Λύνει ένα πραγματικό πρόβλημα στις παρέες: κανείς δεν θέλει να κατεβάσει έξι εφαρμογές. Αναλαμβάνει βαθμολογία, χρονομέτρηση και ρυθμίσεις ώστε η παρέα να παίζει αντί να μαλώνει για τους κανόνες.",
                 highlights: [
@@ -1328,10 +1326,10 @@ export const content: Record<'en' | 'gr', Content> = {
                 imageFit: "cover"
             },
             {
-                name: "HappyFox 🦊 - Εφαρμογή Ψυχικής Υγείας",
+                name: "HappyFox - Εφαρμογή Ψυχικής Υγείας",
                 year: 2023,
                 tags: ["UI/UX Design", "Figma", "Team Project", "SRH Heidelberg"],
-                description: "Σχεδιασμός UI/UX για εφαρμογή ψυχικής υγείας με στόχο την προώθηση της συναισθηματικής ευεξίας. Υλοποιήθηκε στα πλαίσια μεταπτυχιακού μαθήματος.",
+                description: "Concept εφαρμογής ψυχικής υγείας για μέρες χαμηλής ενέργειας, με καθημερινό check-in που ολοκληρώνεται σε λιγότερο από ένα λεπτό. Ομαδικό έργο στο SRH Heidelberg.",
                 role: "Ομαδικό έργο · Σχεδιασμός UI/UX, SRH Heidelberg",
                 detail: "Concept εφαρμογής ψυχικής υγείας που αναπτύχθηκε σε μεταπτυχιακό μάθημα στο SRH Heidelberg. Η ομάδα εστίασε στον σχεδιασμό για ανθρώπους σε κατάσταση χαμηλής ενέργειας: λιγότερα εμπόδια, χωρίς επικριτική γλώσσα, με καθημερινό check-in που ολοκληρώνεται σε λιγότερο από ένα λεπτό.",
                 highlights: [
@@ -1349,7 +1347,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 name: "Ιστοσελίδα Κέντρων Ξένων Γλωσσών Schiller",
                 year: 2026,
                 tags: ["Wix", "Wix Studio", "Web Development", "Educational"],
-                description: "Ανάπτυξη ιστοσελίδας για τα εκπαιδευτικά κέντρα Schiller στο Ρέθυμνο. Παρουσίαση προγραμμάτων σπουδών Αγγλικών, Γερμανικών και Εκπαιδευτικής Ρομποτικής.",
+                description: "Η ιστοσελίδα των κέντρων ξένων γλωσσών Schiller στο Ρέθυμνο: προγράμματα Αγγλικών, Γερμανικών και Εκπαιδευτικής Ρομποτικής, που ενημερώνει το ίδιο το προσωπικό της σχολής.",
                 role: "Ατομική υλοποίηση · Έργο πελάτη",
                 detail: "Η ιστοσελίδα των κέντρων ξένων γλωσσών Schiller στο Ρέθυμνο, με προγράμματα Αγγλικών, Γερμανικών και Εκπαιδευτικής Ρομποτικής. Υλοποιήθηκε σε Wix Studio ώστε το προσωπικό της σχολής να ενημερώνει μόνο του τα προγράμματα χωρίς να χρειάζεται προγραμματιστή.",
                 highlights: [
@@ -1365,7 +1363,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 name: "Raspberry Pi Adblocker & Streamer",
                 year: 2024,
                 tags: ["Raspberry Pi", "Linux", "Networking", "Pi-hole", "Plex"],
-                description: "Παραμετροποίηση Raspberry Pi ως Network-wide Adblocker (Pi-hole) και Media Server (Plex) για οικιακή χρήση.",
+                description: "Παραμετροποίηση Raspberry Pi για αποκλεισμό διαφημίσεων σε όλο το δίκτυο (Pi-hole) και media streaming (Plex) στο σπίτι.",
                 role: "Ατομική υλοποίηση · Home lab",
                 detail: "Ένα Raspberry Pi με δύο ρόλους: αποκλεισμός διαφημίσεων σε επίπεδο δικτύου με Pi-hole και media streaming με Plex. Πρακτική άσκηση στο να βγάζεις χρήσιμη, μόνιμα διαθέσιμη υποδομή από ελάχιστο υλικό, και στη δουλειά DNS, δικτύου και υπηρεσιών που τη διατηρεί σε λειτουργία.",
                 highlights: [
@@ -1398,7 +1396,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 name: "The Friendly Wheelchair (Concept)",
                 year: 2023,
                 tags: ["Project Management", "AI", "NLP", "Agile/SCRUM", "Healthcare IT"],
-                description: "Ανάπτυξη πλάνου διαχείρισης έργου (PM Plan) και τεχνικών προδιαγραφών για concept αυτόνομου αμαξιδίου με AI, για τις κλινικές της Χαϊδελβέργης.",
+                description: "Πλάνο διαχείρισης έργου και τεχνικές προδιαγραφές για αυτόνομο αναπηρικό αμαξίδιο με AI, για τις κλινικές της Χαϊδελβέργης.",
                 role: "Επικεφαλής διαχείρισης έργου · SRH Heidelberg",
                 detail: "Πλάνο διαχείρισης έργου και τεχνικές προδιαγραφές για αυτόνομο αναπηρικό αμαξίδιο με υποστήριξη AI, για τις κλινικές της Χαϊδελβέργης. Δεν επρόκειτο για prototype: κάλυπτε αντικείμενο, κινδύνους, χαρτογράφηση εμπλεκομένων, κανονιστικές παραμέτρους και σχεδιασμό παράδοσης για ιατροτεχνολογικό βοήθημα.",
                 highlights: [
@@ -1424,7 +1422,7 @@ export const content: Record<'en' | 'gr', Content> = {
             intro: { headline: "Γεια σας.", enter: "Είσοδος", skip: "Παράλειψη" },
             hero: {
                 headline: "Στόλοι Apple.\n*Αυτοματοποιημένοι.*",
-                sub: "Ηγούμαι του Apple Fleet & IT Automation στην Omilia: **550+ Mac** στο Jamf Pro, με **zero‑touch** enrollment και θωράκιση κατά CIS Benchmarks.",
+                sub: "Ηγούμαι της ομάδας Apple Fleet & IT Automation στην Omilia: **550+ Mac** στο Jamf Pro, με **zero‑touch** enrollment και θωράκιση κατά CIS Benchmarks.",
                 viewWork: "Δείτε τη δουλειά μου",
                 contact: "Επικοινωνία",
                 note: "Jamf Certified Tech (Jamf 200) · Αθήνα"
@@ -1432,7 +1430,7 @@ export const content: Record<'en' | 'gr', Content> = {
             about: {
                 eyebrow: "Σχετικά",
                 headline: "Γνωρίστε τον Ανδρέα.",
-                bio: "Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) με **πλήρη ευθύνη του Jamf Pro** στην Omilia, μια παγκόσμια εταιρεία conversational AI. Η δουλειά μου βρίσκεται εκεί όπου συναντώνται **η ασφάλεια, ο αυτοματισμός και η κλίμακα** — και κάθε επαναλαμβανόμενη εργασία γίνεται σύστημα.",
+                bio: "Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.), επικεφαλής Apple Fleet & IT Automation στην Omilia, μια παγκόσμια εταιρεία conversational AI. Έχω **πλήρη ευθύνη για το Jamf Pro**, θωρακίζω τον στόλο κατά CIS Benchmarks και μετατρέπω **κάθε επαναλαμβανόμενη εργασία** σε κώδικα.",
                 fullStory: "Διαβάστε ολόκληρη την ιστορία",
                 dialogTitle: "Σχετικά με τον Ανδρέα",
                 credentials: "Πιστοποιήσεις",
@@ -1474,7 +1472,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 code: "Κώδικας",
                 report: "Αναφορά",
                 publication: "Δημοσίευση",
-                github: "Όλα τα projects στο GitHub",
+                github: "Περισσότερα στο GitHub",
                 lineup: "Όλα τα projects",
                 role: "Ρόλος",
                 highlights: "Βασικά σημεία"
