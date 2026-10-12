@@ -56,29 +56,31 @@ export default function Services() {
                 />
 
                 {/* Phones: a snapping horizontal gallery. Desktop: a 3 × 2 grid of equal tiles. */}
-                <ul className={`${HEADER_GAP} kn-gallery md:grid md:grid-cols-3 md:gap-5`}>
-                    {t.services.map((service, index) => (
-                        <Rise as="li" key={service.title} delay={0.1 + Math.min(index, 3) * 0.05} className="h-auto">
-                            <button
-                                type="button"
-                                onClick={() => setActive(service)}
-                                aria-label={`${service.title} — ${k.services.learnMore}`}
-                                className="tile tile--lg group relative w-full h-full min-h-[16.5rem] md:min-h-0 text-left px-7 pt-7 pb-20 md:px-[min(2rem,2.3vw)] md:pt-[min(1.75rem,3vh)] md:pb-[min(1.875rem,3.2vh)] flex flex-col"
-                            >
-                                <Glyph name={service.icon} className="w-9 h-9 md:w-[min(2.375rem,4.1vh)] md:h-[min(2.375rem,4.1vh)] text-[var(--foreground)]" strokeWidth={1.35} />
-                                <span className="t-title mt-5 md:mt-[min(1rem,1.8vh)] text-[1.3125rem] md:text-[min(1.5rem,2.6vh)] tracking-[0.009em] pr-2">
-                                    {service.title}
-                                </span>
-                                <span className="mt-2 t-body md:text-[min(1.0625rem,1.85vh)] text-[var(--muted)] md:pr-[min(3.25rem,3.8vw)]">
-                                    {service.oneLiner}
-                                </span>
-                                <span className="absolute right-5 bottom-5 md:right-[min(1.5rem,1.8vw)] md:bottom-[min(1.5rem,2.6vh)]">
-                                    <Plus />
-                                </span>
-                            </button>
-                        </Rise>
-                    ))}
-                </ul>
+                <Rise step={2} className={HEADER_GAP}>
+                    <ul className="kn-gallery md:grid md:grid-cols-3 md:gap-5">
+                        {t.services.map((service) => (
+                            <li key={service.title} className="h-auto">
+                                <button
+                                    type="button"
+                                    onClick={() => setActive(service)}
+                                    aria-label={`${service.title} — ${k.services.learnMore}`}
+                                    className="tile tile--lg group relative w-full h-full min-h-[16.5rem] md:min-h-0 text-left px-7 pt-7 pb-20 md:px-[min(2rem,2.3vw)] md:pt-[min(1.75rem,3vh)] md:pb-[min(1.875rem,2.6vh)] flex flex-col"
+                                >
+                                    <Glyph name={service.icon} className="w-9 h-9 md:w-[min(2.375rem,4.1vh)] md:h-[min(2.375rem,4.1vh)] text-[var(--foreground)]" strokeWidth={1.35} />
+                                    <span className="t-title mt-5 md:mt-[min(1rem,1.8vh)] text-[1.3125rem] md:text-[min(1.5rem,2.6vh)] tracking-[0.009em] pr-2">
+                                        {service.title}
+                                    </span>
+                                    <span className="mt-2 t-body md:text-[min(1.0625rem,1.85vh)] text-[var(--muted)] md:pr-[min(3.25rem,3.8vw)]">
+                                        {service.oneLiner}
+                                    </span>
+                                    <span className="absolute right-5 bottom-5 md:right-[min(1.5rem,1.8vw)] md:bottom-[min(1.5rem,2.6vh)]">
+                                        <Plus />
+                                    </span>
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                </Rise>
             </div>
 
             <Modal

@@ -90,9 +90,6 @@ html.dark [data-tone="alt"] {
   /* Height of the fixed local nav; desktop panels reserve it at the top. */
   --nav-h: 3.25rem;
 
-  /* apple.com's product-page easing. */
-  --ease-apple: cubic-bezier(0.28, 0.11, 0.32, 1);
-
   /*
    * Vertical rhythm of the desktop slides: every content slide starts its eyebrow at the
    * same height below the nav, so headlines do not jump as the track moves sideways.
@@ -112,6 +109,30 @@ html.dark [data-tone="alt"] {
 
   --font-sans: var(--font-text);
   --font-mono: var(--font-mono);
+}
+
+/*
+ * Motion tokens, mirrored in src/utils/motion.ts. `standard` for hovers and colour,
+ * `apple` for anything entering or settling, `exit` for anything leaving, `emphasized`
+ * for large user-initiated moves. No bounce anywhere.
+ */
+@theme static {
+  --ease-standard: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-apple: cubic-bezier(0.28, 0.11, 0.32, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
+  --default-transition-duration: 200ms;
+  --default-transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+:root {
+  --motion-fast: 200ms;   /* hover, colour, opacity-only state, scrim fade */
+  --motion-base: 300ms;   /* small moves: dot, chevron, copy label, menu items, accordion, exits */
+  --motion-slow: 500ms;   /* containers: stage crossfade, menu panel, theme circle */
+  --motion-reveal: 700ms; /* content entrances: fade + rise */
+  --motion-stagger: 50ms; /* per sibling, at most five steps */
+  --motion-rise: 24px;    /* entrance travel */
+  --motion-rise-sm: 8px;  /* LCP text travel: it moves but is never invisible */
 }
 
 /* Width part of the desktop query; the full query is the `md` variant above. */
@@ -148,10 +169,6 @@ body {
   z-index: 1;
 }
 
-html[data-entered="true"] [data-cinematic] {
-  display: none !important;
-}
-
 ::selection {
   background: rgba(0, 113, 227, 0.22);
 }
@@ -186,15 +203,69 @@ a[href],
   cursor: pointer;
 }
 
+/* Reduced motion: fades stay (shorter), movement and staggers go. */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+  :root {
+    --motion-rise: 0px;
+    --motion-rise-sm: 0px;
+    --motion-stagger: 0ms;
+    --motion-slow: 200ms;
+    --motion-reveal: 200ms;
   }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/*
+ * Entrances. The hero plays at first paint (.kn-enter, .kn-enter-text): no JavaScript
+ * gates it, and its text only settles into place without fading, so the largest paint is
+ * never held back. Other slides reveal as they arrive (.kn-reveal): the <head> script marks
+ * each .slide with data-revealed when it enters the viewport. Without JavaScript, or when
+ * focus lands inside a slide first, everything is simply shown.
+ */
+@keyframes kn-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, var(--motion-rise), 0);
+  }
+}
+
+@keyframes kn-settle {
+  from {
+    transform: translate3d(0, var(--motion-rise-sm), 0);
+  }
+}
+
+.kn-enter,
+.kn-enter-text {
+  animation: kn-rise var(--motion-reveal) var(--ease-apple) both;
+  animation-delay: calc(min(var(--i, 0), 5) * var(--motion-stagger));
+}
+
+.kn-enter-text {
+  animation-name: kn-settle;
+}
+
+html:not([data-js]) :is(.kn-enter, .kn-enter-text) {
+  animation: none;
+}
+
+.kn-reveal {
+  opacity: 0;
+  transform: translate3d(0, var(--motion-rise), 0);
+  transition:
+    opacity var(--motion-reveal) var(--ease-apple),
+    transform var(--motion-reveal) var(--ease-apple);
+  transition-delay: calc(min(var(--i, 0), 5) * var(--motion-stagger));
+}
+
+.slide[data-revealed] .kn-reveal,
+html:not([data-js]) .kn-reveal,
+.slide:focus-within .kn-reveal {
+  opacity: 1;
+  transform: none;
 }
 
 ::-webkit-scrollbar {
@@ -721,6 +792,13 @@ section[id] {
         padding-inline: 2.5rem;
         scroll-padding-inline: 2.5rem;
       }
+    }
+  }
+
+  /* The gallery clips vertically, so its focus ring sits inside each tile. */
+  .kn-gallery :focus-visible {
+    @variant stack {
+      outline-offset: -2px;
     }
   }
 

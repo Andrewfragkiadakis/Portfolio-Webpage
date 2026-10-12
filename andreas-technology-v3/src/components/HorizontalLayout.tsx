@@ -132,6 +132,8 @@ export default function HorizontalLayout() {
                         {SECTIONS.map((section, index) => (
                             <div
                                 key={index}
+                                // The <head> script marks slides as revealed before hydration.
+                                suppressHydrationWarning
                                 data-slide={index}
                                 data-tone={index % 2 === 0 ? 'primary' : 'alt'}
                                 className="slide relative w-full overflow-x-clip md:h-screen md:w-screen md:flex-shrink-0 md:flex md:items-center md:justify-center md:overflow-clip md:pt-[var(--nav-h)] md:pb-[3.75rem]"

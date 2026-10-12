@@ -94,7 +94,7 @@ export default function Projects() {
                         </ScaleIn>
 
                         {/* Fixed-height caption, so the shot and links never jump between projects. */}
-                        <Rise delay={0.2} className="mt-[min(1.75rem,3.2vh)]">
+                        <Rise step={3} className="mt-[min(1.75rem,3.2vh)]">
                             <h3 className="t-title text-[min(1.75rem,3.1vh)] truncate">{stageName.title}</h3>
                             <p className="mt-1 t-small md:text-[min(0.9375rem,1.7vh)] text-[var(--muted)] truncate">
                                 {[stageName.subtitle, project.year].filter(Boolean).join(' · ')}
@@ -107,7 +107,7 @@ export default function Projects() {
                     </div>
 
                     {/* Line-up: a selector on desktop, an accordion on phones. */}
-                    <Rise delay={0.2} className="md:col-span-5">
+                    <Rise step={3} className="md:col-span-5">
                         <h3 className="t-small font-semibold pb-3">{k.projects.lineup}</h3>
                         <ul className="border-t border-[var(--line)]">
                             {t.projects.map((item, index) => {

@@ -5,14 +5,16 @@ import { MotionConfig } from 'motion/react'
 import './globals.css'
 import { LanguageProvider } from '@/contexts/LanguageContext'
 import { ThemeProvider } from '@/contexts/ThemeContext'
-import CinematicEntry from '@/components/dom/CinematicEntry'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { SOCIAL_URLS, content } from '@/data/content'
+import { HEAD_SCRIPT } from './head-script'
 
 // Inter is the non-Apple fallback in the system stack (see --font-display / --font-text).
 // Greek is loaded too, so Greek keeps its weights on Windows and Android, and the optical
-// size axis lets Inter tighten for display sizes the way San Francisco does.
-const inter = Inter({ subsets: ['latin', 'greek'], display: 'swap', variable: '--font-inter', axes: ['opsz'] })
+// size axis lets Inter tighten for display sizes the way San Francisco does. It is not
+// preloaded: Apple devices render San Francisco and never need it, and elsewhere each
+// subset downloads only when its glyphs are first used (metric-matched fallback until then).
+const inter = Inter({ subsets: ['latin', 'greek'], display: 'swap', variable: '--font-inter', axes: ['opsz'], preload: false })
 
 const SITE_URL = 'https://andreas.technology'
 
@@ -78,16 +80,7 @@ export default function RootLayout({
     return (
         <html lang="en" className={inter.variable} suppressHydrationWarning>
             <head>
-                <script
-                    dangerouslySetInnerHTML={{
-                        __html: `(function(){var t=null;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.classList.add(t);document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('meta[name=\"theme-color\"]').forEach(function(m){m.setAttribute('content',t==='dark'?'#000000':'#ffffff')})})})();`,
-                    }}
-                />
-                <script
-                    dangerouslySetInnerHTML={{
-                        __html: `(function(){try{if(localStorage.getItem('cinematic-entered')==='true'){document.documentElement.dataset.entered='true';}}catch(e){}})();`,
-                    }}
-                />
+                <script dangerouslySetInnerHTML={{ __html: HEAD_SCRIPT }} />
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{
@@ -152,7 +145,6 @@ export default function RootLayout({
                 <ThemeProvider>
                     <LanguageProvider>
                         <MotionConfig reducedMotion="user">
-                            <CinematicEntry />
                             {children}
                         </MotionConfig>
                     </LanguageProvider>

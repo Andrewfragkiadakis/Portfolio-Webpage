@@ -1,5 +1,5 @@
 import { devices, expect, test, type Page } from '@playwright/test'
-import { activeDot, isPhone, open, prime, scrollSettled, slideIndexVisible } from './helpers'
+import { activeDot, isPhone, open, prime, scrollSettled, slideIndexVisible, waitForApp } from './helpers'
 
 /** Slide index the desktop page rests on, from the scroll position (must be a whole number). */
 async function restingSlide(page: Page) {
@@ -78,6 +78,7 @@ test.describe('desktop deck', () => {
 test('deep links open on their section and the address follows the slide', async ({ page }, testInfo) => {
     await prime(page)
     await page.goto('/#projects')
+    await waitForApp(page)
     await page.waitForLoadState('networkidle')
     await scrollSettled(page)
     if (isPhone(testInfo)) {

@@ -26,21 +26,22 @@ export default function Contact() {
         >
             <div className="relative w-full max-w-[71rem] flex flex-col items-center">
                 {/* The mark again, bookending the title slide. */}
-                <Rise>
+                <Rise step={0}>
                     <Mark size={96} alt="" className="mx-auto mb-4 w-16 h-16 md:w-[min(4.5rem,7vh)] md:h-[min(4.5rem,7vh)]" />
                     <p className="t-eyebrow">{k.contact.eyebrow}</p>
                 </Rise>
                 <Headline
                     id="contact-title"
+                    step={1}
                     text={k.contact.headline}
                     className="t-hero mt-2 text-[2.75rem] md:text-[min(5.6vw,8.8vh)]"
                 />
-                <Rise delay={0.15}>
+                <Rise step={2}>
                     <p className="t-lede mt-5 md:mt-6 mx-auto max-w-[34rem] text-[1.0625rem] leading-[1.4] md:text-[min(1.5rem,2.7vh)]">
                         <Rich text={k.contact.sub} />
                     </p>
                 </Rise>
-                <Rise delay={0.3} className="mt-8 md:mt-[min(2.5rem,4.4vh)] flex flex-wrap justify-center gap-3.5">
+                <Rise step={3} className="mt-8 md:mt-[min(2.5rem,4.4vh)] flex flex-wrap justify-center gap-3.5">
                     <a href={gmailComposeUrl} target="_blank" rel="noopener noreferrer" className="kn-pill kn-pill--fill" aria-label={`${k.contact.send} (${k.common.newTab})`}>
                         {k.contact.send}
                     </a>
@@ -50,7 +51,7 @@ export default function Contact() {
                 </Rise>
             </div>
 
-            <Rise delay={0.4} className="relative w-full max-w-[71rem] mt-16 md:mt-[min(5rem,7vh)]">
+            <Rise step={4} className="relative w-full max-w-[71rem] mt-16 md:mt-[min(5rem,7vh)]">
                 <dl className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[1.6fr_1fr_1fr_1fr] border-t border-[var(--line)] text-left">
                     <div className="py-5 md:pr-6 border-b md:border-b-0 border-[var(--line)]">
                         <dt className="t-caption text-[var(--muted)]">{k.contact.email}</dt>

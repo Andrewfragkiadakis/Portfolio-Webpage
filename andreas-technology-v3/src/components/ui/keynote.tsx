@@ -1,9 +1,9 @@
 'use client'
 
-import { createContext, Fragment, useContext, useEffect, useRef, type ReactNode } from 'react'
-import { animate, motion, useInView, useMotionValue, useReducedMotion, useTransform, type MotionValue } from 'motion/react'
+import { createContext, Fragment, useContext, useEffect, useRef, type CSSProperties, type ReactNode } from 'react'
+import { motion, useMotionValue, useTransform, type MotionValue } from 'motion/react'
 import { SECTION_STEPS } from '@/data/sections'
-import { EASE_APPLE } from '@/utils/motion'
+import { DURATION } from '@/utils/motion'
 
 /* ─────────────────────────────────────────────────────────────────────────────
  * Track context: lets a slide know where it sits on the horizontal journey, so the
@@ -111,67 +111,74 @@ export function HeadlineText({ text }: { text: string }) {
     )
 }
 
-const REVEAL = { opacity: 0, y: 24 }
-const SHOWN = { opacity: 1, y: 0 }
+/** Reveal order within a slide: each step waits one --motion-stagger (50 ms); five at most. */
+export type Step = 0 | 1 | 2 | 3 | 4 | 5
+
+const stepStyle = (step: number) => ({ '--i': step }) as CSSProperties
 
 interface HeadlineProps {
     text: string
     as?: 'h1' | 'h2' | 'h3' | 'p'
     id?: string
     className?: string
-    /** Controlled reveal (the hero waits for the intro). Omit to reveal on first view. */
-    play?: boolean
+    step?: Step
 }
 
-/** Section headline: the whole line fades and rises into place, as on apple.com. */
-export function Headline({ text, as = 'h2', id, className = '', play }: HeadlineProps) {
-    const Tag = motion[as]
-    const control = play === undefined
-        ? { initial: REVEAL, whileInView: SHOWN, viewport: { once: true, amount: 0.5 } }
-        : { initial: REVEAL, animate: play ? SHOWN : REVEAL }
-
+/**
+ * Section headline: the whole line fades and rises into place when its slide arrives, as
+ * on apple.com. Pure CSS (.kn-reveal): it runs on the compositor and never waits for React.
+ */
+export function Headline({ text, as: Tag = 'h2', id, className = '', step = 1 }: HeadlineProps) {
     return (
-        <Tag id={id} className={className} {...control} transition={{ duration: 1, ease: EASE_APPLE }}>
+        <Tag id={id} className={`kn-reveal ${className}`} style={stepStyle(step)}>
             <HeadlineText text={text} />
         </Tag>
     )
 }
 
-/** Gentle fade-and-rise used for everything that follows a headline. */
-export function Rise({ children, delay = 0, className = '', play, as = 'div' }: { children: ReactNode; delay?: number; className?: string; play?: boolean; as?: 'div' | 'li' }) {
-    const Component = as === 'li' ? motion.li : motion.div
-    const control = play === undefined
-        ? { initial: REVEAL, whileInView: SHOWN, viewport: { once: true, amount: 0.2 } }
-        : { initial: REVEAL, animate: play ? SHOWN : REVEAL }
+/** Gentle fade-and-rise for everything that follows a headline, ordered by `step`. */
+export function Rise({ children, step = 0, className = '', as: Tag = 'div' }: { children: ReactNode; step?: Step; className?: string; as?: 'div' | 'li' }) {
     return (
-        <Component {...control} transition={{ duration: 1, ease: EASE_APPLE, delay }} className={className}>
+        <Tag className={`kn-reveal ${className}`} style={stepStyle(step)}>
             {children}
-        </Component>
+        </Tag>
     )
 }
 
-/** Counts up once in view. Writes straight to the DOM so React never re-renders per frame. */
-export function CountUp({ value, suffix = '', duration = 1.6 }: { value: number; suffix?: string; duration?: number }) {
+/**
+ * Counts up from zero once the number is on screen. The server renders the final value,
+ * so it is right without JavaScript; the reset to zero happens while the number's reveal
+ * still hides it. Writes straight to the DOM, so React never re-renders per frame.
+ */
+export function CountUp({ value, suffix = '' }: { value: number; suffix?: string }) {
     const ref = useRef<HTMLSpanElement>(null)
-    const isInView = useInView(ref, { once: true, amount: 0.6 })
-    const reduce = useReducedMotion()
 
     useEffect(() => {
         const el = ref.current
-        if (!el || !isInView) return
-        if (reduce) {
+        if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+        if (el.closest('.slide')?.hasAttribute('data-revealed')) return // already on screen: leave it
+        el.textContent = `0${suffix}`
+        let frame = 0
+        const io = new IntersectionObserver(([entry]) => {
+            if (!entry.isIntersecting) return
+            io.disconnect()
+            const start = performance.now()
+            const duration = DURATION.count * 1000
+            const tick = (now: number) => {
+                const t = Math.min(1, (now - start) / duration)
+                el.textContent = `${Math.round((1 - Math.pow(1 - t, 4)) * value)}${suffix}`
+                if (t < 1) frame = requestAnimationFrame(tick)
+            }
+            frame = requestAnimationFrame(tick)
+        }, { threshold: 0.3 })
+        io.observe(el)
+        return () => {
+            io.disconnect()
+            cancelAnimationFrame(frame)
             el.textContent = `${value}${suffix}`
-            return
         }
-        const controls = animate(0, value, {
-            duration,
-            ease: [0.16, 1, 0.3, 1],
-            onUpdate: (latest) => { el.textContent = `${Math.round(latest)}${suffix}` },
-        })
-        return () => controls.stop()
-    }, [isInView, value, suffix, duration, reduce])
+    }, [value, suffix])
 
-    // The server render shows the final value, so it is correct without JavaScript.
     return <span ref={ref}>{value}{suffix}</span>
 }
 
@@ -188,13 +195,13 @@ export function SlideHeader({ id, eyebrow, headline, aside }: { id: string; eyeb
     return (
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 md:gap-10">
             <div className="min-w-0">
-                <Rise>
+                <Rise step={0}>
                     <p className="t-eyebrow">{eyebrow}</p>
                 </Rise>
-                <Headline id={id} text={headline} className={`t-headline mt-1.5 md:mt-2 ${HEADLINE_SIZE}`} />
+                <Headline id={id} step={1} text={headline} className={`t-headline mt-1.5 md:mt-2 ${HEADLINE_SIZE}`} />
             </div>
             {aside && (
-                <Rise delay={0.15} className="md:pb-[0.35em] md:text-right md:max-w-[24rem] md:shrink-0">
+                <Rise step={2} className="md:pb-[0.35em] md:text-right md:max-w-[24rem] md:shrink-0">
                     {aside}
                 </Rise>
             )}

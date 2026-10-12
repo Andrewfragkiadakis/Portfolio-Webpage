@@ -2,6 +2,11 @@ import type { NextConfig } from "next";
 import path from "node:path";
 
 const nextConfig: NextConfig = {
+  // The site is one page with ~12 KB of CSS: inlining it removes the render-blocking
+  // stylesheet request, which was most of a phone's first-paint time on slow networks.
+  experimental: {
+    inlineCss: true,
+  },
   // Pin the workspace root: a stray lockfile in the parent folder otherwise
   // makes Turbopack infer the wrong root and emit a build warning.
   turbopack: {

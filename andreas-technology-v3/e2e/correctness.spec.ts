@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { collectErrors, isPhone, jumpToSlide, open, scrollSettled } from './helpers'
+import { collectErrors, isPhone, jumpToSlide, open, scrollSettled, waitForReveal } from './helpers'
 
 test('works when site storage is blocked', async ({ page }) => {
     const errors = collectErrors(page)
@@ -72,6 +72,7 @@ test('dialogs keep focus, padding and never block the page after closing', async
         await jumpToSlide(page, 1)
         await scrollSettled(page)
     }
+    await waitForReveal(trigger)
     await trigger.click()
     const dialog = page.getByRole('dialog')
     await expect(dialog).toBeVisible()

@@ -22,7 +22,7 @@ export default function TechSpecs() {
                     aside={<p className="t-body text-[var(--muted)]">{k.specs.sub}</p>}
                 />
 
-                <Rise delay={0.2} className={HEADER_GAP}>
+                <Rise step={3} className={HEADER_GAP}>
                     <dl className="border-b border-[var(--line)]">
                         {TOOL_GROUPS.map((group) => (
                             <div

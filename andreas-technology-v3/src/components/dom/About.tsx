@@ -5,7 +5,7 @@ import { useContent } from '@/hooks/useContent'
 import type { Skill } from '@/data/content'
 import Modal from '@/components/ui/Modal'
 import { Glyph } from '@/components/ui/Glyph'
-import { ArrowOut, Chevron, CountUp, HEADLINE_SIZE, Headline, Rich, Rise, SLIDE_CLASS } from '@/components/ui/keynote'
+import { ArrowOut, Chevron, CountUp, HEADLINE_SIZE, Headline, Rich, Rise, SLIDE_CLASS, type Step } from '@/components/ui/keynote'
 
 /**
  * Slide 2 — "Meet Andreas." A short bio and the focus areas (hairline rows that open
@@ -33,11 +33,11 @@ export default function About() {
         <section id="about" aria-labelledby="about-title" className={SLIDE_CLASS}>
             <div className="mx-auto w-full max-w-[71rem] grid grid-cols-1 md:grid-cols-12 gap-14 md:gap-x-[5vw]">
                 <div className="md:col-span-6">
-                    <Rise>
+                    <Rise step={0}>
                         <p className="t-eyebrow">{k.about.eyebrow}</p>
                     </Rise>
-                    <Headline id="about-title" text={k.about.headline} className={`t-headline mt-1.5 md:mt-2 ${HEADLINE_SIZE}`} />
-                    <Rise delay={0.15}>
+                    <Headline id="about-title" step={1} text={k.about.headline} className={`t-headline mt-1.5 md:mt-2 ${HEADLINE_SIZE}`} />
+                    <Rise step={2}>
                         <p className="t-lede mt-5 md:mt-[min(1.75rem,3vh)] text-[1.0625rem] leading-[1.4] md:text-[min(1.3125rem,2.4vh)] max-w-[33rem]">
                             <Rich text={k.about.bio} />
                         </p>
@@ -47,7 +47,7 @@ export default function About() {
                         </button>
                     </Rise>
 
-                    <Rise delay={0.3} className="mt-10 md:mt-[min(3rem,5.4vh)]">
+                    <Rise step={3} className="mt-10 md:mt-[min(3rem,5.4vh)]">
                         <h3 className="t-small font-semibold text-[var(--foreground)] pb-3 border-b border-[var(--line)]">{k.about.focus}</h3>
                         <ul className="grid sm:grid-cols-2 gap-x-8">
                             {t.skills.map((skill) => (
@@ -72,7 +72,7 @@ export default function About() {
                 {/* By the numbers: one big figure, three supporting ones, then the credentials behind them. */}
                 <div className="md:col-span-6 md:pt-[min(2.4rem,4.2vh)]">
                     <dl>
-                        <Rise className="flex flex-col-reverse">
+                        <Rise step={2} className="flex flex-col-reverse">
                             {/* dt precedes dd in the DOM (valid <dl>); flex-col-reverse puts the number on top. */}
                             <dt className="mt-2 md:mt-3 t-lede text-[1.0625rem] md:text-[min(1.3125rem,2.4vh)]">{k.about.stats[0]}</dt>
                             <dd className="t-stat text-[5.5rem] md:text-[min(10vw,17vh)] -ml-[0.04em]">
@@ -81,7 +81,7 @@ export default function About() {
                         </Rise>
                         <div className="mt-8 md:mt-[min(2.75rem,4.8vh)] pt-6 md:pt-[min(1.75rem,3vh)] border-t border-[var(--line)] grid grid-cols-3 gap-x-5 sm:gap-x-8">
                             {rest.map((stat, i) => (
-                                <Rise key={i} delay={0.1 + i * 0.08} className="flex flex-col-reverse justify-end">
+                                <Rise key={i} step={(3 + i) as Step} className="flex flex-col-reverse justify-end">
                                     <dt className="mt-2 t-small md:text-[min(0.9375rem,1.7vh)] text-[var(--muted)]">{k.about.stats[i + 1]}</dt>
                                     <dd className="t-stat text-[2.25rem] md:text-[min(3.9vw,6.6vh)]">
                                         <CountUp value={stat.value} suffix={stat.suffix} />
@@ -92,7 +92,7 @@ export default function About() {
                         </div>
                     </dl>
 
-                    <Rise delay={0.35} className="mt-9 md:mt-[min(2.75rem,4.8vh)]">
+                    <Rise step={5} className="mt-9 md:mt-[min(2.75rem,4.8vh)]">
                         <h3 className="t-small font-semibold text-[var(--foreground)] mb-3">{k.about.credentials}</h3>
                         <ul className="flex flex-wrap gap-2">
                             {credentials.map((item) => {

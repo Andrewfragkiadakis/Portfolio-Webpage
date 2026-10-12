@@ -109,7 +109,7 @@ export default function Navigation() {
                             onClick={() => go('hero', 0)}
                             className="flex items-center gap-2.5 min-w-0 rounded-full"
                         >
-                            <Mark size={30} priority className="-my-1" />
+                            <Mark size={30} className="-my-1" />
                             <span
                                 aria-hidden="true"
                                 className="md:hidden xl:inline font-[family-name:var(--font-display)] text-[1.0625rem] md:text-[1.3125rem] font-semibold leading-none tracking-[0.011em] whitespace-nowrap truncate"

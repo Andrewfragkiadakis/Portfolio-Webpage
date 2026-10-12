@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { EASE_OUT } from '@/utils/motion'
+import { TRANSITION } from '@/utils/motion'
 import { Glyph } from '@/components/ui/Glyph'
 
 type CopyState = 'idle' | 'copied' | 'failed'
@@ -77,7 +77,7 @@ export default function CopyButton({ value, label, copiedLabel, failedLabel }: C
                         initial={{ y: '100%' }}
                         animate={{ y: '0%' }}
                         exit={{ y: '-100%' }}
-                        transition={{ duration: 0.3, ease: EASE_OUT }}
+                        transition={TRANSITION.move}
                     >
                         {text}
                     </motion.span>

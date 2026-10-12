@@ -22,6 +22,8 @@ export default function MainContent() {
             if (next >= 0) void scrollToSection(next)
         }
         window.addEventListener('hashchange', onHashChange)
+        // The page is hydrated and has taken its starting position (used by the e2e tests).
+        document.documentElement.setAttribute('data-ready', '')
         return () => window.removeEventListener('hashchange', onHashChange)
     }, [])
 

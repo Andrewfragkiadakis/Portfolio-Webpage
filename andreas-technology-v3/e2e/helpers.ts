@@ -1,4 +1,4 @@
-import type { Page, TestInfo } from '@playwright/test'
+import { expect, type Locator, type Page, type TestInfo } from '@playwright/test'
 
 export type Theme = 'light' | 'dark'
 export type Lang = 'en' | 'el'
@@ -32,6 +32,12 @@ export const LOCALE_ROUTES = false
 export async function open(page: Page, { theme, lang = 'en', blockStorage }: { theme?: Theme; lang?: Lang; blockStorage?: boolean } = {}) {
     await prime(page, { theme, lang, blockStorage })
     await page.goto(LOCALE_ROUTES && lang === 'el' ? '/el' : '/')
+    await waitForApp(page)
+}
+
+/** Waits until the app has hydrated and taken its starting scroll position. */
+export async function waitForApp(page: Page) {
+    await page.locator('html[data-ready]').waitFor({ state: 'attached' })
 }
 
 export const isPhone = (testInfo: TestInfo) => testInfo.project.name === 'phone'
@@ -93,4 +99,13 @@ export async function scrollSettled(page: Page, quietMs = 250, timeoutMs = 4000)
         }
         requestAnimationFrame(tick)
     }), [quietMs, timeoutMs])
+}
+
+/** Waits until an element's entrance animation has finished, so it holds still for a click. */
+export async function waitForReveal(target: Locator) {
+    await expect.poll(() => target.evaluate((el) => {
+        const reveal = el.closest('.kn-reveal') ?? el
+        const style = getComputedStyle(reveal)
+        return style.opacity === '1' && (style.transform === 'none' || style.transform === 'matrix(1, 0, 0, 1, 0, 0)')
+    })).toBe(true)
 }

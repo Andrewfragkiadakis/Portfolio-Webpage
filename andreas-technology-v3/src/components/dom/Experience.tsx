@@ -41,7 +41,7 @@ export default function Experience() {
 
                 <div className={`${HEADER_GAP} grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-x-[3vw]`}>
                     {/* Now — the current role as the hero tile. */}
-                    <Rise delay={0.1} className="md:col-span-5">
+                    <Rise step={2} className="md:col-span-5">
                         <article className="tile tile--lg h-full p-7 md:px-[min(2.25rem,2.6vw)] md:py-[min(2rem,3.4vh)] flex flex-col" aria-labelledby="now-role">
                             <div className="flex items-baseline justify-between gap-4">
                                 <h3 className="t-small font-semibold">{k.experience.now}</h3>
@@ -68,7 +68,7 @@ export default function Experience() {
                     </Rise>
 
                     {/* Then — earlier roles, newest first. */}
-                    <Rise delay={0.2} className="md:col-span-4">
+                    <Rise step={3} className="md:col-span-4">
                         <h3 className="t-small font-semibold pb-3">{k.experience.then}</h3>
                         <ol className="border-t border-[var(--line)]">
                             {earlier.map((item) => (
@@ -96,7 +96,7 @@ export default function Experience() {
                     </Rise>
 
                     {/* Education & credentials. */}
-                    <Rise delay={0.3} className="md:col-span-3">
+                    <Rise step={4} className="md:col-span-3">
                         <h3 className="t-small font-semibold pb-3">{k.experience.education}</h3>
                         <ul className="border-t border-[var(--line)]">
                             {t.education.map((item) => (
