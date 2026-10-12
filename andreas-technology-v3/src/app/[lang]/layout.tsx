@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
-import { MotionConfig } from 'motion/react'
 import '../globals.css'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { LocaleProvider } from '@/contexts/LocaleContext'
@@ -136,7 +135,7 @@ export default async function RootLayout({ children, params }: LayoutProps<'/[la
                 </a>
                 <ThemeProvider>
                     <LocaleProvider locale={lang} copy={copy}>
-                        <MotionConfig reducedMotion="user">{children}</MotionConfig>
+                        {children}
                     </LocaleProvider>
                 </ThemeProvider>
                 <SpeedInsights />

@@ -1,8 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { AnimatePresence, motion } from 'motion/react'
-import { TRANSITION } from '@/utils/motion'
 import { Glyph } from '@/components/ui/Glyph'
 
 type CopyState = 'idle' | 'copied' | 'failed'
@@ -35,7 +33,7 @@ interface CopyButtonProps {
     failedLabel: string
 }
 
-/** Copies `value` and confirms inline; the result is announced politely. */
+/** Copies `value` and confirms inline (the new label slides up); the result is announced politely. */
 export default function CopyButton({ value, label, copiedLabel, failedLabel }: CopyButtonProps) {
     const [state, setState] = useState<CopyState>('idle')
 
@@ -63,26 +61,20 @@ export default function CopyButton({ value, label, copiedLabel, failedLabel }: C
     const text = state === 'copied' ? copiedLabel : state === 'failed' ? failedLabel : label
 
     return (
-        <button
-            type="button"
-            onClick={copy}
-            aria-label={`${label}: ${value}`}
-            className="relative shrink-0 inline-flex items-center gap-1.5 h-7 px-3 rounded-full bg-[var(--surface)] t-caption text-[var(--foreground)] hover:bg-[var(--surface-2)] transition-colors duration-300"
-        >
-            <Glyph name={icon} className="w-3.5 h-3.5" strokeWidth={1.8} />
-            <span aria-live="polite" className="relative inline-flex items-center overflow-hidden h-[1.25em] leading-[1.25em]">
-                <AnimatePresence mode="popLayout" initial={false}>
-                    <motion.span
-                        key={state}
-                        initial={{ y: '100%' }}
-                        animate={{ y: '0%' }}
-                        exit={{ y: '-100%' }}
-                        transition={TRANSITION.move}
-                    >
-                        {text}
-                    </motion.span>
-                </AnimatePresence>
-            </span>
-        </button>
+        <>
+            <button
+                type="button"
+                onClick={copy}
+                aria-label={`${label}: ${value}`}
+                className="relative shrink-0 inline-flex items-center gap-1.5 h-7 px-3 rounded-full bg-[var(--surface)] t-caption text-[var(--foreground)] hover:bg-[var(--surface-2)] transition-colors"
+            >
+                <Glyph name={icon} className="w-3.5 h-3.5" strokeWidth={1.8} />
+                <span aria-hidden="true" className="relative inline-flex items-center overflow-hidden h-[1.25em] leading-[1.25em]">
+                    <span key={state} className={state === 'idle' ? undefined : 'kn-swap-in'}>{text}</span>
+                </span>
+            </button>
+            {/* A sibling status region: VoiceOver skips live regions inside a labelled button. */}
+            <span role="status" className="sr-only">{state === 'idle' ? '' : text}</span>
+        </>
     )
 }

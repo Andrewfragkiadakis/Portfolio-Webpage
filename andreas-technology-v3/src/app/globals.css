@@ -9,6 +9,11 @@
 @custom-variant md (@media (min-width: 64rem) and (min-height: 40rem) and (hover: hover) and (pointer: fine));
 @custom-variant stack (@media not all and (min-width: 64rem) and (min-height: 40rem) and (hover: hover) and (pointer: fine));
 
+/* Dialogs are centred cards where there is room for one, bottom sheets everywhere else. */
+@custom-variant card (@media (min-width: 40rem) and (min-height: 36rem));
+@custom-variant sheet (@media not all and (min-width: 40rem) and (min-height: 36rem));
+@custom-variant reduced-transparency (@media (prefers-reduced-transparency: reduce));
+
 /*
  * APPLE KEYNOTE — round 4
  * The portfolio as a product-launch page, in apple.com's restrained product-page language:
@@ -34,7 +39,7 @@ html:not(.dark) [data-tone="primary"] {
   --line: #d2d2d7;
   --accent: #0066cc;
   --accent-fill: #0071e3;
-  --accent-fill-hover: #0077ed;
+  --accent-fill-hover: #006edb; /* 4.94:1 with white text */
   --plus-bg: #333336;
   --plus-fg: #ffffff;
   --nav-bg: rgba(251, 251, 253, 0.8);
@@ -61,7 +66,7 @@ html.dark [data-tone="primary"] {
   --line: #424245;
   --accent: #2997ff;
   --accent-fill: #0071e3;
-  --accent-fill-hover: #0077ed;
+  --accent-fill-hover: #006edb; /* 4.94:1 with white text */
   --plus-bg: #d2d2d7;
   --plus-fg: #1d1d1f;
   --nav-bg: rgba(22, 22, 23, 0.8);
@@ -141,6 +146,7 @@ html.dark [data-tone="alt"] {
 }
 
 html {
+  -webkit-tap-highlight-color: transparent;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -466,7 +472,9 @@ section[id] {
   }
 
   .kn-link:hover {
-    text-decoration: underline;
+    @media (hover: hover) {
+      text-decoration: underline;
+    }
   }
 
   .kn-chevron {
@@ -475,12 +483,19 @@ section[id] {
     height: 0.76em;
     margin-left: 0.08em;
     flex-shrink: 0;
-    transition: transform 0.3s var(--ease-apple);
+    transition: transform var(--motion-fast) var(--ease-standard);
   }
 
-  :is(a, button):is(:hover, :focus-visible) > .kn-chevron,
-  :is(a, button):is(:hover, :focus-visible) .kn-chevron--nudge {
+  :is(a, button):focus-visible > .kn-chevron,
+  :is(a, button):focus-visible .kn-chevron--nudge {
     transform: translateX(2px);
+  }
+
+  @media (hover: hover) {
+    :is(a, button):hover > .kn-chevron,
+    :is(a, button):hover .kn-chevron--nudge {
+      transform: translateX(2px);
+    }
   }
 
   /* Pill button: 17px regular, radius 980px, like apple.com's "Learn more" / "Buy". */
@@ -498,7 +513,10 @@ section[id] {
     letter-spacing: -0.022em;
     line-height: 1.17648;
     white-space: nowrap;
-    transition: background-color 0.3s var(--ease-apple), color 0.3s var(--ease-apple), border-color 0.3s var(--ease-apple);
+    transition:
+      background-color var(--motion-fast) var(--ease-standard),
+      color var(--motion-fast) var(--ease-standard),
+      border-color var(--motion-fast) var(--ease-standard);
   }
 
   .kn-pill--fill {
@@ -507,7 +525,9 @@ section[id] {
   }
 
   .kn-pill--fill:hover {
-    background-color: var(--accent-fill-hover);
+    @media (hover: hover) {
+      background-color: var(--accent-fill-hover);
+    }
   }
 
   .kn-pill--line {
@@ -516,9 +536,11 @@ section[id] {
   }
 
   .kn-pill--line:hover {
-    background-color: var(--accent-fill);
-    border-color: var(--accent-fill);
-    color: #fff;
+    @media (hover: hover) {
+      background-color: var(--accent-fill);
+      border-color: var(--accent-fill);
+      color: #fff;
+    }
   }
 
   /* Neutral pill for secondary actions inside sheets and menus. */
@@ -528,7 +550,9 @@ section[id] {
   }
 
   .kn-pill--quiet:hover {
-    background-color: var(--surface-2);
+    @media (hover: hover) {
+      background-color: var(--surface-2);
+    }
   }
 
   .kn-pill--sm {
@@ -555,11 +579,15 @@ section[id] {
     border-radius: 999px;
     background-color: var(--surface);
     color: var(--foreground);
-    transition: background-color 0.25s var(--ease-apple), color 0.25s var(--ease-apple);
+    transition:
+      background-color var(--motion-fast) var(--ease-standard),
+      color var(--motion-fast) var(--ease-standard);
   }
 
   .kn-icon-btn:hover {
-    background-color: var(--surface-2);
+    @media (hover: hover) {
+      background-color: var(--surface-2);
+    }
   }
 
   /* The (+) on a tile that opens more detail, as on apple.com's feature tiles. */
@@ -573,11 +601,19 @@ section[id] {
     border-radius: 999px;
     background-color: var(--plus-bg);
     color: var(--plus-fg);
-    transition: opacity 0.3s var(--ease-apple);
+    transition: opacity var(--motion-fast) var(--ease-standard);
   }
 
-  :is(a, button):hover .kn-plus {
-    opacity: 0.86;
+  @media (hover: hover) {
+    :is(a, button):hover .kn-plus {
+      opacity: 0.86;
+    }
+  }
+
+  /* Touch: a quick dim on press instead of the grey tap flash. */
+  :is(.kn-pill, .tile, .kn-icon-btn):active {
+    opacity: 0.8;
+    transition-duration: 0ms;
   }
 
   /* ── Surfaces ─────────────────────────────────────────────────────── */
@@ -814,5 +850,242 @@ section[id] {
       flex: 0 0 min(80%, 20rem);
       scroll-snap-align: start;
     }
+  }
+
+  /*
+   * ── Things that move ───────────────────────────────────────────────────
+   * All of it is CSS on the compositor: transform and opacity only. Entrances start
+   * from @starting-style when an element mounts; exits are a [data-closing] state held
+   * for the exit duration (see hooks/usePresence.ts) before the element unmounts.
+   */
+
+  /* The desktop track and its product shot follow the page's scroll position. Where
+     scroll-driven animations exist this runs off the main thread; elsewhere a small
+     rAF fallback in HorizontalLayout writes the same transforms. */
+  .kn-track {
+    @variant md {
+      @supports (animation-timeline: scroll()) {
+        animation: kn-track linear both;
+        animation-timeline: scroll(root block);
+      }
+    }
+
+    @variant stack {
+      transform: none !important;
+    }
+  }
+
+  .kn-scalein {
+    @variant md {
+      @supports (animation-timeline: scroll()) {
+        animation: var(--scalein) linear both;
+        animation-timeline: scroll(root block);
+      }
+    }
+
+    @variant stack {
+      transform: none !important;
+      opacity: 1 !important;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none !important;
+      transform: none !important;
+      opacity: 1 !important;
+    }
+  }
+
+  /* Dialogs: a scrim and a panel. */
+  .kn-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    @variant card {
+      align-items: center;
+      padding: 1rem;
+    }
+  }
+
+  .kn-modal[data-closing] {
+    pointer-events: none;
+  }
+
+  .kn-modal__scrim {
+    position: absolute;
+    inset: 0;
+    background: rgb(0 0 0 / 0.4);
+    transition: opacity var(--motion-fast) var(--ease-standard);
+
+    @starting-style {
+      opacity: 0;
+    }
+
+    @variant card {
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+  }
+
+  .kn-modal[data-closing] > .kn-modal__scrim {
+    opacity: 0;
+  }
+
+  .kn-modal__panel {
+    transition:
+      transform var(--motion-slow) var(--ease-emphasized),
+      opacity var(--motion-fast) var(--ease-standard);
+
+    /* Phones: the sheet rises from the bottom edge. */
+    @variant sheet {
+      @starting-style {
+        transform: translate3d(0, 100%, 0);
+      }
+    }
+
+    /* Cards settle in from a touch lower and smaller. */
+    @variant card {
+      @starting-style {
+        opacity: 0;
+        transform: translate3d(0, 16px, 0) scale(0.98);
+      }
+    }
+  }
+
+  .kn-modal[data-closing] > .kn-modal__panel {
+    transition-duration: var(--motion-base), var(--motion-fast);
+    transition-timing-function: var(--ease-exit), var(--ease-standard);
+
+    @variant sheet {
+      transform: translate3d(0, 100%, 0);
+    }
+
+    @variant card {
+      opacity: 0;
+      transform: translate3d(0, 8px, 0) scale(0.98);
+    }
+  }
+
+  /* The sheet's grab zone: drag down to dismiss. Cards have no grabber. */
+  .kn-grabber {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 2.75rem;
+    z-index: 15;
+    touch-action: none;
+    cursor: grab;
+
+    @variant card {
+      display: none;
+    }
+  }
+
+  /* Phone menu: the sheet fades, the links follow a beat apart. */
+  .kn-menu {
+    transition: opacity var(--motion-fast) var(--ease-standard);
+
+    @starting-style {
+      opacity: 0;
+    }
+
+    &[data-closing] {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+
+  .kn-menu__item {
+    transition:
+      transform var(--motion-base) var(--ease-apple),
+      opacity var(--motion-base) var(--ease-apple);
+    transition-delay: calc(min(var(--i, 0), 5) * var(--motion-stagger));
+
+    @starting-style {
+      opacity: 0;
+      transform: translate3d(0, -6px, 0);
+    }
+  }
+
+  /* Project stage: the outgoing shot fades while the incoming one rises into place. */
+  .kn-stage-in {
+    animation: kn-stage-in var(--motion-slow) var(--ease-apple) both;
+  }
+
+  .kn-stage-out {
+    animation: kn-stage-out var(--motion-fast) var(--ease-standard) both;
+    pointer-events: none;
+  }
+
+  /* Short label swaps (Copy → Copied). */
+  .kn-swap-in {
+    animation: kn-swap-in var(--motion-base) var(--ease-apple) both;
+  }
+
+  /* Phones: a project row opens its panel by animating the grid track, not the height. */
+  .kn-disclosure {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition:
+      grid-template-rows var(--motion-base) var(--ease-apple),
+      opacity var(--motion-base) var(--ease-apple);
+
+    &[data-open] {
+      grid-template-rows: 1fr;
+      opacity: 1;
+    }
+
+    & > * {
+      min-height: 0;
+      overflow: hidden;
+    }
+  }
+
+  /* Reduced motion: dialogs and the menu fade; nothing slides. */
+  @media (prefers-reduced-motion: reduce) {
+    .kn-modal__panel,
+    .kn-modal[data-closing] > .kn-modal__panel,
+    .kn-menu__item {
+      transform: none;
+    }
+
+    .kn-modal__panel {
+      @starting-style {
+        opacity: 0;
+        transform: none;
+      }
+    }
+
+    .kn-modal[data-closing] > .kn-modal__panel {
+      opacity: 0;
+    }
+  }
+}
+
+@keyframes kn-track {
+  to {
+    transform: translate3d(calc(-1 * var(--track-travel, 0vw)), 0, 0);
+  }
+}
+
+@keyframes kn-stage-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+}
+
+@keyframes kn-stage-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes kn-swap-in {
+  from {
+    transform: translate3d(0, 100%, 0);
   }
 }

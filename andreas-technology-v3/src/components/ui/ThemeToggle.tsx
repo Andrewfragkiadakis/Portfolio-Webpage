@@ -22,7 +22,7 @@ export default function ThemeToggle({ className = '' }: { className?: string }) 
             type="button"
             onClick={(e) => setTheme(isDark ? 'light' : 'dark', centreOf(e.currentTarget))}
             aria-label={isDark ? k.nav.toLight : k.nav.toDark}
-            className={`inline-flex items-center justify-center w-9 h-9 rounded-full text-[var(--foreground)] hover:bg-[var(--surface)] transition-colors duration-300 ${className}`}
+            className={`inline-flex items-center justify-center w-9 h-9 rounded-full text-[var(--foreground)] hover:bg-[var(--surface)] transition-colors ${className}`}
         >
             <svg viewBox="0 0 20 20" className={`w-[1.05rem] h-[1.05rem] transition-opacity ${mounted ? 'opacity-100' : 'opacity-0'}`} aria-hidden="true" fill="none">
                 {isDark ? (

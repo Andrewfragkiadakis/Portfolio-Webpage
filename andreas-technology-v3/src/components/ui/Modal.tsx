@@ -1,8 +1,8 @@
 'use client'
 
-import { useEffect, useEffectEvent, useRef, useSyncExternalStore, type ReactNode } from 'react'
+import { useEffect, useEffectEvent, useRef, useSyncExternalStore, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
-import { motion, AnimatePresence, useIsPresent } from 'motion/react'
+import { usePresence } from '@/hooks/usePresence'
 
 const FOCUSABLE = 'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
 
@@ -10,23 +10,12 @@ const noopSubscribe = () => () => {}
 /** True on the client after hydration, false on the server: portals need a DOM target. */
 const useIsClient = () => useSyncExternalStore(noopSubscribe, () => true, () => false)
 
-/** While the dialog animates out it is still mounted; let clicks pass through to the page. */
-function Layer({ children, onClick }: { children: ReactNode; onClick: () => void }) {
-    const isPresent = useIsPresent()
-    return (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.18 }}
-            className="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center sm:p-4"
-            style={{ pointerEvents: isPresent ? undefined : 'none' }}
-            onClick={onClick}
-        >
-            {children}
-        </motion.div>
-    )
-}
+/** Longest exit transition (--motion-base); the dialog stays mounted this long after closing. */
+const EXIT_MS = 320
+
+/** Drag distance or speed that dismisses a sheet. */
+const DISMISS_PX = 120
+const DISMISS_PX_PER_MS = 0.5
 
 /** Header and main go inert while a dialog is open, so assistive tech and Tab stay inside it. */
 function setBackgroundInert(inert: boolean) {
@@ -49,9 +38,11 @@ interface ModalProps {
 
 /**
  * Accessible dialog: Escape closes it, focus is trapped inside while open, and focus
- * returns to whatever opened it. On phones it is a bottom sheet (full width, rounded top,
- * grabber, no backdrop blur to repaint); from `sm` up it is a centred card. Rendered through a portal so it escapes the
- * transformed horizontal track, which would otherwise become its containing block.
+ * returns to whatever opened it. Where there is room it is a centred card; elsewhere a
+ * bottom sheet (full width, rounded top, a grabber you can drag down to dismiss, no
+ * backdrop blur to repaint). Its motion is CSS (.kn-modal in globals.css). Rendered
+ * through a portal so it escapes the transformed horizontal track, which would otherwise
+ * become its containing block.
  */
 export default function Modal({
     open,
@@ -68,6 +59,42 @@ export default function Modal({
     // Callers pass inline handlers; reading the latest one through an effect event keeps
     // the effect below from re-running (and bouncing focus) whenever the parent re-renders.
     const requestClose = useEffectEvent(() => onClose())
+    const { mounted, closing } = usePresence(open, EXIT_MS)
+    const drag = useRef<{ startY: number; lastY: number; lastT: number; velocity: number } | null>(null)
+
+    // Drag the sheet's grabber down to dismiss it, as on iOS.
+    const onGrabStart = (e: ReactPointerEvent<HTMLDivElement>) => {
+        const panel = panelRef.current
+        if (!panel) return
+        e.currentTarget.setPointerCapture(e.pointerId)
+        drag.current = { startY: e.clientY, lastY: e.clientY, lastT: performance.now(), velocity: 0 }
+        panel.style.transition = 'none'
+    }
+    const onGrabMove = (e: ReactPointerEvent<HTMLDivElement>) => {
+        const panel = panelRef.current
+        const d = drag.current
+        if (!panel || !d) return
+        const now = performance.now()
+        d.velocity = (e.clientY - d.lastY) / Math.max(1, now - d.lastT)
+        d.lastY = e.clientY
+        d.lastT = now
+        panel.style.transform = `translate3d(0, ${Math.max(0, e.clientY - d.startY)}px, 0)`
+    }
+    const onGrabEnd = () => {
+        const panel = panelRef.current
+        const d = drag.current
+        drag.current = null
+        if (!panel || !d) return
+        const distance = d.lastY - d.startY
+        panel.style.transition = ''
+        if (distance > DISMISS_PX || d.velocity > DISMISS_PX_PER_MS) {
+            // Leave from where the finger let go; the closing state keeps it off screen.
+            panel.style.transform = 'translate3d(0, 100%, 0)'
+            onClose()
+        } else {
+            panel.style.transform = ''
+        }
+    }
 
     useEffect(() => {
         if (!open) return
@@ -112,43 +139,43 @@ export default function Modal({
         }
     }, [open])
 
-    if (!isClient) return null
+    if (!isClient || !mounted) return null
 
     return createPortal(
-        <AnimatePresence>
-            {open && (
-                <Layer key="modal" onClick={onClose}>
-                    <div className="absolute inset-0 bg-black/40 sm:backdrop-blur-[20px]" />
-                    <motion.div
-                        ref={panelRef}
-                        role="dialog"
-                        aria-modal="true"
-                        aria-labelledby={labelledBy}
-                        initial={{ opacity: 0, y: 48 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 32 }}
-                        transition={{ duration: 0.45, ease: [0.28, 0.11, 0.32, 1] }}
-                        className={`kn-sheet relative z-10 text-[var(--foreground)] rounded-t-[1.75rem] sm:rounded-[1.75rem] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.35)] max-h-[92svh] sm:max-h-[88vh] overflow-y-auto overscroll-contain no-scrollbar ${className}`}
-                        onClick={e => e.stopPropagation()}
-                    >
-                        <button
-                            ref={closeRef}
-                            type="button"
-                            onClick={onClose}
-                            aria-label={closeLabel}
-                            className="kn-icon-btn absolute top-4 right-4 sm:top-5 sm:right-5 z-20"
-                        >
-                            <svg viewBox="0 0 12 12" className="w-3 h-3" aria-hidden="true" fill="none">
-                                <path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-                            </svg>
-                        </button>
-                        {/* Phones: the sheet rises from the bottom edge, with iOS's grabber. */}
-                        <span aria-hidden="true" className="sm:hidden absolute top-2 left-1/2 -translate-x-1/2 w-9 h-[5px] rounded-full bg-[var(--line)] z-20" />
-                        {children}
-                    </motion.div>
-                </Layer>
-            )}
-        </AnimatePresence>,
+        <div className="kn-modal" data-closing={closing ? '' : undefined}>
+            <div className="kn-modal__scrim" aria-hidden="true" onClick={onClose} />
+            <div
+                ref={panelRef}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby={labelledBy}
+                className={`kn-modal__panel kn-sheet relative z-10 text-[var(--foreground)] rounded-t-[1.75rem] card:rounded-[1.75rem] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.35)] max-h-[92svh] card:max-h-[88svh] overflow-y-auto overscroll-contain [scrollbar-width:thin] ${className}`}
+            >
+                {/* Sheets: drag the top edge down to dismiss; the bar is iOS's grabber. */}
+                <div
+                    aria-hidden="true"
+                    className="kn-grabber"
+                    onPointerDown={onGrabStart}
+                    onPointerMove={onGrabMove}
+                    onPointerUp={onGrabEnd}
+                    onPointerCancel={onGrabEnd}
+                >
+                    <span className="absolute top-2 left-1/2 -translate-x-1/2 w-9 h-[5px] rounded-full bg-[var(--line)]" />
+                </div>
+                <button
+                    ref={closeRef}
+                    type="button"
+                    onClick={onClose}
+                    aria-label={closeLabel}
+                    className="kn-icon-btn absolute top-4 right-4 card:top-5 card:right-5 z-20"
+                >
+                    <svg viewBox="0 0 12 12" className="w-3 h-3" aria-hidden="true" fill="none">
+                        <path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+                    </svg>
+                </button>
+                {children}
+            </div>
+        </div>,
         document.body
     )
 }

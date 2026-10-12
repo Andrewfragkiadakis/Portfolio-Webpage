@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useSyncExternalStore, type ReactNode } from 'react'
 import { flushSync } from 'react-dom'
 import { readStorage, writeStorage } from '@/utils/storage'
+import { DURATION, EASE, cubicBezier, ms } from '@/utils/motion'
 
 export type Theme = 'light' | 'dark'
 
@@ -70,7 +71,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         document.startViewTransition(() => flushSync(commit)).ready.then(() => {
             document.documentElement.animate(
                 { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
-                { duration: 500, easing: 'cubic-bezier(0.16, 1, 0.3, 1)', pseudoElement: '::view-transition-new(root)' },
+                { duration: ms(DURATION.slow), easing: cubicBezier(EASE.emphasized), pseudoElement: '::view-transition-new(root)' },
             )
         }).catch(() => { /* transition skipped — the theme is already applied */ })
     }, [])

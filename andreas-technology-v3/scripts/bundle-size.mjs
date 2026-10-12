@@ -10,7 +10,7 @@ import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs'
 import { join, relative } from 'node:path'
 import { gzipSync } from 'node:zlib'
 
-const BUDGET_KIB = Number(process.env.BUDGET_KIB ?? 300)
+const BUDGET_KIB = Number(process.env.BUDGET_KIB ?? 215)
 const appDir = '.next/server/app'
 const staticDir = '.next'
 

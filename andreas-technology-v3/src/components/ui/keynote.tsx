@@ -1,49 +1,41 @@
 'use client'
 
 import { createContext, Fragment, useContext, useEffect, useRef, type CSSProperties, type ReactNode } from 'react'
-import { motion, useMotionValue, useTransform, type MotionValue } from 'motion/react'
 import { SECTION_STEPS } from '@/data/sections'
 import { DURATION } from '@/utils/motion'
 
 /* ─────────────────────────────────────────────────────────────────────────────
- * Track context: lets a slide know where it sits on the horizontal journey, so the
- * product shot can scale up as its slide arrives. Driven by scroll — never the cursor.
+ * Track: each slide knows its index on the horizontal journey, so the product shot
+ * can scale up as its slide arrives. Driven by scroll — never the cursor.
  * ───────────────────────────────────────────────────────────────────────────── */
 
-interface TrackValue {
-    /** 0..1 progress along the desktop track. */
-    progress: MotionValue<number>
-    /** 1 on desktop with motion allowed, 0 otherwise — collapses every effect to rest. */
-    gate: MotionValue<number>
-}
-
-export const TrackContext = createContext<TrackValue | null>(null)
 export const SlideIndexContext = createContext<number>(0)
 
-/**
- * Signed distance of this slide from the centre of the viewport, in slides:
- * 0 when centred, −1 while it is one slide to the right (arriving), +1 once it has left.
- * Always 0 on mobile or with reduced motion.
- */
-export function useSlideOffset(): MotionValue<number> {
-    const track = useContext(TrackContext)
-    const index = useContext(SlideIndexContext)
-    const zero = useMotionValue(0)
-    return useTransform(
-        [track?.progress ?? zero, track?.gate ?? zero],
-        ([progress, gate]: number[]) => (progress * SECTION_STEPS - index) * gate
-    )
+const percent = (step: number) => `${+((Math.min(SECTION_STEPS, Math.max(0, step)) / SECTION_STEPS) * 100).toFixed(3)}%`
+
+/** Keyframes on the page's scroll timeline: at rest (scale 1) while its slide is centred. */
+function scaleInKeyframes(index: number) {
+    const away = 'transform: scale(0.9); opacity: 0.4;'
+    const here = 'transform: none; opacity: 1;'
+    const frames = [`${percent(index)} { ${here} }`]
+    if (index > 0) frames.unshift(`0%, ${percent(index - 1)} { ${away} }`)
+    if (index < SECTION_STEPS) frames.push(`${percent(index + 1)}, 100% { ${away} }`)
+    return `@keyframes kn-scalein-${index} { ${frames.join(' ')} }`
 }
 
-/** Scales a product shot up from 0.9 as its slide arrives, and back down as it leaves. */
+/**
+ * Scales a product shot up from 0.9 as its slide arrives, and back down as it leaves:
+ * a scroll-driven CSS animation (compositor), with HorizontalLayout's fallback writing
+ * the same values where scroll timelines are unsupported. Off on phones and with
+ * reduced motion.
+ */
 export function ScaleIn({ className = '', children }: { className?: string; children: ReactNode }) {
-    const offset = useSlideOffset()
-    const scale = useTransform(offset, (o) => 1 - Math.min(Math.abs(o), 1) * 0.1)
-    const opacity = useTransform(offset, (o) => 1 - Math.min(Math.abs(o), 1) * 0.6)
+    const index = useContext(SlideIndexContext)
     return (
-        <motion.div style={{ scale, opacity }} className={className}>
+        <div data-scalein={index} className={`kn-scalein ${className}`} style={{ '--scalein': `kn-scalein-${index}` } as CSSProperties}>
+            <style href={`kn-scalein-${index}`} precedence="default">{scaleInKeyframes(index)}</style>
             {children}
-        </motion.div>
+        </div>
     )
 }
 

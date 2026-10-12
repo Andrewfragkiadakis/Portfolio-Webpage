@@ -1,14 +1,13 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion } from 'motion/react'
 import { useLocale } from '@/contexts/LocaleContext'
 import { LOCALES } from '@/data/locales'
 import { writeStorage } from '@/utils/storage'
 import { useTheme } from '@/contexts/ThemeContext'
 import { useContent } from '@/hooks/useContent'
 import { centreOf } from '@/utils/dom'
-import { EASE_APPLE } from '@/utils/motion'
+import { usePresence } from '@/hooks/usePresence'
 import { focusSection, scrollToSection } from '@/utils/track'
 import { SECTION_IDS, type SectionId } from '@/data/sections'
 import { useActiveSlide } from '@/hooks/useActiveSlide'
@@ -28,6 +27,7 @@ export default function Navigation() {
     const k = useContent().keynote
     const labels = k.nav.sections
     const [menuOpen, setMenuOpen] = useState(false)
+    const menu = usePresence(menuOpen, 260)
     const activeIndex = useActiveSlide()
     const firstLinkRef = useRef<HTMLAnchorElement>(null)
     const menuButtonRef = useRef<HTMLButtonElement>(null)
@@ -108,7 +108,7 @@ export default function Navigation() {
             <header className="fixed top-0 inset-x-0 z-50">
                 <nav
                     aria-label={k.nav.main}
-                    className={`h-[var(--nav-h)] border-b border-[var(--nav-line)] text-[var(--foreground)] transition-colors duration-300 ${menuOpen ? 'bg-[var(--background)]' : 'bg-[var(--nav-bg)] backdrop-blur-[20px] backdrop-saturate-[1.8]'}`}
+                    className={`h-[var(--nav-h)] border-b border-[var(--nav-line)] text-[var(--foreground)] transition-colors ${menuOpen ? 'bg-[var(--background)]' : 'bg-[var(--nav-bg)] backdrop-blur-[20px] backdrop-saturate-[1.8] reduced-transparency:backdrop-blur-none reduced-transparency:bg-[var(--background)]'}`}
                 >
                     <div className="h-full px-4 sm:px-10 md:px-[max(3rem,7vw)]">
                     <div className="mx-auto h-full max-w-[71rem] flex items-center justify-between gap-6">
@@ -134,7 +134,7 @@ export default function Navigation() {
                                             href={`#${id}`}
                                             onClick={(e) => { e.preventDefault(); go(id, i) }}
                                             aria-current={activeIndex === i ? 'true' : undefined}
-                                            className={`t-caption whitespace-nowrap transition-colors duration-300 ${activeIndex === i ? 'text-[var(--foreground)]' : 'text-[var(--foreground)]/65 hover:text-[var(--foreground)]'}`}
+                                            className={`t-caption whitespace-nowrap transition-colors ${activeIndex === i ? 'text-[var(--foreground)]' : 'text-[var(--foreground)]/65 hover:text-[var(--foreground)]'}`}
                                         >
                                             {labels[id]}
                                         </a>
@@ -148,7 +148,7 @@ export default function Navigation() {
                                 lang={other.code}
                                 onClick={switchLanguage}
                                 aria-label={`${other.short} — ${other.label}`}
-                                className="inline-flex items-center justify-center h-8 min-w-8 px-1.5 rounded-full t-caption font-semibold text-[var(--foreground)]/80 hover:text-[var(--foreground)] transition-colors duration-300"
+                                className="inline-flex items-center justify-center h-8 min-w-8 px-1.5 rounded-full t-caption font-semibold text-[var(--foreground)]/80 hover:text-[var(--foreground)] transition-colors"
                             >
                                 {other.short}
                             </a>
@@ -169,9 +169,10 @@ export default function Navigation() {
                                 aria-controls="mobile-menu"
                                 className="md:hidden inline-flex items-center justify-center w-10 h-10 -mr-2.5 rounded-full"
                             >
+                                {/* Two lines that meet in the middle and turn into a cross: transform only. */}
                                 <span className="relative block w-[1.0625rem] h-3" aria-hidden="true">
-                                    <span className={`absolute left-0 right-0 h-[1.2px] rounded-full bg-current transition-transform duration-300 ${menuOpen ? 'top-[5px] rotate-45' : 'top-[2px]'}`} />
-                                    <span className={`absolute left-0 right-0 h-[1.2px] rounded-full bg-current transition-transform duration-300 ${menuOpen ? 'top-[5px] -rotate-45' : 'top-[8px]'}`} />
+                                    <span className={`absolute left-0 right-0 top-[5px] h-[1.2px] rounded-full bg-current transition-transform duration-[var(--motion-base)] ease-apple ${menuOpen ? 'rotate-45' : '-translate-y-[3px]'}`} />
+                                    <span className={`absolute left-0 right-0 top-[5px] h-[1.2px] rounded-full bg-current transition-transform duration-[var(--motion-base)] ease-apple ${menuOpen ? '-rotate-45' : 'translate-y-[3px]'}`} />
                                 </span>
                             </button>
                         </div>
@@ -180,66 +181,56 @@ export default function Navigation() {
                 </nav>
             </header>
 
-            <AnimatePresence>
-                {menuOpen && (
-                    <motion.div
-                        id="mobile-menu"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.25 }}
-                        className="md:hidden fixed inset-x-0 top-[var(--nav-h)] bottom-0 z-[55] bg-[var(--background)] text-[var(--foreground)] overflow-y-auto"
-                    >
-                        <nav aria-label={k.nav.menu} className="px-10 pt-6 pb-10 flex flex-col min-h-full">
-                            <ul className="flex flex-col">
-                                {SECTION_IDS.map((id, i) => (
-                                    <motion.li
-                                        key={id}
-                                        initial={{ opacity: 0, y: -6 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: 0.4, ease: EASE_APPLE, delay: 0.03 * i }}
-                                    >
-                                        <a
-                                            ref={i === 0 ? firstLinkRef : undefined}
-                                            href={`#${id}`}
-                                            onClick={(e) => { e.preventDefault(); go(id, i) }}
-                                            aria-current={activeIndex === i ? 'true' : undefined}
-                                            className="block w-full text-left py-1.5 font-[family-name:var(--font-display)] text-[1.75rem] font-semibold leading-[1.14] tracking-[0.007em]"
-                                        >
-                                            {labels[id]}
-                                        </a>
-                                    </motion.li>
-                                ))}
-                            </ul>
-
-                            <div className="mt-auto pt-10 grid grid-cols-2 gap-3">
-                                <div>
-                                    <p className="t-caption text-[var(--muted)] mb-2">{k.nav.appearance}</p>
-                                    <button
-                                        type="button"
-                                        onClick={(e) => setTheme(theme === 'dark' ? 'light' : 'dark', centreOf(e.currentTarget))}
-                                        className="kn-pill kn-pill--sm kn-pill--quiet w-full"
-                                    >
-                                        {theme === 'dark' ? k.nav.light : k.nav.dark}
-                                    </button>
-                                </div>
-                                <div>
-                                    <p className="t-caption text-[var(--muted)] mb-2">{k.nav.language}</p>
+            {menu.mounted && (
+                <div
+                    id="mobile-menu"
+                    data-closing={menu.closing ? '' : undefined}
+                    className="kn-menu md:hidden fixed inset-x-0 top-[var(--nav-h)] bottom-0 z-[55] bg-[var(--background)] text-[var(--foreground)] overflow-y-auto"
+                >
+                    <nav aria-label={k.nav.menu} className="px-10 pt-6 pb-10 flex flex-col min-h-full">
+                        <ul className="flex flex-col">
+                            {SECTION_IDS.map((id, i) => (
+                                <li key={id} className="kn-menu__item" style={{ '--i': i } as React.CSSProperties}>
                                     <a
-                                        href={other.path}
-                                        hrefLang={other.code}
-                                        lang={other.code}
-                                        onClick={switchLanguage}
-                                        className="kn-pill kn-pill--sm kn-pill--quiet w-full"
+                                        ref={i === 0 ? firstLinkRef : undefined}
+                                        href={`#${id}`}
+                                        onClick={(e) => { e.preventDefault(); go(id, i) }}
+                                        aria-current={activeIndex === i ? 'true' : undefined}
+                                        className="block w-full text-left py-1.5 font-[family-name:var(--font-display)] text-[1.75rem] font-semibold leading-[1.14] tracking-[0.007em]"
                                     >
-                                        {other.label}
+                                        {labels[id]}
                                     </a>
-                                </div>
+                                </li>
+                            ))}
+                        </ul>
+
+                        <div className="mt-auto pt-10 grid grid-cols-2 gap-3">
+                            <div>
+                                <p className="t-caption text-[var(--muted)] mb-2">{k.nav.appearance}</p>
+                                <button
+                                    type="button"
+                                    onClick={(e) => setTheme(theme === 'dark' ? 'light' : 'dark', centreOf(e.currentTarget))}
+                                    className="kn-pill kn-pill--sm kn-pill--quiet w-full"
+                                >
+                                    {theme === 'dark' ? k.nav.light : k.nav.dark}
+                                </button>
                             </div>
-                        </nav>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+                            <div>
+                                <p className="t-caption text-[var(--muted)] mb-2">{k.nav.language}</p>
+                                <a
+                                    href={other.path}
+                                    hrefLang={other.code}
+                                    lang={other.code}
+                                    onClick={switchLanguage}
+                                    className="kn-pill kn-pill--sm kn-pill--quiet w-full"
+                                >
+                                    {other.label}
+                                </a>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            )}
         </>
     )
 }

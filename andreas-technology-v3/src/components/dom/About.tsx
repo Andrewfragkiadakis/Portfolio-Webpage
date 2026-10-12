@@ -48,10 +48,10 @@ export default function About() {
                                     <button
                                         type="button"
                                         onClick={() => setActiveSkill(skill)}
-                                        className="group w-full flex items-center justify-between gap-3 py-3 md:py-[min(0.75rem,1.3vh)] text-left t-small md:text-[min(0.9375rem,1.7vh)] hover:text-[var(--accent)] transition-colors duration-300"
+                                        className="group w-full flex items-center justify-between gap-3 py-3 md:py-[min(0.75rem,1.3vh)] text-left t-small md:text-[min(0.9375rem,1.7vh)] hover:text-[var(--accent)] transition-colors"
                                     >
                                         <span className="flex items-center gap-2.5 min-w-0">
-                                            <Glyph name={skill.icon} className="w-[1.125rem] h-[1.125rem] shrink-0 text-[var(--muted)] group-hover:text-[var(--accent)] transition-colors duration-300" strokeWidth={1.5} />
+                                            <Glyph name={skill.icon} className="w-[1.125rem] h-[1.125rem] shrink-0 text-[var(--muted)] group-hover:text-[var(--accent)] transition-colors" strokeWidth={1.5} />
                                             {skill.label}
                                         </span>
                                         <Chevron className="kn-chevron--nudge text-[var(--muted)] group-hover:text-[var(--accent)]" />
@@ -96,7 +96,7 @@ export default function About() {
                                         {item.link && <ArrowOut className="text-[var(--muted)]" />}
                                     </>
                                 )
-                                const cls = 'inline-flex items-center gap-1 h-8 px-3.5 rounded-full bg-[var(--surface)] t-small text-[var(--foreground)] transition-colors duration-300'
+                                const cls = 'inline-flex items-center gap-1 h-8 px-3.5 rounded-full bg-[var(--surface)] t-small text-[var(--foreground)] transition-colors'
                                 return (
                                     <li key={item.id}>
                                         {item.link ? (
