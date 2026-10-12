@@ -1,10 +1,41 @@
 'use client'
 
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useEffectEvent, useRef, useSyncExternalStore, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
-import { motion, AnimatePresence } from 'motion/react'
+import { motion, AnimatePresence, useIsPresent } from 'motion/react'
 
 const FOCUSABLE = 'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
+
+const noopSubscribe = () => () => {}
+/** True on the client after hydration, false on the server: portals need a DOM target. */
+const useIsClient = () => useSyncExternalStore(noopSubscribe, () => true, () => false)
+
+/** While the dialog animates out it is still mounted; let clicks pass through to the page. */
+function Layer({ children, onClick }: { children: ReactNode; onClick: () => void }) {
+    const isPresent = useIsPresent()
+    return (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18 }}
+            className="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center sm:p-4"
+            style={{ pointerEvents: isPresent ? undefined : 'none' }}
+            onClick={onClick}
+        >
+            {children}
+        </motion.div>
+    )
+}
+
+/** Header and main go inert while a dialog is open, so assistive tech and Tab stay inside it. */
+function setBackgroundInert(inert: boolean) {
+    for (const el of [document.querySelector('header'), document.getElementById('main-content')]) {
+        if (!el) continue
+        if (inert) el.setAttribute('inert', '')
+        else el.removeAttribute('inert')
+    }
+}
 
 interface ModalProps {
     open: boolean
@@ -33,11 +64,10 @@ export default function Modal({
     const panelRef = useRef<HTMLDivElement>(null)
     const closeRef = useRef<HTMLButtonElement>(null)
     const lastFocused = useRef<HTMLElement | null>(null)
-    const [mounted, setMounted] = useState(false)
-
-    // Portals need a DOM target, which only exists after hydration.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    useEffect(() => { setMounted(true) }, [])
+    const isClient = useIsClient()
+    // Callers pass inline handlers; reading the latest one through an effect event keeps
+    // the effect below from re-running (and bouncing focus) whenever the parent re-renders.
+    const requestClose = useEffectEvent(() => onClose())
 
     useEffect(() => {
         if (!open) return
@@ -47,7 +77,7 @@ export default function Modal({
 
         const onKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'Escape') {
-                onClose()
+                requestClose()
                 return
             }
             if (e.key !== 'Tab') return
@@ -68,30 +98,26 @@ export default function Modal({
             }
         }
 
-        const previousOverflow = document.body.style.overflow
-        document.body.style.overflow = 'hidden'
+        const root = document.documentElement
+        const previousOverflow = root.style.overflow
+        root.style.overflow = 'hidden'
+        setBackgroundInert(true)
         document.addEventListener('keydown', onKeyDown)
 
         return () => {
             document.removeEventListener('keydown', onKeyDown)
-            document.body.style.overflow = previousOverflow
-            lastFocused.current?.focus()
+            root.style.overflow = previousOverflow
+            setBackgroundInert(false)
+            lastFocused.current?.focus({ preventScroll: true })
         }
-    }, [open, onClose])
+    }, [open])
 
-    if (!mounted) return null
+    if (!isClient) return null
 
     return createPortal(
         <AnimatePresence>
             {open && (
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.18 }}
-                    className="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center sm:p-4"
-                    onClick={onClose}
-                >
+                <Layer key="modal" onClick={onClose}>
                     <div className="absolute inset-0 bg-black/40 sm:backdrop-blur-[20px]" />
                     <motion.div
                         ref={panelRef}
@@ -102,7 +128,7 @@ export default function Modal({
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 32 }}
                         transition={{ duration: 0.45, ease: [0.28, 0.11, 0.32, 1] }}
-                        className={`kn-sheet relative z-10 text-[var(--foreground)] rounded-t-[1.75rem] sm:rounded-[1.75rem] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.35)] max-h-[92svh] sm:max-h-[88vh] overflow-y-auto overscroll-contain no-scrollbar pb-[env(safe-area-inset-bottom)] ${className}`}
+                        className={`kn-sheet relative z-10 text-[var(--foreground)] rounded-t-[1.75rem] sm:rounded-[1.75rem] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.35)] max-h-[92svh] sm:max-h-[88vh] overflow-y-auto overscroll-contain no-scrollbar ${className}`}
                         onClick={e => e.stopPropagation()}
                     >
                         <button
@@ -120,7 +146,7 @@ export default function Modal({
                         <span aria-hidden="true" className="sm:hidden absolute top-2 left-1/2 -translate-x-1/2 w-9 h-[5px] rounded-full bg-[var(--line)] z-20" />
                         {children}
                     </motion.div>
-                </motion.div>
+                </Layer>
             )}
         </AnimatePresence>,
         document.body

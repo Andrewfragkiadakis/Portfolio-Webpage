@@ -14,6 +14,9 @@ export async function prime(page: Page, { theme, lang, blockStorage = false }: {
             return
         }
         try {
+            // Seed once per tab, so reloads keep whatever the page itself stored.
+            if (sessionStorage.getItem('__primed')) return
+            sessionStorage.setItem('__primed', '1')
             if (theme) localStorage.setItem('theme', theme)
             if (lang && !LOCALE_ROUTES) localStorage.setItem('language', lang === 'el' ? 'gr' : lang)
             // Skip the first-visit intro while it still exists.

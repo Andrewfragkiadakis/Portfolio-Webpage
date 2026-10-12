@@ -12,6 +12,7 @@ import { scrollToSection } from '@/utils/smooth-scroll'
 import { SECTION_IDS, SECTION_STEPS, type SectionId } from '@/data/sections'
 import ThemeToggle from '@/components/ui/ThemeToggle'
 import { Mark } from '@/components/ui/Mark'
+import { DESKTOP_MEDIA_QUERY } from '@/hooks/useIsDesktop'
 
 /**
  * apple.com-style local nav: a 52px frosted bar with a hairline bottom edge. The mark and
@@ -64,18 +65,34 @@ export default function Navigation() {
         }
     }, [])
 
-    // Menu: Escape closes it, focus moves in on open and back to the button on close.
+    // Menu: a modal sheet. Escape closes it, focus moves in on open and back to the button
+    // on close, the page behind is inert and does not scroll, and growing the window to
+    // the desktop layout (where the menu does not exist) closes it.
     useEffect(() => {
         if (!menuOpen) return
         firstLinkRef.current?.focus()
         const button = menuButtonRef.current
+        const main = document.getElementById('main-content')
+        const root = document.documentElement
+        const previousOverflow = root.style.overflow
+        main?.setAttribute('inert', '')
+        root.style.overflow = 'hidden'
+
         const onKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'Escape') setMenuOpen(false)
         }
+        const desktop = window.matchMedia(DESKTOP_MEDIA_QUERY)
+        const onDesktop = () => {
+            if (desktop.matches) setMenuOpen(false)
+        }
         document.addEventListener('keydown', onKeyDown)
+        desktop.addEventListener('change', onDesktop)
         return () => {
             document.removeEventListener('keydown', onKeyDown)
-            button?.focus()
+            desktop.removeEventListener('change', onDesktop)
+            main?.removeAttribute('inert')
+            root.style.overflow = previousOverflow
+            button?.focus({ preventScroll: true })
         }
     }, [menuOpen])
 

@@ -1,22 +1,31 @@
-import { useEffect, useRef, Suspense, useCallback } from 'react'
-import dynamic from 'next/dynamic'
+'use client'
+
+import { useEffect, useRef, useCallback } from 'react'
 import { motion, useScroll, useTransform, useVelocity, useMotionValue, animate, useReducedMotion } from 'motion/react'
 import HeroOverlay from '@/components/dom/HeroOverlay'
 import About from '@/components/dom/About'
 import Services from '@/components/dom/Services'
 import TechSpecs from '@/components/dom/TechSpecs'
+import Experience from '@/components/dom/Experience'
+import Projects from '@/components/dom/Projects'
+import Contact from '@/components/dom/Contact'
 import DotNav from '@/components/dom/DotNav'
 import { useIsDesktop } from '@/hooks/useIsDesktop'
 import { SECTION_STEPS, TRACK_HEIGHT_VH, TRACK_TRAVEL_VW } from '@/data/sections'
 import { SlideIndexContext, TrackContext } from '@/components/ui/keynote'
 
-const Experience = dynamic(() => import('@/components/dom/Experience'), { ssr: false })
-const Projects = dynamic(() => import('@/components/dom/Projects'), { ssr: false })
-const Contact = dynamic(() => import('@/components/dom/Contact'), { ssr: false })
-
-function SectionFallback() {
-    return <div className="min-h-screen w-full" aria-hidden />
-}
+// Sections are declared once. The wrapper's CSS — not a second copy of the tree —
+// is what differs between the vertical stack and the horizontal journey. All of them
+// are server-rendered, so crawlers, link previews and no-JS visitors see every section.
+const SECTIONS = [
+    <HeroOverlay key="hero" />,
+    <About key="about" />,
+    <Services key="services" />,
+    <TechSpecs key="specs" />,
+    <Experience key="experience" />,
+    <Projects key="projects" />,
+    <Contact key="contact" />,
+]
 
 /** Stop settling the scroll once it is this close to a section boundary (in progress units). */
 const SNAP_DEADZONE = 0.004
@@ -121,18 +130,6 @@ export default function HorizontalLayout() {
         }
     }, [isDesktop, scrollYProgress])
 
-    // Sections are declared once. The wrapper's CSS — not a second copy of the tree —
-    // is what differs between the vertical stack and the horizontal journey.
-    const sections = [
-        <HeroOverlay key="hero" />,
-        <About key="about" />,
-        <Services key="services" />,
-        <TechSpecs key="specs" />,
-        <Suspense key="experience" fallback={<SectionFallback />}><Experience /></Suspense>,
-        <Suspense key="projects" fallback={<SectionFallback />}><Projects /></Suspense>,
-        <Suspense key="contact" fallback={<SectionFallback />}><Contact /></Suspense>,
-    ]
-
     return (
         <TrackContext.Provider value={{ progress: scrollYProgress, gate: motionGate }}>
             <div
@@ -153,7 +150,7 @@ export default function HorizontalLayout() {
                           sideways entry animations without creating a scroll container, which
                           would break the sticky positioning the desktop track relies on.
                         */}
-                        {sections.map((section, index) => (
+                        {SECTIONS.map((section, index) => (
                             <div
                                 key={index}
                                 data-tone={index % 2 === 0 ? 'primary' : 'alt'}

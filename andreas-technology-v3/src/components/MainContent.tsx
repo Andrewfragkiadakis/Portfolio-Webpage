@@ -1,9 +1,7 @@
 'use client'
 
-import dynamic from 'next/dynamic'
 import { useEffect } from 'react'
-
-const HorizontalLayout = dynamic(() => import('@/components/HorizontalLayout'))
+import HorizontalLayout from '@/components/HorizontalLayout'
 
 export default function MainContent() {
     useEffect(() => {
