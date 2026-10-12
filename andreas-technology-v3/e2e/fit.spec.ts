@@ -5,13 +5,16 @@ import { isPhone, jumpToSlide, open, type Lang } from './helpers'
 const VIEWPORTS = [
     { width: 1440, height: 900 },
     { width: 1280, height: 720 },
-    { width: 1024, height: 768 },
+    { width: 1152, height: 768 },
+    { width: 1536, height: 730 },
+    { width: 1920, height: 1080 },
+    { width: 2560, height: 1440 },
 ]
 
 const SLIDES = 7
-/** Smallest allowed text and the clear gap above the dot navigation (tightened as sizing work lands). */
-const MIN_FONT_PX = 11.5
-const DOT_GAP_PX = 2
+/** Smallest allowed text, and the clear gap kept above the dot navigation. */
+const MIN_FONT_PX = 12
+const DOT_GAP_PX = 8
 
 for (const viewport of VIEWPORTS) {
     for (const lang of ['en', 'el'] as Lang[]) {

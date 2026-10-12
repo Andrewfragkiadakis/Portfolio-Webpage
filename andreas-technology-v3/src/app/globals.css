@@ -1,13 +1,14 @@
 @import "tailwindcss";
 
 /*
- * Desktop = a large enough window AND a mouse or trackpad. Only there does the page run as
- * a horizontal track of slides; tablets, touch laptops in tablet mode and short windows get
- * the vertical stack. `md:` means desktop everywhere in this codebase, and `stack:` is its
+ * Desktop = a window of at least 1152 × 720 AND a mouse or trackpad. Only there does the
+ * page run as a horizontal track of slides, which needs that much room for a slide to fit;
+ * tablets, touch screens, narrow and short windows (a 1366 × 768 laptop's browser is about
+ * 657 px tall) get the vertical stack. `md:` means desktop everywhere in this codebase, and `stack:` is its
  * exact complement. Must stay in sync with DESKTOP_MEDIA_QUERY in src/hooks/useIsDesktop.ts.
  */
-@custom-variant md (@media (min-width: 64rem) and (min-height: 40rem) and (hover: hover) and (pointer: fine));
-@custom-variant stack (@media not all and (min-width: 64rem) and (min-height: 40rem) and (hover: hover) and (pointer: fine));
+@custom-variant md (@media (min-width: 72rem) and (min-height: 45rem) and (hover: hover) and (pointer: fine));
+@custom-variant stack (@media not all and (min-width: 72rem) and (min-height: 45rem) and (hover: hover) and (pointer: fine));
 
 /* Dialogs are centred cards where there is room for one, bottom sheets everywhere else. */
 @custom-variant card (@media (min-width: 40rem) and (min-height: 36rem));
@@ -99,7 +100,7 @@ html.dark [data-tone="alt"] {
    * Vertical rhythm of the desktop slides: every content slide starts its eyebrow at the
    * same height below the nav, so headlines do not jump as the track moves sideways.
    */
-  --slide-top: clamp(1rem, 11vh - 3rem, 4.25rem);
+  --slide-top: max(clamp(1rem, 11vh - 3rem, 4.25rem), 27.5vh - 12.3rem);
 }
 
 @theme inline {
@@ -142,7 +143,24 @@ html.dark [data-tone="alt"] {
 
 /* Width part of the desktop query; the full query is the `md` variant above. */
 @theme {
-  --breakpoint-md: 64rem;
+  --breakpoint-md: 72rem;
+}
+
+/*
+ * Big displays scale the whole system together — type, the 71rem content column, the nav
+ * and the spacing — the way apple.com's large-viewport layout does, instead of leaving a
+ * small page in the middle of a 27-inch screen.
+ */
+@media (min-width: 112rem) and (min-height: 62rem) {
+  html {
+    font-size: 112.5%;
+  }
+}
+
+@media (min-width: 150rem) and (min-height: 80rem) {
+  html {
+    font-size: 125%;
+  }
 }
 
 html {
@@ -151,6 +169,11 @@ html {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   font-optical-sizing: auto;
+
+  /* Stack: keyboard focus and section jumps never land under the fixed nav. */
+  @variant stack {
+    scroll-padding-top: calc(var(--nav-h) + 0.75rem);
+  }
 }
 
 body {
@@ -274,9 +297,21 @@ html:not([data-js]) .kn-reveal,
   transform: none;
 }
 
-::-webkit-scrollbar {
+/* Desktop deck: no page scrollbar over the full-width slides (the dots show position).
+   Everywhere else, and inside dialogs, scrollbars stay so long content shows it scrolls. */
+html {
+  @variant md {
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar,
+.kn-gallery::-webkit-scrollbar {
   display: none;
-  width: 0px;
 }
 
 .no-scrollbar {
@@ -308,13 +343,6 @@ html {
     height: 100vh;
     scroll-snap-align: start;
     pointer-events: none;
-  }
-}
-
-/* Stack: jumps to a section clear the fixed nav. */
-section[id] {
-  @variant stack {
-    scroll-margin-top: var(--nav-h);
   }
 }
 

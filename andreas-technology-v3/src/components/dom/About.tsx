@@ -31,7 +31,7 @@ export default function About() {
                     </Rise>
                     <Headline id="about-title" step={1} text={k.about.headline} className={`t-headline mt-1.5 md:mt-2 ${HEADLINE_SIZE}`} />
                     <Rise step={2}>
-                        <p className="t-lede mt-5 md:mt-[min(1.75rem,3vh)] text-[1.0625rem] leading-[1.4] md:text-[min(1.3125rem,2.4vh)] max-w-[33rem]">
+                        <p className="t-lede mt-5 md:mt-[min(1.75rem,3vh)] text-[1.0625rem] leading-[1.4] md:text-[clamp(1.0625rem,2.4vh,1.3125rem)] max-w-[33rem]">
                             <Rich text={k.about.bio} />
                         </p>
                         <button type="button" onClick={() => setBioOpen(true)} className="kn-link t-body mt-4">
@@ -48,7 +48,7 @@ export default function About() {
                                     <button
                                         type="button"
                                         onClick={() => setActiveSkill(skill)}
-                                        className="group w-full flex items-center justify-between gap-3 py-3 md:py-[min(0.75rem,1.3vh)] text-left t-small md:text-[min(0.9375rem,1.7vh)] hover:text-[var(--accent)] transition-colors"
+                                        className="group w-full flex items-center justify-between gap-3 py-3 md:py-[min(0.75rem,1.3vh)] text-left t-small md:text-[clamp(0.8125rem,1.7vh,0.9375rem)] hover:text-[var(--accent)] transition-colors"
                                     >
                                         <span className="flex items-center gap-2.5 min-w-0">
                                             <Glyph name={skill.icon} className="w-[1.125rem] h-[1.125rem] shrink-0 text-[var(--muted)] group-hover:text-[var(--accent)] transition-colors" strokeWidth={1.5} />
@@ -68,8 +68,8 @@ export default function About() {
                         divs, which a <dl> allows); flex-col-reverse puts the number on top. */}
                     <dl>
                         <Rise step={2} className="flex flex-col-reverse">
-                            <dt className="mt-2 md:mt-3 t-lede text-[1.0625rem] md:text-[min(1.3125rem,2.4vh)]">{lead.label}</dt>
-                            <dd className="t-stat text-[5.5rem] md:text-[min(10vw,17vh)] -ml-[0.04em]">
+                            <dt className="mt-2 md:mt-3 t-lede text-[1.0625rem] md:text-[clamp(1.0625rem,2.4vh,1.3125rem)]">{lead.label}</dt>
+                            <dd className="t-stat text-[5.5rem] md:text-[clamp(4.5rem,min(10vw,17vh),9rem)] -ml-[0.04em]">
                                 <CountUp value={lead.value} suffix={lead.suffix} />
                             </dd>
                         </Rise>
@@ -77,8 +77,8 @@ export default function About() {
                     <dl className="mt-8 md:mt-[min(2.75rem,4.8vh)] pt-6 md:pt-[min(1.75rem,3vh)] border-t border-[var(--line)] grid grid-cols-3 gap-x-5 sm:gap-x-8">
                             {rest.map((stat, i) => (
                                 <Rise key={stat.label} step={(3 + i) as Step} className="flex flex-col-reverse justify-end">
-                                    <dt className="mt-2 t-small md:text-[min(0.9375rem,1.7vh)] text-[var(--muted)]">{stat.label}</dt>
-                                    <dd className="t-stat text-[2.25rem] md:text-[min(3.9vw,6.6vh)]">
+                                    <dt className="mt-2 t-small md:text-[clamp(0.8125rem,1.7vh,0.9375rem)] text-[var(--muted)]">{stat.label}</dt>
+                                    <dd className="t-stat text-[2.25rem] md:text-[clamp(2rem,min(3.9vw,6.6vh),3.5rem)]">
                                         <CountUp value={stat.value} suffix={stat.suffix} />
                                         {stat.unit && <span className="ml-1 text-[0.42em] tracking-[0.004em]">{stat.unit}</span>}
                                     </dd>

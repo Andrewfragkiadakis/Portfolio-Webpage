@@ -22,7 +22,7 @@ export default function Contact() {
         <section
             id="contact"
             aria-labelledby="contact-title"
-            className="relative w-full md:h-full flex flex-col items-center justify-center px-6 sm:px-10 md:px-[max(3rem,7vw)] pt-20 pb-16 md:py-0 text-center"
+            className="relative w-full md:h-full flex flex-col items-center justify-center-safe px-6 sm:px-10 md:px-[max(3rem,7vw)] pt-20 pb-16 md:py-0 text-center"
         >
             <div className="relative w-full max-w-[71rem] flex flex-col items-center">
                 {/* The mark again, bookending the title slide. */}
@@ -34,20 +34,20 @@ export default function Contact() {
                     id="contact-title"
                     step={1}
                     text={k.contact.headline}
-                    className="t-hero mt-2 text-[2.75rem] md:text-[min(5.6vw,8.8vh)]"
+                    className="t-hero mt-2 text-[2.75rem] md:text-[clamp(2.75rem,min(5.6vw,8.8vh),5rem)]"
                 />
                 <Rise step={2}>
-                    <p className="t-lede mt-5 md:mt-6 mx-auto max-w-[34rem] text-[1.0625rem] leading-[1.4] md:text-[min(1.5rem,2.7vh)]">
+                    <p className="t-lede mt-5 md:mt-6 mx-auto max-w-[34rem] text-[1.0625rem] leading-[1.4] md:text-[clamp(1.0625rem,2.7vh,1.5rem)]">
                         <Rich text={k.contact.sub} />
                     </p>
                 </Rise>
                 <Rise step={3} className="mt-8 md:mt-[min(2.5rem,4.4vh)] flex flex-wrap justify-center gap-3.5">
-                    <a href={mailto} className="kn-pill kn-pill--fill">
+                    <a href={mailto} className="kn-pill kn-pill--fill flex-auto max-w-[16rem] md:flex-none">
                         {k.contact.send}
                     </a>
                     {/* Self-hosted, so it downloads in place; hidden until an up-to-date PDF exists (data/site.ts). */}
                     {CV && (
-                        <a href={CV.path} download="Andreas-Fragkiadakis-CV.pdf" className="kn-pill kn-pill--line">
+                        <a href={CV.path} download="Andreas-Fragkiadakis-CV.pdf" className="kn-pill kn-pill--line flex-auto max-w-[16rem] md:flex-none">
                             {k.contact.resume}
                             <span className="sr-only"> (PDF, {CV.sizeLabel})</span>
                         </a>
@@ -55,7 +55,7 @@ export default function Contact() {
                 </Rise>
             </div>
 
-            <Rise step={4} className="relative w-full max-w-[71rem] mt-16 md:mt-[min(5rem,7vh)]">
+            <Rise step={4} className="relative w-full max-w-[71rem] mt-16 md:mt-[min(4.5rem,6vh)]">
                 <dl className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[1.6fr_1fr_1fr_1fr] border-t border-[var(--line)] text-left">
                     <div className="py-5 md:pr-6 border-b md:border-b-0 border-[var(--line)]">
                         <dt className="t-caption text-[var(--muted)]">{k.contact.email}</dt>

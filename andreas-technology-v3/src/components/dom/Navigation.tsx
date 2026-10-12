@@ -110,8 +110,8 @@ export default function Navigation() {
                     aria-label={k.nav.main}
                     className={`h-[var(--nav-h)] border-b border-[var(--nav-line)] text-[var(--foreground)] transition-colors ${menuOpen ? 'bg-[var(--background)]' : 'bg-[var(--nav-bg)] backdrop-blur-[20px] backdrop-saturate-[1.8] reduced-transparency:backdrop-blur-none reduced-transparency:bg-[var(--background)]'}`}
                 >
-                    <div className="h-full px-4 sm:px-10 md:px-[max(3rem,7vw)]">
-                    <div className="mx-auto h-full max-w-[71rem] flex items-center justify-between gap-6">
+                    <div className="h-full px-6 sm:px-10 md:px-[max(3rem,7vw)]">
+                    <div className="mx-auto h-full max-w-[71rem] flex items-center justify-between gap-3 md:gap-6">
                         <button
                             type="button"
                             onClick={() => go('hero', 0)}
@@ -122,7 +122,9 @@ export default function Navigation() {
                                 aria-hidden="true"
                                 className="md:hidden xl:inline font-[family-name:var(--font-display)] text-[1.0625rem] md:text-[1.3125rem] font-semibold leading-none tracking-[0.011em] whitespace-nowrap truncate"
                             >
-                                {k.common.name}
+                                {/* The narrowest phones show the first name only, so the bar never truncates. */}
+                                <span className="min-[25rem]:hidden">{k.common.name.split(' ')[0]}</span>
+                                <span className="hidden min-[25rem]:inline">{k.common.name}</span>
                             </span>
                         </button>
 
@@ -148,7 +150,7 @@ export default function Navigation() {
                                 lang={other.code}
                                 onClick={switchLanguage}
                                 aria-label={`${other.short} — ${other.label}`}
-                                className="inline-flex items-center justify-center h-8 min-w-8 px-1.5 rounded-full t-caption font-semibold text-[var(--foreground)]/80 hover:text-[var(--foreground)] transition-colors"
+                                className="inline-flex items-center justify-center size-11 md:size-auto md:h-8 md:min-w-8 md:px-1.5 rounded-full t-caption font-semibold text-[var(--foreground)]/80 hover:text-[var(--foreground)] transition-colors"
                             >
                                 {other.short}
                             </a>
@@ -167,7 +169,7 @@ export default function Navigation() {
                                 aria-label={menuOpen ? k.nav.closeMenu : k.nav.openMenu}
                                 aria-expanded={menuOpen}
                                 aria-controls="mobile-menu"
-                                className="md:hidden inline-flex items-center justify-center w-10 h-10 -mr-2.5 rounded-full"
+                                className="md:hidden inline-flex items-center justify-center size-11 -mr-3 rounded-full"
                             >
                                 {/* Two lines that meet in the middle and turn into a cross: transform only. */}
                                 <span className="relative block w-[1.0625rem] h-3" aria-hidden="true">

@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react'
  * string rather than a pixel number: rem in media queries follows the browser's font-size
  * setting, so JS and CSS agree even when a reader has enlarged their default text.
  */
-export const DESKTOP_MEDIA_QUERY = '(min-width: 64rem) and (min-height: 40rem) and (hover: hover) and (pointer: fine)'
+export const DESKTOP_MEDIA_QUERY = '(min-width: 72rem) and (min-height: 45rem) and (hover: hover) and (pointer: fine)'
 
 /** Non-reactive check for event handlers; use `useIsDesktop` in components. */
 export function isDesktopViewport(): boolean {

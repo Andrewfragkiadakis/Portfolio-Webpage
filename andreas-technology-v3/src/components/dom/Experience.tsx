@@ -5,7 +5,7 @@ import { useContent } from '@/hooks/useContent'
 import type { Education, Experience as Role } from '@/data/content/types'
 import Modal from '@/components/ui/Modal'
 import { ToolLogo } from '@/components/ui/ToolBadge'
-import { TOOL_BY_LABEL, type Tool } from '@/data/tools'
+import { TOOL_BY_LABEL, hasSymbol, type Tool } from '@/data/tools'
 import { ArrowOut, Chevron, HEADER_GAP, Rise, SLIDE_CLASS, SlideHeader } from '@/components/ui/keynote'
 import { shortPlace, yearSpan } from '@/utils/format'
 
@@ -47,11 +47,11 @@ export default function Experience() {
                                 <h3 className="t-small font-semibold">{k.experience.now}</h3>
                                 <span className="t-caption text-[var(--muted)] text-right">{current.duration}</span>
                             </div>
-                            <p id="now-role" className="t-title mt-4 md:mt-[min(1.25rem,2.2vh)] text-[1.75rem] md:text-[min(2rem,3.6vh)]">{current.role}</p>
+                            <p id="now-role" className="t-title mt-4 md:mt-[min(1.25rem,2.2vh)] text-[1.75rem] md:text-[clamp(1.3125rem,3.6vh,2rem)]">{current.role}</p>
                             <p className="mt-1.5 t-small text-[var(--muted)]">{current.company}</p>
                             <ul className="mt-6 md:mt-[min(1.5rem,2.6vh)]">
                                 {current.tasks.map((task) => (
-                                    <li key={task} className="t-body md:text-[min(1rem,1.8vh)] md:leading-[1.42] py-3 md:py-[min(0.625rem,1.1vh)] border-t border-[var(--line)]">
+                                    <li key={task} className="t-body md:text-[clamp(0.875rem,1.8vh,1rem)] md:leading-[1.42] py-3 md:py-[min(0.625rem,1.1vh)] border-t border-[var(--line)]">
                                         {task}
                                     </li>
                                 ))}
@@ -59,7 +59,7 @@ export default function Experience() {
                             <ul className="mt-auto pt-6 flex flex-wrap gap-x-4 gap-y-2 md:hidden xl:flex xl:[@media(max-height:820px)]:hidden" aria-label={k.services.toolkit}>
                                 {nowStack.map((tool) => (
                                     <li key={tool.label} title={tool.label} className="inline-flex items-center gap-1.5 t-caption text-[var(--muted)]">
-                                        <ToolLogo tool={tool} className="!h-3.5 text-[var(--foreground)]" />
+                                        {hasSymbol(tool) && <ToolLogo tool={tool} className="!h-3.5 text-[var(--foreground)]" />}
                                         {tool.label}
                                     </li>
                                 ))}
@@ -68,7 +68,7 @@ export default function Experience() {
                     </Rise>
 
                     {/* Then — earlier roles, newest first. */}
-                    <Rise step={3} className="md:col-span-4">
+                    <Rise step={3} className="md:col-span-3">
                         <h3 className="t-small font-semibold pb-3">{k.experience.then}</h3>
                         <ol className="border-t border-[var(--line)]">
                             {earlier.map((item) => (
@@ -77,10 +77,10 @@ export default function Experience() {
                                         type="button"
                                         onClick={() => setRole(item)}
                                         aria-label={`${item.role}, ${item.company} — ${k.experience.more}`}
-                                        className="group w-full text-left py-3 md:py-[min(0.625rem,1.05vh)] flex items-center justify-between gap-4"
+                                        className="group w-full text-left py-3 md:py-[min(0.5rem,0.85vh)] flex items-center justify-between gap-4"
                                     >
                                         <span className="min-w-0">
-                                            <span className="block t-small md:text-[min(0.9375rem,1.7vh)] font-semibold group-hover:text-[var(--accent)] transition-colors">
+                                            <span className="block t-small md:text-[clamp(0.8125rem,1.7vh,0.9375rem)] font-semibold group-hover:text-[var(--accent)] transition-colors">
                                                 {item.role}
                                             </span>
                                             <span className="block mt-0.5 t-caption text-[var(--muted)]">{shortPlace(item.company)}</span>
@@ -96,27 +96,28 @@ export default function Experience() {
                     </Rise>
 
                     {/* Education & credentials. */}
-                    <Rise step={4} className="md:col-span-3">
+                    <Rise step={4} className="md:col-span-4">
                         <h3 className="t-small font-semibold pb-3">{k.experience.education}</h3>
                         <ul className="border-t border-[var(--line)]">
                             {t.education.map((item) => (
-                                <li key={item.id} className="py-3 md:py-[min(0.625rem,1.05vh)] border-b border-[var(--line)]">
+                                <li key={item.id} className="py-3 md:py-[min(0.5rem,0.85vh)] border-b border-[var(--line)]">
                                     <button
                                         type="button"
                                         onClick={() => setEdu(item)}
                                         aria-label={`${item.degree} — ${k.experience.details}`}
-                                        className="w-full text-left t-small md:text-[min(0.875rem,1.6vh)] font-semibold hover:text-[var(--accent)] transition-colors"
+                                        className="w-full text-left t-small md:text-[clamp(0.8125rem,1.6vh,0.875rem)] font-semibold hover:text-[var(--accent)] transition-colors"
                                     >
                                         {item.degree}
                                     </button>
-                                    <span className="mt-0.5 flex items-center justify-between gap-3 t-caption text-[var(--muted)]">
-                                        <span className="min-w-0 truncate" title={item.institution}>{shortPlace(item.institution)} · {yearSpan(item.duration).split(' – ').pop()}</span>
+                                    <span className="mt-1 md:mt-0.5 flex items-center justify-between gap-3 t-caption text-[var(--muted)]">
+                                        {/* Two lines rather than an ellipsis: the year is the fact people look for. */}
+                                        <span className="min-w-0 line-clamp-2" title={item.institution}>{shortPlace(item.institution)} · {yearSpan(item.duration).split(' – ').pop()}</span>
                                         {item.link && (
                                             <a
                                                 href={item.link}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="kn-link shrink-0 t-caption"
+                                                className="kn-link shrink-0 t-caption min-h-6 py-1 -my-1 stack:min-h-11 stack:-my-3"
                                                 aria-label={`${k.experience.verify}: ${item.degree} (${k.common.newTab})`}
                                             >
                                                 {k.experience.verify}

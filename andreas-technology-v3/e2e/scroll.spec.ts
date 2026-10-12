@@ -143,6 +143,9 @@ test('tablets and short windows get the vertical stack', async ({ browser }) => 
     for (const options of [
         { ...devices['iPad Pro 11 landscape'], defaultBrowserType: undefined },
         { viewport: { width: 1280, height: 600 } },
+        // A 1366 × 768 laptop's browser window, and a narrow desktop window.
+        { viewport: { width: 1366, height: 657 } },
+        { viewport: { width: 1100, height: 900 } },
     ]) {
         const context = await browser.newContext(options)
         const page = await context.newPage()

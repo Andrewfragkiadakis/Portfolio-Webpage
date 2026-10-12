@@ -5,7 +5,7 @@ import { useContent } from '@/hooks/useContent'
 import { focusSection, scrollToSection } from '@/utils/track'
 import { sectionIndex } from '@/data/sections'
 import type { Service } from '@/data/content/types'
-import { TOOL_BY_LABEL, type Tool } from '@/data/tools'
+import { TOOL_BY_LABEL, hasSymbol, type Tool } from '@/data/tools'
 import Modal from '@/components/ui/Modal'
 import { ToolTile } from '@/components/ui/ToolBadge'
 import { Glyph } from '@/components/ui/Glyph'
@@ -67,10 +67,10 @@ export default function Services() {
                                     className="tile tile--lg group relative w-full h-full min-h-[16.5rem] md:min-h-0 text-left px-7 pt-7 pb-20 md:px-[min(2rem,2.3vw)] md:pt-[min(1.75rem,3vh)] md:pb-[min(1.875rem,2.6vh)] flex flex-col"
                                 >
                                     <Glyph name={service.icon} className="w-9 h-9 md:w-[min(2.375rem,4.1vh)] md:h-[min(2.375rem,4.1vh)] text-[var(--foreground)]" strokeWidth={1.35} />
-                                    <span className="t-title mt-5 md:mt-[min(1rem,1.8vh)] text-[1.3125rem] md:text-[min(1.5rem,2.6vh)] tracking-[0.009em] pr-2">
+                                    <span className="t-title mt-5 md:mt-[min(1rem,1.8vh)] text-[1.3125rem] md:text-[clamp(1.125rem,2.6vh,1.5rem)] tracking-[0.009em] pr-2">
                                         {service.title}
                                     </span>
-                                    <span className="mt-2 t-body md:text-[min(1.0625rem,1.85vh)] text-[var(--muted)] md:pr-[min(3.25rem,3.8vw)]">
+                                    <span className="mt-2 t-body md:text-[clamp(0.875rem,1.85vh,1.0625rem)] text-[var(--muted)] md:pr-[min(3.25rem,3.8vw)]">
                                         {service.oneLiner}
                                     </span>
                                     <span className="absolute right-5 bottom-5 md:right-[min(1.5rem,1.8vw)] md:bottom-[min(1.5rem,2.6vh)]">
@@ -111,7 +111,7 @@ export default function Services() {
                         <ul className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-3">
                             {toolsFor(active).map((tool) => (
                                 <li key={tool.label} className="flex items-center gap-2.5 min-w-0">
-                                    <ToolTile tool={tool} />
+                                    {hasSymbol(tool) ? <ToolTile tool={tool} /> : <span aria-hidden="true" className="w-8 shrink-0" />}
                                     <span className="t-small">{tool.label}</span>
                                 </li>
                             ))}

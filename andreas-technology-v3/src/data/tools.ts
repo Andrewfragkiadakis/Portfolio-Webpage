@@ -68,4 +68,10 @@ export const TOOLS = [
 /** Every tool name, so other content can reference tools with compile-time checking. */
 export type ToolLabel = (typeof TOOLS)[number]['label']
 
+/**
+ * Whether a tool's logo is a symbol (shown next to its name) rather than a wordmark that
+ * spells the name out ("jamf", "macOS", "DUO"); wordmarks would repeat the label beside them.
+ */
+export const hasSymbol = (tool: Tool) => (tool.ratio ?? 1) <= 1.3
+
 export const TOOL_BY_LABEL: ReadonlyMap<ToolLabel, Tool> = new Map(TOOLS.map((tool) => [tool.label, tool]))

@@ -30,7 +30,7 @@ export default function HeroOverlay() {
         <section
             id="hero"
             aria-labelledby="hero-title"
-            className="relative w-full min-h-[100svh] md:min-h-0 md:h-full flex flex-col items-center justify-center px-6 sm:px-10 pt-24 pb-20 md:py-0 text-center"
+            className="relative w-full min-h-[100svh] md:min-h-0 md:h-full flex flex-col items-center justify-center-safe px-6 sm:px-10 pt-24 pb-20 md:py-0 text-center"
         >
             <div className="kn-enter" style={step(0)}>
                 <Mark size={112} alt="" priority className="mx-auto w-[5.5rem] h-[5.5rem] md:w-[min(7rem,13vh)] md:h-[min(7rem,13vh)]" />
@@ -41,23 +41,23 @@ export default function HeroOverlay() {
                     {k.common.name}
                     <span className="sr-only"> — </span>
                 </span>
-                <span className="kn-enter-text kn-hero-title t-hero block mt-2 md:mt-3 text-[clamp(2.75rem,12.4vw,4.5rem)] md:text-[min(6.6vw,11vh)]" style={step(2)}>
+                <span className="kn-enter-text kn-hero-title t-hero block mt-2 md:mt-3 text-[clamp(2.75rem,12.4vw,4.5rem)] md:text-[clamp(3rem,min(6.6vw,11vh),6rem)]" style={step(2)}>
                     <HeadlineText text={k.hero.headline} />
                 </span>
             </h1>
 
             <p
-                className="kn-enter-text t-lede mt-5 md:mt-[min(1.75rem,3vh)] mx-auto max-w-[34rem] md:max-w-[40rem] text-[1.0625rem] leading-[1.4] md:text-[min(1.5rem,2.7vh)]"
+                className="kn-enter-text t-lede mt-5 md:mt-[min(1.75rem,3vh)] mx-auto max-w-[34rem] md:max-w-[40rem] text-[1.0625rem] leading-[1.4] md:text-[clamp(1.0625rem,2.7vh,1.5rem)]"
                 style={step(3)}
             >
                 <Rich text={k.hero.sub} />
             </p>
 
             <div className="kn-enter mt-8 md:mt-[min(2.5rem,4.4vh)] flex flex-wrap justify-center gap-3.5" style={step(4)}>
-                <button type="button" onClick={() => go('projects')} className="kn-pill kn-pill--fill">
+                <button type="button" onClick={() => go('projects')} className="kn-pill kn-pill--fill flex-auto max-w-[16rem] md:flex-none">
                     {k.hero.viewWork}
                 </button>
-                <button type="button" onClick={() => go('contact')} className="kn-pill kn-pill--line">
+                <button type="button" onClick={() => go('contact')} className="kn-pill kn-pill--line flex-auto max-w-[16rem] md:flex-none">
                     {k.hero.contact}
                 </button>
             </div>

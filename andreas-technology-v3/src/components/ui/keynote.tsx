@@ -205,7 +205,7 @@ export function SlideHeader({ id, eyebrow, headline, aside }: { id: string; eyeb
  * Section headline sizes: 40px on phones (a step smaller on the narrowest ones, so
  * two-line Greek headlines do not break into three), apple.com's 56–64px on desktop.
  */
-export const HEADLINE_SIZE = 'text-[clamp(2rem,9.4vw,2.5rem)] md:text-[min(4.4vw,7.2vh)]'
+export const HEADLINE_SIZE = 'text-[clamp(2rem,9.4vw,2.5rem)] md:text-[clamp(2.25rem,min(4.4vw,7.2vh),4rem)]'
 
 /** Gap between a slide header and its content. */
 export const HEADER_GAP = 'mt-9 md:mt-[min(2.5rem,4.4vh)]'

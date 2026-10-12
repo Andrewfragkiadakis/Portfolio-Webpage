@@ -1,7 +1,7 @@
 'use client'
 
 import { useContent } from '@/hooks/useContent'
-import { TOOLS, TOOL_GROUPS } from '@/data/tools'
+import { TOOLS, TOOL_GROUPS, hasSymbol } from '@/data/tools'
 import { ToolLogo } from '@/components/ui/ToolBadge'
 import { HEADER_GAP, Rise, SLIDE_CLASS, SlideHeader } from '@/components/ui/keynote'
 
@@ -29,14 +29,14 @@ export default function TechSpecs() {
                                 key={group}
                                 className="grid grid-cols-1 md:grid-cols-[minmax(12rem,16rem)_1fr] md:items-baseline gap-3 md:gap-8 py-6 md:py-[min(1.5rem,2.4vh)] border-t border-[var(--line)]"
                             >
-                                <dt className="t-title text-[1.3125rem] md:text-[min(1.3125rem,2.3vh)] tracking-[0.011em]">
+                                <dt className="t-title text-[1.3125rem] md:text-[clamp(1.0625rem,2.3vh,1.3125rem)] tracking-[0.011em]">
                                     {k.specs.groups[group]}
                                 </dt>
                                 <dd>
                                     <ul className="flex flex-wrap gap-x-8 gap-y-3 md:gap-y-[min(0.75rem,1.4vh)]">
                                         {TOOLS.filter((tool) => tool.group === group).map((tool) => (
-                                            <li key={tool.label} className="flex items-center gap-2.5 t-body md:text-[min(1.0625rem,1.9vh)]">
-                                                <ToolLogo tool={tool} />
+                                            <li key={tool.label} className="flex items-center gap-2.5 t-body md:text-[clamp(0.875rem,1.9vh,1.0625rem)]">
+                                                {hasSymbol(tool) && <ToolLogo tool={tool} />}
                                                 {tool.label}
                                             </li>
                                         ))}

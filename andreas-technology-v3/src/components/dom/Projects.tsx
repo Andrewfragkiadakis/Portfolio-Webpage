@@ -155,11 +155,11 @@ export default function Projects() {
 
                         {/* Fixed-height caption, so the shot and links never jump between projects. */}
                         <Rise step={3} className="mt-[min(1.75rem,3.2vh)]">
-                            <h3 className="t-title text-[min(1.75rem,3.1vh)] truncate">{stageName.title}</h3>
-                            <p className="mt-1 t-small md:text-[min(0.9375rem,1.7vh)] text-[var(--muted)] truncate">
+                            <h3 className="t-title text-[clamp(1.3125rem,3.1vh,1.75rem)] truncate">{stageName.title}</h3>
+                            <p className="mt-1 t-small md:text-[clamp(0.8125rem,1.7vh,0.9375rem)] text-[var(--muted)] truncate">
                                 {[stageName.subtitle, project.year].filter(Boolean).join(' · ')}
                             </p>
-                            <p className="mt-3 t-body md:text-[min(1.0625rem,1.9vh)] text-[var(--muted)] line-clamp-2 min-h-[2.94em] max-w-[40rem]">{project.description}</p>
+                            <p className="mt-3 t-body md:text-[clamp(0.875rem,1.9vh,1.0625rem)] text-[var(--muted)] line-clamp-2 min-h-[2.94em] max-w-[40rem]">{project.description}</p>
                             <div className="mt-3">
                                 <ProjectLinks project={project} onOpen={() => setDialog(project)} k={k.projects} newTab={k.common.newTab} />
                             </div>
@@ -186,9 +186,9 @@ export default function Projects() {
                                             onPointerEnter={() => { if (isDesktop) void preloadShot(item) }}
                                             onFocus={() => { if (isDesktop) void preloadShot(item) }}
                                             {...state}
-                                            className="group w-full flex items-center justify-between gap-4 text-left py-3.5 md:py-[min(0.7rem,1.2vh)]"
+                                            className="group w-full flex items-center justify-between gap-4 text-left py-3.5 md:py-[min(0.6rem,1vh)]"
                                         >
-                                            <span className="t-body md:text-[min(1.0625rem,1.9vh)] min-w-0 flex flex-col min-[25rem]:flex-row min-[25rem]:items-baseline min-[25rem]:gap-2">
+                                            <span className="t-body md:text-[clamp(0.875rem,1.9vh,1.0625rem)] min-w-0 flex flex-col min-[25rem]:flex-row min-[25rem]:items-baseline min-[25rem]:gap-2">
                                                 <span className={`truncate transition-colors ${isActive ? 'font-semibold text-[var(--foreground)]' : 'text-[var(--foreground)] group-hover:text-[var(--accent)]'}`}>{name.title}</span>
                                                 {name.subtitle && <span className="text-[var(--muted)] font-normal truncate">{name.subtitle}</span>}
                                             </span>
