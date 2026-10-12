@@ -40,7 +40,8 @@ export function useDeckGestures(): void {
                 locked = false
             }, 180)
             if (locked) return
-            accumulated += e.deltaX
+            // Firefox reports wheel deltas in lines (or pages) rather than pixels.
+            accumulated += e.deltaX * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerWidth : 1)
             if (Math.abs(accumulated) >= 40) {
                 locked = true
                 void stepSection(accumulated > 0 ? 1 : -1)

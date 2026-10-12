@@ -18,5 +18,7 @@ export default defineConfig({
     projects: [
         { name: 'desktop', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } } },
         { name: 'phone', use: { ...devices['iPhone 13'], defaultBrowserType: 'chromium' } },
+        // Firefox has no scroll-driven animations yet, so it exercises the track's JS fallback.
+        { name: 'firefox', testMatch: /(scroll|fit|first-paint)\.spec\.ts/, use: { ...devices['Desktop Firefox'], viewport: { width: 1440, height: 900 } } },
     ],
 })

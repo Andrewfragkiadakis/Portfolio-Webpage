@@ -57,6 +57,35 @@ export default function HorizontalLayout() {
         }
     }, [isDesktop])
 
+    // CSS scroll snap rests the page on a slide. Some engines skip it in edge cases (Firefox
+    // after an instant wheel scroll with reduced motion), so once scrolling has ended, a page
+    // left between slides settles on the nearest one. It acts only after the scroll is over,
+    // so it never fights a gesture in progress.
+    useEffect(() => {
+        const runway = runwayRef.current
+        if (!isDesktop || !runway) return
+        const settle = () => {
+            const step = (runway.offsetHeight - window.innerHeight) / SECTION_STEPS
+            if (step <= 0) return
+            const offset = window.scrollY - runway.offsetTop
+            const nearest = Math.round(offset / step)
+            if (Math.abs(offset - nearest * step) > 1) void scrollToSection(nearest)
+        }
+        const hasScrollEnd = 'onscrollend' in window
+        let timer = 0
+        const onScroll = () => {
+            window.clearTimeout(timer)
+            timer = window.setTimeout(settle, 250)
+        }
+        if (hasScrollEnd) window.addEventListener('scrollend', settle)
+        else window.addEventListener('scroll', onScroll, { passive: true })
+        return () => {
+            window.removeEventListener('scrollend', settle)
+            window.removeEventListener('scroll', onScroll)
+            window.clearTimeout(timer)
+        }
+    }, [isDesktop])
+
     // Focus moved into a slide that is off screen (Tab, find-in-page, a screen reader):
     // bring the page to that slide. The viewport and slides clip rather than hide their
     // overflow, so the browser can no longer scroll them sideways behind our back; the
