@@ -319,7 +319,7 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fab fa-apple",
                 label: "Apple Fleet & MDM",
-                detail: "Jamf 200 certified. I own Jamf Pro end-to-end for a 550+ macOS fleet: zero‑touch enrollment through Apple Business Manager, configuration profiles, patching, Self Service and day-to-day fleet hygiene."
+                detail: "Jamf Certified Tech (Jamf 200). I own Jamf Pro end to end for 550+ Macs: zero‑touch enrollment through Apple Business Manager, configuration profiles, patching, Self Service and day-to-day fleet hygiene."
             },
             {
                 icon: "fas fa-shield-halved",
@@ -441,9 +441,9 @@ export const content: Record<'en' | 'gr', Content> = {
                 company: "OMILIA LTD, Athens, Greece",
                 duration: "September 2024 – May 2026",
                 tasks: [
-                    "Architected Jamf Pro zero‑touch enrollment via Apple Business Manager for the 400+ macOS fleet — 70% onboarding-time reduction",
+                    "Architected Jamf Pro zero‑touch enrollment via Apple Business Manager for the 550+ Mac fleet, cutting onboarding time by 70%",
                     "Implemented CIS Benchmark hardening fleet-wide with the Cyber team — full compliance ahead of PCI-DSS and SOC 2 audits",
-                    "Led enterprise EDR migration to Checkpoint Harmony across 400+ devices, resolving FileVault conflicts at cutover with zero data loss",
+                    "Led the enterprise EDR migration to Check Point Harmony Endpoint across 550+ devices, resolving FileVault conflicts at cutover with zero data loss",
                     "Built a centralised SSL renewal pipeline (acme.sh, Let's Encrypt, DNS-01) for Cisco ISE, ESXi, Proxmox and HPE iLO — eliminated all manual cert toil",
                     "Engineered Microsoft Sentinel SIEM integration with Python log collectors (RFC 5424 + TLS) unifying Jamf, Anydesk and HID telemetry",
                     "Drove enterprise AI adoption: Gemini org-wide, Atlassian Rovo Agents, and an AI-powered ticket-triage pipeline",
@@ -513,12 +513,10 @@ export const content: Record<'en' | 'gr', Content> = {
                 ]
             },
             {
-                degree: "Master of Science, Applied Computer Science",
+                degree: "Erasmus+ exchange semester, M.Sc. Applied Computer Science",
                 institution: "SRH Hochschule Heidelberg, Germany",
                 duration: "April 2023 – October 2023",
-                details: ["Awarded presenter and team leader",
-                        "ERASMUS+ Semester",
-                ]
+                details: ["One semester of the M.Sc. Applied Computer Science programme, on Erasmus+", "Recognised as presenter and team lead"]
             },
             {
                 degree: "Jamf Certified Tech — Jamf Pro (Jamf 200)",
@@ -535,9 +533,9 @@ export const content: Record<'en' | 'gr', Content> = {
                 link: "https://www.credly.com/badges/05e1f049-b7fb-4a92-bc2b-fd27ad861755"
             },
             {
-                degree: "ITIL 4 Foundation certified in IT Service Management",
-                institution: "AXELOS Global Best Practice",
-                duration: "2024",
+                degree: "ITIL 4 Foundation Certificate in IT Service Management",
+                institution: "PeopleCert",
+                duration: "2025",
                 kind: "certification",
                 badge: "ITIL 4",
                 details: ["Knowledge of the ITIL 4 framework", "Focus on IT service management (ITSM) best practices"],
@@ -632,14 +630,14 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 name: "Portfolio Website",
                 year: 2026,
-                tags: ["Next.js", "React", "TypeScript", "Framer Motion", "Canvas"],
-                description: "Designed and built this modern portfolio (2026) with a horizontal scroll experience, an interactive Canvas glitch effect, and motion-driven sections. Features dark/light mode, full bilingual support, and responsive design.",
+                tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Motion"],
+                description: "This site: a portfolio told like a product launch. Seven slides on one horizontal track on desktop, a clean vertical stack on phones, in English and Greek, light and dark.",
                 role: "Solo design and build",
-                detail: "This site. A horizontal-scroll journey across six pinned sections on desktop that degrades to a clean vertical stack on tablet and mobile, with an interactive Canvas glitch effect revealed through a masked cursor trail. Fully bilingual, dual-themed, and built to stay accessible: keyboard navigable, focus-visible throughout, and respectful of reduced-motion preferences.",
+                detail: "This site, designed like a product launch page. On desktop, seven slides travel along one horizontal track with snapping and dot navigation; on tablets and phones they become a vertical stack with bottom-sheet dialogs. Fully bilingual, light and dark, and built to stay accessible: keyboard navigable, focus-visible throughout, and respectful of reduced-motion preferences.",
                 highlights: [
-                    "Horizontal scroll-driven track with idle section snapping",
-                    "Interactive Canvas letter-glitch effect masked to the cursor",
-                    "Full EN/GR bilingual content and light/dark theming",
+                    "Seven-slide horizontal track with idle snapping and dot navigation",
+                    "Bottom-sheet dialogs and a snapping tile gallery on phones",
+                    "Full EN/GR content with light and dark themes",
                     "Keyboard accessible with reduced-motion support"
                 ],
                 liveSiteLink: "https://andreas.technology",
@@ -648,7 +646,7 @@ export const content: Record<'en' | 'gr', Content> = {
             },
             {
                 name: "Thesis: Hybrid Wireless-Optical Networks for 5G",
-                year: 2026,
+                year: 2025,
                 tags: ["Thesis", "5G", "Radio over Fiber", "Research"],
                 description: "Master's thesis on new hybrid wireless-optical networks (Radio over Fiber) for 5G. Includes research and full thesis documentation.",
                 role: "Sole researcher · Integrated M.Eng. thesis, University of West Attica",
@@ -953,7 +951,7 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fab fa-apple",
                 label: "Apple Fleet & MDM",
-                detail: "Πιστοποίηση Jamf 200. Διαχειρίζομαι εξ ολοκλήρου το Jamf Pro για στόλο 550+ macOS: zero‑touch enrollment μέσω Apple Business Manager, configuration profiles, ενημερώσεις, Self Service και καθημερινή συντήρηση του στόλου."
+                detail: "Jamf Certified Tech (Jamf 200). Διαχειρίζομαι εξ ολοκλήρου το Jamf Pro για 550+ Mac: zero‑touch enrollment μέσω Apple Business Manager, configuration profiles, ενημερώσεις, Self Service και καθημερινή συντήρηση του στόλου."
             },
             {
                 icon: "fas fa-shield-halved",
@@ -1075,9 +1073,9 @@ export const content: Record<'en' | 'gr', Content> = {
                 company: "OMILIA LTD, Αθήνα",
                 duration: "Σεπτέμβριος 2024 – Μάιος 2026",
                 tasks: [
-                    "Σχεδίαση zero‑touch enrollment με Jamf Pro και Apple Business Manager για στόλο 400+ macOS — μείωση χρόνου onboarding κατά 70%",
+                    "Σχεδίαση zero‑touch enrollment με Jamf Pro και Apple Business Manager για στόλο 550+ Mac — μείωση χρόνου onboarding κατά 70%",
                     "Εφαρμογή θωράκισης CIS Benchmark σε όλο τον στόλο σε συνεργασία με το τμήμα Cyber — πλήρης συμμόρφωση ενόψει ελέγχων PCI-DSS και SOC 2",
-                    "Ηγεσία εταιρικής μετάβασης EDR σε Checkpoint Harmony σε 400+ συσκευές, με επίλυση συγκρούσεων FileVault χωρίς καμία απώλεια δεδομένων",
+                    "Ηγεσία εταιρικής μετάβασης EDR σε Check Point Harmony Endpoint σε 550+ συσκευές, με επίλυση συγκρούσεων FileVault χωρίς καμία απώλεια δεδομένων",
                     "Κατασκευή κεντρικού pipeline ανανέωσης SSL (acme.sh, Let's Encrypt, DNS-01) για Cisco ISE, ESXi, Proxmox και HPE iLO",
                     "Υλοποίηση ενσωμάτωσης Microsoft Sentinel SIEM με Python log collectors (RFC 5424 + TLS) για Jamf, Anydesk και HID",
                     "Προώθηση εταιρικής υιοθέτησης AI: Gemini, Atlassian Rovo Agents και AI pipeline διαλογής αιτημάτων",
@@ -1147,10 +1145,10 @@ export const content: Record<'en' | 'gr', Content> = {
                 ]
             },
             {
-                degree: "Master of Science, Applied Computer Science",
+                degree: "Εξάμηνο Erasmus+, M.Sc. Applied Computer Science",
                 institution: "SRH Hochschule Heidelberg, Γερμανία",
-                duration: "Απρίλιος 2023 - Οκτώβριος 2023",
-                details: ["Εξάμηνο φοίτησης ERASMUS+", "Διάκριση ως ομιλητής και επικεφαλής ομάδας"]
+                duration: "Απρίλιος 2023 – Οκτώβριος 2023",
+                details: ["Ένα εξάμηνο του προγράμματος M.Sc. Applied Computer Science, μέσω Erasmus+", "Διάκριση ως ομιλητής και επικεφαλής ομάδας"]
             },
             {
                 degree: "Jamf Certified Tech — Jamf Pro (Jamf 200)",
@@ -1168,11 +1166,11 @@ export const content: Record<'en' | 'gr', Content> = {
             },
             {
                 degree: "ITIL 4 Foundation Certificate in IT Service Management",
-                institution: "AXELOS Global Best Practice",
-                duration: "2024",
+                institution: "PeopleCert",
+                duration: "2025",
                 kind: "certification",
                 badge: "ITIL 4",
-                details: ["Πιστοποίηση στο πλαίσιο ITIL 4", "Εξειδίκευση στις βέλτιστες πρακτικές διαχείρισης υπηρεσιών πληροφορικής (ITSM)"],
+                details: ["Πιστοποίηση στο πλαίσιο ITIL 4", "Έμφαση στις βέλτιστες πρακτικές διαχείρισης υπηρεσιών πληροφορικής (ITSM)"],
                 link: "/files/itil-v4-cert.pdf"
             },
             {
@@ -1264,14 +1262,14 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 name: "Προσωπική Ιστοσελίδα Portfolio",
                 year: 2026,
-                tags: ["Next.js", "React", "TypeScript", "Framer Motion", "Canvas"],
-                description: "Σχεδίαση και υλοποίηση modern portfolio με horizontal scroll εμπειρία, διαδραστικό Canvas glitch effect, animations και υποστήριξη Dark/Light mode σε δύο γλώσσες.",
+                tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Motion"],
+                description: "Αυτή η ιστοσελίδα: ένα portfolio σαν παρουσίαση προϊόντος. Επτά διαφάνειες σε έναν οριζόντιο άξονα στο desktop, καθαρή κάθετη διάταξη στο κινητό, στα ελληνικά και στα αγγλικά, σε φωτεινό και σκοτεινό θέμα.",
                 role: "Ατομικός σχεδιασμός και υλοποίηση",
-                detail: "Αυτή η ιστοσελίδα. Οριζόντια εμπειρία πλοήγησης σε έξι ενότητες σε desktop, που μετατρέπεται σε καθαρή κάθετη διάταξη σε tablet και κινητό, με διαδραστικό Canvas glitch effect που αποκαλύπτεται μέσω μάσκας στον κέρσορα. Πλήρως δίγλωσση, με δύο θέματα και προσβασιμότητα από πληκτρολόγιο.",
+                detail: "Αυτή η ιστοσελίδα, σχεδιασμένη σαν σελίδα παρουσίασης προϊόντος. Στο desktop, επτά διαφάνειες κινούνται σε έναν οριζόντιο άξονα με snapping και πλοήγηση με τελείες. Σε tablet και κινητό γίνονται κάθετη διάταξη με διαλόγους bottom sheet. Πλήρως δίγλωσση, με φωτεινό και σκοτεινό θέμα, και προσβάσιμη: πλοήγηση από πληκτρολόγιο, ορατή εστίαση παντού και σεβασμός στη ρύθμιση reduced motion.",
                 highlights: [
-                    "Οριζόντιο track με snapping ανά ενότητα",
-                    "Διαδραστικό Canvas letter-glitch effect",
-                    "Πλήρες δίγλωσσο περιεχόμενο EN/GR και light/dark theme",
+                    "Οριζόντιος άξονας επτά διαφανειών με snapping και πλοήγηση με τελείες",
+                    "Διάλογοι bottom sheet και gallery με snapping στο κινητό",
+                    "Πλήρες δίγλωσσο περιεχόμενο EN/GR με φωτεινό και σκοτεινό θέμα",
                     "Πλοήγηση από πληκτρολόγιο και υποστήριξη reduced motion"
                 ],
                 liveSiteLink: "https://andreas.technology",
@@ -1280,7 +1278,7 @@ export const content: Record<'en' | 'gr', Content> = {
             },
             {
                 name: "Thesis: Hybrid Wireless-Optical Networks for 5G",
-                year: 2026,
+                year: 2025,
                 tags: ["Διπλωματική", "5G", "Radio over Fiber", "Έρευνα"],
                 description: "Διπλωματική εργασία στα υβριδικά ασύρματα-οπτικά δίκτυα (Radio over Fiber) για δίκτυα 5ης γενιάς. Περιλαμβάνει τεχνική έρευνα και τεκμηρίωση.",
                 role: "Μοναδικός ερευνητής · Διπλωματική M.Eng., Πανεπιστήμιο Δυτικής Αττικής",
