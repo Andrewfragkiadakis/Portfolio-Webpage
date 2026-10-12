@@ -444,8 +444,8 @@ export const content: Record<'en' | 'gr', Content> = {
                     "Architected Jamf Pro zero‑touch enrollment via Apple Business Manager for the 550+ Mac fleet, cutting onboarding time by 70%",
                     "Implemented CIS Benchmark hardening fleet-wide with the Cyber team — full compliance ahead of PCI DSS and SOC 2 audits",
                     "Led the enterprise EDR migration to Check Point Harmony Endpoint across 550+ devices, resolving FileVault conflicts at cutover with zero data loss",
-                    "Built a centralised SSL renewal pipeline (acme.sh, Let's Encrypt, DNS-01) for Cisco ISE, ESXi, Proxmox and HPE iLO — eliminated all manual cert toil",
-                    "Engineered Microsoft Sentinel SIEM integration with Python log collectors (RFC 5424 + TLS) unifying Jamf, AnyDesk and HID telemetry",
+                    "Built a centralised certificate renewal pipeline (acme.sh, Let's Encrypt, DNS-01) for network, virtualisation and server-management infrastructure, ending manual renewals",
+                    "Engineered Microsoft Sentinel SIEM integration with Python log collectors (RFC 5424 over TLS), unifying endpoint and access telemetry",
                     "Drove enterprise AI adoption: Gemini org-wide, Atlassian Rovo Agents, and an AI-powered ticket-triage pipeline",
                     "Resolved 350+ Jira tickets at 95%+ SLA, authored 40+ Confluence guides and administered 9 enterprise platforms"
                 ]
@@ -594,22 +594,6 @@ export const content: Record<'en' | 'gr', Content> = {
         projectsTitle: "PROJECTS",
         projects: [
             {
-                name: "Plano Plus - Signs & Visual Identity",
-                year: 2026,
-                tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion", "Resend"],
-                description: "A fast, premium website for a signage and visual-identity studio in Crete, built on Next.js, with a contact form that lands straight in the client’s inbox.",
-                role: "Solo design and build · Client project",
-                detail: "A full marketing site for a Cretan signage and visual-identity studio, built on the Next.js App Router. The brief was to make a traditional signage business look as considered online as its work looks on the street: fast, tactile, and unmistakably premium. Includes light/dark theming, parallax depth, smooth scrolling, and a contact form wired to transactional email.",
-                highlights: [
-                    "Next.js App Router with light/dark theming and parallax scroll",
-                    "Contact form with transactional email delivery via Resend",
-                    "Optimised for local search across Crete",
-                    "Live and serving real client enquiries"
-                ],
-                liveSiteLink: "https://www.planoplus.gr/",
-                image: "/images/PlanoPlus/plano.png"
-            },
-            {
                 name: "Signature Craft",
                 year: 2026,
                 tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Email Signatures"],
@@ -661,20 +645,69 @@ export const content: Record<'en' | 'gr', Content> = {
                 image: "/images/thesis-presentation/thesis-image.png"
             },
             {
-                name: "Silence Hero - Chrome Extension",
+                name: "Raspberry Pi Adblocker & Streamer",
                 year: 2024,
-                tags: ["Chrome Extension", "JavaScript", "HTML", "CSS", "UI/UX"],
-                description: "A Chrome extension that shows, at a glance, whether it’s Greek quiet hours — with a countdown to the next change.",
-                role: "Solo build",
-                detail: "A small, deliberately single-purpose Chrome extension that tracks Greek statutory quiet hours and tells you, at a glance, whether right now is a good time to drill a hole in the wall. Visual state plus a live countdown to the next transition.",
+                tags: ["Raspberry Pi", "Linux", "Networking", "Pi-hole", "Plex"],
+                description: "Configured a Raspberry Pi for network-wide adblocking (Pi-hole) and media streaming (Plex) on a home network.",
+                role: "Solo build · Home lab",
+                detail: "A single Raspberry Pi doing two jobs: network-wide DNS ad-blocking with Pi-hole, and media streaming with Plex. A practical exercise in getting useful, always-on infrastructure out of minimal hardware, and in the DNS, networking and service-management work that keeps it running unattended.",
                 highlights: [
-                    "Live countdown to the next quiet-hours transition",
-                    "At-a-glance visual state in the toolbar",
-                    "Handles seasonal variation in Greek quiet-hours law",
-                    "No permissions beyond what the extension actually needs"
+                    "Network-wide DNS-level ad blocking via Pi-hole",
+                    "Plex media server for local streaming",
+                    "Runs unattended on low-power hardware",
+                    "Hands-on Linux service management and networking"
                 ],
-                githubLink: "https://github.com/Andrewfragkiadakis/Silence-Hero",
-                image: "/images/silence-hero/silence-hero.png"
+                image: "/images/raspberry-pi-adblocker-streamer/raspberry-pi.png",
+                imageFit: "cover"
+            },
+            {
+                name: "Plano Plus - Signs & Visual Identity",
+                year: 2026,
+                tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion", "Resend"],
+                description: "A fast, premium website for a signage and visual-identity studio in Crete, built on Next.js, with a contact form that lands straight in the client’s inbox.",
+                role: "Solo design and build · Client project",
+                detail: "A full marketing site for a Cretan signage and visual-identity studio, built on the Next.js App Router. The brief was to make a traditional signage business look as considered online as its work looks on the street: fast, tactile, and unmistakably premium. Includes light/dark theming, parallax depth, smooth scrolling, and a contact form wired to transactional email.",
+                highlights: [
+                    "Next.js App Router with light/dark theming and parallax scroll",
+                    "Contact form with transactional email delivery via Resend",
+                    "Optimised for local search across Crete",
+                    "Live and serving real client enquiries"
+                ],
+                liveSiteLink: "https://www.planoplus.gr/",
+                image: "/images/PlanoPlus/plano.png"
+            },
+            {
+                name: "Schiller Language Centers Website",
+                year: 2026,
+                tags: ["Wix", "Wix Studio", "Web Development", "Educational"],
+                description: "The website for Schiller Language Centers in Rethymno, Crete: English, German and Educational Robotics courses, kept current by the school’s own staff.",
+                role: "Solo build · Client project",
+                detail: "The public website for Schiller Language Centers in Rethymno, Crete, covering their English, German and Educational Robotics programmes. Built on Wix Studio so the client's own staff can keep course listings and term dates current without needing a developer.",
+                highlights: [
+                    "Course catalogue across English, German and Educational Robotics",
+                    "Built for non-technical staff to maintain independently",
+                    "Structured for local search visibility in Rethymno",
+                    "Live and in active use by the school"
+                ],
+                liveSiteLink: "https://www.schiller.edu.gr/",
+                image: "/images/schiller-project/schiller.png"
+            },
+            {
+                name: "LLMs & Human Knowledge - Research review",
+                year: 2024,
+                tags: ["Research", "Cognitive Science", "LLMs", "GPT-3"],
+                description: "A research review of whether GPT-3 attributes beliefs the way people do, based on Trott et al.’s False Belief Task study in Cognitive Science (2023).",
+                role: "Research review · Source study: Trott et al., Cognitive Science 47(7), 2023",
+                detail: "A review of how GPT-3 and people compare on the False Belief Task, a standard test of theory of mind from developmental psychology. The question: does a language model that writes fluently about beliefs actually attribute them, or does it pattern-match its way to the right answer? Based on “Do Large Language Models Know What Humans Know?” by Trott, Jones, Chang, Michaelov and Bergen (Cognitive Science, 2023).",
+                highlights: [
+                    "GPT-3 versus human baselines on the False Belief Task",
+                    "Developmental-psychology methods applied to model evaluation",
+                    "What the results imply about learning theory of mind from language",
+                    "Source: peer-reviewed study in Cognitive Science (Wiley, 2023)"
+                ],
+                reportLink: "https://drive.google.com/uc?export=download&id=1w_3VG01O34Q9lNhrvKmhXno2OfptYJYi",
+                publicationLink: "https://onlinelibrary.wiley.com/doi/10.1111/cogs.13309",
+                image: "/images/research-llms-human-knowledge/llm-research.png"
             },
             {
                 name: "Nexus Party App",
@@ -695,6 +728,22 @@ export const content: Record<'en' | 'gr', Content> = {
                 imageFit: "cover"
             },
             {
+                name: "Silence Hero - Chrome Extension",
+                year: 2024,
+                tags: ["Chrome Extension", "JavaScript", "HTML", "CSS", "UI/UX"],
+                description: "A Chrome extension that shows, at a glance, whether it’s Greek quiet hours — with a countdown to the next change.",
+                role: "Solo build",
+                detail: "A small, deliberately single-purpose Chrome extension that tracks Greek statutory quiet hours and tells you, at a glance, whether right now is a good time to drill a hole in the wall. Visual state plus a live countdown to the next transition.",
+                highlights: [
+                    "Live countdown to the next quiet-hours transition",
+                    "At-a-glance visual state in the toolbar",
+                    "Handles seasonal variation in Greek quiet-hours law",
+                    "No permissions beyond what the extension actually needs"
+                ],
+                githubLink: "https://github.com/Andrewfragkiadakis/Silence-Hero",
+                image: "/images/silence-hero/silence-hero.png"
+            },
+            {
                 name: "HappyFox - Mental Health App",
                 year: 2023,
                 tags: ["UI/UX Design", "Figma", "Team Project", "SRH Heidelberg"],
@@ -711,55 +760,6 @@ export const content: Record<'en' | 'gr', Content> = {
                 image: "/images/happyfox/happyfox-app.png",
                 device: "bare",
                 imageFit: "cover"
-            },
-            {
-                name: "Schiller Language Centers Website",
-                year: 2026,
-                tags: ["Wix", "Wix Studio", "Web Development", "Educational"],
-                description: "The website for Schiller Language Centers in Rethymno, Crete: English, German and Educational Robotics courses, kept current by the school’s own staff.",
-                role: "Solo build · Client project",
-                detail: "The public website for Schiller Language Centers in Rethymno, Crete, covering their English, German and Educational Robotics programmes. Built on Wix Studio so the client's own staff can keep course listings and term dates current without needing a developer.",
-                highlights: [
-                    "Course catalogue across English, German and Educational Robotics",
-                    "Built for non-technical staff to maintain independently",
-                    "Structured for local search visibility in Rethymno",
-                    "Live and in active use by the school"
-                ],
-                liveSiteLink: "https://www.schiller.edu.gr/",
-                image: "/images/schiller-project/schiller.png"
-            },
-            {
-                name: "Raspberry Pi Adblocker & Streamer",
-                year: 2024,
-                tags: ["Raspberry Pi", "Linux", "Networking", "Pi-hole", "Plex"],
-                description: "Configured a Raspberry Pi for network-wide adblocking (Pi-hole) and media streaming (Plex) on a home network.",
-                role: "Solo build · Home lab",
-                detail: "A single Raspberry Pi doing two jobs: network-wide DNS ad-blocking with Pi-hole, and media streaming with Plex. A practical exercise in getting useful, always-on infrastructure out of minimal hardware, and in the DNS, networking and service-management work that keeps it running unattended.",
-                highlights: [
-                    "Network-wide DNS-level ad blocking via Pi-hole",
-                    "Plex media server for local streaming",
-                    "Runs unattended on low-power hardware",
-                    "Hands-on Linux service management and networking"
-                ],
-                image: "/images/raspberry-pi-adblocker-streamer/raspberry-pi.png",
-                imageFit: "cover"
-            },
-            {
-                name: "LLMs & Human Knowledge - Research review",
-                year: 2024,
-                tags: ["Research", "Cognitive Science", "LLMs", "GPT-3"],
-                description: "A research review of whether GPT-3 attributes beliefs the way people do, based on Trott et al.’s False Belief Task study in Cognitive Science (2023).",
-                role: "Research review · Source study: Trott et al., Cognitive Science 47(7), 2023",
-                detail: "A review of how GPT-3 and people compare on the False Belief Task, a standard test of theory of mind from developmental psychology. The question: does a language model that writes fluently about beliefs actually attribute them, or does it pattern-match its way to the right answer? Based on “Do Large Language Models Know What Humans Know?” by Trott, Jones, Chang, Michaelov and Bergen (Cognitive Science, 2023).",
-                highlights: [
-                    "GPT-3 versus human baselines on the False Belief Task",
-                    "Developmental-psychology methods applied to model evaluation",
-                    "What the results imply about learning theory of mind from language",
-                    "Source: peer-reviewed study in Cognitive Science (Wiley, 2023)"
-                ],
-                reportLink: "https://drive.google.com/uc?export=download&id=1w_3VG01O34Q9lNhrvKmhXno2OfptYJYi",
-                publicationLink: "https://onlinelibrary.wiley.com/doi/10.1111/cogs.13309",
-                image: "/images/research-llms-human-knowledge/llm-research.png"
             },
             {
                 name: "The Friendly Wheelchair (Concept)",
@@ -811,7 +811,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 eyebrow: "What I do",
                 headline: "Happens twice?\nIt becomes a script.",
                 learnMore: "Learn more",
-                ctaLead: "Have a unique project in mind?",
+                ctaLead: "Have a project in mind?",
                 ctaLink: "Let's talk",
                 highlights: "In practice",
                 toolkit: "Toolkit"
@@ -849,7 +849,7 @@ export const content: Record<'en' | 'gr', Content> = {
             contact: {
                 eyebrow: "Contact",
                 headline: "Let's build\nsomething.",
-                sub: "Open to **full-time roles**, **freelance projects** and interesting collaborations.",
+                sub: "Open to **full-time roles** and **freelance projects**.",
                 send: "Send a message",
                 resume: "Download résumé",
                 email: "Email",
@@ -1075,8 +1075,8 @@ export const content: Record<'en' | 'gr', Content> = {
                     "Σχεδίαση zero‑touch enrollment με Jamf Pro και Apple Business Manager για στόλο 550+ Mac — μείωση χρόνου onboarding κατά 70%",
                     "Εφαρμογή θωράκισης CIS Benchmark σε όλο τον στόλο σε συνεργασία με το τμήμα Cyber — πλήρης συμμόρφωση ενόψει ελέγχων PCI DSS και SOC 2",
                     "Ηγεσία εταιρικής μετάβασης EDR σε Check Point Harmony Endpoint σε 550+ συσκευές, με επίλυση συγκρούσεων FileVault χωρίς καμία απώλεια δεδομένων",
-                    "Κατασκευή κεντρικού pipeline ανανέωσης SSL (acme.sh, Let's Encrypt, DNS-01) για Cisco ISE, ESXi, Proxmox και HPE iLO",
-                    "Υλοποίηση ενσωμάτωσης Microsoft Sentinel SIEM με Python log collectors (RFC 5424 + TLS) για Jamf, AnyDesk και HID",
+                    "Κατασκευή κεντρικού pipeline ανανέωσης πιστοποιητικών (acme.sh, Let's Encrypt, DNS-01) για υποδομές δικτύου, virtualization και διαχείρισης servers — τέλος στις χειροκίνητες ανανεώσεις",
+                    "Υλοποίηση ενσωμάτωσης Microsoft Sentinel SIEM με Python log collectors (RFC 5424 μέσω TLS) για telemetry τερματικών και πρόσβασης",
                     "Προώθηση εταιρικής υιοθέτησης AI: Gemini σε όλο τον οργανισμό, Atlassian Rovo Agents και pipeline διαλογής αιτημάτων με AI",
                     "Επίλυση 350+ Jira tickets με SLA 95%+, συγγραφή 40+ οδηγών Confluence και διαχείριση 9 εταιρικών πλατφορμών"
                 ]
@@ -1225,22 +1225,6 @@ export const content: Record<'en' | 'gr', Content> = {
         projectsTitle: "PROJECTS",
         projects: [
             {
-                name: "Plano Plus - Επιγραφές & Οπτική Ταυτότητα",
-                year: 2026,
-                tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion", "Resend"],
-                description: "Γρήγορη, premium ιστοσελίδα για στούντιο επιγραφών και οπτικής ταυτότητας στην Κρήτη, με Next.js και φόρμα επικοινωνίας που φτάνει κατευθείαν στο inbox του πελάτη.",
-                role: "Ατομικός σχεδιασμός και υλοποίηση · Έργο πελάτη",
-                detail: "Πλήρης ιστοσελίδα για στούντιο επιγραφών και οπτικής ταυτότητας στην Κρήτη, με Next.js App Router. Ζητούμενο ήταν μια παραδοσιακή επιχείρηση επιγραφών να δείχνει online τόσο προσεγμένη όσο η δουλειά της στον δρόμο. Περιλαμβάνει light/dark theme, parallax, smooth scrolling και φόρμα επικοινωνίας με αποστολή email.",
-                highlights: [
-                    "Next.js App Router με light/dark theme και parallax",
-                    "Φόρμα επικοινωνίας με αποστολή email μέσω Resend",
-                    "Βελτιστοποίηση για τοπική αναζήτηση σε όλη την Κρήτη",
-                    "Σε λειτουργία, εξυπηρετεί πραγματικά αιτήματα πελατών"
-                ],
-                liveSiteLink: "https://www.planoplus.gr/",
-                image: "/images/PlanoPlus/plano.png"
-            },
-            {
                 name: "Signature Craft",
                 year: 2026,
                 tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Email Signatures"],
@@ -1292,20 +1276,69 @@ export const content: Record<'en' | 'gr', Content> = {
                 image: "/images/thesis-presentation/thesis-image.png"
             },
             {
-                name: "Silence Hero - Chrome Extension",
+                name: "Raspberry Pi Adblocker & Streamer",
                 year: 2024,
-                tags: ["Chrome Extension", "JavaScript", "HTML", "CSS", "UI/UX"],
-                description: "Επέκταση Chrome που δείχνει με μια ματιά αν είναι ώρες κοινής ησυχίας, με αντίστροφη μέτρηση για την επόμενη αλλαγή.",
-                role: "Ατομική υλοποίηση",
-                detail: "Μικρή επέκταση Chrome με έναν και μόνο σκοπό: παρακολουθεί τις ώρες κοινής ησυχίας στην Ελλάδα και δείχνει με μια ματιά αν είναι καλή στιγμή να τρυπήσετε τον τοίχο. Οπτική ένδειξη και ζωντανή αντίστροφη μέτρηση.",
+                tags: ["Raspberry Pi", "Linux", "Networking", "Pi-hole", "Plex"],
+                description: "Παραμετροποίηση Raspberry Pi για αποκλεισμό διαφημίσεων σε όλο το δίκτυο (Pi-hole) και media streaming (Plex) στο σπίτι.",
+                role: "Ατομική υλοποίηση · Home lab",
+                detail: "Ένα Raspberry Pi με δύο ρόλους: αποκλεισμός διαφημίσεων σε επίπεδο δικτύου με Pi-hole και media streaming με Plex. Πρακτική άσκηση στο να βγάζεις χρήσιμη, μόνιμα διαθέσιμη υποδομή από ελάχιστο υλικό, και στη δουλειά DNS, δικτύου και υπηρεσιών που τη διατηρεί σε λειτουργία.",
                 highlights: [
-                    "Ζωντανή αντίστροφη μέτρηση για την επόμενη αλλαγή",
-                    "Άμεση οπτική ένδειξη στη γραμμή εργαλείων",
-                    "Υποστήριξη εποχικών διαφορών στο ωράριο κοινής ησυχίας",
-                    "Χωρίς περιττά δικαιώματα πρόσβασης"
+                    "Αποκλεισμός διαφημίσεων σε επίπεδο DNS για όλο το δίκτυο",
+                    "Plex media server για τοπικό streaming",
+                    "Λειτουργεί αδιάλειπτα σε υλικό χαμηλής κατανάλωσης",
+                    "Πρακτική εμπειρία σε διαχείριση υπηρεσιών Linux και δικτύων"
                 ],
-                githubLink: "https://github.com/Andrewfragkiadakis/Silence-Hero",
-                image: "/images/silence-hero/silence-hero.png"
+                image: "/images/raspberry-pi-adblocker-streamer/raspberry-pi.png",
+                imageFit: "cover"
+            },
+            {
+                name: "Plano Plus - Επιγραφές & Οπτική Ταυτότητα",
+                year: 2026,
+                tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion", "Resend"],
+                description: "Γρήγορη, premium ιστοσελίδα για στούντιο επιγραφών και οπτικής ταυτότητας στην Κρήτη, με Next.js και φόρμα επικοινωνίας που φτάνει κατευθείαν στο inbox του πελάτη.",
+                role: "Ατομικός σχεδιασμός και υλοποίηση · Έργο πελάτη",
+                detail: "Πλήρης ιστοσελίδα για στούντιο επιγραφών και οπτικής ταυτότητας στην Κρήτη, με Next.js App Router. Ζητούμενο ήταν μια παραδοσιακή επιχείρηση επιγραφών να δείχνει online τόσο προσεγμένη όσο η δουλειά της στον δρόμο. Περιλαμβάνει light/dark theme, parallax, smooth scrolling και φόρμα επικοινωνίας με αποστολή email.",
+                highlights: [
+                    "Next.js App Router με light/dark theme και parallax",
+                    "Φόρμα επικοινωνίας με αποστολή email μέσω Resend",
+                    "Βελτιστοποίηση για τοπική αναζήτηση σε όλη την Κρήτη",
+                    "Σε λειτουργία, εξυπηρετεί πραγματικά αιτήματα πελατών"
+                ],
+                liveSiteLink: "https://www.planoplus.gr/",
+                image: "/images/PlanoPlus/plano.png"
+            },
+            {
+                name: "Ιστοσελίδα Κέντρων Ξένων Γλωσσών Schiller",
+                year: 2026,
+                tags: ["Wix", "Wix Studio", "Web Development", "Educational"],
+                description: "Η ιστοσελίδα των κέντρων ξένων γλωσσών Schiller στο Ρέθυμνο: προγράμματα Αγγλικών, Γερμανικών και Εκπαιδευτικής Ρομποτικής, που ενημερώνει το ίδιο το προσωπικό της σχολής.",
+                role: "Ατομική υλοποίηση · Έργο πελάτη",
+                detail: "Η ιστοσελίδα των κέντρων ξένων γλωσσών Schiller στο Ρέθυμνο, με προγράμματα Αγγλικών, Γερμανικών και Εκπαιδευτικής Ρομποτικής. Υλοποιήθηκε σε Wix Studio ώστε το προσωπικό της σχολής να ενημερώνει μόνο του τα προγράμματα χωρίς να χρειάζεται προγραμματιστή.",
+                highlights: [
+                    "Κατάλογος προγραμμάτων σε Αγγλικά, Γερμανικά και Εκπαιδευτική Ρομποτική",
+                    "Σχεδιασμένη για αυτόνομη συντήρηση από μη τεχνικό προσωπικό",
+                    "Δομημένη για τοπική αναζήτηση στο Ρέθυμνο",
+                    "Σε πλήρη λειτουργία από τη σχολή"
+                ],
+                liveSiteLink: "https://www.schiller.edu.gr/",
+                image: "/images/schiller-project/schiller.png"
+            },
+            {
+                name: "LLMs & Ανθρώπινη Γνώση - Ερευνητική ανασκόπηση",
+                year: 2024,
+                tags: ["Έρευνα", "Cognitive Science", "LLMs", "GPT-3"],
+                description: "Ερευνητική ανασκόπηση: αποδίδει το GPT-3 πεποιθήσεις όπως οι άνθρωποι; Βασίζεται στη μελέτη των Trott et al. με το False Belief Task στο Cognitive Science (2023).",
+                role: "Ερευνητική ανασκόπηση · Πηγή: Trott et al., Cognitive Science 47(7), 2023",
+                detail: "Ανασκόπηση της σύγκρισης GPT-3 και ανθρώπων στο False Belief Task, καθιερωμένο τεστ της αναπτυξιακής ψυχολογίας για τη θεωρία του νου. Το ερώτημα: ένα γλωσσικό μοντέλο που γράφει με ευχέρεια για πεποιθήσεις όντως τις αποδίδει ή απλώς αναγνωρίζει μοτίβα; Βασίζεται στη μελέτη «Do Large Language Models Know What Humans Know?» των Trott, Jones, Chang, Michaelov και Bergen (Cognitive Science, 2023).",
+                highlights: [
+                    "GPT-3 έναντι ανθρώπινων επιδόσεων στο False Belief Task",
+                    "Μεθοδολογία αναπτυξιακής ψυχολογίας στην αξιολόγηση μοντέλων",
+                    "Τι δείχνουν τα αποτελέσματα για τη θεωρία του νου μέσα από τη γλώσσα",
+                    "Πηγή: μελέτη με κριτές στο Cognitive Science (Wiley, 2023)"
+                ],
+                reportLink: "https://drive.google.com/uc?export=download&id=1w_3VG01O34Q9lNhrvKmhXno2OfptYJYi",
+                publicationLink: "https://onlinelibrary.wiley.com/doi/10.1111/cogs.13309",
+                image: "/images/research-llms-human-knowledge/llm-research.png"
             },
             {
                 name: "Nexus Party App",
@@ -1326,6 +1359,22 @@ export const content: Record<'en' | 'gr', Content> = {
                 imageFit: "cover"
             },
             {
+                name: "Silence Hero - Chrome Extension",
+                year: 2024,
+                tags: ["Chrome Extension", "JavaScript", "HTML", "CSS", "UI/UX"],
+                description: "Επέκταση Chrome που δείχνει με μια ματιά αν είναι ώρες κοινής ησυχίας, με αντίστροφη μέτρηση για την επόμενη αλλαγή.",
+                role: "Ατομική υλοποίηση",
+                detail: "Μικρή επέκταση Chrome με έναν και μόνο σκοπό: παρακολουθεί τις ώρες κοινής ησυχίας στην Ελλάδα και δείχνει με μια ματιά αν είναι καλή στιγμή να τρυπήσετε τον τοίχο. Οπτική ένδειξη και ζωντανή αντίστροφη μέτρηση.",
+                highlights: [
+                    "Ζωντανή αντίστροφη μέτρηση για την επόμενη αλλαγή",
+                    "Άμεση οπτική ένδειξη στη γραμμή εργαλείων",
+                    "Υποστήριξη εποχικών διαφορών στο ωράριο κοινής ησυχίας",
+                    "Χωρίς περιττά δικαιώματα πρόσβασης"
+                ],
+                githubLink: "https://github.com/Andrewfragkiadakis/Silence-Hero",
+                image: "/images/silence-hero/silence-hero.png"
+            },
+            {
                 name: "HappyFox - Εφαρμογή Ψυχικής Υγείας",
                 year: 2023,
                 tags: ["UI/UX Design", "Figma", "Team Project", "SRH Heidelberg"],
@@ -1342,55 +1391,6 @@ export const content: Record<'en' | 'gr', Content> = {
                 image: "/images/happyfox/happyfox-app.png",
                 device: "bare",
                 imageFit: "cover"
-            },
-            {
-                name: "Ιστοσελίδα Κέντρων Ξένων Γλωσσών Schiller",
-                year: 2026,
-                tags: ["Wix", "Wix Studio", "Web Development", "Educational"],
-                description: "Η ιστοσελίδα των κέντρων ξένων γλωσσών Schiller στο Ρέθυμνο: προγράμματα Αγγλικών, Γερμανικών και Εκπαιδευτικής Ρομποτικής, που ενημερώνει το ίδιο το προσωπικό της σχολής.",
-                role: "Ατομική υλοποίηση · Έργο πελάτη",
-                detail: "Η ιστοσελίδα των κέντρων ξένων γλωσσών Schiller στο Ρέθυμνο, με προγράμματα Αγγλικών, Γερμανικών και Εκπαιδευτικής Ρομποτικής. Υλοποιήθηκε σε Wix Studio ώστε το προσωπικό της σχολής να ενημερώνει μόνο του τα προγράμματα χωρίς να χρειάζεται προγραμματιστή.",
-                highlights: [
-                    "Κατάλογος προγραμμάτων σε Αγγλικά, Γερμανικά και Εκπαιδευτική Ρομποτική",
-                    "Σχεδιασμένη για αυτόνομη συντήρηση από μη τεχνικό προσωπικό",
-                    "Δομημένη για τοπική αναζήτηση στο Ρέθυμνο",
-                    "Σε πλήρη λειτουργία από τη σχολή"
-                ],
-                liveSiteLink: "https://www.schiller.edu.gr/",
-                image: "/images/schiller-project/schiller.png"
-            },
-            {
-                name: "Raspberry Pi Adblocker & Streamer",
-                year: 2024,
-                tags: ["Raspberry Pi", "Linux", "Networking", "Pi-hole", "Plex"],
-                description: "Παραμετροποίηση Raspberry Pi για αποκλεισμό διαφημίσεων σε όλο το δίκτυο (Pi-hole) και media streaming (Plex) στο σπίτι.",
-                role: "Ατομική υλοποίηση · Home lab",
-                detail: "Ένα Raspberry Pi με δύο ρόλους: αποκλεισμός διαφημίσεων σε επίπεδο δικτύου με Pi-hole και media streaming με Plex. Πρακτική άσκηση στο να βγάζεις χρήσιμη, μόνιμα διαθέσιμη υποδομή από ελάχιστο υλικό, και στη δουλειά DNS, δικτύου και υπηρεσιών που τη διατηρεί σε λειτουργία.",
-                highlights: [
-                    "Αποκλεισμός διαφημίσεων σε επίπεδο DNS για όλο το δίκτυο",
-                    "Plex media server για τοπικό streaming",
-                    "Λειτουργεί αδιάλειπτα σε υλικό χαμηλής κατανάλωσης",
-                    "Πρακτική εμπειρία σε διαχείριση υπηρεσιών Linux και δικτύων"
-                ],
-                image: "/images/raspberry-pi-adblocker-streamer/raspberry-pi.png",
-                imageFit: "cover"
-            },
-            {
-                name: "LLMs & Ανθρώπινη Γνώση - Ερευνητική ανασκόπηση",
-                year: 2024,
-                tags: ["Έρευνα", "Cognitive Science", "LLMs", "GPT-3"],
-                description: "Ερευνητική ανασκόπηση: αποδίδει το GPT-3 πεποιθήσεις όπως οι άνθρωποι; Βασίζεται στη μελέτη των Trott et al. με το False Belief Task στο Cognitive Science (2023).",
-                role: "Ερευνητική ανασκόπηση · Πηγή: Trott et al., Cognitive Science 47(7), 2023",
-                detail: "Ανασκόπηση της σύγκρισης GPT-3 και ανθρώπων στο False Belief Task, καθιερωμένο τεστ της αναπτυξιακής ψυχολογίας για τη θεωρία του νου. Το ερώτημα: ένα γλωσσικό μοντέλο που γράφει με ευχέρεια για πεποιθήσεις όντως τις αποδίδει ή απλώς αναγνωρίζει μοτίβα; Βασίζεται στη μελέτη «Do Large Language Models Know What Humans Know?» των Trott, Jones, Chang, Michaelov και Bergen (Cognitive Science, 2023).",
-                highlights: [
-                    "GPT-3 έναντι ανθρώπινων επιδόσεων στο False Belief Task",
-                    "Μεθοδολογία αναπτυξιακής ψυχολογίας στην αξιολόγηση μοντέλων",
-                    "Τι δείχνουν τα αποτελέσματα για τη θεωρία του νου μέσα από τη γλώσσα",
-                    "Πηγή: μελέτη με κριτές στο Cognitive Science (Wiley, 2023)"
-                ],
-                reportLink: "https://drive.google.com/uc?export=download&id=1w_3VG01O34Q9lNhrvKmhXno2OfptYJYi",
-                publicationLink: "https://onlinelibrary.wiley.com/doi/10.1111/cogs.13309",
-                image: "/images/research-llms-human-knowledge/llm-research.png"
             },
             {
                 name: "The Friendly Wheelchair (Concept)",
@@ -1442,7 +1442,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 eyebrow: "Υπηρεσίες",
                 headline: "Συμβαίνει δύο φορές;\nΓίνεται script.",
                 learnMore: "Μάθετε περισσότερα",
-                ctaLead: "Έχετε ένα συγκεκριμένο project στο μυαλό σας;",
+                ctaLead: "Έχετε κάποιο project στο μυαλό σας;",
                 ctaLink: "Ας μιλήσουμε",
                 highlights: "Στην πράξη",
                 toolkit: "Εργαλεία"
@@ -1480,7 +1480,7 @@ export const content: Record<'en' | 'gr', Content> = {
             contact: {
                 eyebrow: "Επικοινωνία",
                 headline: "Ας φτιάξουμε\nκάτι μαζί.",
-                sub: "Διαθέσιμος για **freelance projects** και ενδιαφέρουσες συνεργασίες.",
+                sub: "Ανοιχτός σε **θέσεις πλήρους απασχόλησης** και **freelance projects**.",
                 send: "Αποστολή μηνύματος",
                 resume: "Λήψη βιογραφικού",
                 email: "Email",
