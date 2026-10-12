@@ -61,7 +61,7 @@ Screenshots of every slide at 1440×900 and 1280×720, 390×844, light + dark, E
 
 **One visual moment per slide**
 1. Hero: the headline (the site's only colour) under the memoji, plus apple.com's quiet line under the buttons: "Jamf Certified Tech (Jamf 200) · Athens, Greece".
-2. About: **550+** set very large (144px at 1440×900) as the slide's hero figure, with 70%, 7+ yrs and 3 certifications under a hairline, and the credential pills under them. Focus areas became hairline rows with their glyphs in a 2 × 2 grid.
+2. About: **550+** set very large (144px at 1440×900) as the slide's hero figure, with 70%, 6+ yrs and 95%+ SLA under a hairline, and the credential pills under them. Focus areas became hairline rows with their glyphs in a 2 × 2 grid.
 3. What I do: the six tiles, tightened (smaller dead area, glyph 38px, text clear of the (+)): the grid is about 70px shorter at 1440×900.
 4. Tech specs: the hairline spec table, rows baseline-aligned with more even gaps.
 5. Career: the Now tile. The lists show years only ("2024 – 2026", right-aligned next to the chevron) and the organisation without its address; full dates and places stay in the sheets.

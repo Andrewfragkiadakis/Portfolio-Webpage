@@ -18,14 +18,13 @@ export default function About() {
     const [activeSkill, setActiveSkill] = useState<Skill | null>(null)
     const [bioOpen, setBioOpen] = useState(false)
 
-    const certifications = t.education.filter((e) => e.kind === 'certification')
     const credentials = t.education.filter((e) => e.badge && e.kind && e.kind !== 'degree')
 
     const stats = [
         { value: 550, suffix: '+', unit: '' },
         { value: 70, suffix: '%', unit: '' },
-        { value: 7, suffix: '+', unit: k.about.yearsUnit },
-        { value: certifications.length, suffix: '', unit: '' },
+        { value: 6, suffix: '+', unit: k.about.yearsUnit },
+        { value: 95, suffix: '%+', unit: '' },
     ]
 
     const [lead, ...rest] = stats

@@ -91,7 +91,7 @@ export interface KeynoteCopy {
     about: {
         eyebrow: string; headline: string; bio: string; fullStory: string; dialogTitle: string
         credentials: string; focus: string; yearsUnit: string
-        /** Captions for 550+, 70%, 7+ and the certification count, in that order. */
+        /** Captions for 550+, 70%, 6+ and 95%+ (SLA), in that order. */
         stats: [string, string, string, string]
     }
     services: {
@@ -806,7 +806,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 credentials: "Credentials",
                 focus: "Focus areas",
                 yearsUnit: "yrs",
-                stats: ["Macs managed on Jamf Pro", "faster onboarding, zero‑touch", "in IT, infrastructure and security", "certifications, plus a TEE licence"]
+                stats: ["Macs managed on Jamf Pro", "faster onboarding, zero‑touch", "in IT, infrastructure and security", "SLA met across 350+ tickets"]
             },
             services: {
                 eyebrow: "What I do",
@@ -1438,7 +1438,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 credentials: "Πιστοποιήσεις",
                 focus: "Τομείς εστίασης",
                 yearsUnit: "έτη",
-                stats: ["Mac υπό διαχείριση στο Jamf Pro", "ταχύτερο onboarding, zero‑touch", "στο IT, τις υποδομές και την ασφάλεια", "πιστοποιήσεις, συν άδεια ΤΕΕ"]
+                stats: ["Mac υπό διαχείριση στο Jamf Pro", "ταχύτερο onboarding, zero‑touch", "στο IT, τις υποδομές και την ασφάλεια", "τήρηση SLA σε 350+ tickets"]
             },
             services: {
                 eyebrow: "Υπηρεσίες",
