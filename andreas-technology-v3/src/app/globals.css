@@ -131,14 +131,6 @@ body {
   min-height: 100vh;
 }
 
-html.theme-transition,
-html.theme-transition *,
-html.theme-transition *::before,
-html.theme-transition *::after {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
-  transition-delay: 0s !important;
-}
-
 /* Theme switch: the new theme is revealed by a clip-path circle (see ThemeContext). */
 ::view-transition-old(root),
 ::view-transition-new(root) {

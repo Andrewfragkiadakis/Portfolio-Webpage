@@ -1,6 +1,7 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
+import { readStorage, writeStorage } from '@/utils/storage'
 
 type Language = 'en' | 'gr'
 
@@ -15,7 +16,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     const [language, setLanguageState] = useState<Language>('en')
 
     useEffect(() => {
-        const stored = localStorage.getItem('language') as Language
+        const stored = readStorage('language')
         if (stored === 'en' || stored === 'gr') {
             // localStorage is browser-only, so the stored preference lands after hydration.
             // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -25,7 +26,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
     const setLanguage = (lang: Language) => {
         setLanguageState(lang)
-        localStorage.setItem('language', lang)
+        writeStorage('language', lang)
     }
 
     // Sync <html lang> attribute with active language

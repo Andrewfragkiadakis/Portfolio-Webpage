@@ -1,5 +1,5 @@
 
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import { MotionConfig } from 'motion/react'
 import './globals.css'
@@ -61,9 +61,13 @@ export const metadata: Metadata = {
         index: true,
         follow: true,
     },
-    other: {
-        'theme-color': '#000000',
-    },
+}
+
+export const viewport: Viewport = {
+    themeColor: [
+        { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+        { media: '(prefers-color-scheme: dark)', color: '#000000' },
+    ],
 }
 
 export default function RootLayout({
@@ -74,11 +78,9 @@ export default function RootLayout({
     return (
         <html lang="en" className={inter.variable} suppressHydrationWarning>
             <head>
-                <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
-                <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
                 <script
                     dangerouslySetInnerHTML={{
-                        __html: `(function(){try{var t=localStorage.getItem('theme');if(!t){var mq=window.matchMedia('(prefers-color-scheme:dark)');var ml=window.matchMedia('(prefers-color-scheme:light)');if(mq.matches||ml.matches){t=mq.matches?'dark':'light';}else{var h=new Date().getHours();t=(h>=7&&h<20)?'light':'dark';}}document.documentElement.classList.add(t);}catch(e){}})();`,
+                        __html: `(function(){var t=null;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.classList.add(t);document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('meta[name=\"theme-color\"]').forEach(function(m){m.setAttribute('content',t==='dark'?'#000000':'#ffffff')})})})();`,
                     }}
                 />
                 <script
