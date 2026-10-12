@@ -319,12 +319,12 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fab fa-apple",
                 label: "Apple Fleet & MDM",
-                detail: "Jamf Certified Tech (Jamf 200). I own Jamf Pro end to end for 550+ Macs: zero‑touch enrollment through Apple Business Manager, configuration profiles, patching, Self Service and day-to-day fleet hygiene."
+                detail: "Jamf Certified Tech (Jamf 200). I own Jamf Pro end to end for 550+ Macs: zero‑touch enrollment through Apple Business Manager, configuration profiles, patching, Self Service and day-to-day fleet hygiene."
             },
             {
                 icon: "fas fa-shield-halved",
                 label: "Endpoint Security & Identity",
-                detail: "Check Point Harmony Endpoint, CIS Benchmark hardening ahead of PCI DSS and SOC 2 audits, Microsoft Sentinel SIEM pipelines, and identity and access with Microsoft Entra ID, Duo MFA and 1Password."
+                detail: "Check Point Harmony Endpoint, CIS Benchmark hardening ahead of PCI DSS and SOC 2 audits, Microsoft Sentinel SIEM pipelines, and identity and access with Microsoft Entra ID, Duo MFA and 1Password."
             },
             {
                 icon: "fas fa-terminal",
@@ -347,25 +347,25 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fas fa-shield-halved",
                 title: "Endpoint Security & Compliance",
-                oneLiner: "CIS-hardened, EDR-protected Macs, ready for PCI DSS and SOC 2 audits.",
+                oneLiner: "CIS-hardened, EDR-protected Macs, ready for PCI DSS and SOC 2 audits.",
                 description: "Hardening fleets against real-world threats: CIS Benchmark implementation, EDR deployment and migration, disk-encryption management, and audit readiness for PCI DSS and SOC 2.",
-                detail: "Security that holds up in an audit and in production. I implemented CIS Benchmark hardening fleet-wide ahead of PCI DSS and SOC 2 audits, led the migration to Check Point Harmony Endpoint, and feed endpoint telemetry into Microsoft Sentinel so detection has real context.",
+                detail: "Security that holds up in an audit and in production. I implemented CIS Benchmark hardening fleet-wide ahead of PCI DSS and SOC 2 audits, led the migration to Check Point Harmony Endpoint, and feed endpoint telemetry into Microsoft Sentinel so detection has real context.",
                 highlights: [
-                    "CIS Benchmark hardening ahead of PCI DSS and SOC 2 audits",
+                    "CIS Benchmark hardening ahead of PCI DSS and SOC 2 audits",
                     "EDR migration with FileVault conflicts resolved and zero data loss",
-                    "Sentinel SIEM log pipelines over RFC 5424 + TLS"
+                    "Sentinel SIEM log pipelines over RFC 5424 + TLS"
                 ],
                 tools: ["Check Point Harmony Endpoint", "Microsoft Sentinel", "Jamf Pro", "Microsoft Entra ID", "Duo MFA", "1Password"]
             },
             {
                 icon: "fab fa-apple",
                 title: "Apple Fleet Engineering",
-                oneLiner: "550+ Macs on Jamf Pro. Zero‑touch enrollment, 70% faster onboarding.",
+                oneLiner: "550+ Macs on Jamf Pro. Zero‑touch enrollment, 70% less onboarding time.",
                 description: "Jamf Certified Tech (Jamf 200). Managing macOS at scale with Jamf Pro and Apple Business Manager — zero‑touch enrollment, configuration profiles, patch strategy, and fleet hygiene across hundreds of devices.",
-                detail: "I own Jamf Pro end-to-end for a 550+ Mac fleet. A new Mac enrolls itself through Apple Business Manager, pulls its profiles and apps, and is ready on day one — zero‑touch enrollment cut onboarding time by 70%.",
+                detail: "I own Jamf Pro end to end for a 550+ Mac fleet. A new Mac enrolls itself through Apple Business Manager, pulls its profiles and apps, and is ready on day one — zero‑touch enrollment cut onboarding time by 70%.",
                 highlights: [
-                    "Jamf Certified Tech (Jamf 200)",
-                    "Zero‑touch enrollment: 70% faster onboarding",
+                    "Jamf Certified Tech (Jamf 200)",
+                    "Zero‑touch enrollment: 70% less onboarding time",
                     "Configuration profiles, patching, Self Service and fleet hygiene"
                 ],
                 tools: ["Jamf Pro", "Apple Business Manager", "macOS", "Bash / zsh", "Swift", "AppleScript"]
@@ -399,11 +399,11 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fas fa-headset",
                 title: "IT Service Management",
-                oneLiner: "ITIL 4 service delivery: 350+ tickets resolved at 95%+ SLA.",
+                oneLiner: "ITIL 4 service delivery: 350+ tickets resolved at 95%+ SLA.",
                 description: "ITIL 4 certified service delivery: incident and request workflows, ticketing automation, SLA-driven support, and vendor escalation management for business-critical systems.",
-                detail: "Support people can rely on. ITIL 4 certified, I pair clear incident and request processes with automation and documentation, so the queue stays short and answers are easy to find.",
+                detail: "Support people can rely on. ITIL 4 certified, I pair clear incident and request processes with automation and documentation, so the queue stays short and answers are easy to find.",
                 highlights: [
-                    "ITIL 4 Foundation certified",
+                    "ITIL 4 Foundation certified",
                     "350+ Jira tickets resolved at 95%+ SLA",
                     "40+ Confluence guides and 9 enterprise platforms administered"
                 ],
@@ -413,12 +413,12 @@ export const content: Record<'en' | 'gr', Content> = {
                 icon: "fas fa-network-wired",
                 title: "Networks & Infrastructure",
                 oneLiner: "Cisco ISE, Active Directory, ESXi and Proxmox — the layer under it all.",
-                description: "The layer everything else depends on — Cisco ISE, Active Directory, MFA, and virtualization on ESXi and Proxmox, with monitoring that surfaces problems before users report them.",
-                detail: "The foundation under everything else: Cisco ISE network access control, identity across Active Directory and Entra ID, and virtualization on VMware ESXi and Proxmox — with MFA, certificates and monitoring kept in order around them.",
+                description: "The layer everything else depends on — Cisco ISE, Active Directory, MFA, and virtualisation on ESXi and Proxmox, with monitoring that surfaces problems before users report them.",
+                detail: "The foundation under everything else: Cisco ISE network access control, identity across Active Directory and Entra ID, and virtualisation on VMware ESXi and Proxmox — with MFA, certificates and monitoring kept in order around them.",
                 highlights: [
                     "Cisco ISE network access control",
                     "Identity across Active Directory and Entra ID",
-                    "Virtualization on VMware ESXi and Proxmox"
+                    "Virtualisation on VMware ESXi and Proxmox"
                 ],
                 tools: ["Cisco ISE", "Active Directory", "Microsoft Entra ID", "VMware ESXi", "Proxmox", "Linux"]
             }
@@ -507,7 +507,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 institution: "University of West Attica, Athens, Greece",
                 duration: "September 2019 – June 2025",
                 details: [
-                    "Distinguished member of the university's Tech Society",
+                    "Active member of the university’s Tech Society",
                     "Relevant coursework: Advanced Computer Systems, AI, Network Security, Databases, Web Development, Cloud Computing"
                 ]
             },
@@ -526,7 +526,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 icon: "fab fa-apple",
                 featured: true,
                 details: [
-                    "Passed the Jamf 200 certification exam for Jamf Pro",
+                    "Passed the Jamf 200 certification exam for Jamf Pro",
                     "Enrollment, inventory, policies, configuration profiles, Self Service and scoping for macOS and iOS fleets"
                 ],
                 link: "https://www.credly.com/badges/05e1f049-b7fb-4a92-bc2b-fd27ad861755"
@@ -537,7 +537,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 duration: "2025",
                 kind: "certification",
                 badge: "ITIL 4",
-                details: ["Knowledge of the ITIL 4 framework", "Focus on IT service management (ITSM) best practices"],
+                details: ["Knowledge of the ITIL 4 framework", "Focus on IT service management (ITSM) best practices"],
                 link: "/files/itil-v4-cert.pdf"
             },
             {
@@ -548,7 +548,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 badge: "TEE licence",
                 details: [
                     "Statutory licence to practise as an Informatics & Computer Engineer in Greece",
-                    "Requires an accredited five-year integrated Master's degree"
+                    "Requires an accredited five-year integrated Master’s degree"
                 ]
             },
             {
@@ -679,10 +679,10 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 name: "Schiller Language Centers Website",
                 year: 2026,
-                tags: ["Wix", "Wix Studio", "Web Development", "Educational"],
+                tags: ["Wix", "Wix Studio", "Web Development", "Education"],
                 description: "The website for Schiller Language Centers in Rethymno, Crete: English, German and Educational Robotics courses, kept current by the school’s own staff.",
                 role: "Solo build · Client project",
-                detail: "The public website for Schiller Language Centers in Rethymno, Crete, covering their English, German and Educational Robotics programmes. Built on Wix Studio so the client's own staff can keep course listings and term dates current without needing a developer.",
+                detail: "The public website for Schiller Language Centers in Rethymno, Crete, covering their English, German and Educational Robotics programmes. Built on Wix Studio so the client’s own staff can keep course listings and term dates current without needing a developer.",
                 highlights: [
                     "Course catalogue across English, German and Educational Robotics",
                     "Built for non-technical staff to maintain independently",
@@ -749,7 +749,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 tags: ["UI/UX Design", "Figma", "Team Project", "SRH Heidelberg"],
                 description: "A mental-health app concept for low-energy days, built around a daily check-in that takes under a minute. Team project at SRH Heidelberg.",
                 role: "Team project · UI/UX design, SRH Heidelberg",
-                detail: "A mental-health application concept developed during a Master's course at SRH Heidelberg. The team's focus was on designing for people in a low-energy state: reducing friction, avoiding judgemental language, and making the daily check-in something you can complete in under a minute.",
+                detail: "A mental-health application concept developed during a Master’s course at SRH Heidelberg. The team’s focus was on designing for people in a low-energy state: reducing friction, avoiding judgemental language, and making the daily check-in something you can complete in under a minute.",
                 highlights: [
                     "End-to-end UI/UX concept designed in Figma",
                     "Designed around low-friction daily emotional check-ins",
@@ -785,7 +785,7 @@ export const content: Record<'en' | 'gr', Content> = {
             common: { name: "Andreas Fragkiadakis", close: "Close", newTab: "opens in a new tab" },
             nav: {
                 home: "Overview", about: "About", services: "What I do", specs: "Tech specs", experience: "Career", projects: "Projects", contact: "Contact",
-                cta: "Let's talk", openMenu: "Open menu", closeMenu: "Close menu", switchLanguage: "Switch to Greek",
+                cta: "Let’s talk", openMenu: "Open menu", closeMenu: "Close menu", switchLanguage: "Switch to Greek",
                 toLight: "Switch to light theme", toDark: "Switch to dark theme", appearance: "Appearance", language: "Language", light: "Light", dark: "Dark"
             },
             intro: { headline: "Hello.", enter: "Enter", skip: "Skip intro" },
@@ -805,14 +805,14 @@ export const content: Record<'en' | 'gr', Content> = {
                 credentials: "Credentials",
                 focus: "Focus areas",
                 yearsUnit: "yrs",
-                stats: ["Macs managed on Jamf Pro", "faster onboarding, zero‑touch", "in IT, infrastructure and security", "SLA met across 350+ tickets"]
+                stats: ["Macs managed on Jamf Pro", "less onboarding time, zero‑touch", "in IT, infrastructure and security", "SLA met across 350+ tickets"]
             },
             services: {
                 eyebrow: "What I do",
                 headline: "Happens twice?\nIt becomes a script.",
                 learnMore: "Learn more",
                 ctaLead: "Have a project in mind?",
-                ctaLink: "Let's talk",
+                ctaLink: "Let’s talk",
                 highlights: "In practice",
                 toolkit: "Toolkit"
             },
@@ -848,7 +848,7 @@ export const content: Record<'en' | 'gr', Content> = {
             },
             contact: {
                 eyebrow: "Contact",
-                headline: "Let's build\nsomething.",
+                headline: "Let’s build\nsomething.",
                 sub: "Open to **full-time roles** and **freelance projects**.",
                 send: "Send a message",
                 resume: "Download résumé",
@@ -863,7 +863,7 @@ export const content: Record<'en' | 'gr', Content> = {
         },
 
         contactTitle: "GET IN TOUCH",
-        copyright: "© 2026 Created By Andreas Fragkiadakis. All rights reserved."
+        copyright: "© 2026 Andreas Fragkiadakis. All rights reserved."
     },
 
     gr: {
@@ -950,12 +950,12 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fab fa-apple",
                 label: "Apple Fleet & MDM",
-                detail: "Jamf Certified Tech (Jamf 200). Διαχειρίζομαι εξ ολοκλήρου το Jamf Pro για 550+ Mac: zero‑touch enrollment μέσω Apple Business Manager, configuration profiles, ενημερώσεις, Self Service και καθημερινή συντήρηση του στόλου."
+                detail: "Jamf Certified Tech (Jamf 200). Διαχειρίζομαι εξ ολοκλήρου το Jamf Pro για 550+ Mac: zero‑touch enrollment μέσω Apple Business Manager, configuration profiles, ενημερώσεις, Self Service και καθημερινή συντήρηση του στόλου."
             },
             {
                 icon: "fas fa-shield-halved",
                 label: "Endpoint Security & Identity",
-                detail: "Check Point Harmony Endpoint, θωράκιση κατά CIS Benchmarks για ελέγχους PCI DSS και SOC 2, pipelines Microsoft Sentinel SIEM, και διαχείριση ταυτότητας και πρόσβασης με Microsoft Entra ID, Duo MFA και 1Password."
+                detail: "Check Point Harmony Endpoint, θωράκιση κατά CIS Benchmarks για ελέγχους PCI DSS και SOC 2, pipelines Microsoft Sentinel SIEM, και διαχείριση ταυτότητας και πρόσβασης με Microsoft Entra ID, Duo MFA και 1Password."
             },
             {
                 icon: "fas fa-terminal",
@@ -978,25 +978,25 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fas fa-shield-halved",
                 title: "Ασφάλεια Τερματικών & Συμμόρφωση",
-                oneLiner: "Mac θωρακισμένα κατά CIS, με EDR, έτοιμα για ελέγχους PCI DSS και SOC 2.",
+                oneLiner: "Mac θωρακισμένα κατά CIS, με EDR, έτοιμα για ελέγχους PCI DSS και SOC 2.",
                 description: "Θωράκιση στόλου συσκευών απέναντι σε πραγματικές απειλές: εφαρμογή CIS Benchmarks, ανάπτυξη και μετάβαση EDR, διαχείριση κρυπτογράφησης δίσκων και ετοιμότητα για ελέγχους PCI DSS και SOC 2.",
-                detail: "Ασφάλεια που αντέχει τόσο σε έλεγχο όσο και στην παραγωγή. Εφάρμοσα θωράκιση κατά CIS Benchmarks σε όλο τον στόλο πριν από ελέγχους PCI DSS και SOC 2, ηγήθηκα της μετάβασης σε Check Point Harmony Endpoint και τροφοδοτώ το Microsoft Sentinel με telemetry τερματικών ώστε η ανίχνευση να έχει πραγματικό πλαίσιο.",
+                detail: "Ασφάλεια που αντέχει τόσο σε έλεγχο όσο και στην παραγωγή. Εφάρμοσα θωράκιση κατά CIS Benchmarks σε όλο τον στόλο πριν από ελέγχους PCI DSS και SOC 2, ηγήθηκα της μετάβασης σε Check Point Harmony Endpoint και τροφοδοτώ το Microsoft Sentinel με telemetry τερματικών ώστε η ανίχνευση να έχει πραγματικό πλαίσιο.",
                 highlights: [
-                    "Θωράκιση κατά CIS Benchmarks πριν από ελέγχους PCI DSS και SOC 2",
+                    "Θωράκιση κατά CIS Benchmarks πριν από ελέγχους PCI DSS και SOC 2",
                     "Μετάβαση EDR με επίλυση συγκρούσεων FileVault και μηδενική απώλεια δεδομένων",
-                    "Pipelines Sentinel SIEM μέσω RFC 5424 + TLS"
+                    "Pipelines Sentinel SIEM μέσω RFC 5424 + TLS"
                 ],
                 tools: ["Check Point Harmony Endpoint", "Microsoft Sentinel", "Jamf Pro", "Microsoft Entra ID", "Duo MFA", "1Password"]
             },
             {
                 icon: "fab fa-apple",
-                title: "Apple Fleet Engineering",
-                oneLiner: "550+ Mac στο Jamf Pro. Zero‑touch enrollment, 70% ταχύτερο onboarding.",
+                title: "Διαχείριση Στόλου Apple",
+                oneLiner: "550+ Mac στο Jamf Pro. Zero‑touch enrollment, 70% λιγότερος χρόνος onboarding.",
                 description: "Jamf Certified Tech (Jamf 200). Διαχείριση macOS σε κλίμακα με Jamf Pro και Apple Business Manager — zero‑touch enrollment, configuration profiles, στρατηγική ενημερώσεων και συντήρηση εκατοντάδων συσκευών.",
-                detail: "Διαχειρίζομαι εξ ολοκλήρου το Jamf Pro για στόλο 550+ Mac. Ένα νέο Mac εγγράφεται αυτόματα μέσω Apple Business Manager, λαμβάνει profiles και εφαρμογές και είναι έτοιμο από την πρώτη μέρα — το zero‑touch enrollment μείωσε τον χρόνο onboarding κατά 70%.",
+                detail: "Διαχειρίζομαι εξ ολοκλήρου το Jamf Pro για στόλο 550+ Mac. Ένα νέο Mac εγγράφεται αυτόματα μέσω Apple Business Manager, λαμβάνει profiles και εφαρμογές και είναι έτοιμο από την πρώτη μέρα — το zero‑touch enrollment μείωσε τον χρόνο onboarding κατά 70%.",
                 highlights: [
-                    "Jamf Certified Tech (Jamf 200)",
-                    "Zero‑touch enrollment: 70% ταχύτερο onboarding",
+                    "Jamf Certified Tech (Jamf 200)",
+                    "Zero‑touch enrollment: 70% λιγότερος χρόνος onboarding",
                     "Configuration profiles, ενημερώσεις, Self Service και συντήρηση στόλου"
                 ],
                 tools: ["Jamf Pro", "Apple Business Manager", "macOS", "Bash / zsh", "Swift", "AppleScript"]
@@ -1016,7 +1016,7 @@ export const content: Record<'en' | 'gr', Content> = {
             },
             {
                 icon: "fas fa-robot",
-                title: "AI-Augmented Operations",
+                title: "Λειτουργίες IT με AI",
                 oneLiner: "Gemini σε όλο τον οργανισμό, Rovo Agents και διαλογή αιτημάτων με AI στο Jira.",
                 description: "Ανάπτυξη AI που μειώνει μετρήσιμα τον φόρτο εργασίας — εταιρικά rollouts βοηθών, agentic automation και διαλογή αιτημάτων με AI που μειώνει τον χρόνο επίλυσης.",
                 detail: "AI που κάνει πραγματική δουλειά. Εισήγαγα το Google Gemini σε όλο τον οργανισμό και τους Atlassian Rovo Agents, δημιούργησα pipeline διαλογής αιτημάτων με AI για το Jira Service Management και αναπτύσσω prototypes MCP servers ώστε βοηθοί όπως το Claude Code να δουλεύουν απευθείας με τα συστήματα IT.",
@@ -1030,11 +1030,11 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 icon: "fas fa-headset",
                 title: "IT Service Management",
-                oneLiner: "Υπηρεσίες IT κατά ITIL 4: 350+ tickets με SLA άνω του 95%.",
+                oneLiner: "Υπηρεσίες IT κατά ITIL 4: 350+ tickets με SLA άνω του 95%.",
                 description: "Παροχή υπηρεσιών με πιστοποίηση ITIL 4: ροές incident και request, αυτοματισμός ticketing, υποστήριξη βάσει SLA και διαχείριση κρίσιμων vendor escalations.",
-                detail: "Υποστήριξη στην οποία μπορεί κανείς να βασιστεί. Με πιστοποίηση ITIL 4, συνδυάζω σαφείς διαδικασίες incident και request με αυτοματισμό και τεκμηρίωση, ώστε η ουρά να μένει μικρή και οι απαντήσεις να βρίσκονται εύκολα.",
+                detail: "Υποστήριξη στην οποία μπορεί κανείς να βασιστεί. Με πιστοποίηση ITIL 4, συνδυάζω σαφείς διαδικασίες incident και request με αυτοματισμό και τεκμηρίωση, ώστε η ουρά να μένει μικρή και οι απαντήσεις να βρίσκονται εύκολα.",
                 highlights: [
-                    "Πιστοποίηση ITIL 4 Foundation",
+                    "Πιστοποίηση ITIL 4 Foundation",
                     "350+ Jira tickets με SLA 95%+",
                     "40+ οδηγοί Confluence και διαχείριση 9 εταιρικών πλατφορμών"
                 ],
@@ -1157,7 +1157,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 icon: "fab fa-apple",
                 featured: true,
                 details: [
-                    "Επιτυχία στις εξετάσεις πιστοποίησης Jamf 200 για το Jamf Pro",
+                    "Επιτυχία στις εξετάσεις πιστοποίησης Jamf 200 για το Jamf Pro",
                     "Enrollment, inventory, policies, configuration profiles, Self Service και scoping για στόλους macOS και iOS"
                 ],
                 link: "https://www.credly.com/badges/05e1f049-b7fb-4a92-bc2b-fd27ad861755"
@@ -1168,7 +1168,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 duration: "2025",
                 kind: "certification",
                 badge: "ITIL 4",
-                details: ["Πιστοποίηση στο πλαίσιο ITIL 4", "Έμφαση στις βέλτιστες πρακτικές διαχείρισης υπηρεσιών πληροφορικής (ITSM)"],
+                details: ["Πιστοποίηση στο πλαίσιο ITIL 4", "Έμφαση στις βέλτιστες πρακτικές διαχείρισης υπηρεσιών πληροφορικής (ITSM)"],
                 link: "/files/itil-v4-cert.pdf"
             },
             {
@@ -1310,7 +1310,7 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 name: "Ιστοσελίδα Κέντρων Ξένων Γλωσσών Schiller",
                 year: 2026,
-                tags: ["Wix", "Wix Studio", "Web Development", "Educational"],
+                tags: ["Wix", "Wix Studio", "Web Development", "Εκπαίδευση"],
                 description: "Η ιστοσελίδα των κέντρων ξένων γλωσσών Schiller στο Ρέθυμνο: προγράμματα Αγγλικών, Γερμανικών και Εκπαιδευτικής Ρομποτικής, που ενημερώνει το ίδιο το προσωπικό της σχολής.",
                 role: "Ατομική υλοποίηση · Έργο πελάτη",
                 detail: "Η ιστοσελίδα των κέντρων ξένων γλωσσών Schiller στο Ρέθυμνο, με προγράμματα Αγγλικών, Γερμανικών και Εκπαιδευτικής Ρομποτικής. Υλοποιήθηκε σε Wix Studio ώστε το προσωπικό της σχολής να ενημερώνει μόνο του τα προγράμματα χωρίς να χρειάζεται προγραμματιστή.",
@@ -1377,7 +1377,7 @@ export const content: Record<'en' | 'gr', Content> = {
             {
                 name: "HappyFox - Εφαρμογή Ψυχικής Υγείας",
                 year: 2023,
-                tags: ["UI/UX Design", "Figma", "Team Project", "SRH Heidelberg"],
+                tags: ["UI/UX Design", "Figma", "Ομαδικό έργο", "SRH Heidelberg"],
                 description: "Concept εφαρμογής ψυχικής υγείας για μέρες χαμηλής ενέργειας, με καθημερινό check-in που ολοκληρώνεται σε λιγότερο από ένα λεπτό. Ομαδικό έργο στο SRH Heidelberg.",
                 role: "Ομαδικό έργο · Σχεδιασμός UI/UX, SRH Heidelberg",
                 detail: "Concept εφαρμογής ψυχικής υγείας που αναπτύχθηκε σε μεταπτυχιακό μάθημα στο SRH Heidelberg. Η ομάδα εστίασε στον σχεδιασμό για ανθρώπους σε κατάσταση χαμηλής ενέργειας: λιγότερα εμπόδια, χωρίς επικριτική γλώσσα, με καθημερινό check-in που ολοκληρώνεται σε λιγότερο από ένα λεπτό.",
@@ -1417,15 +1417,15 @@ export const content: Record<'en' | 'gr', Content> = {
             nav: {
                 home: "Επισκόπηση", about: "Σχετικά", services: "Υπηρεσίες", specs: "Εργαλεία", experience: "Καριέρα", projects: "Projects", contact: "Επικοινωνία",
                 cta: "Ας μιλήσουμε", openMenu: "Άνοιγμα μενού", closeMenu: "Κλείσιμο μενού", switchLanguage: "Switch to English",
-                toLight: "Φωτεινό θέμα", toDark: "Σκοτεινό θέμα", appearance: "Εμφάνιση", language: "Γλώσσα", light: "Φωτεινό", dark: "Σκοτεινό"
+                toLight: "Αλλαγή σε φωτεινό θέμα", toDark: "Αλλαγή σε σκοτεινό θέμα", appearance: "Εμφάνιση", language: "Γλώσσα", light: "Φωτεινό", dark: "Σκοτεινό"
             },
-            intro: { headline: "Γεια σας.", enter: "Είσοδος", skip: "Παράλειψη" },
+            intro: { headline: "Γεια σας.", enter: "Είσοδος", skip: "Παράλειψη εισαγωγής" },
             hero: {
                 headline: "Στόλοι Apple.\n*Αυτοματοποιημένοι.*",
                 sub: "Ηγούμαι της ομάδας Apple Fleet & IT Automation στην Omilia: **550+ Mac** στο Jamf Pro, με **zero‑touch** enrollment και θωράκιση κατά CIS Benchmarks.",
                 viewWork: "Δείτε τη δουλειά μου",
                 contact: "Επικοινωνία",
-                note: "Jamf Certified Tech (Jamf 200) · Αθήνα"
+                note: "Jamf Certified Tech (Jamf 200) · Αθήνα, Ελλάδα"
             },
             about: {
                 eyebrow: "Σχετικά",
@@ -1436,7 +1436,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 credentials: "Πιστοποιήσεις",
                 focus: "Τομείς εστίασης",
                 yearsUnit: "έτη",
-                stats: ["Mac υπό διαχείριση στο Jamf Pro", "ταχύτερο onboarding, zero‑touch", "στο IT, τις υποδομές και την ασφάλεια", "τήρηση SLA σε 350+ tickets"]
+                stats: ["Mac υπό διαχείριση στο Jamf Pro", "λιγότερος χρόνος onboarding, zero‑touch", "στο IT, τις υποδομές και την ασφάλεια", "τήρηση SLA σε 350+ tickets"]
             },
             services: {
                 eyebrow: "Υπηρεσίες",
@@ -1448,7 +1448,7 @@ export const content: Record<'en' | 'gr', Content> = {
                 toolkit: "Εργαλεία"
             },
             specs: {
-                eyebrow: "Τεχνικά χαρακτηριστικά",
+                eyebrow: "Εργαλεία",
                 headline: "Η εργαλειοθήκη.",
                 sub: "Εργαλεία καθημερινής χρήσης, ανά τομέα.",
                 groups: { apple: "Στόλος Apple", security: "Ασφάλεια & ταυτότητα", infra: "Υποδομές", code: "Κώδικας", ai: "AI", collab: "Συνεργασία & ITSM" }
@@ -1489,11 +1489,11 @@ export const content: Record<'en' | 'gr', Content> = {
                 elsewhere: "Βρείτε με",
                 copy: "Αντιγραφή",
                 copied: "Αντιγράφηκε",
-                copyFailed: "Αποτυχία"
+                copyFailed: "Η αντιγραφή απέτυχε"
             }
         },
 
         contactTitle: "ΕΠΙΚΟΙΝΩΝΙΑ",
-        copyright: "© 2026 Created By Ανδρέας Φραγκιαδάκης. All rights reserved."
+        copyright: "© 2026 Ανδρέας Φραγκιαδάκης. Με την επιφύλαξη παντός δικαιώματος."
     }
 }
