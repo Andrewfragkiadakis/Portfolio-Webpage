@@ -58,6 +58,7 @@ test.describe('desktop deck', () => {
     })
 
     test('Tab keeps the visible slide, the dots and the focus together', async ({ page }) => {
+        test.setTimeout(90_000) // 60 key presses, each waiting for the page to settle
         await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur())
         for (let i = 0; i < 60; i++) {
             await page.keyboard.press('Tab')
