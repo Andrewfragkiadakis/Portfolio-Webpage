@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Writes official brand logos from Simple Icons (https://simpleicons.org) into
- * public/logos/<slug>.svg and prints the `logo`, `ratio` and `brand` values to
+ * public/logos/<slug>.svg and prints the `logo` and `ratio` values to
  * paste into src/data/tools.ts.
  *
  *   node scripts/add-logo.mjs python swift claude
@@ -39,6 +39,6 @@ for (const slug of slugs) {
         `${outDir}${slug}.svg`,
         `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>${icon.title}</title><path fill="#${icon.hex}" d="${icon.path}"/></svg>\n`,
     )
-    console.log(`✓ ${icon.title}: logo: '${slug}', ratio: 1, brand: '#${icon.hex}'`)
+    console.log(`✓ ${icon.title}: logo: '${slug}', ratio: 1`)
 }
 process.exit(failed ? 1 : 0)

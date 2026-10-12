@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![Website](https://img.shields.io/badge/Website-andreas.technology-4f46e5?style=for-the-badge&logo=google-chrome)](https://andreas.technology)
+[![Website](https://img.shields.io/badge/Website-andreas.technology-0071e3?style=for-the-badge&logo=google-chrome)](https://andreas.technology)
 
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
@@ -11,43 +11,42 @@
 
 </div>
 
-Personal portfolio and CV for **Andreas Fragkiadakis** (IT & Security Engineer, M.Eng.). Horizontal-scroll layout, blob cursor, bilingual EN/GR, and modern UI.
+Personal portfolio and CV for **Andreas Fragkiadakis**, Team Lead for Apple Fleet & IT Automation (M.Eng.). A product-launch-style site: seven slides on a horizontal track, bilingual EN/GR, light and dark.
 
 ---
 
 ## At a glance
 
-![Feature map of andreas.technology: 100/100 accessibility, EN/GR bilingual, Next.js 16, compositor-first performance, the horizontal-scroll journey, React 19, TypeScript 5, Framer Motion 12, full keyboard navigation, a 100 Lighthouse accessibility score, SEO built in, reduced-motion support, skip links & aria-live, and playful micro-UI with a blob cursor and spotlight cards.](docs/bento-infographic.svg)
+![Feature map of andreas.technology: 100/100 accessibility, EN/GR bilingual, Next.js 16, compositor-first performance, the horizontal slide track, React 19, TypeScript 5, no animation library, full keyboard navigation, SEO built in, reduced-motion support, skip links and live regions, and a product-page UI of slides, sheets and dot navigation.](docs/bento-infographic.svg)
 
 ---
 
 ## Live site
 
-**[andreas.technology](https://andreas.technology)**
+**[andreas.technology](https://andreas.technology)** · Greek: **[andreas.technology/el](https://andreas.technology/el)**
 
 ---
 
 ## Features
 
-- **Horizontal scroll** – Section-based layout with snap and smooth scroll
-- **Blob cursor** – Configurable trail on hero name with LetterGlitch inside the letters
-- **SpotlightCard & LogoLoop** – Mouse-follow spotlight on cards; tech-stack marquee in About
-- **Framer Motion** – Scroll and hover animations
-- **Bilingual** – English / Greek with persisted preference
-- **Theme** – Light and dark mode
-- **SEO** – Canonical URL, JSON-LD (WebSite + Person), Open Graph, sitemap
+- **Seven slides** – A horizontal track on desktop with native scroll snapping, dot navigation, arrow keys and trackpad swipes; a vertical stack on tablets and phones
+- **Product-page design** – Neutral surfaces, one interactive blue, San Francisco / Inter type scale
+- **Sheets, not pages** – Bio, roles, services and projects open in dialogs (bottom sheets you can swipe away on phones)
+- **Bilingual** – English at `/`, Greek at `/el`, both server-rendered
+- **Theme** – Light and dark, following the system until you choose
+- **Fast** – No animation library: every animation is CSS on the compositor; the hero paints at first paint
+- **Accessible** – WCAG 2.2 AA (axe-tested), keyboard navigation, visible focus, 44 px touch targets, reduced-motion and forced-colours support
+- **SEO** – Canonical URLs, hreflang, JSON-LD (WebSite + Person), per-language Open Graph images, sitemap
 
 ---
 
 ## Tech stack
 
-*The usual suspects —*
-
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19-61dafb?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
-[![Framer Motion](https://img.shields.io/badge/Framer_Motion-magenta?style=flat-square&logo=framer)](https://www.framer.com/motion/)
-[![Font Awesome](https://img.shields.io/badge/Font_Awesome-528dd7?style=flat-square&logo=font-awesome)](https://fontawesome.com/)
+[![Playwright](https://img.shields.io/badge/Tested_with-Playwright-2ead33?style=flat-square&logo=playwright)](https://playwright.dev/)
 
 ---
 
@@ -57,25 +56,20 @@ Personal portfolio and CV for **Andreas Fragkiadakis** (IT & Security Engineer, 
 Portfolio-Webpage/
 ├── andreas-technology-v3/     # Next.js app (deploy root on Vercel)
 │   ├── src/
-│   │   ├── app/               # App Router, layout, globals
-│   │   ├── components/        # dom/, ui/
-│   │   ├── data/              # content.ts (EN/GR)
-│   │   └── contexts/          # Language, Theme providers
-│   ├── docs/                  # deploy, migration, SEO, title guide
-│   └── public/                # images, favicons, files
-└── README.md
+│   │   ├── app/[lang]/        # One static page per language ("/" and "/el")
+│   │   ├── components/        # dom/ (slides, nav), ui/ (shared pieces), slides.ts (registry)
+│   │   ├── data/content/      # Copy: en.ts, el.ts, types.ts
+│   │   ├── hooks/, utils/     # Scroll track, presence, storage, motion tokens
+│   │   └── contexts/          # Theme and locale providers
+│   ├── e2e/                   # Playwright tests (run with npm run check)
+│   └── public/                # Images, favicons, files
+└── docs/                      # Design notes, launch plan, performance log
 ```
 
-See [`andreas-technology-v3/docs/`](andreas-technology-v3/docs/) for deployment, migration, SEO, and content editing guides.
+See [`andreas-technology-v3/README.md`](andreas-technology-v3/README.md) for development.
 
 ---
 
 ## License
 
 © 2026 Andreas Fragkiadakis. All rights reserved.
-
----
-
-<p align="center">
-  <sub>Crafted with TypeScript, Framer Motion & Tailwind</sub>
-</p>

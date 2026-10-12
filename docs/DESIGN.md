@@ -1,6 +1,6 @@
 # Apple Keynote
 
-**Branch:** `style/apple-keynote`
+**Branch:** `style/apple-keynote` (design rounds 1–5) · launched from `release/keynote` (round 6)
 
 ## Concept
 
@@ -17,6 +17,38 @@ It is a personal portfolio *in the style of* a launch page. The Apple logo is ne
 | 5 | Career | Then. Now. | Τότε. Τώρα. |
 | 6 | Projects | Selected work. | Επιλεγμένα έργα. |
 | 7 | Contact | Let's build / something. | Ας φτιάξουμε / κάτι μαζί. |
+
+## Round 6: launch
+
+The design chosen out of five. This round finished it for production; the full audit and plan are in [KEYNOTE-AUDIT-PLAN.md](KEYNOTE-AUDIT-PLAN.md) and the measurements in [perf-log.md](perf-log.md).
+
+**Architecture**
+- One static page per language: `/` (English) and `/el` (Greek), server-rendered with `<html lang>`, hreflang, per-language Open Graph images and JSON-LD. A visitor's language choice is remembered and applied before first paint. Each page ships only its own copy.
+- Copy is split into `data/content/{en,el,types}.ts` with stable ids; `components/slides.ts` maps section ids to slides; position maths live in `utils/track.ts`.
+- Every section is in the server HTML; without JavaScript the whole page is readable.
+
+**Desktop deck**
+- Runs only in a window of at least 1152 × 720 with a mouse or trackpad (`md` variant); everything else gets the vertical stack (`stack`).
+- Native CSS scroll snap: one wheel notch, key press or fling rests on a slide, momentum stays native and any input interrupts a jump. ← → and sideways swipes move one slide. The address bar follows the slide and deep links land on it.
+- Keyboard focus, find-in-page and screen readers bring the page to the slide that holds focus; the track no longer drifts out of sync.
+
+**Motion: no library.** Every animation is CSS on the compositor (transform and opacity only):
+- the track and the product shot are scroll-driven animations (rAF fallback where unsupported);
+- the hero plays at first paint and its text only settles, so it is the first paint; other slides reveal as they arrive;
+- sheets rise from the bottom edge and can be dragged down, cards scale in, the menu fades with its links a beat apart, the stage crossfades after the next shot has decoded, the phone accordion animates grid rows;
+- tokens: `--motion-fast` 200 ms (hover, colour, scrim), `--motion-base` 300 ms (small moves, exits), `--motion-slow` 500 ms (containers, sheets, theme circle), `--motion-reveal` 700 ms (entrances), 50 ms stagger for at most five steps; easings `standard`, `apple`, `exit`, `emphasized`. Reduced motion keeps short fades and drops movement.
+
+**Type and sizing**
+- Height-driven sizes have floors (nothing under 12 px) and caps; displays from ~1800 px scale the whole system up.
+- Career is 5/3/4 columns; education rows wrap instead of hiding the year; wordmark logos show as text.
+
+**Accessibility**
+- WCAG 2.2 AA with axe in the test suite; Lighthouse accessibility 100. 44 px touch targets on phones, notch-safe layout, increased-contrast and forced-colours support, localised landmark labels and skip link.
+
+**Content**
+- Facts reconciled across the site (550+ Macs, 6+ years, ITIL by PeopleCert 2025, the research project as a review, Erasmus+ as an exchange semester). Open questions for Andreas are in [OWNER-TODO.md](OWNER-TODO.md).
+
+**Removed:** the first-visit intro gate, the Motion and typewriter-effect packages, the Drive résumé (hidden until a current PDF is self-hosted), the `style-preview/` screenshots (they remain in the `style/apple-keynote` history).
 
 ## Round 5: finishing polish
 
@@ -197,7 +229,7 @@ Andreas: *"It's too colourful, and some fonts and components look off from Apple
 - **Seven slides.** Giving Tech specs its own slide adds one step to the desktop track, in exchange for a services slide that is no longer "full".
 - **Dialog-heavy detail** is unchanged: every slide fits 1440×900 with no inner scrolling, so the full bio, role tasks, education details and service highlights live in sheets.
 - **Mobile has no tab bar.** Navigation on phones is the nav's menu button, as on apple.com.
-- `typewriter-effect` is still in `package.json` but unused; no dependencies were added.
+- `typewriter-effect` was unused and has been removed (round 6).
 
 ## Checks
 
@@ -207,9 +239,4 @@ Andreas: *"It's too colourful, and some fonts and components look off from Apple
 - **Mobile (390×844)**: 0px horizontal overflow (EN and GR); the Greek hero word is set one step smaller on phones so it never touches the edges.
 - **Console**: only the local 404 for `/_vercel/speed-insights/script.js`, which exists only on Vercel.
 
-## Previews (`style-preview/`)
-
-| Folder | Contents |
-|---|---|
-| `light/`, `dark/` | `desktop-1-hero` … `desktop-7-contact` (1440×900), `mobile-1…7` (390×844) |
-| `extra/` | (round 5) Greek hero, services and career (`gr-light-desktop-*`), 1280×720 career, project / service / Greek bio dialogs, every project on the stage (`project-stages.jpg`), a focus ring, the phone services gallery, bottom sheet, menu and phone frame, the intro, and the OG image |
+The round 1–5 preview screenshots (`style-preview/`) live in the `style/apple-keynote` branch history.

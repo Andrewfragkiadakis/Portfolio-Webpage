@@ -696,10 +696,6 @@ html {
     --line: #424245;
   }
 
-  .kn-rule {
-    border-color: var(--line);
-  }
-
   /* ── Tool logos (official marks, drawn as a mask in the text colour) ─ */
 
   .tool-logo {
@@ -730,13 +726,6 @@ html {
     border-radius: 0.5rem;
     background-color: var(--surface);
     color: var(--foreground);
-  }
-
-  .tool-tile--sm {
-    --tile: 1.5rem;
-    --mark: 0.8rem;
-    --mark-wide: 1.2rem;
-    background-color: transparent;
   }
 
   .tool-tile__logo {

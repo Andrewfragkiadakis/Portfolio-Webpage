@@ -4,6 +4,26 @@ The format is based on [Common Changelog](https://common-changelog.org/), and th
 
 ## [Unreleased]
 
+### Changed (launch: Apple Keynote, round 6)
+- **Content:** facts reconciled everywhere (550+ Macs, 6+ years, 95%+ SLA stat, ITIL by PeopleCert 2025, thesis 2025, Erasmus+ as an exchange semester, the LLM project as a research review); employer security stack described without vendor names; copy tightened in EN and GR; projects ordered by relevance; vendor names spelled correctly
+- **Routes:** English at `/`, Greek at `/el`, each a static server-rendered page with its own `<html lang>`, metadata, hreflang, Open Graph image and JSON-LD; a chosen language is applied before first paint; each page ships only its own copy
+- **Desktop deck:** runs only in windows of at least 1152 × 720 with a mouse or trackpad; native CSS scroll snap replaces the JavaScript settle; ← → and sideways swipes move one slide; focus, find-in-page and screen readers keep the track in sync; deep links, hash links and the address bar follow the slide
+- **Motion:** every animation is CSS on the compositor with one set of tokens; scroll-driven track and product shot; hero visible at first paint; slides reveal as they arrive; sheets rise and can be swiped away; cards scale in; stage crossfades after decoding; transform-only dot navigation and hamburger
+- **Performance:** CSS inlined, Inter not preloaded, nav avatar not preloaded; initial JavaScript 267 → 205 KiB; under throttling the phone's first and largest paint went from 1.9–3.7 s to 0.9 s; screenshots 14 MB → 0.8 MB as WebP
+- **Accessibility:** WCAG 2.2 AA (axe), 44 px touch targets on phones, notch-safe layout, increased contrast and forced colours, localised labels, valid lists, dialog headings, status announcements
+- **Sizing:** text floors and caps, large-display scaling, rebalanced Career slide, phone nav and Greek buttons that never clip
+- **SEO and security:** robots no longer blocks the share image, two-language sitemap, linked manifest, JSON-LD without a phone number, security headers, AVIF images
+- Contact uses `mailto:`; the outdated Drive résumé is hidden until a current PDF is self-hosted
+
+### Added (launch)
+- Playwright end-to-end suite (`npm run check`), JavaScript size budget (`npm run size`), `scripts/optimize-images.mjs`
+- Global error page; guarded storage access (the site no longer crashes when site data is blocked)
+
+### Removed (launch)
+- First-visit intro gate, `motion` and `typewriter-effect` packages, ~40 unused content fields, `.npmrc` `legacy-peer-deps`
+
+## Earlier unreleased work
+
 ### Changed (Apple Keynote style, round 5: finishing polish)
 - Content slides are top-aligned at a shared `--slide-top`, so eyebrows and headlines hold still as the desktop track moves; `SlideHeader`, `HEADLINE_SIZE` and `HEADER_GAP` give every slide the same header and gap. Eyebrows show at every viewport height
 - About: 550+ set as the slide's hero figure, three supporting figures under a hairline, credentials beside them; focus areas as hairline rows with glyphs
