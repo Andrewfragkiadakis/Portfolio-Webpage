@@ -33,7 +33,7 @@ export default function HeroOverlay() {
             className="relative w-full min-h-[100svh] md:min-h-0 md:h-full flex flex-col items-center justify-center-safe px-6 sm:px-10 pt-24 pb-20 md:py-0 text-center"
         >
             <div className="kn-enter" style={step(0)}>
-                <Mark size={112} alt="" priority className="mx-auto w-[5.5rem] h-[5.5rem] md:w-[min(7rem,13vh)] md:h-[min(7rem,13vh)]" />
+                <Mark size={112} alt="" preload className="mx-auto w-[5.5rem] h-[5.5rem] md:w-[min(7rem,13vh)] md:h-[min(7rem,13vh)]" />
             </div>
 
             <h1 id="hero-title" className="mt-4 md:mt-[min(1.5rem,2.6vh)] flex flex-col items-center">

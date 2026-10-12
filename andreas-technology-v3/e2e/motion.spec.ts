@@ -27,7 +27,7 @@ test('switching projects never shows an empty stage', async ({ page }, testInfo)
     await open(page)
     await jumpToSlide(page, 5)
     await scrollSettled(page)
-    const row = page.locator('#projects li button').nth(3)
+    const row = page.locator('#projects li > button').nth(3)
     await waitForReveal(row)
     await row.click()
     // Within half a second the new shot is in place and its image has decoded.

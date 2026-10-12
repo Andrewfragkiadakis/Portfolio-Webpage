@@ -287,7 +287,7 @@ const en: Content = {
                 "Live preview with one-click copy to clipboard"
             ],
             liveSiteLink: "https://signature-craft-tau.vercel.app/",
-            image: "/images/signature-craft/signature-craft.png",
+            image: "/images/signature-craft/signature-craft.webp",
             imageFit: "cover"
         },
         {
@@ -306,8 +306,7 @@ const en: Content = {
             ],
             liveSiteLink: "https://andreas.technology",
             githubLink: "https://github.com/Andrewfragkiadakis/Portfolio-Webpage",
-            image: "/images/portfolio-website/2026.png",
-            edges: ["#070517", "#050316"],
+            image: "/images/portfolio-website/2026-keynote.webp",
         },
         {
             id: "radio-over-fiber-thesis",
@@ -325,7 +324,7 @@ const en: Content = {
             ],
             liveSiteLink: "/thesis-presentation",
             reportLink: "https://drive.usercontent.google.com/download?id=1iayG5SCoUykioRzLPl1BeOkO7iwxxHkD&export=download&authuser=0",
-            image: "/images/thesis-presentation/thesis-image.png",
+            image: "/images/thesis-presentation/thesis-image.webp",
             edges: ["#0e2841", "#1d364d"],
         },
         {
@@ -342,7 +341,7 @@ const en: Content = {
                 "Runs unattended on low-power hardware",
                 "Hands-on Linux service management and networking"
             ],
-            image: "/images/raspberry-pi-adblocker-streamer/raspberry-pi.png",
+            image: "/images/raspberry-pi-adblocker-streamer/raspberry-pi.webp",
             imageFit: "cover"
         },
         {
@@ -360,7 +359,7 @@ const en: Content = {
                 "Live and serving real client enquiries"
             ],
             liveSiteLink: "https://www.planoplus.gr/",
-            image: "/images/PlanoPlus/plano.png",
+            image: "/images/PlanoPlus/plano.webp",
             edges: ["#010308", "#020409"],
         },
         {
@@ -378,7 +377,7 @@ const en: Content = {
                 "Live and in active use by the school"
             ],
             liveSiteLink: "https://www.schiller.edu.gr/",
-            image: "/images/schiller-project/schiller.png",
+            image: "/images/schiller-project/schiller.webp",
             edges: ["#fafafa", "#797e81"],
         },
         {
@@ -397,7 +396,7 @@ const en: Content = {
             ],
             reportLink: "https://drive.google.com/uc?export=download&id=1w_3VG01O34Q9lNhrvKmhXno2OfptYJYi",
             publicationLink: "https://onlinelibrary.wiley.com/doi/10.1111/cogs.13309",
-            image: "/images/research-llms-human-knowledge/llm-research.png",
+            image: "/images/research-llms-human-knowledge/llm-research.webp",
             edges: ["#3a365d", "#dccdcd"],
         },
         {
@@ -415,7 +414,7 @@ const en: Content = {
                 "State managed with Zustand; animated with Framer Motion"
             ],
             liveSiteLink: "https://nexus-party-app.vercel.app/",
-            image: "/images/NexusPartyApp/nexuspartyapp.png",
+            image: "/images/NexusPartyApp/nexuspartyapp.webp",
             device: "phone",
             imageFit: "cover"
         },
@@ -434,7 +433,7 @@ const en: Content = {
                 "No permissions beyond what the extension actually needs"
             ],
             githubLink: "https://github.com/Andrewfragkiadakis/Silence-Hero",
-            image: "/images/silence-hero/silence-hero.png",
+            image: "/images/silence-hero/silence-hero.webp",
             edges: ["#fbfafa", "#fbfafb"],
         },
         {
@@ -452,7 +451,7 @@ const en: Content = {
                 "Focus on accessible, non-judgemental interaction design"
             ],
             githubLink: "https://github.com/Andrewfragkiadakis/Mental-Health-Project/tree/main",
-            image: "/images/happyfox/happyfox-app.png",
+            image: "/images/happyfox/happyfox-app.webp",
             device: "bare",
             imageFit: "cover"
         },
@@ -471,7 +470,7 @@ const en: Content = {
                 "Scoped against healthcare IT constraints"
             ],
             reportLink: "https://drive.google.com/uc?export=download&id=18gqsCB6UYA1wMTBFjkw2jBoYMqK_HsZT",
-            image: "/images/friendly-wheelchair-concept/friendly-wheelchair.png",
+            image: "/images/friendly-wheelchair-concept/friendly-wheelchair.webp",
             imageFit: "cover",
             imagePosition: "50% 62%"
         }

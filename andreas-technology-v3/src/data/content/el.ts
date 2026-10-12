@@ -287,7 +287,7 @@ const el: Content = {
                 "Ζωντανή προεπισκόπηση με αντιγραφή με ένα κλικ"
             ],
             liveSiteLink: "https://signature-craft-tau.vercel.app/",
-            image: "/images/signature-craft/signature-craft.png",
+            image: "/images/signature-craft/signature-craft.webp",
             imageFit: "cover"
         },
         {
@@ -306,8 +306,7 @@ const el: Content = {
             ],
             liveSiteLink: "https://andreas.technology",
             githubLink: "https://github.com/Andrewfragkiadakis/Portfolio-Webpage",
-            image: "/images/portfolio-website/2026.png",
-            edges: ["#070517", "#050316"],
+            image: "/images/portfolio-website/2026-keynote.webp",
         },
         {
             id: "radio-over-fiber-thesis",
@@ -325,7 +324,7 @@ const el: Content = {
             ],
             liveSiteLink: "/thesis-presentation",
             reportLink: "https://drive.usercontent.google.com/download?id=1iayG5SCoUykioRzLPl1BeOkO7iwxxHkD&export=download&authuser=0",
-            image: "/images/thesis-presentation/thesis-image.png",
+            image: "/images/thesis-presentation/thesis-image.webp",
             edges: ["#0e2841", "#1d364d"],
         },
         {
@@ -342,7 +341,7 @@ const el: Content = {
                 "Λειτουργεί αδιάλειπτα σε υλικό χαμηλής κατανάλωσης",
                 "Πρακτική εμπειρία σε διαχείριση υπηρεσιών Linux και δικτύων"
             ],
-            image: "/images/raspberry-pi-adblocker-streamer/raspberry-pi.png",
+            image: "/images/raspberry-pi-adblocker-streamer/raspberry-pi.webp",
             imageFit: "cover"
         },
         {
@@ -360,7 +359,7 @@ const el: Content = {
                 "Σε λειτουργία, εξυπηρετεί πραγματικά αιτήματα πελατών"
             ],
             liveSiteLink: "https://www.planoplus.gr/",
-            image: "/images/PlanoPlus/plano.png",
+            image: "/images/PlanoPlus/plano.webp",
             edges: ["#010308", "#020409"],
         },
         {
@@ -378,7 +377,7 @@ const el: Content = {
                 "Σε πλήρη λειτουργία από τη σχολή"
             ],
             liveSiteLink: "https://www.schiller.edu.gr/",
-            image: "/images/schiller-project/schiller.png",
+            image: "/images/schiller-project/schiller.webp",
             edges: ["#fafafa", "#797e81"],
         },
         {
@@ -397,7 +396,7 @@ const el: Content = {
             ],
             reportLink: "https://drive.google.com/uc?export=download&id=1w_3VG01O34Q9lNhrvKmhXno2OfptYJYi",
             publicationLink: "https://onlinelibrary.wiley.com/doi/10.1111/cogs.13309",
-            image: "/images/research-llms-human-knowledge/llm-research.png",
+            image: "/images/research-llms-human-knowledge/llm-research.webp",
             edges: ["#3a365d", "#dccdcd"],
         },
         {
@@ -415,7 +414,7 @@ const el: Content = {
                 "Διαχείριση κατάστασης με Zustand, animations με Framer Motion"
             ],
             liveSiteLink: "https://nexus-party-app.vercel.app/",
-            image: "/images/NexusPartyApp/nexuspartyapp.png",
+            image: "/images/NexusPartyApp/nexuspartyapp.webp",
             device: "phone",
             imageFit: "cover"
         },
@@ -434,7 +433,7 @@ const el: Content = {
                 "Χωρίς περιττά δικαιώματα πρόσβασης"
             ],
             githubLink: "https://github.com/Andrewfragkiadakis/Silence-Hero",
-            image: "/images/silence-hero/silence-hero.png",
+            image: "/images/silence-hero/silence-hero.webp",
             edges: ["#fbfafa", "#fbfafb"],
         },
         {
@@ -452,7 +451,7 @@ const el: Content = {
                 "Έμφαση σε προσβάσιμο και μη επικριτικό σχεδιασμό"
             ],
             githubLink: "https://github.com/Andrewfragkiadakis/Mental-Health-Project/tree/main",
-            image: "/images/happyfox/happyfox-app.png",
+            image: "/images/happyfox/happyfox-app.webp",
             device: "bare",
             imageFit: "cover"
         },
@@ -471,7 +470,7 @@ const el: Content = {
                 "Σχεδιασμός εντός περιορισμών healthcare IT"
             ],
             reportLink: "https://drive.google.com/uc?export=download&id=18gqsCB6UYA1wMTBFjkw2jBoYMqK_HsZT",
-            image: "/images/friendly-wheelchair-concept/friendly-wheelchair.png",
+            image: "/images/friendly-wheelchair-concept/friendly-wheelchair.webp",
             imageFit: "cover",
             imagePosition: "50% 62%"
         }
