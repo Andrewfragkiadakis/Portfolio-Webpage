@@ -746,17 +746,17 @@ export const content: Record<'en' | 'gr', Content> = {
                 imageFit: "cover"
             },
             {
-                name: "Research: LLMs & Human Knowledge",
+                name: "LLMs & Human Knowledge - Research review",
                 year: 2024,
-                tags: ["Research", "Cognitive Science", "LLMs", "GPT-3", "Python"],
-                description: "Compared GPT-3 and human performance on the False Belief Task to assess belief attribution in LLMs. Published in Cognitive Science.",
-                role: "Research contributor · Published in Cognitive Science",
-                detail: "A comparison of GPT-3 and human performance on the False Belief Task, a standard instrument in developmental psychology for assessing theory of mind. The question: does a language model that produces fluent text about beliefs actually attribute beliefs, or does it pattern-match its way to the right answer? Published in the journal Cognitive Science.",
+                tags: ["Research", "Cognitive Science", "LLMs", "GPT-3"],
+                description: "A research review of whether GPT-3 attributes beliefs the way people do, based on Trott et al.’s False Belief Task study in Cognitive Science (2023).",
+                role: "Research review · Source study: Trott et al., Cognitive Science 47(7), 2023",
+                detail: "A review of how GPT-3 and people compare on the False Belief Task, a standard test of theory of mind from developmental psychology. The question: does a language model that writes fluently about beliefs actually attribute them, or does it pattern-match its way to the right answer? Based on “Do Large Language Models Know What Humans Know?” by Trott, Jones, Chang, Michaelov and Bergen (Cognitive Science, 2023).",
                 highlights: [
-                    "Benchmarked GPT-3 against human baselines on the False Belief Task",
-                    "Applied developmental-psychology methodology to model evaluation",
-                    "Peer-reviewed and published in Cognitive Science (Wiley)",
-                    "Analysis pipeline implemented in Python"
+                    "GPT-3 versus human baselines on the False Belief Task",
+                    "Developmental-psychology methods applied to model evaluation",
+                    "What the results imply about learning theory of mind from language",
+                    "Source: peer-reviewed study in Cognitive Science (Wiley, 2023)"
                 ],
                 reportLink: "https://drive.google.com/uc?export=download&id=1w_3VG01O34Q9lNhrvKmhXno2OfptYJYi",
                 publicationLink: "https://onlinelibrary.wiley.com/doi/10.1111/cogs.13309",
@@ -1378,17 +1378,17 @@ export const content: Record<'en' | 'gr', Content> = {
                 imageFit: "cover"
             },
             {
-                name: "Έρευνα: LLMs & Ανθρώπινη Γνώση",
+                name: "LLMs & Ανθρώπινη Γνώση - Ερευνητική ανασκόπηση",
                 year: 2024,
-                tags: ["Research", "Cognitive Science", "LLMs", "GPT-3", "Python"],
-                description: "Συγκριτική μελέτη απόδοσης GPT-3 και ανθρώπων στο 'False Belief Task'. Η έρευνα δημοσιεύθηκε στο περιοδικό Cognitive Science.",
-                role: "Συμμετοχή στην έρευνα · Δημοσίευση στο Cognitive Science",
-                detail: "Συγκριτική μελέτη απόδοσης GPT-3 και ανθρώπων στο False Belief Task, καθιερωμένο εργαλείο της αναπτυξιακής ψυχολογίας για την αξιολόγηση της θεωρίας του νου. Το ερώτημα: ένα γλωσσικό μοντέλο που παράγει ρέοντα κείμενα για πεποιθήσεις όντως αποδίδει πεποιθήσεις, ή απλώς αναγνωρίζει μοτίβα;",
+                tags: ["Έρευνα", "Cognitive Science", "LLMs", "GPT-3"],
+                description: "Ερευνητική ανασκόπηση: αποδίδει το GPT-3 πεποιθήσεις όπως οι άνθρωποι; Βασίζεται στη μελέτη των Trott et al. με το False Belief Task στο Cognitive Science (2023).",
+                role: "Ερευνητική ανασκόπηση · Πηγή: Trott et al., Cognitive Science 47(7), 2023",
+                detail: "Ανασκόπηση της σύγκρισης GPT-3 και ανθρώπων στο False Belief Task, καθιερωμένο τεστ της αναπτυξιακής ψυχολογίας για τη θεωρία του νου. Το ερώτημα: ένα γλωσσικό μοντέλο που γράφει με ευχέρεια για πεποιθήσεις όντως τις αποδίδει ή απλώς αναγνωρίζει μοτίβα; Βασίζεται στη μελέτη «Do Large Language Models Know What Humans Know?» των Trott, Jones, Chang, Michaelov και Bergen (Cognitive Science, 2023).",
                 highlights: [
-                    "Σύγκριση GPT-3 με ανθρώπινες επιδόσεις στο False Belief Task",
-                    "Εφαρμογή μεθοδολογίας αναπτυξιακής ψυχολογίας σε αξιολόγηση μοντέλων",
-                    "Δημοσίευση με κριτές στο Cognitive Science (Wiley)",
-                    "Ανάλυση δεδομένων σε Python"
+                    "GPT-3 έναντι ανθρώπινων επιδόσεων στο False Belief Task",
+                    "Μεθοδολογία αναπτυξιακής ψυχολογίας στην αξιολόγηση μοντέλων",
+                    "Τι δείχνουν τα αποτελέσματα για τη θεωρία του νου μέσα από τη γλώσσα",
+                    "Πηγή: μελέτη με κριτές στο Cognitive Science (Wiley, 2023)"
                 ],
                 reportLink: "https://drive.google.com/uc?export=download&id=1w_3VG01O34Q9lNhrvKmhXno2OfptYJYi",
                 publicationLink: "https://onlinelibrary.wiley.com/doi/10.1111/cogs.13309",
