@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useContent } from '@/hooks/useContent'
-import { scrollToSection } from '@/utils/smooth-scroll'
+import { focusSection, scrollToSection } from '@/utils/track'
 import { sectionIndex } from '@/data/sections'
 import type { Service } from '@/data/content'
 import { TOOL_BY_LABEL, type Tool } from '@/data/tools'
@@ -45,7 +45,7 @@ export default function Services() {
                             <p className="t-body text-[var(--muted)]">{k.services.ctaLead}</p>
                             <button
                                 type="button"
-                                onClick={() => scrollToSection(sectionIndex('contact'), 'contact')}
+                                onClick={() => { void scrollToSection(sectionIndex('contact')).then(() => focusSection('contact')) }}
                                 className="kn-link t-body"
                             >
                                 {k.services.ctaLink}

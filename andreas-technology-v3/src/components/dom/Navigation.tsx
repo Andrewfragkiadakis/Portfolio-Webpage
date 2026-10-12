@@ -8,8 +8,9 @@ import { useContent } from '@/hooks/useContent'
 import { useSectionLabels } from '@/hooks/useSectionLabels'
 import { centreOf } from '@/utils/dom'
 import { EASE_APPLE } from '@/utils/motion'
-import { scrollToSection } from '@/utils/smooth-scroll'
-import { SECTION_IDS, SECTION_STEPS, type SectionId } from '@/data/sections'
+import { focusSection, scrollToSection } from '@/utils/track'
+import { SECTION_IDS, type SectionId } from '@/data/sections'
+import { useActiveSlide } from '@/hooks/useActiveSlide'
 import ThemeToggle from '@/components/ui/ThemeToggle'
 import { Mark } from '@/components/ui/Mark'
 import { DESKTOP_MEDIA_QUERY } from '@/hooks/useIsDesktop'
@@ -25,45 +26,33 @@ export default function Navigation() {
     const k = useContent().keynote
     const labels = useSectionLabels()
     const [menuOpen, setMenuOpen] = useState(false)
-    const [activeIndex, setActiveIndex] = useState(0)
-    const firstLinkRef = useRef<HTMLButtonElement>(null)
+    const activeIndex = useActiveSlide()
+    const firstLinkRef = useRef<HTMLAnchorElement>(null)
     const menuButtonRef = useRef<HTMLButtonElement>(null)
+    // Whether the visitor has moved yet: until then the address bar keeps whatever hash
+    // they arrived with. After a nav jump, focus goes to the section, not back to the menu.
+    const moved = useRef(false)
+    const restoreFocus = useRef(true)
 
-    // Active slide: the track position on desktop, the section in mid-screen on phones.
     useEffect(() => {
-        let ticking = false
-
-        const update = () => {
-            ticking = false
-            if (window.matchMedia('(min-width: 64rem)').matches) {
-                const maxScroll = document.documentElement.scrollHeight - window.innerHeight
-                const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0
-                setActiveIndex(Math.round(progress * SECTION_STEPS))
-                return
-            }
-            const mid = window.scrollY + window.innerHeight / 2
-            let found = 0
-            SECTION_IDS.forEach((id, i) => {
-                const el = document.getElementById(id)
-                if (el && el.getBoundingClientRect().top + window.scrollY <= mid) found = i
-            })
-            setActiveIndex(found)
-        }
-
-        const onScroll = () => {
-            if (ticking) return
-            ticking = true
-            requestAnimationFrame(update)
-        }
-
-        window.addEventListener('scroll', onScroll, { passive: true })
-        window.addEventListener('resize', onScroll)
-        update()
+        const mark = () => { moved.current = true }
+        const options = { passive: true, once: true } as const
+        window.addEventListener('wheel', mark, options)
+        window.addEventListener('touchstart', mark, options)
+        window.addEventListener('keydown', mark, { once: true })
         return () => {
-            window.removeEventListener('scroll', onScroll)
-            window.removeEventListener('resize', onScroll)
+            window.removeEventListener('wheel', mark)
+            window.removeEventListener('touchstart', mark)
+            window.removeEventListener('keydown', mark)
         }
     }, [])
+
+    // Keep the address bar on the slide in view, so a link or a reload lands there.
+    useEffect(() => {
+        if (!moved.current) return
+        const url = activeIndex === 0 ? location.pathname + location.search : `#${SECTION_IDS[activeIndex]}`
+        window.history.replaceState(null, '', url)
+    }, [activeIndex])
 
     // Menu: a modal sheet. Escape closes it, focus moves in on open and back to the button
     // on close, the page behind is inert and does not scroll, and growing the window to
@@ -92,13 +81,16 @@ export default function Navigation() {
             desktop.removeEventListener('change', onDesktop)
             main?.removeAttribute('inert')
             root.style.overflow = previousOverflow
-            button?.focus({ preventScroll: true })
+            if (restoreFocus.current) button?.focus({ preventScroll: true })
+            restoreFocus.current = true
         }
     }, [menuOpen])
 
     const go = (id: SectionId, index: number) => {
+        moved.current = true
+        restoreFocus.current = false
         setMenuOpen(false)
-        scrollToSection(index, id)
+        void scrollToSection(index).then(() => focusSection(id))
     }
 
     const toggleLanguage = () => setLanguage(language === 'en' ? 'gr' : 'en')
@@ -130,14 +122,14 @@ export default function Navigation() {
                             <ul className="hidden md:flex items-center gap-[1.5rem] mr-5">
                                 {SECTION_IDS.map((id, i) => (
                                     <li key={id}>
-                                        <button
-                                            type="button"
-                                            onClick={() => go(id, i)}
+                                        <a
+                                            href={`#${id}`}
+                                            onClick={(e) => { e.preventDefault(); go(id, i) }}
                                             aria-current={activeIndex === i ? 'true' : undefined}
                                             className={`t-caption whitespace-nowrap transition-colors duration-300 ${activeIndex === i ? 'text-[var(--foreground)]' : 'text-[var(--foreground)]/65 hover:text-[var(--foreground)]'}`}
                                         >
                                             {labels[id]}
-                                        </button>
+                                        </a>
                                     </li>
                                 ))}
                             </ul>
@@ -197,15 +189,15 @@ export default function Navigation() {
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.4, ease: EASE_APPLE, delay: 0.03 * i }}
                                     >
-                                        <button
+                                        <a
                                             ref={i === 0 ? firstLinkRef : undefined}
-                                            type="button"
-                                            onClick={() => go(id, i)}
+                                            href={`#${id}`}
+                                            onClick={(e) => { e.preventDefault(); go(id, i) }}
                                             aria-current={activeIndex === i ? 'true' : undefined}
-                                            className="w-full text-left py-1.5 font-[family-name:var(--font-display)] text-[1.75rem] font-semibold leading-[1.14] tracking-[0.007em]"
+                                            className="block w-full text-left py-1.5 font-[family-name:var(--font-display)] text-[1.75rem] font-semibold leading-[1.14] tracking-[0.007em]"
                                         >
                                             {labels[id]}
-                                        </button>
+                                        </a>
                                     </motion.li>
                                 ))}
                             </ul>

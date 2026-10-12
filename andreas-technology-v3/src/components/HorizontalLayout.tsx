@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useRef, useCallback } from 'react'
-import { motion, useScroll, useTransform, useVelocity, useMotionValue, animate, useReducedMotion } from 'motion/react'
+import { useEffect, useRef } from 'react'
+import { motion, useScroll, useTransform, useMotionValue, useReducedMotion } from 'motion/react'
 import HeroOverlay from '@/components/dom/HeroOverlay'
 import About from '@/components/dom/About'
 import Services from '@/components/dom/Services'
@@ -11,7 +11,10 @@ import Projects from '@/components/dom/Projects'
 import Contact from '@/components/dom/Contact'
 import DotNav from '@/components/dom/DotNav'
 import { useIsDesktop } from '@/hooks/useIsDesktop'
-import { SECTION_STEPS, TRACK_HEIGHT_VH, TRACK_TRAVEL_VW } from '@/data/sections'
+import { useActiveSlide } from '@/hooks/useActiveSlide'
+import { useDeckGestures } from '@/hooks/useDeckGestures'
+import { currentSectionIndex, scrollToSection } from '@/utils/track'
+import { SECTION_IDS, TRACK_HEIGHT_VH, TRACK_TRAVEL_VW } from '@/data/sections'
 import { SlideIndexContext, TrackContext } from '@/components/ui/keynote'
 
 // Sections are declared once. The wrapper's CSS — not a second copy of the tree —
@@ -27,17 +30,14 @@ const SECTIONS = [
     <Contact key="contact" />,
 ]
 
-/** Stop settling the scroll once it is this close to a section boundary (in progress units). */
-const SNAP_DEADZONE = 0.004
-/** Treat the scroll as "still moving" above this velocity, so we never fight the user. */
-const SNAP_VELOCITY_CEILING = 0.08
-/** Quiet period after the last scroll event before we settle. */
-const SNAP_IDLE_MS = 140
-
 export default function HorizontalLayout() {
     const targetRef = useRef<HTMLDivElement>(null)
+    const viewportRef = useRef<HTMLDivElement>(null)
     const isDesktop = useIsDesktop()
     const prefersReducedMotion = useReducedMotion()
+    const activeSlide = useActiveSlide()
+
+    useDeckGestures()
 
     const { scrollYProgress } = useScroll({ target: targetRef })
 
@@ -45,8 +45,8 @@ export default function HorizontalLayout() {
     // plain booleans on purpose: swapping `style` between a motion value and a literal
     // leaves the last transform stuck on the element, so a desktop→mobile resize would
     // strand the vertical stack off-screen. Keeping one stable binding whose output
-    // collapses to zero avoids that entirely. `motionGate` switches off the parallax
-    // layers and product-shot scaling (see components/ui/keynote.tsx).
+    // collapses to zero avoids that entirely. `motionGate` switches off the product-shot
+    // scaling (see components/ui/keynote.tsx).
     const trackGate = useMotionValue(0)
     const motionGate = useMotionValue(0)
 
@@ -60,84 +60,64 @@ export default function HorizontalLayout() {
         ([progress, gate]: number[]) => `${-progress * gate * TRACK_TRAVEL_VW}vw`
     )
 
-    const velocity = useVelocity(scrollYProgress)
-    // A ref, not state: the snap guard is read inside listeners and must never
-    // re-render the whole track mid-animation.
-    const isSnappingRef = useRef(false)
-
-    const setSnapping = useCallback((value: boolean) => {
-        isSnappingRef.current = value
-    }, [])
-
-    // Settle to the nearest section once the user stops scrolling.
+    // Focus moved into a slide that is off screen (Tab, find-in-page, a screen reader):
+    // bring the page to that slide. The viewport and slides clip rather than hide their
+    // overflow, so the browser can no longer scroll them sideways behind our back; the
+    // scroll listener is a safety net for engines without `overflow: clip`.
     useEffect(() => {
-        if (!isDesktop || prefersReducedMotion) return
-
-        let idleTimer: ReturnType<typeof setTimeout>
-
-        const handleScroll = () => {
-            if (isSnappingRef.current) return
-
-            clearTimeout(idleTimer)
-            idleTimer = setTimeout(() => {
-                if (isSnappingRef.current) return
-                if (Math.abs(velocity.get()) > SNAP_VELOCITY_CEILING) return
-
-                const progress = scrollYProgress.get()
-                const nearest = Math.round(progress * SECTION_STEPS) / SECTION_STEPS
-                if (Math.abs(progress - nearest) <= SNAP_DEADZONE) return
-
-                setSnapping(true)
-                const maxScroll = document.documentElement.scrollHeight - window.innerHeight
-
-                animate(window.scrollY, nearest * maxScroll, {
-                    duration: 0.7,
-                    ease: [0.22, 1, 0.36, 1],
-                    onUpdate: (latest) => window.scrollTo({ top: latest }),
-                }).then(() => {
-                    setTimeout(() => setSnapping(false), 120)
-                })
-            }, SNAP_IDLE_MS)
+        const viewport = viewportRef.current
+        if (!isDesktop || !viewport) return
+        const onFocusIn = (e: FocusEvent) => {
+            const slide = (e.target as Element).closest<HTMLElement>('[data-slide]')
+            if (!slide) return
+            viewport.scrollLeft = 0
+            const index = Number(slide.dataset.slide)
+            if (index !== currentSectionIndex()) void scrollToSection(index, { instant: true })
         }
-
-        window.addEventListener('scroll', handleScroll, { passive: true })
+        const onScroll = () => {
+            if (viewport.scrollLeft !== 0) viewport.scrollLeft = 0
+        }
+        viewport.addEventListener('focusin', onFocusIn)
+        viewport.addEventListener('scroll', onScroll, { passive: true })
         return () => {
-            window.removeEventListener('scroll', handleScroll)
-            clearTimeout(idleTimer)
+            viewport.removeEventListener('focusin', onFocusIn)
+            viewport.removeEventListener('scroll', onScroll)
         }
-    }, [isDesktop, prefersReducedMotion, scrollYProgress, velocity, setSnapping])
+    }, [isDesktop])
 
-    // Keep the active section aligned when the viewport resizes.
+    // Crossing between the stack and the track (window resize, rotation) keeps the
+    // visitor on the section they were reading instead of a raw pixel offset.
+    const lastSlide = useRef(0)
+    const lastLayout = useRef<boolean | null>(null)
     useEffect(() => {
-        if (!isDesktop) return
-
-        let resizeTimer: ReturnType<typeof setTimeout>
-
-        const handleResize = () => {
-            clearTimeout(resizeTimer)
-            resizeTimer = setTimeout(() => {
-                const progress = scrollYProgress.get()
-                const nearest = Math.round(progress * SECTION_STEPS) / SECTION_STEPS
-                const maxScroll = document.documentElement.scrollHeight - window.innerHeight
-                window.scrollTo({ top: nearest * maxScroll })
-            }, 150)
-        }
-
-        window.addEventListener('resize', handleResize)
-        return () => {
-            window.removeEventListener('resize', handleResize)
-            clearTimeout(resizeTimer)
-        }
-    }, [isDesktop, scrollYProgress])
+        lastSlide.current = activeSlide
+    }, [activeSlide])
+    useEffect(() => {
+        if (isDesktop === null) return
+        const previous = lastLayout.current
+        lastLayout.current = isDesktop
+        if (previous === null || previous === isDesktop) return
+        const index = lastSlide.current
+        requestAnimationFrame(() => { void scrollToSection(index, { instant: true }) })
+    }, [isDesktop])
 
     return (
         <TrackContext.Provider value={{ progress: scrollYProgress, gate: motionGate }}>
             <div
                 ref={targetRef}
+                data-runway
                 className="relative bg-[var(--background)] md:h-[var(--track-height)]"
                 style={{ '--track-height': `${TRACK_HEIGHT_VH}vh` } as React.CSSProperties}
             >
-                <div className="md:sticky md:top-0 md:left-0 md:flex md:h-screen md:w-full md:items-center md:overflow-hidden">
+                {/* One snap point per slide: CSS scroll snap rests the page on these. */}
+                {SECTION_IDS.map((id, i) => (
+                    <span key={id} data-snap={i} aria-hidden="true" className="kn-snap" style={{ top: `${i * 100}vh` }} />
+                ))}
+
+                <div
+                    ref={viewportRef}
+                    className="md:sticky md:top-0 md:left-0 md:flex md:h-screen md:w-full md:items-center md:overflow-clip"
+                >
                     <motion.div
                         style={{ x }}
                         className="flex flex-col md:flex-row md:h-screen md:items-center md:will-change-transform"
@@ -145,16 +125,16 @@ export default function HorizontalLayout() {
                         {/*
                           Each panel is a keynote slide. Slides alternate between the theme's two
                           neutral tones, like apple.com's white and #F5F5F7 sections (see
-                          [data-tone] in globals.css).
-                          Panels use overflow-x-clip rather than overflow-hidden: it contains the
-                          sideways entry animations without creating a scroll container, which
-                          would break the sticky positioning the desktop track relies on.
+                          [data-tone] in globals.css). Panels clip their overflow: `clip` contains
+                          the content without creating a scroll container, which would break the
+                          sticky track and let focus scroll a slide sideways.
                         */}
                         {SECTIONS.map((section, index) => (
                             <div
                                 key={index}
+                                data-slide={index}
                                 data-tone={index % 2 === 0 ? 'primary' : 'alt'}
-                                className="slide relative w-full overflow-x-clip md:h-screen md:w-screen md:flex-shrink-0 md:flex md:items-center md:justify-center md:overflow-hidden md:pt-[var(--nav-h)] md:pb-[3.75rem]"
+                                className="slide relative w-full overflow-x-clip md:h-screen md:w-screen md:flex-shrink-0 md:flex md:items-center md:justify-center md:overflow-clip md:pt-[var(--nav-h)] md:pb-[3.75rem]"
                             >
                                 <SlideIndexContext.Provider value={index}>{section}</SlideIndexContext.Provider>
                             </div>
@@ -162,7 +142,7 @@ export default function HorizontalLayout() {
                     </motion.div>
                 </div>
 
-                <DotNav progress={scrollYProgress} />
+                <DotNav />
             </div>
         </TrackContext.Provider>
     )

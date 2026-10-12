@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react'
 
 /**
- * The point where the layout switches to the horizontal journey.
+ * When the page runs as the horizontal journey: a large enough window with a mouse or
+ * trackpad. Tablets and touch screens stay on the vertical layout — scroll-jacking a touch
+ * device through a horizontal track is worse than scrolling down — and so do short windows,
+ * where a slide would not fit.
  *
- * Must stay in sync with `--breakpoint-md: 64rem` in globals.css so every `md:` utility
- * flips at exactly this width. It is a media query string rather than a pixel number:
- * rem in media queries follows the browser's font-size setting, so JS and CSS agree even
- * when a reader has enlarged their default text. Tablets stay on the vertical layout:
- * scroll-jacking a touch device through a horizontal track is worse than scrolling down.
+ * Must stay in sync with the `md` custom variant in globals.css. It is a media query
+ * string rather than a pixel number: rem in media queries follows the browser's font-size
+ * setting, so JS and CSS agree even when a reader has enlarged their default text.
  */
-export const DESKTOP_MEDIA_QUERY = '(min-width: 64rem)'
+export const DESKTOP_MEDIA_QUERY = '(min-width: 64rem) and (min-height: 40rem) and (hover: hover) and (pointer: fine)'
 
 /** Non-reactive check for event handlers; use `useIsDesktop` in components. */
 export function isDesktopViewport(): boolean {

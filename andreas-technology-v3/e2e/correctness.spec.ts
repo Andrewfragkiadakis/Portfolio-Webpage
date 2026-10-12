@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { collectErrors, isPhone, open } from './helpers'
+import { collectErrors, isPhone, jumpToSlide, open, scrollSettled } from './helpers'
 
 test('works when site storage is blocked', async ({ page }) => {
     const errors = collectErrors(page)
@@ -67,7 +67,11 @@ test('dialogs keep focus, padding and never block the page after closing', async
     await open(page)
     await page.waitForLoadState('networkidle')
     const trigger = page.locator('#about').getByRole('button').filter({ hasText: /story|ιστορία/i }).first()
-    await trigger.scrollIntoViewIfNeeded()
+    if (isPhone(testInfo)) await trigger.scrollIntoViewIfNeeded()
+    else {
+        await jumpToSlide(page, 1)
+        await scrollSettled(page)
+    }
     await trigger.click()
     const dialog = page.getByRole('dialog')
     await expect(dialog).toBeVisible()

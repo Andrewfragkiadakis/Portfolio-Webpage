@@ -1,6 +1,15 @@
 @import "tailwindcss";
 
 /*
+ * Desktop = a large enough window AND a mouse or trackpad. Only there does the page run as
+ * a horizontal track of slides; tablets, touch laptops in tablet mode and short windows get
+ * the vertical stack. `md:` means desktop everywhere in this codebase, and `stack:` is its
+ * exact complement. Must stay in sync with DESKTOP_MEDIA_QUERY in src/hooks/useIsDesktop.ts.
+ */
+@custom-variant md (@media (min-width: 64rem) and (min-height: 40rem) and (hover: hover) and (pointer: fine));
+@custom-variant stack (@media not all and (min-width: 64rem) and (min-height: 40rem) and (hover: hover) and (pointer: fine));
+
+/*
  * APPLE KEYNOTE — round 4
  * The portfolio as a product-launch page, in apple.com's restrained product-page language:
  * neutral surfaces, one interactive blue, San Francisco (or Inter) at Apple's scale and
@@ -105,10 +114,7 @@ html.dark [data-tone="alt"] {
   --font-mono: var(--font-mono);
 }
 
-/*
- * The layout switches from the vertical stack to the horizontal journey at `md`.
- * Must stay in sync with DESKTOP_MEDIA_QUERY in src/hooks/useIsDesktop.ts.
- */
+/* Width part of the desktop query; the full query is the `md` variant above. */
 @theme {
   --breakpoint-md: 64rem;
 }
@@ -201,6 +207,45 @@ a[href],
   scrollbar-width: none;
 }
 
+/*
+ * Desktop: CSS scroll snap rests the page on a slide after every wheel notch, trackpad
+ * fling or key press (the snap markers live in HorizontalLayout). Native scrolling keeps
+ * momentum and lets any new input interrupt a jump. No sideways overscroll, so a
+ * two-finger swipe moves the deck instead of triggering the browser's Back gesture.
+ */
+html {
+  @variant md {
+    scroll-snap-type: y mandatory;
+    overscroll-behavior-x: none;
+  }
+}
+
+.kn-snap {
+  display: none;
+
+  @variant md {
+    display: block;
+    position: absolute;
+    left: 0;
+    width: 1px;
+    height: 100vh;
+    scroll-snap-align: start;
+    pointer-events: none;
+  }
+}
+
+/* Stack: jumps to a section clear the fixed nav. */
+section[id] {
+  @variant stack {
+    scroll-margin-top: var(--nav-h);
+  }
+}
+
+/* Headings that receive focus after navigation, for screen readers, need no ring. */
+[tabindex="-1"]:focus {
+  outline: none;
+}
+
 @layer components {
   /* A slide: paints its tone edge to edge. */
   .slide {
@@ -220,8 +265,8 @@ a[href],
     color: var(--muted);
   }
 
-  @media (min-width: 64rem) {
-    .t-eyebrow {
+  .t-eyebrow {
+    @variant md {
       font-size: 1.3125rem;
       line-height: 1.19;
       letter-spacing: 0.011em;
@@ -308,8 +353,8 @@ a[href],
   }
 
   /* Phones: Greek section headlines a step smaller, so "Συμβαίνει δύο φορές;" stays on one line. */
-  @media (max-width: 63.99rem) {
-    html[lang="el"] .t-headline {
+  html[lang="el"] .t-headline {
+    @variant stack {
       font-size: clamp(1.75rem, 8vw, 2.25rem) !important;
     }
   }
@@ -465,8 +510,8 @@ a[href],
     border-radius: 1.125rem;
   }
 
-  @media (min-width: 64rem) {
-    .tile--lg {
+  .tile--lg {
+    @variant md {
       border-radius: 1.75rem;
     }
   }
@@ -659,8 +704,8 @@ a[href],
    * Phones: apple.com's horizontal tile gallery. Tiles snap to the gutter and the next
    * one peeks in, so six tiles take one screen instead of four.
    */
-  @media (max-width: 63.99rem) {
-    .kn-gallery {
+  .kn-gallery {
+    @variant stack {
       display: flex;
       gap: 0.75rem;
       margin-inline: -1.5rem;
@@ -670,19 +715,19 @@ a[href],
       scroll-snap-type: x mandatory;
       scroll-padding-inline: 1.5rem;
       scrollbar-width: none;
-    }
 
-    .kn-gallery > * {
-      flex: 0 0 min(80%, 20rem);
-      scroll-snap-align: start;
+      @media (min-width: 40rem) {
+        margin-inline: -2.5rem;
+        padding-inline: 2.5rem;
+        scroll-padding-inline: 2.5rem;
+      }
     }
   }
 
-  @media (min-width: 40rem) and (max-width: 63.99rem) {
-    .kn-gallery {
-      margin-inline: -2.5rem;
-      padding-inline: 2.5rem;
-      scroll-padding-inline: 2.5rem;
+  .kn-gallery > * {
+    @variant stack {
+      flex: 0 0 min(80%, 20rem);
+      scroll-snap-align: start;
     }
   }
 }

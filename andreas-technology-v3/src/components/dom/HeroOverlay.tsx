@@ -3,7 +3,7 @@
 import { motion } from 'motion/react'
 import { useContent } from '@/hooks/useContent'
 import { useLanguage } from '@/contexts/LanguageContext'
-import { scrollToSection } from '@/utils/smooth-scroll'
+import { focusSection, scrollToSection } from '@/utils/track'
 import { useSiteEntered } from '@/hooks/useSiteEntered'
 import { EASE_APPLE } from '@/utils/motion'
 import { HeadlineText, Rich, Rise } from '@/components/ui/keynote'
@@ -23,7 +23,9 @@ export default function HeroOverlay() {
     const { language } = useLanguage()
     const phoneSize = language === 'gr' ? 'text-[clamp(2rem,8.6vw,4.5rem)]' : 'text-[clamp(2.75rem,12.4vw,4.5rem)]'
 
-    const go = (id: SectionId) => scrollToSection(sectionIndex(id), id)
+    const go = (id: SectionId) => {
+        void scrollToSection(sectionIndex(id)).then(() => focusSection(id))
+    }
 
     return (
         <section
