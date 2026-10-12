@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useContent } from '@/hooks/useContent'
-import type { Skill } from '@/data/content'
+import type { Skill } from '@/data/content/types'
 import Modal from '@/components/ui/Modal'
 import { Glyph } from '@/components/ui/Glyph'
 import { ArrowOut, Chevron, CountUp, HEADLINE_SIZE, Headline, Rich, Rise, SLIDE_CLASS, type Step } from '@/components/ui/keynote'
@@ -20,14 +20,7 @@ export default function About() {
 
     const credentials = t.education.filter((e) => e.badge && e.kind && e.kind !== 'degree')
 
-    const stats = [
-        { value: 550, suffix: '+', unit: '' },
-        { value: 70, suffix: '%', unit: '' },
-        { value: 6, suffix: '+', unit: k.about.yearsUnit },
-        { value: 95, suffix: '%+', unit: '' },
-    ]
-
-    const [lead, ...rest] = stats
+    const [lead, ...rest] = k.about.stats
 
     return (
         <section id="about" aria-labelledby="about-title" className={SLIDE_CLASS}>
@@ -51,7 +44,7 @@ export default function About() {
                         <h3 className="t-small font-semibold text-[var(--foreground)] pb-3 border-b border-[var(--line)]">{k.about.focus}</h3>
                         <ul className="grid sm:grid-cols-2 gap-x-8">
                             {t.skills.map((skill) => (
-                                <li key={skill.label} className="border-b border-[var(--line)]">
+                                <li key={skill.id} className="border-b border-[var(--line)]">
                                     <button
                                         type="button"
                                         onClick={() => setActiveSkill(skill)}
@@ -71,25 +64,26 @@ export default function About() {
 
                 {/* By the numbers: one big figure, three supporting ones, then the credentials behind them. */}
                 <div className="md:col-span-6 md:pt-[min(2.4rem,4.2vh)]">
+                    {/* Each figure is a dt/dd pair directly inside its <dl> (the Rise wrappers are
+                        divs, which a <dl> allows); flex-col-reverse puts the number on top. */}
                     <dl>
                         <Rise step={2} className="flex flex-col-reverse">
-                            {/* dt precedes dd in the DOM (valid <dl>); flex-col-reverse puts the number on top. */}
-                            <dt className="mt-2 md:mt-3 t-lede text-[1.0625rem] md:text-[min(1.3125rem,2.4vh)]">{k.about.stats[0]}</dt>
+                            <dt className="mt-2 md:mt-3 t-lede text-[1.0625rem] md:text-[min(1.3125rem,2.4vh)]">{lead.label}</dt>
                             <dd className="t-stat text-[5.5rem] md:text-[min(10vw,17vh)] -ml-[0.04em]">
                                 <CountUp value={lead.value} suffix={lead.suffix} />
                             </dd>
                         </Rise>
-                        <div className="mt-8 md:mt-[min(2.75rem,4.8vh)] pt-6 md:pt-[min(1.75rem,3vh)] border-t border-[var(--line)] grid grid-cols-3 gap-x-5 sm:gap-x-8">
+                    </dl>
+                    <dl className="mt-8 md:mt-[min(2.75rem,4.8vh)] pt-6 md:pt-[min(1.75rem,3vh)] border-t border-[var(--line)] grid grid-cols-3 gap-x-5 sm:gap-x-8">
                             {rest.map((stat, i) => (
-                                <Rise key={i} step={(3 + i) as Step} className="flex flex-col-reverse justify-end">
-                                    <dt className="mt-2 t-small md:text-[min(0.9375rem,1.7vh)] text-[var(--muted)]">{k.about.stats[i + 1]}</dt>
+                                <Rise key={stat.label} step={(3 + i) as Step} className="flex flex-col-reverse justify-end">
+                                    <dt className="mt-2 t-small md:text-[min(0.9375rem,1.7vh)] text-[var(--muted)]">{stat.label}</dt>
                                     <dd className="t-stat text-[2.25rem] md:text-[min(3.9vw,6.6vh)]">
                                         <CountUp value={stat.value} suffix={stat.suffix} />
                                         {stat.unit && <span className="ml-1 text-[0.42em] tracking-[0.004em]">{stat.unit}</span>}
                                     </dd>
                                 </Rise>
                             ))}
-                        </div>
                     </dl>
 
                     <Rise step={5} className="mt-9 md:mt-[min(2.75rem,4.8vh)]">
@@ -104,7 +98,7 @@ export default function About() {
                                 )
                                 const cls = 'inline-flex items-center gap-1 h-8 px-3.5 rounded-full bg-[var(--surface)] t-small text-[var(--foreground)] transition-colors duration-300'
                                 return (
-                                    <li key={item.badge}>
+                                    <li key={item.id}>
                                         {item.link ? (
                                             <a href={item.link} target="_blank" rel="noopener noreferrer" className={`${cls} hover:bg-[var(--surface-2)]`} aria-label={`${item.degree} — ${item.institution} (${k.common.newTab})`}>
                                                 {body}

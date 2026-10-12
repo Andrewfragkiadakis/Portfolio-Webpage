@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useContent } from '@/hooks/useContent'
 import { focusSection, scrollToSection } from '@/utils/track'
 import { sectionIndex } from '@/data/sections'
-import type { Service } from '@/data/content'
+import type { Service } from '@/data/content/types'
 import { TOOL_BY_LABEL, type Tool } from '@/data/tools'
 import Modal from '@/components/ui/Modal'
 import { ToolTile } from '@/components/ui/ToolBadge'
@@ -59,7 +59,7 @@ export default function Services() {
                 <Rise step={2} className={HEADER_GAP}>
                     <ul className="kn-gallery md:grid md:grid-cols-3 md:gap-5">
                         {t.services.map((service) => (
-                            <li key={service.title} className="h-auto">
+                            <li key={service.id} className="h-auto">
                                 <button
                                     type="button"
                                     onClick={() => setActive(service)}

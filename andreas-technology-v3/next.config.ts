@@ -13,12 +13,21 @@ const nextConfig: NextConfig = {
     root: path.join(__dirname),
   },
   images: {
-    remotePatterns: [
-      { protocol: 'https', hostname: 'andreas.technology', pathname: '/**' },
-    ],
+    formats: ['image/avif', 'image/webp'],
   },
   async headers() {
     return [
+      {
+        // Baseline hardening. No enforcing CSP: the inline head script, JSON-LD and Next's
+        // bootstrap would need nonces, and nonces force every page to render dynamically.
+        source: '/:path*',
+        headers: [
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), browsing-topics=()' },
+        ],
+      },
       {
         source: '/thesis-presentation',
         headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
@@ -36,7 +45,13 @@ const nextConfig: NextConfig = {
         destination: '/thesis-presentation.html',
         permanent: true,
       },
+      // English lives at "/", so its internal route never shows in the address bar.
+      { source: '/en', destination: '/', permanent: true },
     ]
+  },
+  async rewrites() {
+    // One page per language under app/[lang]: "/" serves English, "/el" Greek.
+    return [{ source: '/', destination: '/en' }]
   },
 };
 

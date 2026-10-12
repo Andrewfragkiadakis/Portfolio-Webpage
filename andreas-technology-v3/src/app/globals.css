@@ -423,6 +423,13 @@ section[id] {
     letter-spacing: 0.004em;
   }
 
+  /* "Αυτοματοποιημένοι." is one long word: a step smaller on phones, so it never touches the edges. */
+  html[lang="el"] .kn-hero-title {
+    @variant stack {
+      font-size: clamp(2rem, 8.6vw, 4.5rem) !important;
+    }
+  }
+
   /* Phones: Greek section headlines a step smaller, so "Συμβαίνει δύο φορές;" stays on one line. */
   html[lang="el"] .t-headline {
     @variant stack {

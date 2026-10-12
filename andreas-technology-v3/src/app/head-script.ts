@@ -1,5 +1,6 @@
 /**
  * Runs in <head> before first paint:
+ *  - sends a visitor who chose Greek from "/" to "/el" before anything is painted;
  *  - marks that JavaScript runs (`data-js`), which arms the reveal styles in globals.css;
  *  - paints the stored or system theme, so the page never flashes the wrong one;
  *  - reveals each slide as it enters the viewport (`data-revealed`), with no framework
@@ -8,6 +9,14 @@
  */
 export const HEAD_SCRIPT = `(function () {
   var d = document.documentElement;
+  try {
+    var l = localStorage.getItem('language');
+    if ((l === 'el' || l === 'gr') && location.pathname === '/') {
+      d.style.visibility = 'hidden';
+      location.replace('/el' + location.search + location.hash);
+      return;
+    }
+  } catch (e) {}
   d.setAttribute('data-js', '');
   var t = null;
   try { t = localStorage.getItem('theme'); } catch (e) {}

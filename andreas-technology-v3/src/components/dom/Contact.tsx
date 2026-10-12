@@ -5,8 +5,7 @@ import LocalTime from '@/components/ui/LocalTime'
 import CopyButton from '@/components/ui/CopyButton'
 import { ArrowOut, Headline, Rich, Rise } from '@/components/ui/keynote'
 import { Mark } from '@/components/ui/Mark'
-
-const CV_LINK = 'https://drive.google.com/uc?export=download&id=1b-GiyMU1D_6yxr70bmpufj_kIqKgW38A'
+import { CV } from '@/data/site'
 
 /**
  * Slide 7 — the closing slide. The memoji (as on the title slide), one big line, one
@@ -16,7 +15,8 @@ const CV_LINK = 'https://drive.google.com/uc?export=download&id=1b-GiyMU1D_6yxr7
 export default function Contact() {
     const t = useContent()
     const k = t.keynote
-    const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(t.email)}&su=${encodeURIComponent('Project Collaboration // Andreas Technology')}`
+    // mailto works with whatever mail app the visitor uses (Mail, Outlook, Gmail…).
+    const mailto = `mailto:${t.email}?subject=${encodeURIComponent(k.contact.subject)}`
 
     return (
         <section
@@ -42,12 +42,16 @@ export default function Contact() {
                     </p>
                 </Rise>
                 <Rise step={3} className="mt-8 md:mt-[min(2.5rem,4.4vh)] flex flex-wrap justify-center gap-3.5">
-                    <a href={gmailComposeUrl} target="_blank" rel="noopener noreferrer" className="kn-pill kn-pill--fill" aria-label={`${k.contact.send} (${k.common.newTab})`}>
+                    <a href={mailto} className="kn-pill kn-pill--fill">
                         {k.contact.send}
                     </a>
-                    <a href={CV_LINK} download className="kn-pill kn-pill--line">
-                        {k.contact.resume}
-                    </a>
+                    {/* Self-hosted, so it downloads in place; hidden until an up-to-date PDF exists (data/site.ts). */}
+                    {CV && (
+                        <a href={CV.path} download="Andreas-Fragkiadakis-CV.pdf" className="kn-pill kn-pill--line">
+                            {k.contact.resume}
+                            <span className="sr-only"> (PDF, {CV.sizeLabel})</span>
+                        </a>
+                    )}
                 </Rise>
             </div>
 

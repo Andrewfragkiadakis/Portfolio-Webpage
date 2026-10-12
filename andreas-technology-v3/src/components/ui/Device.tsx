@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import type { ReactNode } from 'react'
-import type { Project } from '@/data/content'
+import type { Project } from '@/data/content/types'
 import ProjectImage from '@/components/ui/ProjectImage'
 
 /**

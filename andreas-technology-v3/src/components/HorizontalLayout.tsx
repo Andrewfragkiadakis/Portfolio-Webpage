@@ -2,13 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import { motion, useScroll, useTransform, useMotionValue, useReducedMotion } from 'motion/react'
-import HeroOverlay from '@/components/dom/HeroOverlay'
-import About from '@/components/dom/About'
-import Services from '@/components/dom/Services'
-import TechSpecs from '@/components/dom/TechSpecs'
-import Experience from '@/components/dom/Experience'
-import Projects from '@/components/dom/Projects'
-import Contact from '@/components/dom/Contact'
+import { SLIDES } from '@/components/slides'
 import DotNav from '@/components/dom/DotNav'
 import { useIsDesktop } from '@/hooks/useIsDesktop'
 import { useActiveSlide } from '@/hooks/useActiveSlide'
@@ -16,19 +10,6 @@ import { useDeckGestures } from '@/hooks/useDeckGestures'
 import { currentSectionIndex, scrollToSection } from '@/utils/track'
 import { SECTION_IDS, TRACK_HEIGHT_VH, TRACK_TRAVEL_VW } from '@/data/sections'
 import { SlideIndexContext, TrackContext } from '@/components/ui/keynote'
-
-// Sections are declared once. The wrapper's CSS — not a second copy of the tree —
-// is what differs between the vertical stack and the horizontal journey. All of them
-// are server-rendered, so crawlers, link previews and no-JS visitors see every section.
-const SECTIONS = [
-    <HeroOverlay key="hero" />,
-    <About key="about" />,
-    <Services key="services" />,
-    <TechSpecs key="specs" />,
-    <Experience key="experience" />,
-    <Projects key="projects" />,
-    <Contact key="contact" />,
-]
 
 export default function HorizontalLayout() {
     const targetRef = useRef<HTMLDivElement>(null)
@@ -129,18 +110,24 @@ export default function HorizontalLayout() {
                           the content without creating a scroll container, which would break the
                           sticky track and let focus scroll a slide sideways.
                         */}
-                        {SECTIONS.map((section, index) => (
-                            <div
-                                key={index}
-                                // The <head> script marks slides as revealed before hydration.
-                                suppressHydrationWarning
-                                data-slide={index}
-                                data-tone={index % 2 === 0 ? 'primary' : 'alt'}
-                                className="slide relative w-full overflow-x-clip md:h-screen md:w-screen md:flex-shrink-0 md:flex md:items-center md:justify-center md:overflow-clip md:pt-[var(--nav-h)] md:pb-[3.75rem]"
-                            >
-                                <SlideIndexContext.Provider value={index}>{section}</SlideIndexContext.Provider>
-                            </div>
-                        ))}
+                        {/* Sections are declared once (components/slides.ts). The wrapper's CSS — not a
+                            second copy of the tree — is what differs between the vertical stack and the
+                            horizontal journey. All are server-rendered, for crawlers, link previews and no-JS. */}
+                        {SECTION_IDS.map((id, index) => {
+                            const Slide = SLIDES[id]
+                            return (
+                                <div
+                                    key={id}
+                                    // The <head> script marks slides as revealed before hydration.
+                                    suppressHydrationWarning
+                                    data-slide={index}
+                                    data-tone={index % 2 === 0 ? 'primary' : 'alt'}
+                                    className="slide relative w-full overflow-x-clip md:h-screen md:w-screen md:flex-shrink-0 md:flex md:items-center md:justify-center md:overflow-clip md:pt-[var(--nav-h)] md:pb-[3.75rem]"
+                                >
+                                    <SlideIndexContext.Provider value={index}><Slide /></SlideIndexContext.Provider>
+                                </div>
+                            )
+                        })}
                     </motion.div>
                 </div>
 

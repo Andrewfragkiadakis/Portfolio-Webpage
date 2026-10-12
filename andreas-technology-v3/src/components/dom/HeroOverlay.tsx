@@ -2,7 +2,6 @@
 
 import type { CSSProperties } from 'react'
 import { useContent } from '@/hooks/useContent'
-import { useLanguage } from '@/contexts/LanguageContext'
 import { focusSection, scrollToSection } from '@/utils/track'
 import { HeadlineText, Rich } from '@/components/ui/keynote'
 import { Mark } from '@/components/ui/Mark'
@@ -22,9 +21,6 @@ const step = (i: number) => ({ '--i': i }) as CSSProperties
 export default function HeroOverlay() {
     const t = useContent()
     const k = t.keynote
-    // "Αυτοματοποιημένοι." is one long word: set it a step smaller on phones so it never touches the edges.
-    const { language } = useLanguage()
-    const phoneSize = language === 'gr' ? 'text-[clamp(2rem,8.6vw,4.5rem)]' : 'text-[clamp(2.75rem,12.4vw,4.5rem)]'
 
     const go = (id: SectionId) => {
         void scrollToSection(sectionIndex(id)).then(() => focusSection(id))
@@ -45,7 +41,7 @@ export default function HeroOverlay() {
                     {k.common.name}
                     <span className="sr-only"> — </span>
                 </span>
-                <span className={`kn-enter-text t-hero block mt-2 md:mt-3 ${phoneSize} md:text-[min(6.6vw,11vh)]`} style={step(2)}>
+                <span className="kn-enter-text kn-hero-title t-hero block mt-2 md:mt-3 text-[clamp(2.75rem,12.4vw,4.5rem)] md:text-[min(6.6vw,11vh)]" style={step(2)}>
                     <HeadlineText text={k.hero.headline} />
                 </span>
             </h1>

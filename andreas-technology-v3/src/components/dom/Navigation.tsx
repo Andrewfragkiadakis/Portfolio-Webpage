@@ -2,10 +2,11 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { useLanguage } from '@/contexts/LanguageContext'
+import { useLocale } from '@/contexts/LocaleContext'
+import { LOCALES } from '@/data/locales'
+import { writeStorage } from '@/utils/storage'
 import { useTheme } from '@/contexts/ThemeContext'
 import { useContent } from '@/hooks/useContent'
-import { useSectionLabels } from '@/hooks/useSectionLabels'
 import { centreOf } from '@/utils/dom'
 import { EASE_APPLE } from '@/utils/motion'
 import { focusSection, scrollToSection } from '@/utils/track'
@@ -21,10 +22,11 @@ import { DESKTOP_MEDIA_QUERY } from '@/hooks/useIsDesktop'
  * small blue pill sit on the right. On phones the links fold into a full-screen menu.
  */
 export default function Navigation() {
-    const { language, setLanguage } = useLanguage()
+    const locale = useLocale()
+    const other = LOCALES.find((l) => l.code !== locale) ?? LOCALES[0]
     const { theme, setTheme } = useTheme()
     const k = useContent().keynote
-    const labels = useSectionLabels()
+    const labels = k.nav.sections
     const [menuOpen, setMenuOpen] = useState(false)
     const activeIndex = useActiveSlide()
     const firstLinkRef = useRef<HTMLAnchorElement>(null)
@@ -93,13 +95,19 @@ export default function Navigation() {
         void scrollToSection(index).then(() => focusSection(id))
     }
 
-    const toggleLanguage = () => setLanguage(language === 'en' ? 'gr' : 'en')
+    // Each language is its own page: switching is a navigation, remembered for next time,
+    // that keeps the visitor on the same slide.
+    const switchLanguage = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        writeStorage('language', other.code)
+        e.preventDefault()
+        window.location.assign(other.path + window.location.hash)
+    }
 
     return (
         <>
             <header className="fixed top-0 inset-x-0 z-50">
                 <nav
-                    aria-label="Main navigation"
+                    aria-label={k.nav.main}
                     className={`h-[var(--nav-h)] border-b border-[var(--nav-line)] text-[var(--foreground)] transition-colors duration-300 ${menuOpen ? 'bg-[var(--background)]' : 'bg-[var(--nav-bg)] backdrop-blur-[20px] backdrop-saturate-[1.8]'}`}
                 >
                     <div className="h-full px-4 sm:px-10 md:px-[max(3rem,7vw)]">
@@ -134,14 +142,16 @@ export default function Navigation() {
                                 ))}
                             </ul>
 
-                            <button
-                                type="button"
-                                onClick={toggleLanguage}
-                                aria-label={k.nav.switchLanguage}
+                            <a
+                                href={other.path}
+                                hrefLang={other.code}
+                                lang={other.code}
+                                onClick={switchLanguage}
+                                aria-label={`${other.short} — ${other.label}`}
                                 className="inline-flex items-center justify-center h-8 min-w-8 px-1.5 rounded-full t-caption font-semibold text-[var(--foreground)]/80 hover:text-[var(--foreground)] transition-colors duration-300"
                             >
-                                {language === 'en' ? 'ΕΛ' : 'EN'}
-                            </button>
+                                {other.short}
+                            </a>
                             <ThemeToggle />
                             <button
                                 type="button"
@@ -180,7 +190,7 @@ export default function Navigation() {
                         transition={{ duration: 0.25 }}
                         className="md:hidden fixed inset-x-0 top-[var(--nav-h)] bottom-0 z-[55] bg-[var(--background)] text-[var(--foreground)] overflow-y-auto"
                     >
-                        <nav aria-label={k.nav.openMenu} className="px-10 pt-6 pb-10 flex flex-col min-h-full">
+                        <nav aria-label={k.nav.menu} className="px-10 pt-6 pb-10 flex flex-col min-h-full">
                             <ul className="flex flex-col">
                                 {SECTION_IDS.map((id, i) => (
                                     <motion.li
@@ -215,14 +225,15 @@ export default function Navigation() {
                                 </div>
                                 <div>
                                     <p className="t-caption text-[var(--muted)] mb-2">{k.nav.language}</p>
-                                    <button
-                                        type="button"
-                                        onClick={toggleLanguage}
-                                        aria-label={k.nav.switchLanguage}
+                                    <a
+                                        href={other.path}
+                                        hrefLang={other.code}
+                                        lang={other.code}
+                                        onClick={switchLanguage}
                                         className="kn-pill kn-pill--sm kn-pill--quiet w-full"
                                     >
-                                        {language === 'en' ? 'Ελληνικά' : 'English'}
-                                    </button>
+                                        {other.label}
+                                    </a>
                                 </div>
                             </div>
                         </nav>

@@ -2,16 +2,14 @@
 
 import { useState } from 'react'
 import { useContent } from '@/hooks/useContent'
-import type { Education, Experience as Role } from '@/data/content'
+import type { Education, Experience as Role } from '@/data/content/types'
 import Modal from '@/components/ui/Modal'
 import { ToolLogo } from '@/components/ui/ToolBadge'
-import { TOOL_BY_LABEL, type Tool, type ToolLabel } from '@/data/tools'
+import { TOOL_BY_LABEL, type Tool } from '@/data/tools'
 import { ArrowOut, Chevron, HEADER_GAP, Rise, SLIDE_CLASS, SlideHeader } from '@/components/ui/keynote'
 import { shortPlace, yearSpan } from '@/utils/format'
 
 /** The stack named in the current role's own task list. */
-const NOW_STACK: ToolLabel[] = ['Jamf Pro', 'Bash / zsh', 'Python', 'TypeScript', 'MCP Servers', "acme.sh / Let's Encrypt"]
-const nowStack = NOW_STACK.map((label) => TOOL_BY_LABEL.get(label)).filter((tool): tool is Tool => Boolean(tool))
 
 function Check() {
     return (
@@ -32,7 +30,9 @@ export default function Experience() {
     const [role, setRole] = useState<Role | null>(null)
     const [edu, setEdu] = useState<Education | null>(null)
 
-    const [current, ...earlier] = t.experience
+    const current = t.experience.find((item) => item.current) ?? t.experience[0]
+    const earlier = t.experience.filter((item) => item !== current)
+    const nowStack = (current.stack ?? []).map((label) => TOOL_BY_LABEL.get(label)).filter((tool): tool is Tool => Boolean(tool))
 
     return (
         <section id="experience" aria-labelledby="experience-title" className={SLIDE_CLASS}>
@@ -72,7 +72,7 @@ export default function Experience() {
                         <h3 className="t-small font-semibold pb-3">{k.experience.then}</h3>
                         <ol className="border-t border-[var(--line)]">
                             {earlier.map((item) => (
-                                <li key={`${item.role}-${item.duration}`} className="border-b border-[var(--line)]">
+                                <li key={item.id} className="border-b border-[var(--line)]">
                                     <button
                                         type="button"
                                         onClick={() => setRole(item)}
@@ -100,7 +100,7 @@ export default function Experience() {
                         <h3 className="t-small font-semibold pb-3">{k.experience.education}</h3>
                         <ul className="border-t border-[var(--line)]">
                             {t.education.map((item) => (
-                                <li key={item.degree} className="py-3 md:py-[min(0.625rem,1.05vh)] border-b border-[var(--line)]">
+                                <li key={item.id} className="py-3 md:py-[min(0.625rem,1.05vh)] border-b border-[var(--line)]">
                                     <button
                                         type="button"
                                         onClick={() => setEdu(item)}

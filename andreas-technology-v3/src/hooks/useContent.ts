@@ -1,7 +1,6 @@
-import { useLanguage } from '@/contexts/LanguageContext'
-import { content as allContent } from '@/data/content'
+import { useCopy } from '@/contexts/LocaleContext'
 
+/** The current page's copy, in its language. */
 export function useContent() {
-    const { language } = useLanguage()
-    return allContent[language]
+    return useCopy()
 }

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useContent } from '@/hooks/useContent'
-import type { KeynoteCopy, Project } from '@/data/content'
+import type { KeynoteCopy, Project } from '@/data/content/types'
 import Modal from '@/components/ui/Modal'
 import { ProjectShot } from '@/components/ui/Device'
 import { ArrowOut, Chevron, HEADER_GAP, Rise, ScaleIn, SLIDE_CLASS, SlideHeader } from '@/components/ui/keynote'
@@ -76,7 +76,7 @@ export default function Projects() {
                         <ScaleIn className="relative h-[min(40vh,25rem)] flex items-end justify-center">
                             <AnimatePresence mode="wait" initial={false}>
                                 <motion.div
-                                    key={project.name}
+                                    key={project.id}
                                     initial={{ opacity: 0, y: 16 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: -8 }}
@@ -114,7 +114,7 @@ export default function Projects() {
                                 const isActive = index === activeIndex
                                 const name = splitName(item.name)
                                 return (
-                                    <li key={item.name} className="border-b border-[var(--line)]">
+                                    <li key={item.id} className="border-b border-[var(--line)]">
                                         <button
                                             type="button"
                                             onClick={() => setActiveIndex(index)}

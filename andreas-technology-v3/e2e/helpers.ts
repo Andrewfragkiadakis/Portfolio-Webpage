@@ -26,7 +26,7 @@ export async function prime(page: Page, { theme, lang, blockStorage = false }: {
 }
 
 /** Whether each language has its own URL ("/" and "/el"). */
-export const LOCALE_ROUTES = false
+export const LOCALE_ROUTES = true
 
 /** Opens the home page in a language, with stored preferences set first. */
 export async function open(page: Page, { theme, lang = 'en', blockStorage }: { theme?: Theme; lang?: Lang; blockStorage?: boolean } = {}) {

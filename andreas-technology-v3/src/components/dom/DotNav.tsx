@@ -1,7 +1,7 @@
 'use client'
 
 import { SECTION_IDS } from '@/data/sections'
-import { useSectionLabels } from '@/hooks/useSectionLabels'
+import { useContent } from '@/hooks/useContent'
 import { useActiveSlide } from '@/hooks/useActiveSlide'
 import { scrollToSection } from '@/utils/track'
 
@@ -11,13 +11,14 @@ import { scrollToSection } from '@/utils/track'
  * button to its slide. Focus stays on the dot, as in a carousel.
  */
 export default function DotNav() {
-    const labels = useSectionLabels()
+    const nav = useContent().keynote.nav
+    const labels = nav.sections
     const active = useActiveSlide()
 
     return (
         <nav
             data-dotnav
-            aria-label="Slides"
+            aria-label={nav.slides}
             className="hidden md:flex fixed bottom-5 left-1/2 -translate-x-1/2 z-40 items-center gap-0.5 h-9 px-2.5 rounded-full bg-[var(--nav-bg)] backdrop-blur-[20px] backdrop-saturate-[1.8]"
         >
             {SECTION_IDS.map((id, i) => (

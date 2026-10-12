@@ -2,11 +2,9 @@ import type { ReactNode } from 'react'
 
 /**
  * Line icons drawn in the spirit of SF Symbols (regular weight, round caps), which
- * cannot be used on the web. They replace Font Awesome, whose solid glyphs read as
- * generic web UI rather than Apple. Content still names icons by their old Font
- * Awesome class, so the data files did not change.
+ * cannot be used on the web. Content names them by key (see GlyphName).
  */
-const PATHS: Record<string, ReactNode> = {
+const PATHS = {
     laptop: (
         <>
             <rect x="4.25" y="5" width="15.5" height="10.75" rx="1.6" />
@@ -61,20 +59,11 @@ const PATHS: Record<string, ReactNode> = {
     check: <path d="m5 12.5 4.5 4.5L19 7.5" />,
     xmark: <path d="M6 6l12 12M18 6 6 18" />,
     plus: <path d="M12 5v14M5 12h14" />,
-}
+} satisfies Record<string, ReactNode>
 
-const FROM_FONT_AWESOME: Record<string, string> = {
-    'fab fa-apple': 'laptop',
-    'fas fa-shield-halved': 'shield',
-    'fas fa-terminal': 'terminal',
-    'fas fa-robot': 'sparkles',
-    'fas fa-gears': 'gear',
-    'fas fa-headset': 'headphones',
-    'fas fa-network-wired': 'network',
-}
+export type GlyphName = keyof typeof PATHS
 
-export function Glyph({ name, className = '', strokeWidth = 1.6 }: { name: string; className?: string; strokeWidth?: number }) {
-    const key = FROM_FONT_AWESOME[name] ?? name
+export function Glyph({ name, className = '', strokeWidth = 1.6 }: { name: GlyphName; className?: string; strokeWidth?: number }) {
     return (
         <svg
             viewBox="0 0 24 24"
@@ -86,7 +75,7 @@ export function Glyph({ name, className = '', strokeWidth = 1.6 }: { name: strin
             strokeLinecap="round"
             strokeLinejoin="round"
         >
-            {PATHS[key] ?? PATHS.laptop}
+            {PATHS[name]}
         </svg>
     )
 }
