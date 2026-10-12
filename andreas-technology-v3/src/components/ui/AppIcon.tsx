@@ -3,7 +3,7 @@ import Icon, { type SymbolName } from '@/components/ui/Icon'
 import type { AppId } from '@/data/apps'
 
 /**
- * Original app icons in the macOS Big Sur idiom: a superellipse ("squircle") tile,
+ * Original app icons in the macOS idiom (Finder, Contacts, System Settings, Notes, Mail and Terminal lookalikes): a superellipse ("squircle") tile,
  * a layered gradient, a soft top highlight, a hairline rim and a drop shadow, with one
  * simple glyph. None of this is Apple artwork; the shapes are drawn here from scratch.
  */
@@ -28,13 +28,13 @@ export const SQUIRCLE = squirclePath()
 
 /** Gradient stops per app: [top, bottom]. */
 const TINT: Record<AppId, [string, string]> = {
-    hero: ['#7CC8FF', '#1F6BF0'],
-    about: ['#C79BFF', '#7437E6'],
-    services: ['#4FE3AE', '#0A9A6C'],
-    experience: ['#FFC173', '#F0650F'],
+    hero: ['#74C6FF', '#1E86F4'],
+    about: ['#FDFDFE', '#E2E3E8'],
+    services: ['#D9DCE2', '#9AA0AC'],
+    experience: ['#FFFFFF', '#F1F1F4'],
     projects: ['#FBFCFE', '#D9DFE8'],
-    contact: ['#FF8FA3', '#E3264F'],
-    terminal: ['#56565E', '#1B1B1F'],
+    contact: ['#5CCBFF', '#1272F0'],
+    terminal: ['#9A9AA3', '#5B5B63'],
     github: ['#454B55', '#0D1117'],
     linkedin: ['#2E97EE', '#0A62BC'],
     resume: ['#FFFFFF', '#FFFFFF'],
@@ -73,58 +73,78 @@ export function Squircle({ from, to, children, id }: { from: string; to: string;
 function Glyph({ app, id }: { app: AppId; id: string }) {
     switch (app) {
         case 'hero':
-            // A display showing a tiny wallpaper.
+            // Finder: a two-tone face, blue on the left, pale on the right, with a smile.
             return (
                 <>
                     <defs>
-                        <linearGradient id={`${id}-scr`} x1="0" y1="0" x2="1" y2="1">
-                            <stop offset="0" stopColor="#FFB58A" />
-                            <stop offset="0.5" stopColor="#F59BC8" />
-                            <stop offset="1" stopColor="#7E8CFF" />
+                        <clipPath id={`${id}-cp`}><path d={SQUIRCLE} /></clipPath>
+                        <linearGradient id={`${id}-fr`} x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0" stopColor="#F4F9FF" />
+                            <stop offset="1" stopColor="#CFE4FB" />
                         </linearGradient>
                     </defs>
-                    <rect x="19" y="23" width="62" height="42" rx="6.5" fill="#FFFFFF" />
-                    <rect x="24" y="28" width="52" height="32" rx="2.5" fill={`url(#${id}-scr)`} />
-                    <path d="M24 50c9-6 17-7 26-2s17 4 26-3v12.5a2.5 2.5 0 0 1-2.5 2.5h-47a2.5 2.5 0 0 1-2.5-2.5z" fill="#FFFFFF" fillOpacity="0.35" />
-                    <path d="M43 65h14l2.5 9h-19z" fill="#E6ECF7" />
-                    <rect x="34" y="73" width="32" height="4.5" rx="2.25" fill="#FFFFFF" />
+                    <g clipPath={`url(#${id}-cp)`}>
+                        <path d="M55 0C49 28 58 62 49 100H100V0Z" fill={`url(#${id}-fr)`} />
+                    </g>
+                    <g stroke="#0A2A5C" strokeLinecap="round" strokeLinejoin="round" fill="none">
+                        <path d="M36 33v13M64 33v13" strokeWidth="5" />
+                        <path d="M53 33c1.5 9 .5 17-2 24h6" strokeWidth="3" />
+                        <path d="M27 64c9 13 37 13 46 0" strokeWidth="4" />
+                    </g>
                 </>
             )
         case 'about':
-            // A contact card.
+            // Contacts: a cream page, a grey silhouette, a brown spine and coloured tabs.
             return (
                 <>
-                    <rect x="17" y="26" width="66" height="48" rx="8" fill="#FFFFFF" />
-                    <circle cx="36" cy="45" r="7.5" fill="#8B5CF6" />
-                    <path d="M24.5 64c1.6-6 6-9 11.5-9s9.9 3 11.5 9z" fill="#8B5CF6" />
-                    <rect x="53" y="40" width="21" height="4" rx="2" fill="#C9B5FA" />
-                    <rect x="53" y="49" width="16" height="4" rx="2" fill="#DDD0FC" />
-                    <rect x="53" y="58" width="19" height="4" rx="2" fill="#DDD0FC" />
+                    <defs><clipPath id={`${id}-cp`}><path d={SQUIRCLE} /></clipPath></defs>
+                    <g clipPath={`url(#${id}-cp)`}>
+                        <rect x="0" y="0" width="13" height="100" fill="#A9703F" />
+                        <rect x="0" y="0" width="13" height="100" fill="#FFFFFF" fillOpacity="0.12" />
+                        {['#F5605C', '#FFB340', '#4CD964', '#3DA5F4', '#9A6BFF'].map((c, i) => (
+                            <rect key={c} x="91" y={14 + i * 15} width="9" height="11" rx="2" fill={c} />
+                        ))}
+                    </g>
+                    <circle cx="52" cy="40" r="13.5" fill="#8C8F99" />
+                    <path d="M26 79c1.5-15 12-23 26-23s24.5 8 26 23z" fill="#8C8F99" />
                 </>
             )
         case 'services':
-            // Three sliders: the craft of tuning systems.
+            // System Settings: a graphite gear.
             return (
                 <>
-                    {[34, 50, 66].map((y) => (
-                        <rect key={y} x="22" y={y - 3} width="56" height="6" rx="3" fill="#FFFFFF" fillOpacity="0.55" />
-                    ))}
-                    <rect x="22" y="31" width="38" height="6" rx="3" fill="#FFFFFF" />
-                    <rect x="22" y="47" width="18" height="6" rx="3" fill="#FFFFFF" />
-                    <rect x="22" y="63" width="44" height="6" rx="3" fill="#FFFFFF" />
-                    <circle cx="60" cy="34" r="8.5" fill="#FFFFFF" />
-                    <circle cx="40" cy="50" r="8.5" fill="#FFFFFF" />
-                    <circle cx="66" cy="66" r="8.5" fill="#FFFFFF" />
+                    <defs>
+                        <linearGradient id={`${id}-gr`} x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0" stopColor="#5E636E" />
+                            <stop offset="1" stopColor="#363A43" />
+                        </linearGradient>
+                    </defs>
+                    <g fill={`url(#${id}-gr)`}>
+                        {[0, 45, 90, 135].map((a) => (
+                            <rect key={a} x="43" y="16" width="14" height="68" rx="3.5" transform={`rotate(${a} 50 50)`} />
+                        ))}
+                        <circle cx="50" cy="50" r="25" />
+                    </g>
+                    <circle cx="50" cy="50" r="10.5" fill="#B4B9C3" />
+                    <circle cx="50" cy="50" r="10.5" fill="none" stroke="#2E323A" strokeOpacity="0.35" strokeWidth="1.5" />
                 </>
             )
         case 'experience':
-            // A briefcase.
+            // Notes: a yellow header over lined paper.
             return (
                 <>
-                    <path d="M40 36v-5a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v5" fill="none" stroke="#FFFFFF" strokeWidth="5" />
-                    <rect x="17" y="35" width="66" height="42" rx="8" fill="#FFFFFF" />
-                    <rect x="17" y="53" width="66" height="3.5" fill="#FFD9B0" />
-                    <rect x="44.5" y="49.5" width="11" height="10" rx="2.5" fill="#F47A20" />
+                    <defs><clipPath id={`${id}-cp`}><path d={SQUIRCLE} /></clipPath></defs>
+                    <g clipPath={`url(#${id}-cp)`}>
+                        <rect x="0" y="0" width="100" height="27" fill="#FFD43B" />
+                        <rect x="0" y="26" width="100" height="1.5" fill="#E0B21E" />
+                    </g>
+                    {[43, 57, 71].map((y) => (
+                        <rect key={y} x="14" y={y} width="72" height="1.8" rx=".9" fill="#D9D9DE" />
+                    ))}
+                    <rect x="20" y="36" width="34" height="4" rx="2" fill="#4A4A52" />
+                    <rect x="20" y="50" width="52" height="3.2" rx="1.600" fill="#B5B5BC" />
+                    <rect x="20" y="64" width="40" height="3.2" rx="1.600" fill="#B5B5BC" />
+                    <rect x="20" y="78" width="24" height="3.2" rx="1.600" fill="#B5B5BC" />
                 </>
             )
         case 'projects':
@@ -143,19 +163,21 @@ function Glyph({ app, id }: { app: AppId; id: string }) {
                 </>
             )
         case 'contact':
-            // A paper plane.
+            // Mail: a white envelope on a blue tile.
             return (
                 <>
-                    <path d="M20 50 79 25 63 76 47 59z" fill="#FFFFFF" />
-                    <path d="M47 59 79 25 52 71z" fill="#FFD6DE" />
-                    <path d="M47 59 79 25" stroke="#FF9DB0" strokeWidth="1.6" />
+                    <rect x="15" y="27" width="70" height="46" rx="8" fill="#FFFFFF" />
+                    <path d="M18 33c10 8 21 17 32 17s22-9 32-17" fill="none" stroke="#2F86F2" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
                 </>
             )
         case 'terminal':
+            // Terminal: a black screen inside a light grey bezel.
             return (
                 <>
-                    <path d="M28 37 41 50 28 63" fill="none" stroke="#F4F4F6" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
-                    <rect x="46" y="59" width="24" height="6" rx="3" fill="#F4F4F6" />
+                    <rect x="7" y="9" width="86" height="82" rx="14" fill="#0D0D10" />
+                    <rect x="7" y="9" width="86" height="82" rx="14" fill="none" stroke="#FFFFFF" strokeOpacity="0.18" strokeWidth="1.2" />
+                    <path d="M24 38 38 50 24 62" fill="none" stroke="#F4F4F6" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
+                    <rect x="45" y="59" width="26" height="6" rx="3" fill="#F4F4F6" />
                 </>
             )
         case 'github':
