@@ -103,6 +103,8 @@ export interface KeynoteCopy {
     about: {
         eyebrow: string; headline: string; bio: string; fullStory: string; dialogTitle: string
         credentials: string; focus: string
+        /** Link to the case studies (/work), next to the full-story link. */
+        caseStudies: string
         /** By the numbers: the first is the slide's large figure. */
         stats: { value: number; suffix: string; unit?: string; label: string }[]
     }

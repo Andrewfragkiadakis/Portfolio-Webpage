@@ -12,10 +12,16 @@ export const PERSON = {
 } as const
 
 /** Bump when the content changes, so the sitemap reports a real modification date. */
-export const CONTENT_UPDATED_AT = '2026-10-12'
+export const CONTENT_UPDATED_AT = '2026-10-25'
 
 /**
- * Self-hosted résumé. Leave null until an up-to-date PDF is in public/files (D5 in
- * docs/KEYNOTE-AUDIT-PLAN.md); the Download button is hidden while it is null.
+ * Self-hosted résumé: the public 1-page CV (no phone number). Set to null to hide the
+ * Download button; replace the PDF and its size label together when the CV changes.
  */
-export const CV = null as { path: string; sizeLabel: string } | null
+export const CV = { path: '/files/Andreas-Fragkiadakis-CV.pdf', sizeLabel: '56 KB' } as { path: string; sizeLabel: string } | null
+
+/**
+ * Google Search Console ownership token (the content of its HTML-tag method). Rendered as
+ * <meta name="google-site-verification"> when set; null renders nothing.
+ */
+export const GOOGLE_SITE_VERIFICATION = null as string | null

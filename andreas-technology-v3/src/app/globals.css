@@ -332,6 +332,15 @@ html {
   }
 }
 
+/* Case-study pages are ordinary documents: no slide snapping, and a thin scrollbar shows
+   where the reader is (scrollbar-width also switches off the ::-webkit-scrollbar rule). */
+html:has(.kn-article) {
+  @variant md {
+    scroll-snap-type: none;
+    scrollbar-width: thin;
+  }
+}
+
 .kn-snap {
   display: none;
 

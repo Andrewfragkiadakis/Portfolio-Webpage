@@ -9,9 +9,9 @@ const el: Content = {
 
     about: {
         description: [
-            "Είμαι Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) και Team Lead της ομάδας Apple Fleet & IT Automation στην Omilia, μια παγκόσμια εταιρεία conversational AI. Έχω πλήρη ευθύνη για το Jamf Pro σε 550+ Mac και ηγούμαι του endpoint engineering για Check Point Harmony Endpoint, Microsoft Sentinel και αυτοματοποίηση πιστοποιητικών SSL.",
-            "Στην πράξη: θωράκιση κατά CIS Benchmarks ενόψει ελέγχων PCI DSS και SOC 2, και zero‑touch enrollment που μείωσε τον χρόνο onboarding των Mac κατά 70%.",
-            "Παράλληλα προωθώ την υιοθέτηση AI: Google Gemini σε όλο τον οργανισμό, Atlassian Rovo Agents και ένα pipeline διαλογής αιτημάτων με AI που μείωσε τον μέσο χρόνο triage σε 350+ tickets.",
+            "Είμαι Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.) και Team Lead της ομάδας Apple Fleet & IT Automation στην Omilia, μια παγκόσμια εταιρεία conversational AI. Έχω πλήρη ευθύνη για το Jamf Pro σε 550+ Mac και ηγούμαι του endpoint engineering: Check Point Harmony Endpoint, προώθηση συμβάντων στο Microsoft Sentinel και αυτοματοποίηση πιστοποιητικών SSL.",
+            "Στην πράξη: θωράκιση κατά CIS Benchmarks ενόψει ελέγχων PCI DSS και SOC 2, και zero‑touch enrollment που μείωσε την προετοιμασία ενός νέου Mac από πάνω από δύο ώρες σε κάτω από 30 λεπτά.",
+            "Παράλληλα προωθώ την υιοθέτηση AI: Google Gemini σε όλο τον οργανισμό, Claude Enterprise και Claude Code μέσω MDM, και πιλοτικό Rovo agent για τη διαλογή αιτημάτων IT.",
             "Jamf Certified Tech (Jamf 200) · Αδειούχος μηχανικός ΤΕΕ · ITIL 4 Foundation · Αθήνα · Αγγλικά (C2), Ελληνικά (μητρική), Γερμανικά (B2)"
         ]
     },
@@ -27,7 +27,7 @@ const el: Content = {
             id: "endpoint-security",
             icon: "shield",
             label: "Endpoint Security & Identity",
-            detail: "Check Point Harmony Endpoint, θωράκιση κατά CIS Benchmarks για ελέγχους PCI DSS και SOC 2, pipelines Microsoft Sentinel SIEM, και διαχείριση ταυτότητας και πρόσβασης με Microsoft Entra ID, Duo MFA και 1Password."
+            detail: "Check Point Harmony Endpoint, θωράκιση κατά CIS Benchmarks για ελέγχους PCI DSS και SOC 2, προώθηση συμβάντων στο Microsoft Sentinel, και διαχείριση ταυτότητας και πρόσβασης με Microsoft Entra ID, Duo MFA και 1Password."
         },
         {
             id: "automation",
@@ -39,7 +39,7 @@ const el: Content = {
             id: "ai-workflow",
             icon: "sparkles",
             label: "AI & Workflow Automation",
-            detail: "Υιοθέτηση AI σε εταιρικό επίπεδο: Google Gemini σε όλο τον οργανισμό, Atlassian Rovo Agents, Claude Code και MCP servers, καθώς και pipeline AI ticket-triage στο Jira Service Management."
+            detail: "Υιοθέτηση AI σε εταιρικό επίπεδο: Google Gemini σε όλο τον οργανισμό, Claude Enterprise, Claude Code και MCP servers, καθώς και πιλοτικός Rovo agent για διαλογή αιτημάτων στο Jira Service Management."
         }
     ],
 
@@ -61,11 +61,11 @@ const el: Content = {
             id: "apple-fleet",
             icon: "laptop",
             title: "Διαχείριση Στόλου Apple",
-            oneLiner: "550+ Mac στο Jamf Pro. Zero‑touch enrollment, 70% λιγότερος χρόνος onboarding.",
-            detail: "Διαχειρίζομαι εξ ολοκλήρου το Jamf Pro για στόλο 550+ Mac. Ένα νέο Mac εγγράφεται αυτόματα μέσω Apple Business Manager, λαμβάνει profiles και εφαρμογές και είναι έτοιμο από την πρώτη μέρα — το zero‑touch enrollment μείωσε τον χρόνο onboarding κατά 70%.",
+            oneLiner: "550+ Mac στο Jamf Pro. Zero‑touch προετοιμασία σε κάτω από 30 λεπτά, από 2+ ώρες.",
+            detail: "Διαχειρίζομαι εξ ολοκλήρου το Jamf Pro για στόλο 550+ Mac. Ένα νέο Mac εγγράφεται αυτόματα μέσω Apple Business Manager, λαμβάνει profiles και εφαρμογές και είναι έτοιμο από την πρώτη μέρα — το zero‑touch enrollment μείωσε την προετοιμασία από πάνω από δύο ώρες σε κάτω από 30 λεπτά.",
             highlights: [
                 "Jamf Certified Tech (Jamf 200)",
-                "Zero‑touch enrollment: 70% λιγότερος χρόνος onboarding",
+                "Zero‑touch enrollment: προετοιμασία από 2+ ώρες σε κάτω από 30 λεπτά",
                 "Configuration profiles, ενημερώσεις, Self Service και συντήρηση στόλου"
             ],
             tools: ["Jamf Pro", "Apple Business Manager", "macOS", "Bash / zsh", "Swift", "AppleScript"]
@@ -87,11 +87,11 @@ const el: Content = {
             id: "ai-operations",
             icon: "sparkles",
             title: "Λειτουργίες IT με AI",
-            oneLiner: "Gemini σε όλο τον οργανισμό, Rovo Agents και διαλογή αιτημάτων με AI στο Jira.",
-            detail: "AI που κάνει πραγματική δουλειά. Εισήγαγα το Google Gemini σε όλο τον οργανισμό και τους Atlassian Rovo Agents, δημιούργησα pipeline διαλογής αιτημάτων με AI για το Jira Service Management και αναπτύσσω prototypes MCP servers ώστε βοηθοί όπως το Claude Code να δουλεύουν απευθείας με τα συστήματα IT.",
+            oneLiner: "Gemini σε όλο τον οργανισμό, Claude μέσω MDM, πιλοτική διαλογή αιτημάτων με AI στο Jira.",
+            detail: "AI που κάνει πραγματική δουλειά. Εισήγαγα το Google Gemini σε όλο τον οργανισμό και το Claude Enterprise με ρυθμίσεις μέσω MDM, έτρεξα πιλοτικά έναν Rovo agent για διαλογή αιτημάτων στο Jira Service Management και αναπτύσσω prototypes MCP servers ώστε βοηθοί όπως το Claude Code να δουλεύουν απευθείας με τα συστήματα IT.",
             highlights: [
                 "Ανάπτυξη Google Gemini σε όλο τον οργανισμό",
-                "Διαλογή αιτημάτων με AI σε 350+ tickets",
+                "Πιλοτικός Rovo agent για διαλογή αιτημάτων IT",
                 "Prototypes MCP servers για εργαλεία IT"
             ],
             tools: ["Claude Code", "MCP Servers", "Google Gemini", "Grok Bot", "Atlassian Rovo", "Jira Service Management", "Slack"]
@@ -100,12 +100,12 @@ const el: Content = {
             id: "itsm",
             icon: "headphones",
             title: "IT Service Management",
-            oneLiner: "Υπηρεσίες IT κατά ITIL 4: 350+ tickets με SLA άνω του 95%.",
+            oneLiner: "Υπηρεσίες IT κατά ITIL 4: 486 tickets, με διάμεσο χρόνο επίλυσης μία ημέρα.",
             detail: "Υποστήριξη στην οποία μπορεί κανείς να βασιστεί. Με πιστοποίηση ITIL 4, συνδυάζω σαφείς διαδικασίες incident και request με αυτοματισμό και τεκμηρίωση, ώστε η ουρά να μένει μικρή και οι απαντήσεις να βρίσκονται εύκολα.",
             highlights: [
                 "Πιστοποίηση ITIL 4 Foundation",
-                "350+ Jira tickets με SLA 95%+",
-                "40+ οδηγοί Confluence και διαχείριση 9 εταιρικών πλατφορμών"
+                "486 Jira tickets με διάμεσο χρόνο επίλυσης μία ημέρα",
+                "50+ οδηγοί Confluence για την ομάδα και για self-service"
             ],
             tools: ["Jira Service Management", "Confluence", "Atlassian Rovo", "Slack", "Google Workspace"]
         },
@@ -129,9 +129,9 @@ const el: Content = {
             id: "omilia-team-lead",
             current: true,
             stack: ["Jamf Pro", "Bash / zsh", "Python", "TypeScript", "MCP Servers", "acme.sh / Let's Encrypt"],
-            role: "Team Lead, Apple Fleet & IT Automation",
+            role: "Apple Fleet & IT Automation Engineer (Team Lead, Jamf & Automations)",
             company: "Omilia, Αθήνα",
-            duration: "Απρίλιος 2026 – Σήμερα",
+            duration: "Ιούλιος 2026 – Σήμερα",
             tasks: [
                 "Πλήρης ευθύνη για τον τομέα Apple Fleet & IT Automation, την πλατφόρμα Jamf Pro και τα AI pipelines σε 550+ τερματικά macOS",
                 "Ηγεσία automation engineering σε Bash, Python και TypeScript — Jamf API, διαλογή αιτημάτων με AI, prototypes MCP servers και υποδομή ανανέωσης SSL",
@@ -142,21 +142,21 @@ const el: Content = {
             id: "omilia-it-engineer",
             role: "IT Engineer",
             company: "Omilia, Αθήνα",
-            duration: "Σεπτέμβριος 2024 – Μάιος 2026",
+            duration: "Σεπτέμβριος 2024 – Ιούνιος 2026",
             tasks: [
-                "Σχεδίαση zero‑touch enrollment με Jamf Pro και Apple Business Manager για στόλο 550+ Mac — μείωση χρόνου onboarding κατά 70%",
-                "Εφαρμογή θωράκισης CIS Benchmark σε όλο τον στόλο σε συνεργασία με το τμήμα Cyber — πλήρης συμμόρφωση ενόψει ελέγχων PCI DSS και SOC 2",
-                "Ηγεσία εταιρικής μετάβασης EDR σε Check Point Harmony Endpoint σε 550+ συσκευές, με επίλυση συγκρούσεων FileVault χωρίς καμία απώλεια δεδομένων",
+                "Σχεδίαση zero‑touch enrollment με Jamf Pro και Apple Business Manager για στόλο 550+ Mac — η προετοιμασία ενός νέου Mac από πάνω από δύο ώρες σε κάτω από 30 λεπτά",
+                "Εφαρμογή θωράκισης CIS Benchmark σε όλο τον στόλο σε συνεργασία με το τμήμα Cyber, ενόψει ελέγχων PCI DSS και SOC 2",
+                "Αναβάθμιση του Check Point Harmony Endpoint σε όλα τα ενεργά τερματικά και αφαίρεση του FileVault blade χωρίς καμία απώλεια δεδομένων",
                 "Κατασκευή κεντρικού pipeline ανανέωσης πιστοποιητικών (acme.sh, Let's Encrypt, DNS-01) για υποδομές δικτύου, virtualization και διαχείρισης servers — τέλος στις χειροκίνητες ανανεώσεις",
-                "Υλοποίηση ενσωμάτωσης Microsoft Sentinel SIEM με Python log collectors (RFC 5424 μέσω TLS) για telemetry τερματικών και πρόσβασης",
-                "Προώθηση εταιρικής υιοθέτησης AI: Gemini σε όλο τον οργανισμό, Atlassian Rovo Agents και pipeline διαλογής αιτημάτων με AI",
-                "Επίλυση 350+ Jira tickets με SLA 95%+, συγγραφή 40+ οδηγών Confluence και διαχείριση 9 εταιρικών πλατφορμών"
+                "Προώθηση συμβάντων Jamf και AnyDesk στο Microsoft Sentinel (RFC 5424 μέσω TLS)",
+                "Προώθηση εταιρικής υιοθέτησης AI: Gemini σε όλο τον οργανισμό και πιλοτικός Rovo agent για διαλογή αιτημάτων",
+                "Επίλυση 486 Jira tickets με διάμεσο χρόνο μία ημέρα και συγγραφή 50+ οδηγών Confluence"
             ]
         },
         {
             id: "military-service",
             role: "Στρατιωτική θητεία — IT & διοικητική υποστήριξη",
-            company: "Ελληνικός Στρατός",
+            company: "Ελληνικός Στρατός, με τη θέση στην Omilia σε μερική απασχόληση",
             duration: "Νοέμβριος 2025 – Αύγουστος 2026",
             tasks: [
                 "Παροχή υπηρεσιών IT operations και διοικητικής υποστήριξης με αναφορά απευθείας στον Υποδιοικητή Τάγματος",
@@ -166,18 +166,18 @@ const el: Content = {
         {
             id: "keep-eat-healthy",
             role: "IT Support & Infrastructure Coordinator",
-            company: "Keep Eat Healthy, Κορωπί",
+            company: "Keep Eat Healthy, Κορωπί · freelance, μερική απασχόληση",
             duration: "Μάιος 2022 – Νοέμβριος 2025",
             tasks: [
                 "Πλήρης ευθύνη IT για υβριδικό γραφείο: δίκτυο, ασφάλεια τερματικών, κύκλος ζωής εξοπλισμού και συντονισμός προμηθευτών",
-                "Επέκταση του μέσου χρόνου ζωής των συσκευών κατά 18 μήνες μέσω προληπτικής συντήρησης",
+                "Προληπτική συντήρηση και σχεδιασμός κύκλου ζωής του εξοπλισμού",
                 "Μετάβαση από έντυπες ροές σε Google Workspace και WordPress, με μείωση διοικητικού φόρτου"
             ]
         },
         {
             id: "anemomyloi-andros",
             role: "IT Support Specialist",
-            company: "Anemomyloi Andros, Άνδρος",
+            company: "Anemomyloi Andros, Άνδρος · μερική απασχόληση, remote",
             duration: "Ιανουάριος 2023 – Φεβρουάριος 2024",
             tasks: [
                 "Ψηφιοποίηση καθημερινών λειτουργιών με μεταφορά ολόκληρου του εταιρικού αρχείου από έντυπη μορφή σε Google Drive",
@@ -253,7 +253,7 @@ const el: Content = {
             id: "tee-licence",
             degree: "Άδεια Άσκησης Επαγγέλματος — Μηχανικός Πληροφορικής & Υπολογιστών",
             institution: "Τεχνικό Επιμελητήριο Ελλάδας (ΤΕΕ)",
-            duration: "2025",
+            duration: "2026",
             kind: "license",
             badge: "ΤΕΕ",
             details: [
@@ -277,13 +277,13 @@ const el: Content = {
             name: "Signature Craft",
             year: 2026,
             tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Email Signatures"],
-            description: "Εργαλείο δημιουργίας email signatures με 32+ templates. Υπογραφές που εμφανίζονται σωστά σε Gmail, Outlook, Apple Mail, Yahoo και Thunderbird — δωρεάν, χωρίς εγγραφή.",
+            description: "Εργαλείο δημιουργίας email signatures με 47 templates. Υπογραφές που εμφανίζονται σωστά σε Gmail, Outlook, Apple Mail, Yahoo και Thunderbird: 6 templates δωρεάν, όλη η συλλογή με εφάπαξ $19, χωρίς λογαριασμό.",
             role: "Ατομικός σχεδιασμός και υλοποίηση",
-            detail: "Εργαλείο δημιουργίας email signatures για ένα πρόβλημα που έχουν όλες οι εταιρείες: υπογραφές που «σπάνε» μόλις φύγουν από τον υπολογιστή. Παράγει HTML βασισμένο σε πίνακες που εμφανίζεται σωστά στους βασικούς mail clients, χωρίς εγγραφή, χωρίς συνδρομή και χωρίς tracking.",
+            detail: "Εργαλείο δημιουργίας email signatures για ένα πρόβλημα που έχουν όλες οι εταιρείες: υπογραφές που «σπάνε» μόλις φύγουν από τον υπολογιστή. Παράγει HTML βασισμένο σε πίνακες που εμφανίζεται σωστά στους βασικούς mail clients, χωρίς λογαριασμό και χωρίς tracking. Έξι templates είναι δωρεάν· με εφάπαξ $19 ξεκλειδώνουν και τα 47.",
             highlights: [
-                "32+ templates: εταιρικά, minimal και δημιουργικά",
+                "47 templates: εταιρικά, minimal και δημιουργικά",
                 "HTML ελεγμένο σε Gmail, Outlook, Apple Mail, Yahoo και Thunderbird",
-                "Δωρεάν, χωρίς εγγραφή και χωρίς tracking",
+                "6 δωρεάν templates, και τα 47 με εφάπαξ $19, χωρίς λογαριασμό",
                 "Ζωντανή προεπισκόπηση με αντιγραφή με ένα κλικ"
             ],
             liveSiteLink: "https://signature-craft-tau.vercel.app/",
@@ -323,7 +323,7 @@ const el: Content = {
                 "Παρουσίαση ως διαδραστικό deck παράλληλα με τη γραπτή εργασία"
             ],
             liveSiteLink: "/thesis-presentation",
-            reportLink: "https://drive.usercontent.google.com/download?id=1iayG5SCoUykioRzLPl1BeOkO7iwxxHkD&export=download&authuser=0",
+            reportLink: "/files/Fragkiadakis_2025_Radio-over-Fiber_5G_thesis.pdf",
             image: "/images/thesis-presentation/thesis-image.webp",
             edges: ["#0e2841", "#1d364d"],
         },
@@ -496,14 +496,15 @@ const el: Content = {
             headline: "Γνωρίστε τον Ανδρέα.",
             bio: "Μηχανικός Πληροφορικής και Υπολογιστών (M.Eng.), επικεφαλής Apple Fleet & IT Automation στην Omilia, μια παγκόσμια εταιρεία conversational AI. Έχω **πλήρη ευθύνη για το Jamf Pro**, θωρακίζω τον στόλο κατά CIS Benchmarks και μετατρέπω **κάθε επαναλαμβανόμενη εργασία** σε κώδικα.",
             fullStory: "Διαβάστε ολόκληρη την ιστορία",
+            caseStudies: "Μελέτες περίπτωσης",
             dialogTitle: "Σχετικά με τον Ανδρέα",
             credentials: "Πιστοποιήσεις",
             focus: "Τομείς εστίασης",
             stats: [
                 { value: 550, suffix: "+", label: "Mac υπό διαχείριση στο Jamf Pro" },
-                { value: 70, suffix: "%", label: "λιγότερος χρόνος onboarding, zero‑touch" },
-                { value: 6, suffix: "+", unit: "έτη", label: "στο IT, τις υποδομές και την ασφάλεια" },
-                { value: 95, suffix: "%+", label: "τήρηση SLA σε 350+ tickets" },
+                { value: 95, suffix: "%", label: "λιγότερες κρίσιμες ευπάθειες σε 60 ημέρες" },
+                { value: 30, suffix: "", unit: "λεπτά", label: "ή λιγότερο για ένα νέο Mac, από 2+ ώρες" },
+                { value: 486, suffix: "", label: "αιτήματα, με διάμεσο χρόνο επίλυσης μία ημέρα" },
             ]
         },
         services: {
@@ -547,7 +548,7 @@ const el: Content = {
         contact: {
             eyebrow: "Επικοινωνία",
             headline: "Ας φτιάξουμε\nκάτι μαζί.",
-            sub: "Ανοιχτός σε **θέσεις πλήρους απασχόλησης** και **freelance projects**.",
+            sub: "Μιλάμε για **στόλους Apple**, **αυτοματισμούς IT** και **freelance projects**.",
             send: "Αποστολή μηνύματος", subject: "Χαιρετισμούς από το andreas.technology",
             resume: "Λήψη βιογραφικού",
             email: "Email",

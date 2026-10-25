@@ -7,7 +7,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import { content } from '@/data/content'
 import { LOCALES, localeInfo, toLocale, type Locale } from '@/data/locales'
 import { KEYWORDS, META } from '@/data/meta'
-import { PERSON, SITE_URL, SOCIAL_URLS } from '@/data/site'
+import { CONTENT_UPDATED_AT, GOOGLE_SITE_VERIFICATION, PERSON, SITE_URL, SOCIAL_URLS } from '@/data/site'
 import { HEAD_SCRIPT } from '../head-script'
 
 // Inter is the non-Apple fallback in the system stack (see --font-display / --font-text).
@@ -63,6 +63,7 @@ export async function generateMetadata({ params }: LayoutProps<'/[lang]'>): Prom
             description: meta.xDescription,
         },
         robots: { index: true, follow: true },
+        ...(GOOGLE_SITE_VERIFICATION ? { verification: { google: GOOGLE_SITE_VERIFICATION } } : {}),
     }
 }
 
@@ -76,7 +77,7 @@ export const viewport: Viewport = {
     ],
 }
 
-/** Structured data: one Person (the site's owner) and the WebSite they publish. */
+/** Structured data: the WebSite, the profile page it is, and the Person it is about. */
 function jsonLd(lang: Locale) {
     const personId = `${SITE_URL}/#person`
     const copy = content.en
@@ -92,16 +93,28 @@ function jsonLd(lang: Locale) {
         },
         {
             '@context': 'https://schema.org',
+            '@type': 'ProfilePage',
+            url: `${SITE_URL}${localeInfo(lang).path === '/' ? '' : localeInfo(lang).path}`,
+            inLanguage: lang,
+            dateModified: CONTENT_UPDATED_AT,
+            mainEntity: { '@id': personId },
+        },
+        {
+            '@context': 'https://schema.org',
             '@type': 'Person',
             '@id': personId,
             name: PERSON.name,
+            alternateName: 'Andrew Fragkiadakis',
             url: SITE_URL,
             mainEntityOfPage: SITE_URL,
             image: `${SITE_URL}/favicons/android-chrome-512x512.png`,
             description: 'Apple fleet and IT automation lead at Omilia: Jamf Pro, endpoint security and automation for 550+ Macs.',
-            jobTitle: 'Team Lead, Apple Fleet & IT Automation',
+            jobTitle: 'Apple Fleet & IT Automation Engineer (Team Lead, Jamf & Automations)',
             worksFor: { '@type': 'Organization', name: 'Omilia', url: 'https://omilia.com' },
-            alumniOf: { '@type': 'CollegeOrUniversity', name: 'University of West Attica' },
+            alumniOf: [
+                { '@type': 'CollegeOrUniversity', name: 'University of West Attica', url: 'https://www.uniwa.gr' },
+                { '@type': 'CollegeOrUniversity', name: 'SRH Hochschule Heidelberg', url: 'https://www.srh-university.de' },
+            ],
             knowsLanguage: ['en', 'el', 'de'],
             sameAs: [SOCIAL_URLS.github, SOCIAL_URLS.linkedin],
             email: PERSON.email,

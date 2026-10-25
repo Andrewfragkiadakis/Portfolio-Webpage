@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { useContent } from '@/hooks/useContent'
+import { useLocale } from '@/contexts/LocaleContext'
+import { localePath } from '@/data/locales'
 import type { Skill } from '@/data/content/types'
 import Modal from '@/components/ui/Modal'
 import { Glyph } from '@/components/ui/Glyph'
@@ -15,6 +17,7 @@ import { ArrowOut, Chevron, CountUp, HEADLINE_SIZE, Headline, Rich, Rise, SLIDE_
 export default function About() {
     const t = useContent()
     const k = t.keynote
+    const locale = useLocale()
     const [activeSkill, setActiveSkill] = useState<Skill | null>(null)
     const [bioOpen, setBioOpen] = useState(false)
 
@@ -34,10 +37,17 @@ export default function About() {
                         <p className="t-lede mt-5 md:mt-[min(1.75rem,3vh)] text-[1.0625rem] leading-[1.4] md:text-[clamp(1.0625rem,2.4vh,1.3125rem)] max-w-[33rem]">
                             <Rich text={k.about.bio} />
                         </p>
-                        <button type="button" onClick={() => setBioOpen(true)} className="kn-link t-body mt-4 min-h-11 md:min-h-0">
-                            {k.about.fullStory}
-                            <Chevron />
-                        </button>
+                        <div className="mt-4 flex flex-wrap items-center gap-x-6">
+                            <button type="button" onClick={() => setBioOpen(true)} className="kn-link t-body min-h-11 md:min-h-0">
+                                {k.about.fullStory}
+                                <Chevron />
+                            </button>
+                            {/* How the numbers on the right happened: the case-study pages. */}
+                            <a href={localePath(locale, '/work')} className="kn-link t-body min-h-11 md:min-h-0">
+                                {k.about.caseStudies}
+                                <Chevron />
+                            </a>
+                        </div>
                     </Rise>
 
                     <Rise step={3} className="mt-10 md:mt-[min(3rem,5.4vh)]">

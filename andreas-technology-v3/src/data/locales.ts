@@ -19,3 +19,10 @@ export function toLocale(value: string): Locale {
 export function localeInfo(code: Locale) {
     return LOCALES.find((locale) => locale.code === code) ?? LOCALES[0]
 }
+
+/** A path inside a language: ('en', '/work') → "/work", ('el', '/work') → "/el/work", ('el') → "/el". */
+export function localePath(code: Locale, sub = ''): string {
+    const root = localeInfo(code).path
+    if (!sub) return root
+    return root === '/' ? sub : `${root}${sub}`
+}

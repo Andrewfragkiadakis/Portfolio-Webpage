@@ -9,9 +9,9 @@ const en: Content = {
 
     about: {
         description: [
-            "I’m a Computer Engineer (M.Eng.) and Team Lead for Apple Fleet & IT Automation at Omilia, a global conversational-AI company. I own Jamf Pro end to end for 550+ Macs and lead endpoint engineering across Check Point Harmony Endpoint, Microsoft Sentinel and SSL certificate automation.",
-            "In practice, that means CIS Benchmark hardening ahead of PCI DSS and SOC 2 audits, and zero‑touch enrollment that cut Mac onboarding time by 70%.",
-            "I also lead AI adoption: Google Gemini org-wide, Atlassian Rovo Agents, and an AI ticket-triage pipeline that cut average triage time across 350+ tickets.",
+            "I’m a Computer Engineer (M.Eng.) and Team Lead for Apple Fleet & IT Automation at Omilia, a global conversational-AI company. I own Jamf Pro end to end for 550+ Macs and lead endpoint engineering: Check Point Harmony Endpoint, event forwarding into Microsoft Sentinel, and SSL certificate automation.",
+            "In practice, that means CIS Benchmark hardening ahead of PCI DSS and SOC 2 audits, and zero‑touch enrollment that cut new-Mac setup from over two hours to under 30 minutes.",
+            "I also lead AI adoption: Google Gemini org-wide, Claude Enterprise and Claude Code rolled out through MDM, and a Rovo agent pilot for IT ticket triage.",
             "Jamf Certified Tech (Jamf 200) · TEE-licensed engineer · ITIL 4 Foundation · Athens, Greece · English (C2), Greek (native), German (B2)"
         ]
     },
@@ -27,7 +27,7 @@ const en: Content = {
             id: "endpoint-security",
             icon: "shield",
             label: "Endpoint Security & Identity",
-            detail: "Check Point Harmony Endpoint, CIS Benchmark hardening ahead of PCI DSS and SOC 2 audits, Microsoft Sentinel SIEM pipelines, and identity and access with Microsoft Entra ID, Duo MFA and 1Password."
+            detail: "Check Point Harmony Endpoint, CIS Benchmark hardening ahead of PCI DSS and SOC 2 audits, event forwarding into Microsoft Sentinel, and identity and access with Microsoft Entra ID, Duo MFA and 1Password."
         },
         {
             id: "automation",
@@ -39,7 +39,7 @@ const en: Content = {
             id: "ai-workflow",
             icon: "sparkles",
             label: "AI & Workflow Automation",
-            detail: "Driving enterprise AI adoption: Google Gemini org-wide, Atlassian Rovo Agents, Claude Code and MCP servers, plus an AI ticket-triage pipeline in Jira Service Management."
+            detail: "Driving enterprise AI adoption: Google Gemini org-wide, Claude Enterprise, Claude Code and MCP servers, plus a Rovo agent pilot for ticket triage in Jira Service Management."
         }
     ],
 
@@ -61,11 +61,11 @@ const en: Content = {
             id: "apple-fleet",
             icon: "laptop",
             title: "Apple Fleet Engineering",
-            oneLiner: "550+ Macs on Jamf Pro. Zero‑touch enrollment, 70% less onboarding time.",
-            detail: "I own Jamf Pro end to end for a 550+ Mac fleet. A new Mac enrolls itself through Apple Business Manager, pulls its profiles and apps, and is ready on day one — zero‑touch enrollment cut onboarding time by 70%.",
+            oneLiner: "550+ Macs on Jamf Pro. Zero‑touch setup in under 30 minutes, down from 2+ hours.",
+            detail: "I own Jamf Pro end to end for a 550+ Mac fleet. A new Mac enrolls itself through Apple Business Manager, pulls its profiles and apps, and is ready on day one — zero‑touch enrollment cut setup from over two hours to under 30 minutes.",
             highlights: [
                 "Jamf Certified Tech (Jamf 200)",
-                "Zero‑touch enrollment: 70% less onboarding time",
+                "Zero‑touch enrollment: setup from 2+ hours to under 30 minutes",
                 "Configuration profiles, patching, Self Service and fleet hygiene"
             ],
             tools: ["Jamf Pro", "Apple Business Manager", "macOS", "Bash / zsh", "Swift", "AppleScript"]
@@ -87,11 +87,11 @@ const en: Content = {
             id: "ai-operations",
             icon: "sparkles",
             title: "AI-Augmented Operations",
-            oneLiner: "Gemini org-wide, Rovo Agents and AI ticket triage in Jira.",
-            detail: "AI that does real work. I rolled out Google Gemini org-wide and Atlassian Rovo Agents, built an AI ticket-triage pipeline for Jira Service Management, and prototype MCP servers so assistants like Claude Code can work with IT systems directly.",
+            oneLiner: "Gemini org-wide, Claude rolled out through MDM, AI triage piloted in Jira.",
+            detail: "AI that does real work. I rolled out Google Gemini org-wide and Claude Enterprise with MDM-managed settings, piloted a Rovo agent for ticket triage in Jira Service Management, and prototype MCP servers so assistants like Claude Code can work with IT systems directly.",
             highlights: [
                 "Org-wide Google Gemini rollout",
-                "AI ticket triage across 350+ tickets",
+                "Rovo agent pilot for IT ticket triage",
                 "MCP server prototypes for IT tooling"
             ],
             tools: ["Claude Code", "MCP Servers", "Google Gemini", "Grok Bot", "Atlassian Rovo", "Jira Service Management", "Slack"]
@@ -100,12 +100,12 @@ const en: Content = {
             id: "itsm",
             icon: "headphones",
             title: "IT Service Management",
-            oneLiner: "ITIL 4 service delivery: 350+ tickets resolved at 95%+ SLA.",
+            oneLiner: "ITIL 4 service delivery: 486 tickets resolved, median one day.",
             detail: "Support people can rely on. ITIL 4 certified, I pair clear incident and request processes with automation and documentation, so the queue stays short and answers are easy to find.",
             highlights: [
                 "ITIL 4 Foundation certified",
-                "350+ Jira tickets resolved at 95%+ SLA",
-                "40+ Confluence guides and 9 enterprise platforms administered"
+                "486 Jira tickets resolved with a one-day median",
+                "50+ Confluence guides for the team and for self-service"
             ],
             tools: ["Jira Service Management", "Confluence", "Atlassian Rovo", "Slack", "Google Workspace"]
         },
@@ -129,9 +129,9 @@ const en: Content = {
             id: "omilia-team-lead",
             current: true,
             stack: ["Jamf Pro", "Bash / zsh", "Python", "TypeScript", "MCP Servers", "acme.sh / Let's Encrypt"],
-            role: "Team Lead, Apple Fleet & IT Automation",
+            role: "Apple Fleet & IT Automation Engineer (Team Lead, Jamf & Automations)",
             company: "Omilia, Athens, Greece",
-            duration: "April 2026 – Present",
+            duration: "July 2026 – Present",
             tasks: [
                 "Own the Apple Fleet & IT Automation function, the Jamf Pro platform, and AI-driven IT pipelines across 550+ macOS endpoints",
                 "Lead automation engineering in Bash, Python and TypeScript — Jamf API, AI ticket triage, MCP server prototypes and SSL renewal infrastructure",
@@ -142,21 +142,21 @@ const en: Content = {
             id: "omilia-it-engineer",
             role: "IT Engineer",
             company: "Omilia, Athens, Greece",
-            duration: "September 2024 – May 2026",
+            duration: "September 2024 – June 2026",
             tasks: [
-                "Architected Jamf Pro zero‑touch enrollment via Apple Business Manager for the 550+ Mac fleet, cutting onboarding time by 70%",
-                "Implemented CIS Benchmark hardening fleet-wide with the Cyber team — full compliance ahead of PCI DSS and SOC 2 audits",
-                "Led the enterprise EDR migration to Check Point Harmony Endpoint across 550+ devices, resolving FileVault conflicts at cutover with zero data loss",
+                "Architected Jamf Pro zero‑touch enrollment via Apple Business Manager for the 550+ Mac fleet, cutting new-Mac setup from over two hours to under 30 minutes",
+                "Implemented CIS Benchmark hardening fleet-wide with the Cyber team ahead of PCI DSS and SOC 2 audits",
+                "Brought Check Point Harmony Endpoint current on every active endpoint and removed the FileVault blade with zero data loss",
                 "Built a centralised certificate renewal pipeline (acme.sh, Let's Encrypt, DNS-01) for network, virtualisation and server-management infrastructure, ending manual renewals",
-                "Engineered Microsoft Sentinel SIEM integration with Python log collectors (RFC 5424 over TLS), unifying endpoint and access telemetry",
-                "Drove enterprise AI adoption: Gemini org-wide, Atlassian Rovo Agents, and an AI-powered ticket-triage pipeline",
-                "Resolved 350+ Jira tickets at 95%+ SLA, authored 40+ Confluence guides and administered 9 enterprise platforms"
+                "Built Jamf and AnyDesk event forwarding into Microsoft Sentinel (RFC 5424 over TLS)",
+                "Drove enterprise AI adoption: Gemini org-wide and a Rovo agent pilot for ticket triage",
+                "Resolved 486 Jira tickets with a one-day median and wrote 50+ Confluence guides"
             ]
         },
         {
             id: "military-service",
             role: "Military Service — IT & Administrative Support",
-            company: "Hellenic Army, Greece",
+            company: "Hellenic Army, Greece · Omilia role kept part-time",
             duration: "November 2025 – August 2026",
             tasks: [
                 "Delivered IT operations and administrative support reporting directly to the Deputy Battalion Commander",
@@ -166,18 +166,18 @@ const en: Content = {
         {
             id: "keep-eat-healthy",
             role: "IT Support & Infrastructure Coordinator",
-            company: "Keep Eat Healthy, Koropi, Greece",
+            company: "Keep Eat Healthy, Koropi, Greece · freelance, part-time",
             duration: "May 2022 – November 2025",
             tasks: [
                 "Owned end-to-end IT for a hybrid office: network, endpoint security, hardware lifecycle and vendor coordination",
-                "Extended average device lifespan by 18 months through proactive maintenance and lifecycle planning",
+                "Kept the hardware estate healthy through proactive maintenance and lifecycle planning",
                 "Migrated paper workflows to Google Workspace and WordPress, reducing admin overhead and improving cross-team collaboration"
             ]
         },
         {
             id: "anemomyloi-andros",
             role: "IT Support Specialist",
-            company: "Anemomyloi Andros, Andros, Greece",
+            company: "Anemomyloi Andros, Andros, Greece · part-time, remote",
             duration: "January 2023 – February 2024",
             tasks: [
                 "Digitised daily operations by migrating the entire business archive from paper to Google Drive with data retention and security controls",
@@ -251,13 +251,13 @@ const en: Content = {
         },
         {
             id: "tee-licence",
-            degree: "Professional Licence — Informatics & Computer Engineer",
+            degree: "Professional Licence — IT & Computer Science Engineer",
             institution: "Technical Chamber of Greece (TEE)",
-            duration: "2025",
+            duration: "2026",
             kind: "license",
             badge: "TEE licence",
             details: [
-                "Statutory licence to practise as an Informatics & Computer Engineer in Greece",
+                "Statutory licence to practise as an IT & Computer Science Engineer in Greece",
                 "Requires an accredited five-year integrated Master’s degree"
             ]
         },
@@ -277,13 +277,13 @@ const en: Content = {
             name: "Signature Craft",
             year: 2026,
             tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Email Signatures"],
-            description: "An email-signature builder with 32+ templates. Signatures that render correctly in Gmail, Outlook, Apple Mail, Yahoo and Thunderbird — free, with no sign-up.",
+            description: "An email-signature builder with 47 templates. Signatures that render correctly in Gmail, Outlook, Apple Mail, Yahoo and Thunderbird: 6 templates free, the full library for a one-time $19, never an account.",
             role: "Solo design and build",
-            detail: "An email-signature builder for a problem every company has and nobody owns: signatures that break the moment they leave your machine. Signature Craft generates table-based HTML that renders consistently across the major mail clients, with no sign-up, no paywall and no tracking.",
+            detail: "An email-signature builder for a problem every company has and nobody owns: signatures that break the moment they leave your machine. Signature Craft generates table-based HTML that renders consistently across the major mail clients, with no account and no tracking. Six templates are free; a one-time $19 unlock opens all 47.",
             highlights: [
-                "32+ templates spanning corporate, minimal and creative layouts",
+                "47 templates spanning corporate, minimal and creative layouts",
                 "Client-safe HTML tested against Gmail, Outlook, Apple Mail, Yahoo and Thunderbird",
-                "Free, with no sign-up and no tracking",
+                "6 free templates, all 47 for a one-time $19, no account",
                 "Live preview with one-click copy to clipboard"
             ],
             liveSiteLink: "https://signature-craft-tau.vercel.app/",
@@ -323,7 +323,7 @@ const en: Content = {
                 "Presented as an interactive slide deck alongside the written thesis"
             ],
             liveSiteLink: "/thesis-presentation",
-            reportLink: "https://drive.usercontent.google.com/download?id=1iayG5SCoUykioRzLPl1BeOkO7iwxxHkD&export=download&authuser=0",
+            reportLink: "/files/Fragkiadakis_2025_Radio-over-Fiber_5G_thesis.pdf",
             image: "/images/thesis-presentation/thesis-image.webp",
             edges: ["#0e2841", "#1d364d"],
         },
@@ -496,14 +496,15 @@ const en: Content = {
             headline: "Meet Andreas.",
             bio: "A Computer Engineer (M.Eng.) leading Apple Fleet & IT Automation at Omilia, a global conversational-AI company. I own **Jamf Pro end to end**, harden the fleet to CIS Benchmarks, and turn **every repeated task** into code.",
             fullStory: "Read the full story",
+            caseStudies: "Case studies",
             dialogTitle: "About Andreas",
             credentials: "Credentials",
             focus: "Focus areas",
             stats: [
                 { value: 550, suffix: "+", label: "Macs managed on Jamf Pro" },
-                { value: 70, suffix: "%", label: "less onboarding time, zero‑touch" },
-                { value: 6, suffix: "+", unit: "yrs", label: "in IT, infrastructure and security" },
-                { value: 95, suffix: "%+", label: "SLA met across 350+ tickets" },
+                { value: 95, suffix: "%", label: "fewer critical vulnerabilities in 60 days" },
+                { value: 30, suffix: "", unit: "min", label: "or less to set up a new Mac, from 2+ hours" },
+                { value: 486, suffix: "", label: "tickets resolved, one-day median" },
             ]
         },
         services: {
@@ -547,7 +548,7 @@ const en: Content = {
         contact: {
             eyebrow: "Contact",
             headline: "Let’s build\nsomething.",
-            sub: "Open to **full-time roles** and **freelance projects**.",
+            sub: "Happy to talk **Apple fleets**, **IT automation** and **freelance projects**.",
             send: "Send a message", subject: "Hello from andreas.technology",
             resume: "Download résumé",
             email: "Email",

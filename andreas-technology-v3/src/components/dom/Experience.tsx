@@ -7,7 +7,7 @@ import Modal from '@/components/ui/Modal'
 import { ToolLogo } from '@/components/ui/ToolBadge'
 import { TOOL_BY_LABEL, hasSymbol, type Tool } from '@/data/tools'
 import { ArrowOut, Chevron, HEADER_GAP, Rise, SLIDE_CLASS, SlideHeader } from '@/components/ui/keynote'
-import { shortPlace, yearSpan } from '@/utils/format'
+import { shortPlace, splitRole, yearSpan } from '@/utils/format'
 
 /** The stack named in the current role's own task list. */
 
@@ -32,6 +32,7 @@ export default function Experience() {
 
     const current = t.experience.find((item) => item.current) ?? t.experience[0]
     const earlier = t.experience.filter((item) => item !== current)
+    const nowRole = splitRole(current.role)
     const nowStack = (current.stack ?? []).map((label) => TOOL_BY_LABEL.get(label)).filter((tool): tool is Tool => Boolean(tool))
 
     return (
@@ -47,7 +48,10 @@ export default function Experience() {
                                 <h3 className="t-small font-semibold">{k.experience.now}</h3>
                                 <span className="t-caption text-[var(--muted)] text-right">{current.duration}</span>
                             </div>
-                            <p id="now-role" className="t-title mt-4 md:mt-[min(1.25rem,2.2vh)] text-[1.75rem] md:text-[clamp(1.3125rem,3.6vh,2rem)]">{current.role}</p>
+                            <p id="now-role" className="mt-4 md:mt-[min(1.25rem,2.2vh)]">
+                                <span className="block t-title text-[1.75rem] md:text-[clamp(1.3125rem,3.6vh,2rem)]">{nowRole.title}</span>
+                                {nowRole.qualifier && <span className="block mt-1.5 t-small font-semibold text-[var(--foreground)]">{nowRole.qualifier}</span>}
+                            </p>
                             <p className="mt-1.5 t-small text-[var(--muted)]">{current.company}</p>
                             <ul className="mt-6 md:mt-[min(1.5rem,2.6vh)]">
                                 {current.tasks.map((task) => (

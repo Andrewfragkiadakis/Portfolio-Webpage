@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
   // stylesheet request, which was most of a phone's first-paint time on slow networks.
   experimental: {
     inlineCss: true,
+    // app/[lang] is the only root layout, so a URL that matches no route gets the branded
+    // app/global-not-found.tsx instead of Next's default page.
+    globalNotFound: true,
   },
   // Pin the workspace root: a stray lockfile in the parent folder otherwise
   // makes Turbopack infer the wrong root and emit a build warning.
@@ -47,11 +50,17 @@ const nextConfig: NextConfig = {
       },
       // English lives at "/", so its internal route never shows in the address bar.
       { source: '/en', destination: '/', permanent: true },
+      { source: '/en/work', destination: '/work', permanent: true },
+      { source: '/en/work/:slug', destination: '/work/:slug', permanent: true },
     ]
   },
   async rewrites() {
     // One page per language under app/[lang]: "/" serves English, "/el" Greek.
-    return [{ source: '/', destination: '/en' }]
+    return [
+      { source: '/', destination: '/en' },
+      { source: '/work', destination: '/en/work' },
+      { source: '/work/:slug', destination: '/en/work/:slug' },
+    ]
   },
 };
 

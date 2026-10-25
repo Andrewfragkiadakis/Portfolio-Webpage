@@ -32,6 +32,16 @@ export function yearSpan(duration: string): string {
     return from === to ? from : `${from} – ${to}`
 }
 
+/**
+ * "Apple Fleet & IT Automation Engineer (Team Lead, Jamf & Automations)" →
+ * { title: "Apple Fleet & IT Automation Engineer", qualifier: "Team Lead, Jamf & Automations" },
+ * so the slide sets the title large and the qualifier as a quieter second line.
+ */
+export function splitRole(role: string): { title: string; qualifier?: string } {
+    const match = role.match(/^(.+?)\s*\((.+)\)$/)
+    return match ? { title: match[1].trim(), qualifier: match[2].trim() } : { title: role }
+}
+
 /** "University of West Attica, Athens, Greece" → "University of West Attica". */
 export function shortPlace(place: string): string {
     return place.split(',')[0].trim()
