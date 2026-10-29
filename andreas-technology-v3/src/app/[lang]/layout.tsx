@@ -4,6 +4,7 @@ import '../globals.css'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { LocaleProvider } from '@/contexts/LocaleContext'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import { Analytics } from '@vercel/analytics/next'
 import { content } from '@/data/content'
 import { LOCALES, localeInfo, toLocale, type Locale } from '@/data/locales'
 import { KEYWORDS, META } from '@/data/meta'
@@ -155,6 +156,7 @@ export default async function RootLayout({ children, params }: LayoutProps<'/[la
                     </LocaleProvider>
                 </ThemeProvider>
                 <SpeedInsights />
+                <Analytics />
             </body>
         </html>
     )
